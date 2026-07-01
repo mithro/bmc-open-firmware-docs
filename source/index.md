@@ -1,0 +1,108 @@
+# Open BMC & Firmware
+
+Open-source firmware, emulation, and driver documentation for three pieces of
+legacy management hardware, replacing their proprietary firmware with open
+alternatives (OpenBMC on Linux, WallaBMC on Zephyr) and providing full QEMU
+emulation, upstream Linux/U-Boot support, and a hardware-in-the-loop test bench.
+
+```{list-table}
+:header-rows: 1
+:widths: 22 18 14 46
+
+* - System
+  - SoC
+  - CPU core
+  - Role
+* - {doc}`systems/kgpe-d16`
+  - Aspeed AST2050
+  - ARM926EJ-S (ARMv5TE)
+  - ASUS server-motherboard BMC
+* - {doc}`systems/dell-c410x`
+  - Aspeed AST2050
+  - ARM926EJ-S
+  - Dell 16-slot PCIe GPU expansion chassis BMC
+* - {doc}`systems/hpe-ipdu`
+  - Digi NS9360
+  - ARM926EJ-S
+  - HPE intelligent PDU (AF531A)
+```
+
+Two of the three boards share the **Aspeed AST2050** SoC, so the SoC-level work
+(kernel drivers, U-Boot, QEMU model) is shared and each board contributes only
+its own device tree / board description. The third board (Digi NS9360) is a
+separate but same-core (ARM926EJ-S) track.
+
+## What this documentation covers
+
+This site is written to be **enough to build both QEMU models and drivers** for
+every component, and to bring up every layer of the software stack:
+
+- {doc}`hardware/index` — SoC and peripheral register/interface reference
+  (I2C topology, sensors, fan controllers, PCIe switches, power, SPI flash).
+- {doc}`emulation/index` — the QEMU machine models and the per-component test
+  benches that verify them.
+- {doc}`drivers/index` — Linux, U-Boot, and Zephyr driver notes and the
+  upstream patch-series/rebase workflow.
+- {doc}`firmware/index` — the OpenBMC (Linux) and WallaBMC (Zephyr) firmware
+  tracks: Redfish, power, sensors, fans, PCIe control, SoL, and footprint work.
+- {doc}`debug/index` — JTAG/UART/SPI bring-up and the hardware-in-the-loop rig.
+
+```{admonition} Status
+:class: note
+
+This is an actively developed program. Pages marked *(planned)* describe work
+that is scaffolded but not yet complete; each carries an acceptance criterion so
+progress is unambiguous. The authoritative implementation history lives in the
+(private) program repository — see {doc}`about`.
+```
+
+```{toctree}
+:hidden:
+:caption: Systems
+
+systems/index
+```
+
+```{toctree}
+:hidden:
+:caption: Hardware reference
+
+hardware/index
+```
+
+```{toctree}
+:hidden:
+:caption: Emulation & test
+
+emulation/index
+```
+
+```{toctree}
+:hidden:
+:caption: Drivers
+
+drivers/index
+```
+
+```{toctree}
+:hidden:
+:caption: Firmware
+
+firmware/index
+```
+
+```{toctree}
+:hidden:
+:caption: Bring-up & debug
+
+debug/index
+```
+
+```{toctree}
+:hidden:
+:caption: Project
+
+references
+contributing
+about
+```
