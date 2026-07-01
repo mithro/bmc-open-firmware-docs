@@ -15,6 +15,8 @@ python:
   install:
     - requirements: requirements.txt
 
+# PDF (latexpdf) is temporarily disabled: the Sphinx->LaTeX generation is clean,
+# but the pdflatex compile has not yet been verified against a full texlive.
+# Re-enable `- pdf` once a real texlive build is confirmed green.
 formats:
-  - pdf
   - htmlzip
