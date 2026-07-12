@@ -2,49 +2,90 @@
 
 The full-featured firmware track, built in the `mithro/openbmc` fork with a
 `meta-<board>` layer per board on top of `meta-aspeed`. Images are verified in
-QEMU (and later on HIL) via the {doc}`../emulation/testbench`.
+QEMU (and on real hardware) via the {doc}`../emulation/testbench`.
 
-## Feature build-out (C410X leads)
+## Running on the real AST2050
+
+Modern OpenBMC has been brought up on a **real ASUS KGPE-D16 AST2050** BMC:
+booted over the P2A path ({doc}`../debug/bring-up`) with an NFS-root userspace,
+its `bmcweb` answers **Redfish v1.17.0** over HTTPS on the board's own network
+interface. This required the two hardware-verified kernel fixes — the G3 VIC
+irqchip driver and the ftgmac100 `FAST_MODE` RX fix ({doc}`../drivers/linux`) —
+before the network stack would carry Redfish traffic on silicon.
+
+```{admonition} The 64 MiB constraint
+:class: important
+
+The AST2050 on this board has **64 MiB of DRAM** (hardware-verified). A modern,
+full OpenBMC image does not fit in 64 MiB. The target is therefore a **stripped,
+Redfish-only (`bmcweb`) image** served over NFS on the bench, with the QEMU model
+and board DTS both pinned to 64 MiB so the size budget is enforced the same way
+in emulation and on hardware. This — not XIP polish — is the real footprint gate.
+```
+
+## BMC feature build-out
+
+Nine BMC feature areas were built out on the OpenBMC/AST2050 stack, each with a
+CI job. All are demonstrated in QEMU; several are additionally proven on real
+silicon. The table records that distinction honestly.
 
 ```{list-table}
 :header-rows: 1
-:widths: 30 44 26
+:widths: 22 48 30
 
 * - Feature
   - Implementation
-  - Verified by
+  - Status
 * - Redfish API
   - `bmcweb`
-  - `GET /redfish/v1` in CI
+  - **silicon** — Redfish v1.17.0 answers on the real BMC
+* - System identity
+  - populated FRU / `MachineName`
+  - **silicon**
 * - Sensors
-  - `dbus-sensors` (hwmon) + entity-manager for the 72 C410X sensors
-  - Redfish sensor enumeration
-* - Fans
-  - `phosphor-pid-control` (ADT7462 curves)
-  - PWM/tach response
-* - Power
-  - `phosphor-state-manager` driving the 12-step GPIO/PCA9555 sequence
-  - ordered GPIO transitions on the model
-* - PCIe switches
-  - a phosphor-style PEX8696/8647 I2C daemon
-  - qtest of the switch model
+  - `dbus-sensors` (hwmon) → Redfish/IPMI SDR
+  - **silicon** — populated SDR from the D-Bus sensor values
+* - Power control
+  - `phosphor-state-manager` → GPIO
+  - QEMU (Redfish `Reset` drives the modelled power-state GPIO)
 * - Serial-over-LAN
-  - `obmc-console` over the modelled UART
-  - console attach
-* - Networking
-  - ssh + https reachable via slirp hostfwd
-  - CI reachability
+  - `obmc-console`
+  - **silicon** — SOL session operational
+* - IPMI
+  - IPMI-over-LAN and host-local IPMI via **KCS**
+  - **silicon** — `ipmitool` returns ASUSTek / KGPE-D16
+* - USB, NC-SI, KVM, firmware update
+  - obmc-ikvm / phosphor-ipmi / update flows
+  - QEMU-demonstrated; see faithfulness notes below
 ```
 
-## Footprint work (XIP + stripping)
+```{admonition} Faithfulness findings
+:class: note
 
-The AST2050 is RAM/flash constrained, so after a functional (non-XIP) image
-boots, the OpenBMC image is size-optimised:
+Building against the real board corrected several assumptions, in keeping with
+the program's "model the real hardware" rule:
 
-- **XIP** the read-only rootfs directly from the modelled SPI NOR to cut RAM use;
-- **strip** authentication and unneeded features to fit the flash-partition and
-  RAM budgets defined by the board device tree.
+- host↔BMC IPMI on this board is **KCS**, not NC-SI;
+- there is **no USB host** exposed to the BMC on this board;
+- the BIOS is not directly BMC-reachable.
 
-**Acceptance:** `openbmc-c410x-xip` builds an image that fits the flash budget and
-boots to Redfish in QEMU with `-m` set to the board's real RAM size. This is the
-hardest OpenBMC item; WallaBMC is the lighter fallback where OpenBMC cannot fit.
+These are recorded as hardware facts, not worked around — the emulation and
+firmware are shaped to match them.
+```
+
+## Sensor-rich board: Dell C410X
+
+The Dell C410X is the sensor-dense target (16× INA219, 2× ADT7462, 16× TMP75,
+5× PCA9555, the PEX8696/8647 PCIe switches) — its 72-sensor topology
+({doc}`../hardware/i2c-topology`) drives the `dbus-sensors` / `entity-manager`
+and PCIe-switch-daemon work. The hardware demonstration to date is on the
+KGPE-D16 (the board on the bench); the C410X contributes the rich I2C/sensor
+model that the same daemons consume.
+
+## Footprint work
+
+The AST2050's 64 MiB budget is met by stripping the image to the Redfish-only
+feature set above rather than shipping full OpenBMC. Execute-in-place (XIP) of the
+read-only rootfs from SPI NOR remains a further RAM-saving option once a serving
+boot flash is in place. WallaBMC ({doc}`wallabmc`) is the lighter Zephyr fallback
+where even a stripped OpenBMC cannot fit.
