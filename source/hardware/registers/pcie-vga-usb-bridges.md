@@ -537,6 +537,22 @@ strap). `[DS §18 p.205](#sources)`, `[P2A-BOOT](#sources)`
   BIOS assigns to PCIS14; the datasheet gives the *offset* (`+0x10000`) and the
   remap arithmetic, not an absolute address (correctly host-dependent).
 
+## See also
+
+**Related pages**
+
+- {doc}`/hardware/registers/uart-vic-timers` — the sibling CPU-facing peripherals (UARTs, VIC, timers) split off from this page
+- {doc}`/hardware/registers/display-usb` — the full USB 2.0 / Video Engine / VGA register maps summarised here
+- {doc}`/hardware/registers/engines-blocks` — the 2D engine and the outbound A2P bridge (counterpart to the inbound P2A)
+- {doc}`/hardware/soc-ast2050` — the P2A/iLPC AHB debug bridges at SoC level
+
+**External references**
+
+- [Linux PCI subsystem](https://docs.kernel.org/PCI/index.html) — the PCI model behind this PCI-slave/VGA endpoint
+- [Linux DRM/KMS](https://docs.kernel.org/gpu/drm-kms.html) — the display/DRM framework for the VGA controller
+- [Linux USB gadget API](https://docs.kernel.org/driver-api/usb/gadget.html) — the gadget/vhub model this USB block exposes
+- [QEMU Aspeed SoC documentation](https://www.qemu.org/docs/master/system/arm/aspeed.html) — how QEMU models the Aspeed endpoint and AHB bridges
+
 ## Sources
 
 - **AST2050/AST1100 A3 Datasheet, V1.05** (25 May 2010), in-repo PDF. Chapters

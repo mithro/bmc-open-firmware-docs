@@ -1211,6 +1211,21 @@ for a faithful model [DS §17.6-17.7 p.203]:
 
 ---
 
+## See also
+
+**Related pages**
+
+- {doc}`/hardware/registers/scu-clock-reset` — the M-PLL (MCLK) source and the SCU unlock/scratch registers this init sequence programs
+- {doc}`/hardware/registers/engines-blocks` — the MIC (DRAM scrub) and MDMA (buffer-fill for ECC init) engines that operate on this DRAM
+- {doc}`/hardware/soc-ast2050` — the hardware-verified 64 MiB DRAM constraint at SoC level
+- {doc}`/hardware/registers/index` — register reference landing
+
+**External references**
+
+- [Linux EDAC subsystem](https://docs.kernel.org/driver-api/edac.html) — error-detection-and-correction for memory controllers (the controller family's ECC feature, disabled here)
+- [U-Boot documentation](https://docs.u-boot.org/en/latest/) — the bootloader whose low-level DDR2 bring-up this page reconstructs
+- [Linux Common Clock Framework](https://docs.kernel.org/driver-api/clk.html) — the M-PLL/MCLK clocking that drives the SDRAM controller
+
 ## Sources
 
 Primary (in-repo, read-only reverse-engineering + datasheet):

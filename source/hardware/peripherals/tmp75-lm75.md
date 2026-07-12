@@ -312,6 +312,22 @@ mapped to R1:R0, and at probe it sets R1:R0 = 12-bit and clears the OS bit
   datasheet part, use `national,lm75` (9-bit), **not** `national,lm75b`. [lm75.c](https://github.com/torvalds/linux/blob/master/drivers/hwmon/lm75.c)
 ```
 
+## See also
+
+**Related pages**
+
+- {doc}`/hardware/peripherals/pca954x-mux` — the two PCA9548 muxes that reach the 16 per-slot sensors
+- {doc}`/hardware/i2c-topology` — buses `0xF4`/`0xF6` in the C410X I2C tree
+- {doc}`/hardware/registers/buses-gpio` — the AST2050 I2C controller upstream
+- {doc}`/systems/dell-c410x` — the board (16 per-slot + 1 front-board sensor)
+
+**External references**
+
+- [TI TMP75 product page](https://www.ti.com/product/TMP75) — the vendor product/datasheet page (TMP75/TMP175)
+- [TI LM75B product page](https://www.ti.com/product/LM75B) — the LM75-class part vendor page
+- [Linux hwmon: lm75](https://docs.kernel.org/hwmon/lm75.html) — the mainline driver documentation (`ti,tmp75` / `national,lm75`)
+- [Devicetree binding: lm75.yaml](https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/hwmon/lm75.yaml) — the DT binding (current mainline path)
+
 ## Sources
 
 - **TMP75 datasheet** (TI SBOS288) and **LM75 datasheet** (National/TI SNIS153)

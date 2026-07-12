@@ -1047,6 +1047,23 @@ These match [mach-ns9xxx regs-sys-ns9360.h](#sources) (`SYS_SMCSDMB/DMM`=0x1d0/0
 `RTC Clock Control` (0x224): 32-bit divider that generates the 100 Hz RTC clock;
 program to (PLL output frequency)/200 [HWRef p.193-194](#sources).
 
+## See also
+
+**Related pages**
+
+- {doc}`/hardware/soc-ns9360-io` — GPIO, BBus utility and DMA register maps
+- {doc}`/hardware/soc-ns9360-memory-serial` — memory controller, Ethernet and serial
+- {doc}`/hardware/soc-ns9360-secondary` — LCD, IEEE 1284 and USB secondary blocks
+- {doc}`/systems/hpe-ipdu` — the HPE iPDU board built on this SoC
+- {doc}`/drivers/uboot` — the open NS9360 U-Boot port that drives these registers
+
+**External references**
+
+- [Linux `arch/arm/mach-ns9xxx` (v2.6.39)](https://github.com/torvalds/linux/tree/v2.6.39/arch/arm/mach-ns9xxx) — the historical mainline NS9360 platform tree (browse)
+- [U-Boot documentation](https://docs.u-boot.org/en/latest/) — the open-firmware path chosen for this SoC
+- [Zephyr architecture-porting guide](https://docs.zephyrproject.org/latest/hardware/porting/arch.html) — the ARMv5 / ARM926EJ-S port this core needs
+- [ARM9 processor family](https://en.wikipedia.org/wiki/ARM9) — background on the ARM926EJ-S (ARMv5TEJ) core
+
 ## Sources
 
 Primary datasheets (in-repo, the authority for the register map):

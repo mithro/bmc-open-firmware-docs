@@ -95,3 +95,19 @@ On a bench board with no serving firmware the SMC flash-read window returns zero
 (the SMC is not clocked on a dead BMC), so flash **dumping** on such a board uses
 an external SPI emulator (spispy on an FPGA) rather than P2A. Once the BMC runs
 the program's own firmware, in-band flash access via `culvert` becomes available.
+
+## See also
+
+**Related pages**
+
+- {doc}`/debug/jtag-uart` — the JTAG run-control path in detail (wiring, OpenOCD)
+- {doc}`/hardware/soc-ast2050` — the DDR2 init corrections that make P2A boot reliable
+- {doc}`/systems/kgpe-d16` — the board these two access paths were verified on
+- {doc}`/drivers/linux` — the VIC blind-spot lesson (P2A reads zero at `0x1E6C0000`)
+- {doc}`/firmware/openbmc` — the OpenBMC image booted over P2A on silicon
+
+**External references**
+
+- [`culvert` (upstream)](https://github.com/amboar/culvert) — the Aspeed AHB-bridge tool, upstream of the G3-ported fork
+- [OpenOCD](https://openocd.org/) — the JTAG run-control tool for the second access path
+- [ARM9 processor family](https://en.wikipedia.org/wiki/ARM9) — the ARM926EJ-S core and its EmbeddedICE-RT debug

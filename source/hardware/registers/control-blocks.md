@@ -1183,6 +1183,22 @@ The pass-through UART exposes **only the ARM-only extended registers**
   [aspeed-mainline-drivers-analysis.md:135](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-mainline-drivers-analysis.md#L135) [aspeed-driver-quick-reference.md:96](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-driver-quick-reference.md#L96)
 ```
 
+## See also
+
+**Related pages**
+
+- {doc}`/hardware/registers/uart-vic-timers` — the VIC lines these blocks raise and the real UART1/UART2 the PUART passes through
+- {doc}`/hardware/registers/scu-clock-reset` — the SCU04/SCU0C/SCU74 reset, clock-gate and pin-mux bits for these blocks
+- {doc}`/hardware/peripherals/w83795g` — the off-chip hardware monitor doing fan/PWM on the target boards
+- {doc}`/hardware/registers/index` — register reference landing
+
+**External references**
+
+- [Linux hwmon aspeed-pwm-tacho](https://docs.kernel.org/hwmon/aspeed-pwm-tacho.html) — the upstream driver doc for this exact PWM/fan-tach block
+- [Linux RTC (real-time clock) class](https://docs.kernel.org/admin-guide/rtc.html) — the RTC subsystem model
+- [aspeed PECI device-tree binding](https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/peci/peci-aspeed.yaml) — the upstream binding for the Aspeed PECI controller
+- [Linux serial/TTY driver API](https://docs.kernel.org/driver-api/serial/index.html) — the serial-core underneath the VUART/PUART 16550 register sets
+
 ## Sources
 
 - **AST2050/AST1100 A3 Datasheet V1.05** (in-repo:

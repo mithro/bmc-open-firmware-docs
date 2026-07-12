@@ -123,3 +123,18 @@ display-usb
 control-blocks
 engines-blocks
 ```
+
+## See also
+
+**Related pages**
+
+- {doc}`/hardware/soc-ast2050` — the SoC-level orientation this register reference sits under
+- {doc}`/drivers/peripheral-map` — every block mapped to its Linux/Zephyr/QEMU driver and OpenBMC daemon
+- {doc}`/emulation/testbench` — the qtest benches that assert these register behaviours
+- {doc}`/drivers/linux` — the G3 mainline-Linux driver work
+
+**External references**
+
+- [QEMU Aspeed SoC documentation](https://www.qemu.org/docs/master/system/arm/aspeed.html) — the machine models that emulate this SoC's registers
+- [Linux driver API index](https://docs.kernel.org/driver-api/index.html) — the subsystem driver docs the per-block pages link into
+- [Device Tree usage model](https://docs.kernel.org/devicetree/usage-model.html) — how these register blocks are described to Linux via DT

@@ -181,3 +181,20 @@ Full register-bit detail lives in the program's [`ast2050.h`](https://github.com
 datasheet. This page captures the SoC-level map a model/driver needs; per-block
 bit tables are added as each block is modelled.
 ```
+
+## See also
+
+**Related pages**
+
+- {doc}`/hardware/registers/index` — the register-by-register maps for every on-chip block
+- {doc}`/hardware/index` — the hardware section landing
+- {doc}`/debug/bring-up` — the P2A cold-boot-into-DRAM chain referenced above
+- {doc}`/drivers/linux` — the G3 VIC/clock driver work and the upstreaming shape
+- {doc}`/systems/kgpe-d16` — the primary board carrying this SoC
+
+**External references**
+
+- [QEMU Aspeed SoC documentation](https://www.qemu.org/docs/master/system/arm/aspeed.html) — the Aspeed machine models (G4/G5 cousins of this G3 SoC)
+- [ARM926EJ-S Technical Reference Manual](https://developer.arm.com/documentation/ddi0198/latest/) — the ARMv5TE CPU core at the heart of the AST2050
+- [Linux Common Clock Framework](https://docs.kernel.org/driver-api/clk.html) — the clk framework the `clk-aspeed` driver plugs into
+- [Linux IRQ handling (core API)](https://docs.kernel.org/core-api/irq/index.html) — the irqchip model behind the compact G3 VIC driver

@@ -279,6 +279,23 @@ follows that standard, the pinout is: `[HEADERS-J1-J6.md](https://github.com/mit
 
 ---
 
+## See also
+
+**Related pages**
+
+- {doc}`/hardware/soc-ns9360` — the Digi NS9360 SoC this board is built on
+- {doc}`/hardware/soc-ns9360-io` — the GPIO/serial I/O the board wires up
+- {doc}`/hardware/peripherals/maxq3180` — the metering AFE (U15)
+- {doc}`/hardware/peripherals/ics1893` — the Ethernet PHY (U10)
+- {doc}`/drivers/uboot` — the open NS9360 U-Boot port for this board
+
+**External references**
+
+- [NS9360 Hardware Reference (Digi 90000675 rev J)](https://ftp1.digi.com/support/documentation/90000675_J.pdf) — the SoC register authority
+- [NS9360 Datasheet (Digi 91001326 rev D)](https://ftp1.digi.com/support/documentation/91001326_D.pdf) — electrical/strap reference
+- [Linux `arch/arm/mach-ns9xxx` (v2.6.39)](https://github.com/torvalds/linux/tree/v2.6.39/arch/arm/mach-ns9xxx) — the historical mainline NS9360 platform tree
+- [U-Boot documentation](https://docs.u-boot.org/en/latest/) — upstream docs for the open-firmware path
+
 ## Sources
 
 - **`hpe-ipdu-firmware/`** — [`ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md), [`HEADERS-J1-J6.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/HEADERS-J1-J6.md), [`STATUS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/STATUS.md)

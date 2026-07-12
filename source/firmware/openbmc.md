@@ -89,3 +89,22 @@ feature set above rather than shipping full OpenBMC. Execute-in-place (XIP) of t
 read-only rootfs from SPI NOR remains a further RAM-saving option once a serving
 boot flash is in place. WallaBMC ({doc}`wallabmc`) is the lighter Zephyr fallback
 where even a stripped OpenBMC cannot fit.
+
+## See also
+
+**Related pages**
+
+- {doc}`/firmware/wallabmc` — the lighter Zephyr BMC alternative
+- {doc}`/drivers/linux` — the G3 VIC and ftgmac100 fixes that let Redfish run on silicon
+- {doc}`/drivers/peripheral-map` — the feature → daemon → hardware-path map
+- {doc}`/debug/bring-up` — the P2A path used to boot OpenBMC on the real AST2050
+- {doc}`/emulation/qemu` — the QEMU vehicle for the modern-OpenBMC/Redfish work
+
+**External references**
+
+- [OpenBMC documentation](https://github.com/openbmc/docs) — the upstream project docs
+- [OpenBMC project site](https://www.openbmc.org/) — project overview and governance
+- [`bmcweb`](https://github.com/openbmc/bmcweb) — the Redfish/web daemon used here
+- [DMTF Redfish standard](https://www.dmtf.org/standards/redfish) — the Redfish API specification `bmcweb` implements
+- [`phosphor-state-manager`](https://github.com/openbmc/phosphor-state-manager) — the power/host-state daemon
+- [`dbus-sensors`](https://github.com/openbmc/dbus-sensors) — the sensor daemon behind the SDR

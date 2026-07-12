@@ -127,3 +127,20 @@ No mainline support exists. The path is to forward-port the archived
 `arch/arm/mach-ns9xxx` (≈ Linux 2.6.39) toward a modern kernel, device-tree-ifying
 it. This is the highest-risk kernel item; the acceptance target is a console boot
 on the QEMU `ns9360` machine.
+
+## See also
+
+**Related pages**
+
+- {doc}`/drivers/driver-reference` — the full verified driver table (source, `compatible`, caveats)
+- {doc}`/drivers/peripheral-map` — peripheral → driver → daemon map
+- {doc}`/hardware/soc-ast2050` — the AST2050 (G3) SoC these drivers bind to
+- {doc}`/hardware/soc-ns9360` — the NS9360 SoC behind the mach-ns9xxx path
+- {doc}`/firmware/openbmc` — the userspace these kernel fixes carry on silicon
+
+**External references**
+
+- [Devicetree usage model](https://docs.kernel.org/devicetree/usage-model.html) — how DT nodes bind to Linux drivers
+- [Linux driver model](https://docs.kernel.org/driver-api/driver-model/index.html) — the bus/driver/device binding framework
+- [Linux hwmon subsystem](https://docs.kernel.org/hwmon/index.html) — the subsystem behind the INA219/ADT7462/LM75 sensor drivers
+- [Linux `arch/arm/mach-ns9xxx` (v2.6.39)](https://github.com/torvalds/linux/tree/v2.6.39/arch/arm/mach-ns9xxx) — the archived NS9360 platform tree to forward-port

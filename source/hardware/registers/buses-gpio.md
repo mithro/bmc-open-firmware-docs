@@ -1485,6 +1485,24 @@ as the PEX8696 reset — alongside 80 off-chip PCA9555 expander lines
 
 ---
 
+## See also
+
+**Related pages**
+
+- {doc}`/hardware/registers/scu-clock-reset` — the SCU74 pin-mux and SCU04 resets that bring these bus controllers online
+- {doc}`/hardware/i2c-topology` — the board-level I2C bus tree this I2C/SMBus controller drives
+- {doc}`/hardware/peripherals/index` — the I2C/SMBus devices and GPIO expanders wired to these buses
+- {doc}`/hardware/registers/pcie-vga-usb-bridges` — the iLPC-to-AHB backdoor in the LPC block, covered from the AHB-bridge side
+
+**External references**
+
+- [Linux I2C/SMBus subsystem](https://docs.kernel.org/i2c/index.html) — the subsystem the `i2c-aspeed` driver plugs into
+- [Linux SPI subsystem](https://docs.kernel.org/spi/index.html) — SPI framework behind the SMC/SPI-flash interface
+- [Linux GPIO driver interface](https://docs.kernel.org/driver-api/gpio/index.html) — the gpiolib model `gpio-aspeed` implements
+- [Linux pin control subsystem](https://docs.kernel.org/driver-api/pin-control.html) — the pinctrl/pinmux model behind the SCU multi-function pins
+- [aspeed I2C device-tree binding](https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml) — the register-compatible G4 I2C-bus binding
+- [aspeed GPIO device-tree binding](https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/gpio/aspeed,ast2400-gpio.yaml) — the register-compatible G4 GPIO binding
+
 ## Sources
 
 **Primary datasheet**

@@ -1107,6 +1107,23 @@ sequence. The `0x033103F1` value loaded into `r2` at [platform.S:149](https://gi
 silicon check is dead/unused (the subsequent `set_MPLL` writes literal
 `0x00004c81` instead). [platform.S:149-159](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L149-L159)
 
+## See also
+
+**Related pages**
+
+- {doc}`/hardware/registers/ddr2-sdram` — the DDR2 cold-init that programs the M-PLL, the SCU unlock key, and the SCU40 scratch/handshake registers
+- {doc}`/hardware/registers/uart-vic-timers` — the watchdog's `HRST_N` reset domain, plus the PCLK/UARTCLK derived from these PLLs
+- {doc}`/hardware/registers/network-mac-phy` — the SCU04/SCU70/SCU74 bits that reset, gate and pin-mux the MAC and select its PHY mode
+- {doc}`/hardware/soc-ast2050` — SoC-level orientation and the G3-vs-G4 clock/strap deltas
+
+**External references**
+
+- [Linux Common Clock Framework](https://docs.kernel.org/driver-api/clk.html) — the clk framework the (AST2400/G4) `clk-aspeed` driver plugs into
+- [Linux reset controller API](https://docs.kernel.org/driver-api/reset.html) — the model behind per-module SCU04 software resets
+- [Linux Watchdog API](https://docs.kernel.org/watchdog/watchdog-api.html) — userspace/driver contract for a watchdog like the WDT block here
+- [aspeed watchdog device-tree binding](https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/watchdog/aspeed,ast2400-wdt.yaml) — the register-compatible G4 watchdog binding
+- [QEMU Aspeed SoC documentation](https://www.qemu.org/docs/master/system/arm/aspeed.html) — how QEMU models the Aspeed SCU/clock/watchdog
+
 ## Sources
 
 - **AST2050/AST1100 A3 Datasheet V1.05** (in-repo:

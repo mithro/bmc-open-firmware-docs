@@ -503,6 +503,22 @@ serial channel bases (0x90200000/40, 0x90300000/40). The PLL field split (FS bit
 $\text{cpuclock} = \text{systemclock}/2$ are identical across both code bases and the
 datasheet [mach-ns9xxx processor-ns9360.c][u-boot ns9750dev.h][HWRef p.153].
 
+## See also
+
+**Related pages**
+
+- {doc}`/hardware/soc-ns9360` — the NS9360 SoC overview and SCM register map
+- {doc}`/hardware/soc-ns9360-memory-serial` — memory controller, Ethernet and serial
+- {doc}`/hardware/soc-ns9360-secondary` — LCD, IEEE 1284 and USB secondary blocks
+- {doc}`/systems/hpe-ipdu` — the board whose GPIO/BBus wiring this drives
+- {doc}`/drivers/uboot` — the open NS9360 U-Boot port
+
+**External references**
+
+- [Linux `arch/arm/mach-ns9xxx` (v2.6.39)](https://github.com/torvalds/linux/tree/v2.6.39/arch/arm/mach-ns9xxx) — `gpio-ns9360.c` / `regs-bbu.h` in the historical mainline tree
+- [U-Boot documentation](https://docs.u-boot.org/en/latest/) — the open-firmware path chosen for this SoC
+- [Zephyr architecture-porting guide](https://docs.zephyrproject.org/latest/hardware/porting/arch.html) — the ARMv5 / ARM926EJ-S port this core needs
+
 ## Sources
 
 Primary datasheets (in-repo, the authority for the register map):

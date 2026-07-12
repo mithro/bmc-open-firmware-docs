@@ -461,6 +461,22 @@ the AST2050's own GPIO/WDT reset primitives (§3).
 
 ---
 
+## See also
+
+**Related pages**
+
+- {doc}`/hardware/soc-ast2050` — the AST2050 SoC this board's BMC is built on
+- {doc}`/debug/jtag-uart` — the JTAG/UART wiring and OpenOCD invocation
+- {doc}`/debug/bring-up` — the P2A + JTAG out-of-band bring-up paths
+- {doc}`/drivers/linux` — the G3 kernel fixes verified on this board
+- {doc}`/firmware/openbmc` — OpenBMC brought up on this real AST2050
+
+**External references**
+
+- [Raptor Engineering](https://www.raptorengineering.com/) — author of the known-good AST2050 Linux 2.6.28.9 port this board follows
+- [coreboot mainboard documentation](https://doc.coreboot.org/mainboard/index.html) — the KGPE-D16 is a supported coreboot mainboard
+- [OpenBMC documentation](https://github.com/openbmc/docs) — the open BMC firmware target for this board
+
 ## Sources
 
 - **`asus-kgpe-d16-firmware/`** — [`HEADER-PINOUTS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/HEADER-PINOUTS.md), [`JTAG-HEADERS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-HEADERS.md),

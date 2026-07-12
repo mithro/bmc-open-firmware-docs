@@ -205,6 +205,22 @@ when change baud rate in Dialog.c"). Capabilities the MCU exposes to the NS9360:
 
 ---
 
+## See also
+
+**Related pages**
+
+- {doc}`/hardware/soc-ns9360` — the NS9360 SoC it talks to over a UART
+- {doc}`/hardware/soc-ns9360-memory-serial` — the NS9360 serial ports (Serial Port B)
+- {doc}`/systems/hpe-ipdu` — the iPDU board
+- {doc}`/hardware/peripherals/ics1893` — the iPDU's other NS9360-attached peripheral
+
+**External references**
+
+- [Toshiba TMP89FM42LUG product page (archived)](https://web.archive.org/web/20260303180515/https://toshiba.semicon-storage.com/us/semiconductor/product/microcontrollers/tlcs-870-c1-series-and-tlcs-870-c1e-series/detail.TMP89FM42LUG.html) — the vendor product page
+- [Toshiba TMP89FM42 datasheet (TLCS-870/C1)](https://media.digikey.com/pdf/Data%20Sheets/Toshiba%20PDFs/TMP89FM42UG_e080902.pdf) — the family datasheet (device overview + UART0 registers)
+
+(Toshiba TLCS-870/C1 8-bit MCU — no mainline Linux or Zephyr driver.)
+
 ## Sources
 
 - **TMP89FM42LUG datasheet** (Toshiba TLCS-870/C1) — device overview + the

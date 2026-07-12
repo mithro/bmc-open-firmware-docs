@@ -1381,6 +1381,20 @@ verify (`asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md`, "Change 10: Ethernet
 
 ---
 
+## See also
+
+**Related pages**
+
+- {doc}`/hardware/registers/scu-clock-reset` — the SCU04/SCU0C/SCU70/SCU74 reset, clock-gate, pin-mux and PHY-mode bits that gate the MAC
+- {doc}`/hardware/peripherals/ics1893` — an external 10/100 MII/RMII PHY peripheral of the same clause-22 class
+- {doc}`/hardware/registers/index` — register reference landing
+
+**External references**
+
+- [Linux networking subsystem](https://docs.kernel.org/networking/index.html) — driver/stack documentation the ftgmac100 MAC driver lives in
+- [Linux PHY abstraction layer (phylib)](https://docs.kernel.org/networking/phy.html) — the MDIO/MII management + PHY model this MAC's PHYCR/PHYDATA feed
+- [ftgmac100 device-tree binding](https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/net/faraday,ftgmac100.yaml) — the upstream binding for this exact Faraday MAC IP
+
 ## Sources
 
 Primary hardware authority:

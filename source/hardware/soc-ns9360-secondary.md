@@ -2294,6 +2294,21 @@ The endpoint FIFO *data* is moved by the USB device BBus DMA controller at
 
 ---
 
+## See also
+
+**Related pages**
+
+- {doc}`/hardware/soc-ns9360` — the NS9360 SoC overview and SCM register map
+- {doc}`/hardware/soc-ns9360-io` — the BBus Master Reset / clock-enable bits that gate these blocks
+- {doc}`/hardware/soc-ns9360-memory-serial` — memory controller, Ethernet and serial
+- {doc}`/systems/hpe-ipdu` — the board where these blocks sit unused
+
+**External references**
+
+- [Linux `arch/arm/mach-ns9xxx` (v2.6.39)](https://github.com/torvalds/linux/tree/v2.6.39/arch/arm/mach-ns9xxx) — the historical mainline tree (which carries **no** LCD/1284/USB register defs)
+- [U-Boot documentation](https://docs.u-boot.org/en/latest/) — the open-firmware path chosen for this SoC
+- [Zephyr architecture-porting guide](https://docs.zephyrproject.org/latest/hardware/porting/arch.html) — the ARMv5 / ARM926EJ-S port this core needs
+
 ## Sources
 
 Primary datasheet (in-repo, the authority for the register map):

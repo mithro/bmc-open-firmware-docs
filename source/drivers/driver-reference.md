@@ -306,6 +306,22 @@ U-Boot support), not OpenBMC/Linux. Two iPDU sensors likewise have no mainline
 driver: the **MAXQ3180** energy-measurement AFE (SPI) and the **TMP89** sub-MCU
 (custom serial protocol); both require custom drivers.
 
+## See also
+
+**Related pages**
+
+- {doc}`/drivers/linux` — the G3 patch-series narrative behind these compatibles
+- {doc}`/drivers/peripheral-map` — peripheral → driver → daemon map
+- {doc}`/hardware/registers/index` — the register pages the "Drives" column links
+- {doc}`/hardware/soc-ast2050` — the AST2050 (G3) SoC most rows target
+- {doc}`/hardware/peripherals/index` — the off-chip devices in the lower rows
+
+**External references**
+
+- [Linux driver model](https://docs.kernel.org/driver-api/driver-model/index.html) — how these drivers bind to devices
+- [Devicetree usage model](https://docs.kernel.org/devicetree/usage-model.html) — how the `compatible` strings match
+- [Linux hwmon subsystem](https://docs.kernel.org/hwmon/index.html) — the subsystem for the sensor drivers
+
 ## Sources
 
 <!-- Mainline Linux driver sources (verified HTTP 200 against torvalds/linux master) -->

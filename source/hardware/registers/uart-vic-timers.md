@@ -942,6 +942,22 @@ delivery is fixed. `[TIMER-RCA](#sources)`
 
 ---
 
+## See also
+
+**Related pages**
+
+- {doc}`/hardware/registers/pcie-vga-usb-bridges` — the sibling host-facing endpoint and AHB debug bridges split off from this page
+- {doc}`/hardware/registers/scu-clock-reset` — PCLK/UARTCLK generation and the watchdog's `HRST_N` reset domain
+- {doc}`/hardware/registers/control-blocks` — the VUART/PUART 16550 variants and the RTC alarms that raise VIC lines
+- {doc}`/hardware/soc-ast2050` — the compact G3 VIC and why the mainline G4 VIC driver misses it
+
+**External references**
+
+- [Linux serial/TTY driver API](https://docs.kernel.org/driver-api/serial/index.html) — the serial-core the 16550 UART driver sits under
+- [Linux IRQ handling (core API)](https://docs.kernel.org/core-api/irq/index.html) — irqchip/irqdomain model behind a VIC driver
+- [8250/16550 UART device-tree binding](https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/serial/8250.yaml) — the binding for this 16550-compatible UART
+- [QEMU Aspeed SoC documentation](https://www.qemu.org/docs/master/system/arm/aspeed.html) — how QEMU models the Aspeed UART/VIC/timer blocks
+
 ## Sources
 
 - **AST2050/AST1100 A3 Datasheet, V1.05** (25 May 2010), in-repo PDF. Chapters

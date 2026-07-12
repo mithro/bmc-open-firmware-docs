@@ -66,3 +66,19 @@ sudo openocd -f rpi4-jtag.cfg -f ast2050.cfg -c "init; scan_chain; shutdown"
 
 These configs and the wiring detail are maintained in the program's
 [`RPI4-OPENOCD-JTAG-WIRING.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RPI4-OPENOCD-JTAG-WIRING.md) / `openocd/` reference and drive the HIL backend.
+
+## See also
+
+**Related pages**
+
+- {doc}`/debug/bring-up` — the two independent access paths (P2A + JTAG) overview
+- {doc}`/systems/kgpe-d16` — the AST2050 header pinouts and RPi4 wiring in full
+- {doc}`/systems/hpe-ipdu` — the NS9360 J1–J6 debug/JTAG header set
+- {doc}`/hardware/registers/uart-vic-timers` — the UART instance / `ttyS1` detail
+- {doc}`/emulation/testbench` — the HIL backend these OpenOCD configs drive
+
+**External references**
+
+- [OpenOCD](https://openocd.org/) — the on-chip debugger used with the `linuxgpiod` bit-bang driver
+- [OpenOCD User Guide](https://openocd.org/doc/html/index.html) — adapter drivers, `scan_chain`, and reset handling
+- [ARM9 processor family](https://en.wikipedia.org/wiki/ARM9) — the ARM926EJ-S core and its EmbeddedICE-RT (raw-JTAG) debug

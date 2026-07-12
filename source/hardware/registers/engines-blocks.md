@@ -1596,6 +1596,22 @@ Each cursor pixel is a 16-bit word in the frame-buffer shape area
   "ASPEED Confidential" watermark fragments; all values here were read back
   against the source PDF pages (e.g. PDF p.222 confirmed identical to the text).
 
+## See also
+
+**Related pages**
+
+- {doc}`/hardware/registers/ddr2-sdram` — the DRAM that the MIC scrubs and the MDMA fills (ECC init)
+- {doc}`/hardware/registers/pcie-vga-usb-bridges` — the inbound P2A bridge, counterpart to the outbound A2P here, and the PCI endpoint
+- {doc}`/hardware/registers/display-usb` — the VGA/Video path the 2D engine and hardware cursor belong to
+- {doc}`/hardware/registers/scu-clock-reset` — YCLK/GCLK gating and the SCU04 resets for HACE and the 2D engine
+
+**External references**
+
+- [Linux crypto API](https://docs.kernel.org/crypto/index.html) — the framework a HACE hash/cipher driver registers with
+- [Linux DMA engine subsystem](https://docs.kernel.org/driver-api/dmaengine/index.html) — the dmaengine model for a memory-to-memory copier like MDMA
+- [aspeed HACE device-tree binding](https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/crypto/aspeed,ast2500-hace.yaml) — the later-gen Aspeed hash/crypto binding
+- [Linux GPU/DRM documentation](https://docs.kernel.org/gpu/index.html) — the display/2D-acceleration subsystem context for the 2D engine and cursor
+
 ## Sources
 
 - [DS](#sources) ASPEED, *AST2050 / AST1100 A3 Datasheet, V1.05* (25 May 2010), in-repo at

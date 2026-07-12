@@ -52,3 +52,21 @@ Every firmware build job ends by booting its image through
 `firmware-testbench --backend qemu --bench <board>` and asserting the board
 bench (boot → SSH → Redfish → sensors → power). The identical command with
 `--backend hil` gates promotion to real hardware.
+
+## See also
+
+**Related pages**
+
+- {doc}`/emulation/qemu` — the QEMU machines the qtest benches exercise
+- {doc}`/debug/index` — the real-hardware (HIL) side of the shared benches
+- {doc}`/debug/jtag-uart` — the OpenOCD/UART rig behind the `hil` backend
+- {doc}`/firmware/openbmc` — the board bench (boot → Redfish → sensors → power)
+- {doc}`/hardware/index` — the register reset-values the qtest layer asserts
+
+**External references**
+
+- [QEMU `qtest` framework](https://www.qemu.org/docs/master/devel/testing/qtest.html) — the register-level device-model test protocol
+- [QEMU testing guide](https://www.qemu.org/docs/master/devel/testing/index.html) — how QEMU's test suites are run
+- [Meson unit tests](https://mesonbuild.com/Unit-tests.html) — the `meson test --suite qtest` runner
+- [pytest documentation](https://docs.pytest.org/en/stable/) — the framework the `firmware-testbench` benches use
+- [OpenOCD](https://openocd.org/) — the JTAG tool behind the HIL backend

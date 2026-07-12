@@ -115,6 +115,25 @@ visibility on the currently selected channel(s).
 
 ---
 
+## See also
+
+**Related pages**
+
+- {doc}`/hardware/peripherals/adt7462` — the two ADT7462s behind the PCA9544A
+- {doc}`/hardware/peripherals/tmp75-lm75` — the 16 per-slot sensors behind the two PCA9548As
+- {doc}`/hardware/i2c-topology` — the full C410X I2C tree the muxes structure
+- {doc}`/hardware/registers/buses-gpio` — the AST2050 I2C controller upstream of the muxes
+- {doc}`/systems/dell-c410x` — the board
+
+**External references**
+
+- [NXP PCA9548A datasheet (archived)](https://web.archive.org/web/20251026123132/https://www.nxp.com/docs/en/data-sheet/PCA9548A.pdf) — the 8-channel switch datasheet
+- [NXP PCA9544A datasheet (archived)](https://web.archive.org/web/20260312161155/https://www.nxp.com/docs/en/data-sheet/PCA9544A.pdf) — the 4-channel mux datasheet
+- [Linux I2C muxes / topology](https://docs.kernel.org/i2c/i2c-topology.html) — how the kernel models muxed I2C segments
+- [Devicetree binding: i2c-mux-pca954x.yaml](https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml) — the DT binding (`nxp,pca9548` / `nxp,pca9544`)
+- [Zephyr binding: ti,tca9548a](https://docs.zephyrproject.org/latest/build/dts/api/bindings/i2c/ti,tca9548a.html) — the Zephyr 8-channel-mux binding (PCA9548-compatible)
+- [Zephyr binding: ti,tca9544a](https://docs.zephyrproject.org/latest/build/dts/api/bindings/i2c/ti,tca9544a.html) — the Zephyr 4-channel-mux binding (PCA9544-compatible)
+
 ## Sources
 
 - **PCA9548A datasheet** (NXP SCPS143) and **PCA9544A datasheet** (NXP SCPS146) —

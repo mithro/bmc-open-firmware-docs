@@ -227,3 +227,21 @@ SoC in this program therefore requires a **first-class ARMv5 architecture port**
 as a prerequisite deliverable, on top of which the per-peripheral Zephyr drivers
 above are written. This is tracked as the highest-risk item of the WallaBMC
 track; see {doc}`../firmware/wallabmc`.
+
+## See also
+
+**Related pages**
+
+- {doc}`/drivers/driver-reference` — the full verified driver table behind this map
+- {doc}`/drivers/linux` — the AST2050 G3 patch series that adds the `ast2050-*` compatibles
+- {doc}`/firmware/openbmc` — the daemons named in the OpenBMC column
+- {doc}`/hardware/i2c-topology` — the C410X bus fan-out feeding these devices
+- {doc}`/hardware/index` — the register references each row links to
+
+**External references**
+
+- [OpenBMC documentation](https://github.com/openbmc/docs) — the upstream project docs
+- [OpenBMC `dbus-sensors`](https://github.com/openbmc/dbus-sensors) — the sensor daemon in the map
+- [OpenBMC `entity-manager`](https://github.com/openbmc/entity-manager) — inventory / configuration daemon
+- [Linux hwmon subsystem](https://docs.kernel.org/hwmon/index.html) — the kernel side of the sensor rows
+- [Zephyr documentation](https://docs.zephyrproject.org/latest/) — the WallaBMC-track driver framework

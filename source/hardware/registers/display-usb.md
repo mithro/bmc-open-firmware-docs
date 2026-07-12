@@ -2811,6 +2811,22 @@ through PCI I/O ports. `[aspeeddrm]`
 
 ---
 
+## See also
+
+**Related pages**
+
+- {doc}`/hardware/registers/pcie-vga-usb-bridges` — the PCI/VGA/USB endpoint summary that points to these full register maps
+- {doc}`/hardware/registers/engines-blocks` — the 2D graphics engine and hardware cursor that share this VGA/Video path
+- {doc}`/hardware/registers/scu-clock-reset` — the DCLK/ECLK/USB2.0 clock enables and SCU04 resets these blocks need
+- {doc}`/hardware/registers/index` — register reference landing
+
+**External references**
+
+- [Linux USB gadget API](https://docs.kernel.org/driver-api/usb/gadget.html) — the gadget/virtual-hub model behind the USB block (`aspeed-vhub`)
+- [Linux V4L2 core](https://docs.kernel.org/driver-api/media/v4l2-core.html) — the video-capture framework the Video Engine driver targets
+- [Linux DRM/KMS](https://docs.kernel.org/gpu/drm-kms.html) — the display/mode-setting framework for the VGA controller
+- [aspeed video-engine device-tree binding](https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/media/aspeed,video-engine.yaml) — the upstream binding for the Aspeed Video Engine
+
 ## Sources
 
 - **AST2050/AST1100 A3 Datasheet, V1.05** (25 May 2010), in-repo PDF

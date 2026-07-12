@@ -73,3 +73,19 @@ Board-complete modelling (MAXQ3180, display MCU, Ethernet PHY) is planned.
 One reusable `I2CSlave` model per device type (INA219, ADT7462, TMP75/LM75,
 PCA9555, PCA9548/PCA9544, PEX8696/8647), shared by the KGPE-D16 and C410X
 machines. Built highest-multiplicity-first; each ships with a qtest bench.
+
+## See also
+
+**Related pages**
+
+- {doc}`/emulation/testbench` — the qtest + `firmware-testbench` harness driving these machines
+- {doc}`/hardware/soc-ast2050` — the AST2050 SoC the `kgpe-d16-bmc` model reproduces
+- {doc}`/hardware/soc-ns9360` — the SoC behind the `ns9360` machine
+- {doc}`/firmware/openbmc` — the OpenBMC/Redfish-in-QEMU vehicle
+- {doc}`/drivers/linux` — the `FAST_MODE`/VIC fixes developed QEMU-first
+
+**External references**
+
+- [QEMU Aspeed machines](https://www.qemu.org/docs/master/system/arm/aspeed.html) — the upstream AST24xx/25xx/2600 models the AST2050 machine extends
+- [QEMU Arm system emulation](https://www.qemu.org/docs/master/system/target-arm.html) — the Arm target these machines build on
+- [QEMU `qtest` framework](https://www.qemu.org/docs/master/devel/testing/qtest.html) — the device-model test protocol used by the benches

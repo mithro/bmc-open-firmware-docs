@@ -1152,6 +1152,22 @@ bits 3:0 report valid configuration (`VCAC`/`VTAC`/`VCC`/`VTC`) and the counters
 will not run on an invalid configuration [HWRef p.498-506](#sources). The RTC clock divider
 that produces the 100 Hz tick lives in the SCM at 0xA0900224 [HWRef p.193](#sources).
 
+## See also
+
+**Related pages**
+
+- {doc}`/hardware/soc-ns9360` — the NS9360 SoC overview and SCM register map
+- {doc}`/hardware/soc-ns9360-io` — GPIO, BBus utility and DMA register maps
+- {doc}`/hardware/peripherals/ics1893` — the Ethernet PHY on the MAC's MII bus
+- {doc}`/hardware/peripherals/maxq3180` — the metering AFE on a serial-SPI channel
+- {doc}`/systems/hpe-ipdu` — the board this memory/serial map describes
+
+**External references**
+
+- [Linux `arch/arm/mach-ns9xxx` (v2.6.39)](https://github.com/torvalds/linux/tree/v2.6.39/arch/arm/mach-ns9xxx) — `regs-mem.h` and the serial driver in the historical mainline tree
+- [U-Boot documentation](https://docs.u-boot.org/en/latest/) — the open-firmware path chosen for this SoC (CFI NOR, serial, MAC)
+- [Zephyr architecture-porting guide](https://docs.zephyrproject.org/latest/hardware/porting/arch.html) — the ARMv5 / ARM926EJ-S port this core needs
+
 ## Sources
 
 Primary datasheets (in-repo, the authority for the register map):

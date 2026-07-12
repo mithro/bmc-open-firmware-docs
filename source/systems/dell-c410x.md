@@ -261,6 +261,22 @@ temperature/config/T_LOW/T_HIGH). [dts:739-743,769] The front-board sensor at
 and LM75 register sets; the per-slot part is functionally one of them.
 ```
 
+## See also
+
+**Related pages**
+
+- {doc}`/hardware/soc-ast2050` — the AST2050 BMC SoC that manages this chassis
+- {doc}`/hardware/i2c-topology` — the full seven-bus I2C topology
+- {doc}`/hardware/peripherals/index` — the off-chip sensor / GPIO / PEX devices
+- {doc}`/firmware/openbmc` — the OpenBMC stack that consumes this sensor/power model
+- {doc}`/emulation/qemu` — the planned board-complete `c410x-bmc` QEMU machine
+
+**External references**
+
+- [OpenBMC documentation](https://github.com/openbmc/docs) — the firmware target for this board
+- [Linux hwmon subsystem](https://docs.kernel.org/hwmon/index.html) — the subsystem behind the INA219/ADT7462/TMP75/LM75 sensors
+- [QEMU Aspeed machines](https://www.qemu.org/docs/master/system/arm/aspeed.html) — the Aspeed BMC family this board's SoC is emulated within
+
 ## Sources
 
 - **`dell-c410x-firmware/ANALYSIS.md`**, the decoded **`io-tables/`**,
