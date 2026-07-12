@@ -37,6 +37,17 @@ FTGMAC100 IP block; the AST2050 datasheet documents a *superset* register map
 (1000 Mbps / GMII fields are present in the definitions but **only 10/100 is
 supported** on this chip). [DS §14.1 p.124](#sources)
 
+```{figure} /_static/diagrams/ast2050-network-datapath.svg
+:alt: AST2050 Ethernet datapath — the on-chip FTGMAC100 MAC (MAC0 0x1E660000, MAC1 0x1E680000) moving frames via TX/RX DMA rings on the AHB bus, reaching the external RTL8201CP PHY over a bidirectional MDIO/MDC clause-22 management bus and an RMII data path, then through isolation magnetics to the RJ-45 10/100BASE-T connector.
+:width: 100%
+
+The AST2050 Ethernet signal chain: the on-chip **FTGMAC100** MAC reaches the
+external **RTL8201CP** PHY over two channels — a **clause-22 MDIO/MDC**
+management bus (link/speed/duplex) and the **RMII data path** — then through
+magnetics to the RJ-45. The MDIO speed read is the path the `FAST_MODE` fix
+corrects (see §10 below and {doc}`/drivers/linux`).
+```
+
 :::{list-table} MAC module address & interrupt map
 :header-rows: 1
 :widths: 22 20 14 14 30
