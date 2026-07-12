@@ -47,6 +47,24 @@ every component, and to bring up every layer of the software stack:
   tracks: Redfish, power, sensors, fans, PCIe control, SoL, and footprint work.
 - {doc}`debug/index` — JTAG/UART/SPI bring-up and the hardware-in-the-loop rig.
 
+## Start here
+
+```{list-table}
+:header-rows: 1
+:widths: 34 66
+
+* - If you are…
+  - Start with
+* - Writing a **QEMU device model**
+  - {doc}`hardware/registers/index` (the AST2050 register maps) → {doc}`emulation/qemu` → {doc}`emulation/testbench`
+* - Writing a **Linux / Zephyr driver**
+  - {doc}`drivers/peripheral-map` (block → driver → daemon) → the relevant {doc}`hardware/registers/index` page → {doc}`drivers/linux`
+* - Building **OpenBMC / WallaBMC firmware**
+  - {doc}`firmware/openbmc` / {doc}`firmware/wallabmc` → {doc}`drivers/peripheral-map`
+* - Doing **bench bring-up** on real silicon
+  - {doc}`debug/bring-up` (P2A + JTAG) → {doc}`debug/jtag-uart` → the board page under {doc}`systems/index`
+```
+
 ```{admonition} Status — much of this is now hardware-verified
 :class: important
 

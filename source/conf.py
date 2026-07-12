@@ -14,12 +14,15 @@ extensions = [
     "myst_parser",
     "sphinx_design",
     "sphinx_copybutton",
+    "sphinx.ext.mathjax",   # render $...$ / $$...$$ math via MathJax
 ]
 
 # MyST (Markdown) extensions used across the docs.
 myst_enable_extensions = [
     "colon_fence",   # ::: fenced directives
     "deflist",       # definition lists
+    "dollarmath",    # $inline$ and $$block$$ math
+    "amsmath",       # LaTeX amsmath environments (align, cases, …)
     "fieldlist",
     "substitution",
     "tasklist",

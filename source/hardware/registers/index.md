@@ -68,6 +68,47 @@ repository file for reverse-engineered values, or a URL for cross-checked
 external references (mainline drivers, JEDEC, component datasheets). These are
 exactly the behaviours the {doc}`../../emulation/testbench` qtest benches assert.
 
+## The pages at a glance
+
+Each row links to the register page; the {doc}`../../drivers/peripheral-map`
+maps every block to its Linux/Zephyr/QEMU driver and OpenBMC daemon.
+
+```{list-table}
+:header-rows: 1
+:widths: 40 30 30
+
+* - Block(s)
+  - Base address(es)
+  - Page
+* - SCU · clock/PLL · reset · watchdog
+  - `0x1E6E2000` · `0x1E785000`
+  - {doc}`scu-clock-reset`
+* - DDR2 / SDRAM controller + cold-init
+  - `0x1E6E0000`
+  - {doc}`ddr2-sdram`
+* - Ethernet MAC · MDIO/MII · PHY
+  - `0x1E660000` / `0x1E680000`
+  - {doc}`network-mac-phy`
+* - I2C/SMBus · SPI/SMC flash · LPC · GPIO
+  - `0x1E78A000` · `0x16000000` · `0x1E789000` · `0x1E780000`
+  - {doc}`buses-gpio`
+* - UARTs · interrupt controller (VIC) · timers
+  - `0x1E783000`/`0x1E784000` · `0x1E6C0000` · `0x1E782000`
+  - {doc}`uart-vic-timers`
+* - PCI-slave/VGA endpoint · USB hub · P2A/iLPC AHB bridges
+  - `0x1E600000` · `0x1E6A0000` · `0x1E720000`
+  - {doc}`pcie-vga-usb-bridges`
+* - USB 2.0 · Video Engine · VGA + extended-CRT (full maps)
+  - `0x1E6A0000` · `0x1E700000`
+  - {doc}`display-usb`
+* - PWM & fan-tach · RTC · PECI · VUART/PUART
+  - `0x1E786000` · `0x1E781000` · `0x1E78B000` · `0x1E787000`
+  - {doc}`control-blocks`
+* - HACE · MIC · MDMA · A2P bridge · 2D engine · HW cursor
+  - `0x1E6E3000` · `0x1E640000` · `0x1E740000` · `0x1E720000`
+  - {doc}`engines-blocks`
+```
+
 ```{toctree}
 :maxdepth: 1
 :caption: SoC blocks
