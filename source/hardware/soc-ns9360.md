@@ -312,6 +312,18 @@ base/mask registers), the programmable timers, the software watchdog, the
 vectored interrupt controller, the PLL/clock configuration, reset/sleep control,
 and the RTC clock divider [HWRef p.136](#sources).
 
+```{admonition} Offset gaps and reset values in the NS9360 register maps
+:class: note
+
+Where an offset does not appear in an NS9360 register-map table below, it is
+**reserved** in the Digi hardware reference (the register files are not densely
+packed). Reset values are given inline for the fields whose power-on state the
+HW reference specifies; fields without a stated reset are ones the reference
+leaves undefined, and are noted as such rather than guessed. The exhaustively
+reset-annotated `Bits | Field | Access | Reset | Meaning` layout on
+{doc}`soc-ns9360-secondary` (LCD / IEEE-1284 / USB) is the template; the primary
+blocks here follow the same convention within the limits of the source.
+
 ### SCM register map
 
 ```{list-table} SCM registers (offset from 0xA0900000)

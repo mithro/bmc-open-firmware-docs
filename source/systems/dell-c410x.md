@@ -190,6 +190,43 @@ attention button [gpio-map](#sources).
 
 ---
 
+## Debug & console access
+
+The C410X BMC is an AST2050, so it shares the SoC-level debug and out-of-band
+access paths documented for the shared SoC — see {doc}`/debug/bring-up`
+(cold-boot over the **P2A** PCIe-to-AHB bridge) and {doc}`/debug/jtag-uart`
+(JTAG run-control). The board-specific access points that the stock firmware
+uses are:
+
+```{list-table}
+:header-rows: 1
+:widths: 26 22 52
+
+* - Path
+  - Location
+  - Notes
+* - Serial console
+  - **UART0** `0x1E783000` (`ttyS0`)
+  - 115200 8N1, vt100; the stock `bootargs` are `console=ttyS0,115200n8`
+* - Serial-over-LAN (SOL)
+  - **UART1** `0x1E784000`
+  - remote serial console over IPMI (the second SoC UART)
+* - vKVM
+  - Video Engine + `avct_server`
+  - Avocent virtual-KVM console server (`vkcs.ko`) — video capture + USB HID
+* - Out-of-band AHB
+  - P2A / iLPC bridges
+  - the shared AST2050 backdoors ({doc}`/hardware/registers/pcie-vga-usb-bridges`);
+    P2A is usable, iLPC is disabled on the boards examined
+```
+
+Unlike the KGPE-D16 (whose physical JTAG/UART header pinouts are reverse-engineered
+in {doc}`/systems/kgpe-d16`), the C410X's on-board debug-header *locations* have
+not been separately mapped here; the register-level access paths above are the
+shared-SoC ones and apply unchanged. [ANALYSIS.md:322](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/ANALYSIS.md#L322)
+
+---
+
 ## Coverage notes and gaps
 
 

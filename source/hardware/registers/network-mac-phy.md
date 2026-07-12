@@ -1386,7 +1386,9 @@ cause of the modern-kernel RMII-TX issue — that lies in the driver's `ndo_open
 path (§9).
 
 The Raptor porting notes flag the same SCU touch-points: pinmux/interface-mode
-(SCU74/SCU80–9C group) and the SCU48 MAC clock-delay as the AST2050-specific items to
+(the G3 multi-function pin-control registers **SCU74/SCU78** — what the AST2400
+calls the SCU80–9C group, which does not exist on the G3; see
+{doc}`scu-clock-reset`) and the SCU48 MAC clock-delay as the AST2050-specific items to
 verify (`asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md`, "Change 10: Ethernet
 (FTGMAC100)").
 

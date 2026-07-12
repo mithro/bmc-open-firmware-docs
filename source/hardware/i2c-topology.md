@@ -11,6 +11,18 @@ the reverse-engineered ground truth that the reconstructed device tree, the
 The C410X seven-bus I2C topology (see {doc}`../systems/dell-c410x` for the full device inventory and interrupt routing).
 ```
 
+```{admonition} Scope — this page is C410X-specific
+:class: note
+
+This topology is the **Dell C410X** BMC I2C map. The other two program boards
+differ: on the **KGPE-D16** the documented sensors (the W83795G, DIMM SPD) sit on
+the *host* SP5100 SMBus, **not** the AST2050 BMC's own I2C engines — what the BMC
+drives on its I2C buses on that board is still being characterised on silicon (an
+open hardware item), so it is intentionally not asserted here. The **iPDU** uses
+the Digi NS9360's I2C controller ({doc}`soc-ns9360-memory-serial`) to reach its
+extension-bar connectors, covered on {doc}`../systems/hpe-ipdu`.
+```
+
 ## Device count summary
 
 ```{list-table}

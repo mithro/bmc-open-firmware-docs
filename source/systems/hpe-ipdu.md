@@ -89,6 +89,18 @@ NS9360 MII/MAC. `[ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs
   - Cascade / redundancy pairing
 ```
 
+```{admonition} Extension-bar / daisy-chain protocols are out of scope for the port
+:class: note
+
+The outlet power-control (`stick.Start`/`stick.End`) and cascade (`Core DC
+Proto`) packet protocols are **application-level NET+OS firmware** running on top
+of the SoC's UART/serial blocks — they are named here for board context but not
+register-mapped, because the open-firmware path for this board is a **U-Boot /
+Linux / Zephyr SoC port** ({doc}`/drivers/uboot`), not a re-implementation of the
+stock RTOS application. The SoC serial controllers those protocols ride on *are*
+fully documented in {doc}`/hardware/soc-ns9360-memory-serial`.
+```
+
 ```{figure} /_static/diagrams/ipdu-board-block.svg
 :alt: HPE iPDU board signal chain: Ethernet magnetics and ICS1893 PHY to the NS9360 SoC, with the MAXQ3180 energy meter, TMP89 display/bezel MCU and daisy-chained extension bars.
 :width: 90%

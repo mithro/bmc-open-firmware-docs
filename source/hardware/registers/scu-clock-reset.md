@@ -446,6 +446,48 @@ authoritative: SCU28 is the frequency-counter comparison range, SCU2C is Misc.
 Control (which is where the div13 bit lives). [hwreg.h:89](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h#L89) [platform.S:166-176](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L166-L176) [DS p.213](#sources)
 ```
 
+### SCU74 / SCU78 — Multi-function pin control / pinmux (offsets 0x74 / 0x78)
+
+SCU74 and SCU78 are the G3's **multi-function pin-control** registers — the
+pinmux a `pinctrl-aspeed` driver programs to route shared balls to the SCU, MAC,
+PWM/tach, PECI, GPIO or watchdog function. On the AST2050 the whole pin-mux lives
+in **SCU74/SCU78**; the AST2400 (G4) "SCU80–9C" pin-control group does **not**
+exist on the G3 (the SCU register file ends at SCU7C). The individual bit
+assignments are spread across the datasheet's multi-function-pin tables (§18.2,
+§3.5, §7); those documented across these pages are collected here:
+
+```{list-table} Documented SCU74 / SCU78 pin-mux bits
+:header-rows: 1
+:widths: 16 22 62
+
+* - Bit
+  - Function select
+  - Detail
+* - `SCU74[7]`
+  - PECI
+  - routes the PECI pin (else GPIO) — see {doc}`PECI <control-blocks>`
+* - `SCU74[8:11]`
+  - PWM1–PWM4
+  - enables the four PWM fan outputs (tach inputs shared with GPIOE / DVO) — see
+    {doc}`PWM & fan-tach <control-blocks>`
+* - `SCU74[20]`
+  - MAC#2 MDC/MDIO
+  - routes the second MAC's MDIO management pins
+* - `SCU74[25]`
+  - MAC PHY#1 status
+  - routes MAC#1 `PHYLINK` / `PHYPD#` pins
+* - `SCU74[27]`
+  - GPIOE ↔ MAC
+  - selects GPIOE group 2 (MII/RMII2 TXD/RXD) vs group 1 (VP / TACH) — see
+    {doc}`GPIO <buses-gpio>`
+* - `SCU78[3]`
+  - WDTRST output
+  - enables the watchdog reset output pin (with `WDT0C[3]`); absent on A0 silicon
+```
+
+The remaining SCU74/SCU78 bits follow the datasheet's multi-function-pin tables
+(reset `SCU74 = 0x40048000`, `SCU78 = 0x00000000`). [DS §18.2 SCU74 p.219](#sources) [DS §3.5 p.58](#sources)
+
 ### SCU7C — Silicon Revision ID (offset 0x7C)
 
 Read-only identity register. This is the register the DDR init reads to confirm
