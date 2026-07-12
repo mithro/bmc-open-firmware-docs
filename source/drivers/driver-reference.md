@@ -110,12 +110,48 @@ driver/compatible is required, not just an added match-table entry.
   - `aspeed,ast2400-peci`; `aspeed,ast2500-peci`; `aspeed,ast2600-peci`
   - [PECI][reg-ctrl]
   - G3 base `0x1E78B000`; unused on both boards
+* - [`aspeed-wdt`](https://github.com/torvalds/linux/blob/master/drivers/watchdog/aspeed_wdt.c)
+  - watchdog
+  - [aspeed_wdt.c](https://github.com/torvalds/linux/blob/master/drivers/watchdog/aspeed_wdt.c)
+  - `aspeed,ast2400-wdt`; `aspeed,ast2500-wdt`
+  - [Watchdog][reg-scu]
+  - G3 binds on `ast2400-wdt`; WDT block adjacent to the SCU
+* - [`aspeed-lpc-ctrl`](https://github.com/torvalds/linux/blob/master/drivers/soc/aspeed/aspeed-lpc-ctrl.c)
+  - soc / lpc
+  - [aspeed-lpc-ctrl.c](https://github.com/torvalds/linux/blob/master/drivers/soc/aspeed/aspeed-lpc-ctrl.c)
+  - `aspeed,ast2400-lpc-ctrl`; `aspeed,ast2500-lpc-ctrl`
+  - [LPC][reg-buses]
+  - host↔BMC LPC firmware/mailbox windows
+* - [`aspeed-lpc-snoop`](https://github.com/torvalds/linux/blob/master/drivers/soc/aspeed/aspeed-lpc-snoop.c)
+  - soc / lpc
+  - [aspeed-lpc-snoop.c](https://github.com/torvalds/linux/blob/master/drivers/soc/aspeed/aspeed-lpc-snoop.c)
+  - `aspeed,ast2400-lpc-snoop`; `aspeed,ast2500-lpc-snoop`
+  - [LPC][reg-buses]
+  - snoops host I/O-port writes (BIOS POST codes)
+* - [`kcs_bmc_aspeed`](https://github.com/torvalds/linux/blob/master/drivers/char/ipmi/kcs_bmc_aspeed.c)
+  - ipmi / kcs
+  - [kcs_bmc_aspeed.c](https://github.com/torvalds/linux/blob/master/drivers/char/ipmi/kcs_bmc_aspeed.c)
+  - `aspeed,ast2400-kcs-bmc`; `aspeed,ast2500-kcs-bmc-v2`
+  - [LPC][reg-buses]
+  - host-side IPMI over KCS (LPC) — **silicon-proven** on the KGPE-D16
+* - [`realtek`](https://github.com/torvalds/linux/tree/master/drivers/net/phy/realtek) / generic clause-22 PHY
+  - net / phy
+  - [realtek/](https://github.com/torvalds/linux/tree/master/drivers/net/phy/realtek)
+  - clause-22 PHY ID (generic `genphy` fallback)
+  - [MAC / MDIO / PHY][reg-mac]
+  - the RTL8201CP binds the realtek / generic clause-22 driver over the MAC's MDIO
 * - [`aspeed-vhub`](https://github.com/torvalds/linux/tree/master/drivers/usb/gadget/udc/aspeed-vhub)
   - usb / gadget (udc)
   - [aspeed-vhub/][aspeed-vhub] · [vhub.h][vhub-h]
   - `aspeed,ast2400-usb-vhub` … `aspeed,ast2700-usb-vhub`
   - [USB 2.0 virtual hub][reg-disp]
   - base `0x1E6A0000`; the vKVM HID path
+* - [`uhci-hcd`](https://github.com/torvalds/linux/blob/master/drivers/usb/host/uhci-hcd.c)
+  - usb / host
+  - [uhci-hcd.c](https://github.com/torvalds/linux/blob/master/drivers/usb/host/uhci-hcd.c)
+  - `aspeed,ast2400-uhci`, `generic-uhci`
+  - [USB 1.1 UHCI host][reg-disp]
+  - standard Intel UHCI at `0x1E6B0000`; **no EHCI host on G3**
 * - [`aspeed-video`](https://github.com/torvalds/linux/blob/master/drivers/media/platform/aspeed/aspeed-video.c)
   - media (V4L2)
   - [aspeed-video.c][aspeed-video]
@@ -194,6 +230,24 @@ driver/compatible is required, not just an added match-table entry.
   - none (pre-DT board files)
   - iPDU SoC (NS9360)
   - **no mainline driver** since v2.6.39; open path is a U-Boot port
+```
+
+```{admonition} Driver names subsumed by another row
+:class: note
+
+A few driver names appear in the [peripheral map][program-linux] and the Linux
+page but have no row of their own, because on the G3 they are **not** separate
+bindable drivers:
+
+- `reset-aspeed` — the reset controller is implemented *inside*
+  [`clk-aspeed`][clk-aspeed] (reset ops on the same node), not a standalone driver.
+- `mdio-aspeed` — an AST2600-only MDIO controller; on the G3 the MDIO bus is
+  **internal to** [`ftgmac100`][ftgmac100], so no separate driver binds.
+- `of_serial` / [`8250_of`](https://github.com/torvalds/linux/blob/master/drivers/tty/serial/8250/8250_of.c)
+  — only the device-tree glue that instantiates the [`8250`][uart-8250] core for
+  the SoC 16550 UARTs.
+
+Each is covered by the linked row above.
 ```
 
 ## Per-driver notes

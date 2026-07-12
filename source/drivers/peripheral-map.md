@@ -39,10 +39,10 @@ but not yet complete.
   - port needed
   - within SCU model
 * - Watchdog
-  - `aspeed-wdt`
+  - [`aspeed-wdt`](https://github.com/torvalds/linux/blob/master/drivers/watchdog/aspeed_wdt.c)
   - optional
   - Zephyr `wdt` shim, port needed
-  - `aspeed-wdt`
+  - [`aspeed-wdt`](https://github.com/torvalds/linux/blob/master/drivers/watchdog/aspeed_wdt.c)
 * - {doc}`DDR2 / SDRAM <../hardware/registers/ddr2-sdram>`
   - — (warm-booted; no runtime driver)
   - **[`platform.S`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S) init** (primary)

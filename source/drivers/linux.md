@@ -110,7 +110,7 @@ drivers are needed except the PCIe switch (handled in userspace):
   - [`spi-aspeed-smc`](https://github.com/torvalds/linux/blob/master/drivers/spi/spi-aspeed-smc.c)
   - mtd/spi
 * - I2C / GPIO / WDT
-  - [`i2c-aspeed`](https://github.com/torvalds/linux/blob/master/drivers/i2c/busses/i2c-aspeed.c) / [`gpio-aspeed`](https://github.com/torvalds/linux/blob/master/drivers/gpio/gpio-aspeed.c) / `aspeed-wdt`
+  - [`i2c-aspeed`](https://github.com/torvalds/linux/blob/master/drivers/i2c/busses/i2c-aspeed.c) / [`gpio-aspeed`](https://github.com/torvalds/linux/blob/master/drivers/gpio/gpio-aspeed.c) / [`aspeed-wdt`](https://github.com/torvalds/linux/blob/master/drivers/watchdog/aspeed_wdt.c)
   - —
 * - PEX8696/8647
   - *(userspace daemon)*
