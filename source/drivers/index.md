@@ -8,6 +8,7 @@ staying cleanly upstreamable.
 :maxdepth: 1
 
 peripheral-map
+driver-reference
 linux
 uboot
 zephyr
