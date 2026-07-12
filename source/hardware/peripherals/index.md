@@ -40,6 +40,10 @@ model code and driver bindings are reused across boards.
   - metering AFE
   - iPDU
   - polyphase energy-metering front-end
+* - {doc}`w83795g`
+  - hwmon
+  - KGPE-D16
+  - Nuvoton voltage/temp/fan monitor + Smart-Fan control
 ```
 
 ```{toctree}
@@ -52,6 +56,7 @@ pca9555
 pca954x-mux
 pex8696-8647
 maxq3180
+w83795g
 ```
 
 ## Modelling order
