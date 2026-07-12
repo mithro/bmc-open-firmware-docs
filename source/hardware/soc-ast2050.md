@@ -7,6 +7,16 @@ SPI. It predates mainline Linux Aspeed support (which starts at the AST2400 /
 register-compatible enough with the G4 to reuse most peripheral models/drivers,
 with SoC-specific deltas in the clock (SCU) and memory controllers.
 
+```{admonition} Full register reference
+:class: seealso
+
+This page is the SoC-level orientation. The **register-by-register** maps for
+every block — SCU/clock/reset, DDR2, MAC/MDIO/PHY, the buses and GPIO, and the
+UART/VIC/timers/PCIe/USB/bridges — live under
+{doc}`registers/index`, each cross-referenced against the datasheet, the
+mainline drivers, and the hardware-verified reverse-engineering.
+```
+
 ## Memory map
 
 ```{list-table}
@@ -35,7 +45,8 @@ with SoC-specific deltas in the clock (SCU) and memory controllers.
   - **compact G3 layout** — see below; *not* the AST2400+ interleaved map
 * - GPIO controller
   - `0x1E780000`
-  - GPIOA…GPIOP 8-bit port groups
+  - GPIOA…GPIOH 8-bit port groups (**64 pins**; the G3 defines banks A–H only,
+    not A–P — see {doc}`registers/buses-gpio`)
 * - MAC0 / MAC1 (ftgmac100)
   - `0x1E660000` / `0x1E680000`
   - 10/100 Ethernet

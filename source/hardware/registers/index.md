@@ -52,6 +52,7 @@ exactly the behaviours the {doc}`../../emulation/testbench` qtest benches assert
 :caption: SoC blocks
 
 scu-clock-reset
+ddr2-sdram
 network-mac-phy
 buses-gpio
 uart-vic-timers
