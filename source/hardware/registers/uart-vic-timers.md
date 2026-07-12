@@ -52,7 +52,9 @@ register blocks are byte/half/word accessible unless noted. `[DS §9 p.97](#sour
   - **AHB Bus Controller (AHBC)** — remap + AHB-unlock key
 * - `0x1E6A0000–0x1E6BFFFF`
   - 128K
-  - **USB2.0 Virtual Hub Controller**
+  - **USB2.0 Virtual Hub (device) at `0x1E6A0000`** + **USB1.1 UHCI host at
+    `0x1E6B0000`** (two distinct blocks in this window; no EHCI host on G3 —
+    see {doc}`display-usb`)
 * - `0x1E6C0000–0x1E6DFFFF`
   - 128K
   - **Vector Interrupt Controller (VIC)**

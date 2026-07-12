@@ -25,10 +25,15 @@ crypto engine (§19), the MIC (§13), the MDMA engine (§22), the outbound AHB�
 and the full USB-endpoint / Video-Engine / VGA + extended-CRT register files.
 
 The only items given below register level are ones the datasheet itself does not
-define at that level: the eight USB SETUP data buffers (raw 8-byte packet scratch
-areas with no bit structure), two reserved Video-Engine registers, and the A2P
-bridge (specified as address windows plus an enable strap, with no per-register
-bitfields). Each is called out where it occurs — nothing is silently omitted.
+define at that level, or that are standard (non-Aspeed) interfaces: the eight USB
+SETUP data buffers (raw 8-byte packet scratch areas with no bit structure), two
+reserved Video-Engine registers, the A2P bridge (specified as address windows
+plus an enable strap, with no per-register bitfields), and the **USB 1.1 UHCI
+host controller** at `0x1E6B0000` (a standard Intel UHCI block, documented by
+reference to the UHCI specification and the mainline `uhci-hcd` driver rather
+than re-transcribed). Each is called out where it occurs — nothing is silently
+omitted. (The AST2050 has **no EHCI / USB 2.0 host**; that block exists only on
+the AST2400/G4.)
 ```
 
 ## How to read these tables

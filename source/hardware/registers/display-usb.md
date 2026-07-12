@@ -4,7 +4,8 @@ Complete register-by-register reference for the three large **display / USB**
 blocks of the Aspeed **AST2050 (SoC generation 3, "G3"; also sold as AST1100)**
 that are only summarised elsewhere in these docs:
 
-1. the **USB 2.0 Virtual Hub Controller** (§15, base `0x1E6A0000`, VIC #5),
+1. the **USB 2.0 Virtual Hub Controller** (§15, base `0x1E6A0000`, VIC #5) — and
+   its companion **USB 1.1 UHCI host controller** (base `0x1E6B0000`, §1b),
 2. the **Video (Capture/Compression) Engine** (§20, base `0x1E700000`, VIC #7),
 3. the **VGA Display Controller** (§34, legacy VGA I/O space + MMIO alias).
 
@@ -1084,6 +1085,47 @@ The mainline [`aspeed-vhub`](https://github.com/torvalds/linux/tree/master/drive
 generic-endpoint window at base + 0x200 + N·0x10 as here. `[vhubh]` The driver
 targets AST2400/2500/2600; the AST2050's 7 downstream devices + 21 pooled
 endpoints are the ancestor of that design.
+
+---
+
+## 1b. USB 1.1 Host Controller (UHCI, base `0x1E6B0000`)
+
+Distinct from the USB 2.0 *device-mode* virtual hub at `0x1E6A0000` (§1), the
+AST2050 also has a **USB 1.1 host controller at base `0x1E6B0000`** (a `0x100`
+window). It is a **standard Intel UHCI** (Universal Host Controller Interface)
+block — *not* an Aspeed-proprietary register file — so its registers follow the
+UHCI 1.1 specification rather than the datasheet: `USBCMD`/`USBSTS`/`USBINTR` at
+offset `0x00`/`0x02`/`0x04`, `FRNUM` `0x06`, `FRBASEADD` `0x08`, `SOFMOD` `0x0C`,
+and `PORTSC1`/`PORTSC2` at `0x10`/`0x12`. It is therefore documented here by
+reference to that standard, which the mainline driver already implements. This
+host controller carries the BMC's USB **virtual media** and **virtual
+keyboard/mouse**.
+
+- **Clock gate** — `SCU0C[7]` "Stop UCLK (USB 1.1)", the only SCU trace of the
+  block. [DS §18 p.209](#sources) [`hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)
+- **Interrupt** — VIC source #4 ("USB1.1" in the Raptor IRQ map).
+  [RAPTOR_ENGINEERING_AST2050_ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md)
+- **Reset** — held by the `SCU04` USB1.1-host reset bit until released by init.
+
+**Software.** The standard mainline [`uhci-hcd`](https://github.com/torvalds/linux/blob/master/drivers/usb/host/uhci-hcd.c) /
+`generic-uhci` driver binds — the project's real-hardware device tree declares
+`usb@1e6b0000` with `compatible = "aspeed,ast2400-uhci", "generic-uhci"`. Raptor's
+2.6.28 port shipped a custom `astuhci` driver, but the generic UHCI driver is
+expected to work against Aspeed's standards-compliant implementation. In QEMU the
+stock UHCI host model (e.g. `piix3-usb-uhci`) presents the identical interface.
+
+```{admonition} No EHCI (USB 2.0 host) on the AST2050
+:class: important
+
+The AST2050 has **no EHCI / USB 2.0 host controller**. This is stated explicitly
+in the hardware-verified Raptor analysis — *"the AST2050 has UHCI only (no
+EHCI/USB 2.0) … Do NOT add EHCI — AST2050 doesn't have it."* A `usb@1e6a1000`
+EHCI node does appear in the G4-template real-hardware DTS, but that base address
+is carried over from the AST2400 (G4) binding and does **not** correspond to G3
+silicon. On the AST2050 the USB 2.0 capability is the *device-mode* virtual hub
+at `0x1E6A0000` (§1 above), not an EHCI host. Model and port accordingly: a UHCI
+**host** plus a USB 2.0 **device** hub, with no EHCI host block.
+```
 
 ---
 
