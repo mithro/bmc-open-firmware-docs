@@ -21,10 +21,15 @@ myst_enable_extensions = [
     "colon_fence",   # ::: fenced directives
     "deflist",       # definition lists
     "fieldlist",
-    "linkify",       # bare URLs -> links
     "substitution",
     "tasklist",
 ]
+# NOTE: the MyST `linkify` extension is intentionally NOT enabled. It turns any
+# bare token that looks like a domain into a link, which mis-links the
+# reverse-engineering citation shorthand used throughout these pages
+# (`ANALYSIS.md`, `RAPTOR-PORTING-GUIDE.md:40`, phase labels like `A.PF`, …) into
+# broken `http://…` URLs. Real links use explicit `<url>` autolinks or
+# `[text](url)` / reference-style markup.
 myst_heading_anchors = 3
 
 templates_path = ["_templates"]
@@ -58,6 +63,8 @@ linkcheck_ignore = [
     r"https://github\.com/mithro/ai-shenanigans-for-bmcs.*",
     # Google Docs internal references.
     r"https://docs\.google\.com/.*",
+    # Valid pages that anti-bot / rate-limit the CI link checker (HTTP 403).
+    r"https://developer\.arm\.com/.*",
 ]
 linkcheck_timeout = 15
 linkcheck_retries = 2

@@ -961,5 +961,5 @@ delivery is fixed. `[TIMER-RCA]`
 [pl190]: https://developer.arm.com/documentation/ddi0181/latest/
 [vicdt]: https://www.kernel.org/doc/Documentation/devicetree/bindings/interrupt-controller/arm,vic.txt
 [fttmr]: https://github.com/torvalds/linux/blob/master/drivers/clocksource/timer-fttmr010.c
-[fttmrdt]: https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/timer/faraday%2Cfttmr010.txt
+[fttmrdt]: https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/timer/faraday%2Cfttmr010.yaml
 [aspeedvic]: https://github.com/torvalds/linux/blob/master/drivers/irqchip/irq-aspeed-vic.c
