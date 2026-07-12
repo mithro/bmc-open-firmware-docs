@@ -7,7 +7,7 @@ subsystem: the two Faraday **FTGMAC100** 10/100 Ethernet MAC modules, their buil
 
 Every register field below is cross-referenced against **at least two independent
 sources**: the Aspeed AST2050/AST1100 A3 datasheet (the hardware authority), the
-mainline Linux `ftgmac100` driver / register header (the software view of the *same*
+mainline Linux [`ftgmac100`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.c) driver / register header (the software view of the *same*
 Faraday IP block), the Realtek RTL8201CP datasheet (for the PHY), and the project's
 own reverse-engineering notes captured on real AST2050 hardware. Divergences between
 the Aspeed datasheet and the generic Faraday header are called out explicitly because
@@ -97,7 +97,7 @@ the divergence is footnoted.
   - Reset
   - Access
   - Description
-  - `ftgmac100.h`
+  - [`ftgmac100.h`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h)
 * - `0x00`
   - ISR
   - `0x0`
@@ -626,7 +626,7 @@ definitions [DS §14.3 p.137–138](#sources); the last column gives the matchin
   - Field (datasheet)
   - Access
   - Meaning
-  - `ftgmac100.h`
+  - [`ftgmac100.h`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h)
 * - 31
   - SW RST
   - RW
@@ -739,7 +739,7 @@ definitions [DS §14.3 p.137–138](#sources); the last column gives the matchin
   - `MACCR_TXDMA_EN`
 :::
 
-† **Bit-6 / bit-11 divergence.** The generic Faraday `ftgmac100.h` assigns bit 6 =
+† **Bit-6 / bit-11 divergence.** The generic Faraday [`ftgmac100.h`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h) assigns bit 6 =
 `LOOP_EN` and bit 11 = `PHY_LINK_LEVEL`. The AST2050 datasheet instead documents
 bit 6 as **PHY link-status detection mode** (edge vs. level) and marks bit 11
 **reserved** [DS §14.3 p.137–138](#sources). Aspeed's integration of the Faraday IP is
@@ -835,7 +835,7 @@ access goes through **PHYCR (`0x60`)** and **PHYDATA (`0x64`)**. [DS §14.4.6 p.
   - Field
   - Access
   - Meaning
-  - `ftgmac100.h`
+  - [`ftgmac100.h`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h)
 * - 31:28
   - Reserved (0)
   - —
@@ -885,7 +885,7 @@ access goes through **PHYCR (`0x60`)** and **PHYDATA (`0x64`)**. [DS §14.4.6 p.
   - Field
   - Access
   - Meaning
-  - `ftgmac100.h`
+  - [`ftgmac100.h`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h)
 * - 31:16
   - MIIRDATA
   - R
@@ -953,7 +953,7 @@ the datasheet:
 
 :::{note}
 **RMII / PHY-mode caveat observed on the KGPE-D16 rig.** With the DT set to the real
-RMII PHY (`phy-mode = "rmii"`, no `fixed-link`), the modern mainline `ftgmac100`
+RMII PHY (`phy-mode = "rmii"`, no `fixed-link`), the modern mainline [`ftgmac100`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.c)
 driver logs `Unsupported PHY mode rmii !` and never calls `adjust_link(up)`, so
 `MACCR` stays 0 and `eth0` gets no carrier. The MAC-clock rate was ruled out as the
 cause (see `0002-ftgmac100-ast2050-macclk.patch`, which leaves MACCLK at the U-Boot

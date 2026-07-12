@@ -168,7 +168,7 @@ AST2050.
 
 ## Upstreaming shape (Linux)
 
-The clean series is: (1) a `clk-aspeed` change adding AST2050 support, (2) a new
+The clean series is: (1) a [`clk-aspeed`](https://github.com/torvalds/linux/blob/master/drivers/clk/aspeed/clk-aspeed.c) change adding AST2050 support, (2) a new
 `aspeed-g3.dtsi` SoC include, (3) `aspeed,ast2050-*` compatibles on the affected
 drivers, then (4) the two board `.dts` files include the G3 dtsi. See
 {doc}`../drivers/linux`.

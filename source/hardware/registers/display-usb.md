@@ -30,13 +30,13 @@ in fact largely stable across generations, which is what makes the mainline
 drivers usable as a cross-check:
 
 - **USB vhub** — `HUB00…HUB3C` / device / endpoint offsets match the mainline
-  `aspeed-vhub` gadget driver register file 1:1. `[vhubh]`
+  [`aspeed-vhub`](https://github.com/torvalds/linux/tree/master/drivers/usb/gadget/udc/aspeed-vhub) gadget driver register file 1:1. `[vhubh]`
 - **Video Engine** — `VR000…VR308` offsets match the `VE_*` offsets in the
-  mainline `aspeed-video` V4L2 driver 1:1. `[aspeedvideo]`
+  mainline [`aspeed-video`](https://github.com/torvalds/linux/blob/master/drivers/media/platform/aspeed/aspeed-video.c) V4L2 driver 1:1. `[aspeedvideo]`
 - **VGA** — the legacy VGA + Aspeed extended-CRT index space (`CR80…CRD7`) is
-  the same one the mainline **`drm/ast`** PCI-VGA driver drives (that driver
+  the same one the mainline **[`drm/ast`](https://github.com/torvalds/linux/tree/master/drivers/gpu/drm/ast)** PCI-VGA driver drives (that driver
   historically enumerates *AST1100* among its chips). This is **not** the
-  same block as `drm/aspeed`, which is the separate SoC "GFX/CRT" controller at
+  same block as [`drm/aspeed`](https://github.com/torvalds/linux/tree/master/drivers/gpu/drm/aspeed), which is the separate SoC "GFX/CRT" controller at
   `0x1E6E6000`. `[astdrv]`, `[aspeeddrm]`
 ```
 
@@ -1074,7 +1074,7 @@ datasheet's "Others" column. `[DS §15.3.6 p.173](#sources)`
 
 ### 1.7 Mainline cross-check
 
-The mainline `aspeed-vhub` USB-gadget driver register file matches this block
+The mainline [`aspeed-vhub`](https://github.com/torvalds/linux/tree/master/drivers/usb/gadget/udc/aspeed-vhub) USB-gadget driver register file matches this block
 1:1: `AST_VHUB_CTRL` 0x00, `AST_VHUB_CONF` 0x04, `AST_VHUB_IER` 0x08,
 `AST_VHUB_ISR` 0x0C, `AST_VHUB_EP_ACK_IER` 0x10, `AST_VHUB_EP_NACK_IER` 0x14,
 `AST_VHUB_EP_ACK_ISR` 0x18, `AST_VHUB_EP_NACK_ISR` 0x1C, `AST_VHUB_SW_RESET`
@@ -2139,7 +2139,7 @@ auto-trigger, stream-buffer (1,0 = N/A). `[DS §20.3 p.235](#sources)`
 
 ### 2.3 Mainline cross-check
 
-The mainline `aspeed-video` V4L2 driver drives the same offsets under `VE_*`
+The mainline [`aspeed-video`](https://github.com/torvalds/linux/blob/master/drivers/media/platform/aspeed/aspeed-video.c) V4L2 driver drives the same offsets under `VE_*`
 names: `VE_PROTECTION_KEY` 0x000, `VE_SEQ_CTRL` 0x004, `VE_CTRL` 0x008,
 `VE_TGS_0/1` 0x00C/0x010, `VE_SCALING_FACTOR` 0x014, `VE_SCALING_FILTER0..3`
 0x018–0x024, `VE_BCD_CTRL` 0x02C, `VE_CAP_WINDOW` 0x030, `VE_COMP_WINDOW` 0x034,
@@ -2794,7 +2794,7 @@ Indices B4 and B5 are reserved (no register defined). `[DS §34.9 p.387](#source
 ### 3.8 Mainline cross-check
 
 The legacy VGA + Aspeed extended-CRT index space here is exactly what the
-mainline **`drm/ast`** PCI-VGA driver programs — that driver historically
+mainline **[`drm/ast`](https://github.com/torvalds/linux/tree/master/drivers/gpu/drm/ast)** PCI-VGA driver programs — that driver historically
 enumerates **AST1100** among its supported chips, matching the CRAB[7:6]=10
 "AST2050/AST1100" chip ID above. It drives the same index registers: password
 CR80/unlock, CRAA/CRAB power-on-trapping straps for VRAM-size and chip
@@ -2802,8 +2802,8 @@ detection, CRA3 color-mode, CRAC–CRAF/CRB0 extended H/V overflow + CRT start
 address + offset, CRB6 power management, CRBB–CRC1 D-PLL, and CRC2–CRCB for the
 64×64 hardware cursor. `[astdrv]`
 
-Note the distinction: **`drm/ast`** is the host-side driver for this legacy PCI
-VGA device, whereas **`drm/aspeed`** is a *different* block — the SoC's separate
+Note the distinction: **[`drm/ast`](https://github.com/torvalds/linux/tree/master/drivers/gpu/drm/ast)** is the host-side driver for this legacy PCI
+VGA device, whereas **[`drm/aspeed`](https://github.com/torvalds/linux/tree/master/drivers/gpu/drm/aspeed)** is a *different* block — the SoC's separate
 "GFX/CRT" display controller (base `0x1E6E6000`) that does not exist as a PCI
 VGA device. A BMC-side OpenBMC/u-bmc port that wants this VGA controller would
 drive these same index registers via the MMIO alias (`Base + index`) rather than
@@ -2820,7 +2820,7 @@ through PCI I/O ports. `[aspeeddrm]`
   p.234–255), **§34 VGA Display Controller** (p.368–392; standard sets §34.3–34.8
   p.369–381, Aspeed extended CRT §34.9 p.382–392). Doc (printed) page = PDF page.
 - Mainline Linux drivers used as cross-checks:
-  - [`aspeed-vhub` register header (`vhub.h`)][vhubh] — USB gadget virtual-hub
+  - [`aspeed-vhub` register header ([`vhub.h`](https://github.com/torvalds/linux/blob/master/drivers/usb/gadget/udc/aspeed-vhub/vhub.h))][vhubh] — USB gadget virtual-hub
     register offsets `HUB00…HUB3C` and per-device / per-endpoint windows.
   - [`aspeed-video.c` V4L2 driver][aspeedvideo] — Video Engine `VE_*` register
     offsets matching `VR000…VR308` and the `0x1A03_8AA8` protection key.

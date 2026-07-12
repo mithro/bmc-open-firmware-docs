@@ -289,9 +289,9 @@ state for 27 addresses. [TMP75 DS p.11](#sources) [LM75 DS p.13](#sources)
 ```
 [TMP75 DS p.3-5,9-12,17-20](#sources) [LM75 DS p.1,3-5,12-17](#sources)
 
-## Linux binding (`lm75`)
+## Linux binding ([`lm75`](https://github.com/torvalds/linux/blob/master/drivers/hwmon/lm75.c))
 
-Mainline Linux drives both with the `hwmon`/`lm75` driver via a chip-type table.
+Mainline Linux drives both with the `hwmon`/[`lm75`](https://github.com/torvalds/linux/blob/master/drivers/hwmon/lm75.c) driver via a chip-type table.
 The C410X uses `compatible = "ti,tmp75"` (per-slot) and `compatible =
 "national,lm75"` (front board). [dts:769,1116] [lm75.c](#sources) The driver's registers are
 `LM75_REG_TEMP` 0x00, `LM75_REG_CONF` 0x01, `LM75_REG_HYST` 0x02, `LM75_REG_MAX`

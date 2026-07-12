@@ -5,7 +5,7 @@
 Mainline Linux supports the AST2400 (G4) and later. AST2050 support is added as a
 clean series in `mithro/linux`:
 
-1. **`clk-aspeed`** — add AST2050 clock support (the H-PLL/derived clocks a G3
+1. **[`clk-aspeed`](https://github.com/torvalds/linux/blob/master/drivers/clk/aspeed/clk-aspeed.c)** — add AST2050 clock support (the H-PLL/derived clocks a G3
    part exposes).
 2. **`aspeed-g3.dtsi`** — a new SoC include describing the AST2050 peripheral
    layout, mirroring `aspeed-g4.dtsi` with the G3 base addresses.
@@ -89,28 +89,28 @@ drivers are needed except the PCIe switch (handled in userspace):
   - Driver
   - Subsystem
 * - INA219 ×16
-  - `ina2xx`
+  - [`ina2xx`](https://github.com/torvalds/linux/blob/master/drivers/hwmon/ina2xx.c)
   - hwmon
 * - ADT7462 ×2
-  - `adt7462`
+  - [`adt7462`](https://github.com/torvalds/linux/blob/master/drivers/hwmon/adt7462.c)
   - hwmon
 * - TMP75 ×16 / LM75
-  - `lm75`
+  - [`lm75`](https://github.com/torvalds/linux/blob/master/drivers/hwmon/lm75.c)
   - hwmon
 * - PCA9555 ×5
-  - `pca953x`
+  - [`pca953x`](https://github.com/torvalds/linux/blob/master/drivers/gpio/gpio-pca953x.c)
   - gpio
 * - PCA9548 / PCA9544
-  - `i2c-mux-pca954x`
+  - [`i2c-mux-pca954x`](https://github.com/torvalds/linux/blob/master/drivers/i2c/muxes/i2c-mux-pca954x.c)
   - i2c
 * - ftgmac100 MAC
-  - `ftgmac100`
+  - [`ftgmac100`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.c)
   - net
 * - SPI NOR (FMC)
-  - `spi-aspeed-smc`
+  - [`spi-aspeed-smc`](https://github.com/torvalds/linux/blob/master/drivers/spi/spi-aspeed-smc.c)
   - mtd/spi
 * - I2C / GPIO / WDT
-  - `i2c-aspeed` / `gpio-aspeed` / `aspeed-wdt`
+  - [`i2c-aspeed`](https://github.com/torvalds/linux/blob/master/drivers/i2c/busses/i2c-aspeed.c) / [`gpio-aspeed`](https://github.com/torvalds/linux/blob/master/drivers/gpio/gpio-aspeed.c) / `aspeed-wdt`
   - —
 * - PEX8696/8647
   - *(userspace daemon)*

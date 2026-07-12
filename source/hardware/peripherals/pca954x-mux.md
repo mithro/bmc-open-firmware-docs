@@ -103,7 +103,7 @@ PCA9548As are mandatory to reach them one at a time; the two ADT7462s likewise s
 an address behind the 4-channel PCA9544A [io-tables](#sources). (The exact PCA9544A raw
 channel number for each ADT7462 is not pinned down in the RE notes — see §7 Gaps.)
 
-## 2.4 Linux binding (`i2c-mux-pca954x`)
+## 2.4 Linux binding ([`i2c-mux-pca954x`](https://github.com/torvalds/linux/blob/master/drivers/i2c/muxes/i2c-mux-pca954x.c))
 
 Mainline Linux drives both parts with **`drivers/i2c/muxes/i2c-mux-pca954x.c`**,
 DT compatibles **`nxp,pca9548`** and **`nxp,pca9544`** [i2c-mux-pca954x](#sources). The mux

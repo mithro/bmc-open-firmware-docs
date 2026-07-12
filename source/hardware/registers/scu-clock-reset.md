@@ -506,16 +506,11 @@ while the low-rate housekeeping clocks (1 MHz, 12 MHz, 32 KHz, PECI, PWM, tach)
 are simple integer divisions of the 24 MHz reference. USB2.0 has its own PHY PLL.
 [DS §8.1 p.84, §8.5 p.88](#sources) [RAPTOR-PORTING-GUIDE.md:222-227](#sources)
 
-```
-24 MHz CLKIN (PAD_CLKIN → CLK24M)
-   ├─ H-PLL (SCU24) ─▶ CPUCLK, HCLK, PCLK, UARTCLK
-   ├─ M-PLL (SCU20) ─▶ MCLK, ECLK, YCLK, GCLK   (ECLK/MCLK source-selectable to H-PLL via SCU08)
-   ├─ V-PLL1 (dclk_pll) ─▶ DCLK, V1CLK
-   ├─ V-PLL2 (dclk2_pll) ─▶ (video port B)
-   └─ ÷ integer ─▶ CLK12M (12 MHz), CLK1M (1 MHz), CLK32K (32 KHz),
-                    PECICLK, PWMCLK, TACHCLK
-   USB2.0 PHY ─▶ UtmiCLK ─▶ USB2CLK
-   External pins ─▶ BCLK (33 MHz PCI), LCLK (33 MHz LPC), MII/RMII refclks
+```{figure} /_static/diagrams/ast2050-clock-tree.svg
+:alt: AST2050 clock tree: the 24 MHz CLKIN crystal feeding the H-PLL (CPU/AHB), M-PLL (DDR), V-PLL (video) and the fixed 24 MHz path, through the integer dividers to the CPU/AHB/APB/MAC/UART/RTC clock domains.
+:width: 90%
+
+The AST2050 clock tree — 24 MHz CLKIN → PLLs → dividers → clock domains (the M-PLL and H-PLL are SCU20 / SCU24 above).
 ```
 
 [DS Figure 22 §8.5 p.88](#sources) [DS §8.1 p.84](#sources)

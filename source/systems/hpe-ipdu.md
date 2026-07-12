@@ -30,7 +30,7 @@ stack is built up in stages (all five layers are in scope):
 
 1. **U-Boot** — an open NS9360 port (serial, GPIO, clock, I2C, Ethernet, CFI
    flash) that already boots in QEMU. See {doc}`../drivers/uboot`.
-2. **Linux** — forward-port the archived `mach-ns9xxx` support toward a modern
+2. **Linux** — forward-port the archived [`mach-ns9xxx`](https://github.com/torvalds/linux/tree/v2.6.39/arch/arm/mach-ns9xxx) support toward a modern
    kernel. See {doc}`../drivers/linux`.
 3. **Zephyr** — via the shared ARMv5 architecture port. See
    {doc}`../drivers/zephyr`.
