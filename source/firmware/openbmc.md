@@ -103,7 +103,7 @@ where even a stripped OpenBMC cannot fit.
 **External references**
 
 - [OpenBMC documentation](https://github.com/openbmc/docs) — the upstream project docs
-- [OpenBMC project site](https://www.openbmc.org/) — project overview and governance
+- [OpenBMC project site](https://openbmc.org) — project overview and governance
 - [`bmcweb`](https://github.com/openbmc/bmcweb) — the Redfish/web daemon used here
 - [DMTF Redfish standard](https://www.dmtf.org/standards/redfish) — the Redfish API specification `bmcweb` implements
 - [`phosphor-state-manager`](https://github.com/openbmc/phosphor-state-manager) — the power/host-state daemon
