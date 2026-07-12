@@ -14,6 +14,13 @@ soc-ns9360
 ```
 
 ```{toctree}
+:maxdepth: 2
+:caption: AST2050 register reference
+
+registers/index
+```
+
+```{toctree}
 :maxdepth: 1
 :caption: Board topology
 
