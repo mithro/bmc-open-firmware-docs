@@ -44,7 +44,7 @@ register semantics and are flagged where the G3 block diverges from them.
 
 Each block's interrupt hooks into the 32-source Vector Interrupt Controller
 (VIC) and its clock gate / reset control live in the SCU. [DS §10 p.99]
-[DS §18 SCU04 p.205-206] [DS §18 SCU0C p.208-209]
+[DS §18 SCU04 p.205-206] [DS §18 SCU0C p.209]
 
 ```{list-table} Per-block VIC lines, clocks, reset & pin-mux
 :header-rows: 1
@@ -1173,7 +1173,8 @@ The pass-through UART exposes **only the ARM-only extended registers**
   which can leave the host stuck; this is documented as A1 errata (fixed A2).
   [DS A1/A2 errata list, item "VUART and PUART reset when ARM reboots"]
 - VUART/PUART function control is *also* exposed in the LPC controller's Host
-  Interface Control Register `HICR0[12:8]` (LHCR0). [DS revision history, v1.03]
+  **LPC Host Control Register 0** (`LHCR0`)`[12:8]` — distinct from the Host
+  Interface Control Register HICR0. [DS revision history, v1.03]
   [DS §30 p.311]
 - Mainline `drivers/tty/serial/8250/8250_aspeed_vuart.c`
   (compat `aspeed,ast2400-vuart`) uses the same extended-register offsets
@@ -1192,7 +1193,7 @@ The pass-through UART exposes **only the ARM-only extended registers**
   - §9 ARM Address Space Mapping — the four block base addresses (p.97).
   - §10 Interrupt Source Table (Table 36) — VIC #15 PECI, #22-26 RTC, #28 tach (p.99).
   - §18 System Control Unit — SCU04 reset control (p.205-206), SCU0C clock-stop
-    (p.208-209).
+    (p.209).
   - §24 Real Time Clock — RTC00-RTC14 + programming modes (p.270-274).
   - §28 PWM & Fan Tacho Controller — PTCR00-PTCR3C + RPM formula (p.290-295).
   - §29 Virtual UART & Pass-through UART — VUART00-3C / PUART20-3C (p.296-310).

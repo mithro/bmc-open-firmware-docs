@@ -1101,7 +1101,7 @@ any other value locks — registers stay readable when locked). `[DS §20.3 p.23
 
 ### 2.1 Register file overview
 
-```{list-table} Video Engine register map (offset from base `0x1E700000`)
+```{list-table} Video Engine register map (offset from base 0x1E700000)
 :header-rows: 1
 :widths: 12 10 12 66
 

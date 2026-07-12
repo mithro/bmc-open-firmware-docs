@@ -25,7 +25,7 @@ Conventions used in the register tables below:
 
 The six blocks sit at these bases in the ch. 9 address map, and four of them own
 a dedicated interrupt line in the ch. 10 Interrupt Source Table
-[DS §10 p.98]:
+[DS §10 p.99]:
 
 :::{list-table} Block bases and VIC interrupt lines
 :header-rows: 1
@@ -38,27 +38,29 @@ a dedicated interrupt line in the ch. 10 Interrupt Source Table
 * - Memory Integrity Check (MIC)
   - `0x1E64_0000`
   - 1
-  - `MIC interrupt`, sensitive high-level [DS §13 p.116] [DS §10 p.98]
+  - `MIC interrupt`, sensitive high-level [DS §13 p.116] [DS §10 p.99]
 * - Hash & Crypto Engine (HACE)
   - `0x1E6E_3000`
   - 4
-  - `Crypto interrupt`, sensitive high-level [DS §19 p.221] [DS §10 p.98]
+  - `Crypto interrupt`, sensitive high-level [DS §19 p.221] [DS §10 p.99]
 * - MDMA Engine
   - `0x1E74_0000`
   - 6
-  - `MDMA interrupt`, sensitive high-level [DS §22 p.257] [DS §10 p.98]
+  - `MDMA interrupt`, sensitive high-level [DS §22 p.257] [DS §10 p.99]
 * - AHB-to-P-Bus / AHB→PCI (A2P) bridge
   - `0x1E72_0000`
   - —
   - No own interrupt; window bridge only [DS §21 p.256]
 * - 2D Graphics Engine (GER)
   - `PCIS14 (BAR1) + 0x8000`
-  - 7 (shared)
-  - Part of the video/graphics path; `Video Engine interrupt` line covers the CRT/2D block [DS §35 p.393] [DS §10 p.98]
+  - —
+  - No dedicated interrupt line; completion is polled via `GER4C` (§35 assigns
+    no VIC source, and there is no 2D entry in Table 36) [DS §35 p.393]
 * - Graphics Hardware Cursor
   - `0x1E6E_2050` / `0x1E70_0008`
-  - 7 (shared)
-  - Cursor-change IRQ is delivered through SCU18 into the VGA path [DS §37 p.401]
+  - 21 (SCU)
+  - No dedicated line; the cursor-change IRQ enable/status is in `SCU18`, so it is
+    delivered as the SCU interrupt (VIC #21) [DS §37 p.401]
 :::
 
 None of these six blocks is defined in the Raptor U-Boot register headers: the
@@ -490,7 +492,7 @@ It implements 8 32-bit registers backed by two software-supplied DRAM buffers: a
   - Reserved (0)
 * - 15:0
   - RW
-  - Rate control setting. Request rate = 1 / (1 + value); a higher value slows the scan and reduces the extra DRAM bandwidth used. [DS §13 p.117]
+  - Rate control setting. A higher value slows the scan and reduces the extra DRAM bandwidth used; the datasheet gives only this qualitative relation, not an exact formula. [DS §13 p.117]
 :::
 
 ### MIC0C — Control
@@ -833,7 +835,7 @@ MCLK/H-PLL > 2 (either direction) those writes are only legal while MDMA is idle
   - Available command-queue length: `00000` full (no free space) … `10000` 16 free double-words; others reserved. The FIFO holds 16 double-words. [DS §22 p.260]
 * - 3
   - W1C
-  - MDMA idle status. `1` = idle and queue empty; write 1 to clear. (Reset value has this bit set — Init `0000_0100`.) [DS §22 p.261]
+  - MDMA idle status. `1` = idle and queue empty; write 1 to clear. Bit 3 is **0** at reset — the Init value `0x00000100` sets bit 8 (the [8:4] free-dword-count field = 16), not this bit. [DS §22 p.261]
 * - 2
   - —
   - Reserved (0)
@@ -886,7 +888,7 @@ P-Bus:
 arbitrary PCI *bus* commands through it — it simply forwards AHB reads/writes in
 its window to the P-Bus I/O or MMIO regions [DS §21 p.256]. This is the mirror
 image of the ch. 36 P2A bridge, which forwards host PCI accesses inbound to the
-AHB and is normally locked [DS §36 p.399].
+AHB and is normally locked [DS §36 p.400].
 
 ---
 
