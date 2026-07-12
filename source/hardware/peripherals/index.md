@@ -44,6 +44,14 @@ model code and driver bindings are reused across boards.
   - hwmon
   - KGPE-D16
   - Nuvoton voltage/temp/fan monitor + Smart-Fan control
+* - {doc}`ics1893`
+  - Ethernet PHY
+  - iPDU
+  - IDT 10/100 clause-22 MII PHY for the NS9360 MAC
+* - {doc}`tmp89`
+  - sub-MCU
+  - iPDU
+  - Toshiba TLCS-870/C1 display/bezel controller
 ```
 
 ```{toctree}
@@ -57,6 +65,8 @@ pca954x-mux
 pex8696-8647
 maxq3180
 w83795g
+ics1893
+tmp89
 ```
 
 ## Modelling order
