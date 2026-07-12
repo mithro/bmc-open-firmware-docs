@@ -55,7 +55,7 @@ oracle), it is marked as such. See [§9](#9-ast2050-specific-vs-shared-with-ast2
   - 256 MB (28-bit internal address)
   - [DS §17.4.1 p.201](#sources)
 * - Refresh clock reference
-  - 12 MHz source; refresh freq = 12 MHz / MCR0C[15:8]
+  - 12 MHz source; $\text{refresh freq} = 12\,\text{MHz} / \text{MCR0C}[15{:}8]$
   - [DS §17.3 p.186 MCR0C](#sources)
 * - ECC
   - Supported by family; **disabled** on this board
@@ -513,7 +513,7 @@ exactly the graphics/PCI/2D masters, cross-referenced against the REQ table in
   - Reserved (0)
 * - `[15:8]`
   - RW
-  - High-priority refresh-cycle period. Refresh frequency = 12 MHz / period
+  - High-priority refresh-cycle period. $\text{Refresh frequency} = 12\,\text{MHz} / \text{period}$
 * - `[7:6]`
   - —
   - Reserved (0)
@@ -530,7 +530,7 @@ exactly the graphics/PCI/2D masters, cross-referenced against the REQ table in
 
 Two values are used [platform.S:510-512,538-540]:
 
-- **Initial `0x00005A08`** — period `0x5A`=90 → 12 MHz/90 = **133 kHz ≈ 7.5 µs**
+- **Initial `0x00005A08`** — period `0x5A`=90 → $12\,\text{MHz}/90 = 133\,\text{kHz} \approx 7.5\,\mu\text{s}$
   refresh interval (within the DDR2 7.8 µs limit), and `[3:0]=8` → **8 refresh
   cycles per period** (a burst of refreshes during init, satisfying the JEDEC
   "≥2 AUTO REFRESH" requirement), low-priority refresh off.
@@ -652,8 +652,8 @@ an offset code: read each field's base from the table and add the field value
 ```
 
 **Timing sanity at DDR2-400 (5 ns/T):** tRP=20 ns, tRCD=20 ns, tRAS=50 ns,
-tRFC=140 ns (covers a 1 Gbit DDR2 device's 127.5 ns), and **write latency = 2T =
-CL(3) − 1** — internally consistent with the `MCR2C` CAS-latency-3 setting in
+tRFC=140 ns (covers a 1 Gbit DDR2 device's 127.5 ns), and **write latency**
+$= 2T = \text{CL}(3) - 1$ — internally consistent with the `MCR2C` CAS-latency-3 setting in
 [§6](#6-ddr2-mode-register-mrsemrs-programming). These numbers all sit inside
 the JEDEC DDR2-400 envelope [DS §17.3 p.187-189](#sources).
 
@@ -693,11 +693,11 @@ the JEDEC DDR2-400 envelope [DS §17.3 p.187-189](#sources).
   - normal
 * - `[15:12]`
   - RW
-  - CK/CKN output delay (only when DLL disabled): ~0.3 ns + N·0.25 ns
+  - CK/CKN output delay (only when DLL disabled): $\approx 0.3\,\text{ns} + N \cdot 0.25\,\text{ns}$
   - N=2 (n/a, DLL on)
 * - `[11:8]`
   - RW
-  - DQS read-window delay: ~0.3 ns + N·0.25 ns
+  - DQS read-window delay: $\approx 0.3\,\text{ns} + N \cdot 0.25\,\text{ns}$
   - N=2 (~0.8 ns)
 * - `[7:4]`
   - RW
@@ -902,8 +902,8 @@ DLL1 input-phase SADJ for DQS0, `[15:8]` = DLL1 input-phase SADJ for DQS1 — bo
 `MCR6C = 0x00909090` [platform.S:354-356](#sources). `[7:0]` = DLL1 master-adjust **MADJ**
 = `0x90` (144), `[23:16]` = DLL3 MADJ = `0x90` (144); `[15:8]` and `[31:24]` are
 reserved [DS §17.3 p.198](#sources). Per the datasheet DLL note, the minimum MADJ is 40 and
-the operating-frequency relation is `MIN_FREQ = 67·120/MADJ`,
-`MAX_FREQ = 347·120/MADJ`, with output delay `(SADJ+24)/MADJ · Tref + 0.1 ns`
+the operating-frequency relation is $\text{MIN\_FREQ} = 67 \cdot 120 / \text{MADJ}$,
+$\text{MAX\_FREQ} = 347 \cdot 120 / \text{MADJ}$, with output delay $\frac{\text{SADJ}+24}{\text{MADJ}} \cdot T_\text{ref} + 0.1\,\text{ns}$
 [DS §17.3 p.199](#sources). MADJ=144 sets the DLL's operating band around the ~200 MHz MCLK.
 This is written **before** the main register block so the DLL master loop is
 running when `MCR64`'s phase settings take effect.
@@ -1076,7 +1076,7 @@ against JEDEC JESD79-2 DDR2 power-up [JESD79-2B](#sources).
 11. **Unlock + verify SDRAM controller** — `MCR00 = 0xFC600309`, read back
     `0x01`; on failure print `"SDRAM LOCKED"` and abort [platform.S:287-295](#sources).
 12. **Final M-PLL** — `SCU20 = 0x000041F0` (numerator 15, denumerator 0, output
-    divider 1, post-divider ÷2 → 24 MHz·17/1÷2 ≈ **204 MHz ≈ DDR2-400**), then a
+    divider 1, post-divider ÷2 → $24\,\text{MHz} \cdot 17/1 \div 2 \approx 204\,\text{MHz} \approx \text{DDR2-400}$), then a
     **~400 µs PLL-lock** delay [platform.S:334-348](#sources) [DS §18.2 p.212 SCU20](#sources).
 13. **Re-unlock SDRAM** (`MCR00 = 0xFC600309`) in case the PLL change bounced the
     lock [platform.S:350-352](#sources).

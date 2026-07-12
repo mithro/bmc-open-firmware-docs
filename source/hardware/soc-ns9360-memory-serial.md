@@ -936,21 +936,21 @@ first), bit 15 `RTSTX` (RTS active only while transmitting, for multidrop)
 * - 14:0
   - N
   - R/W
-  - Divisor: N = (F_CLK / (oversample × baud)) - 1
+  - Divisor: $N = \dfrac{F_\text{CLK}}{\text{oversample} \times \text{baud}} - 1$
 ```
 
 Field bits match [u-boot ns9750_ser.h](#sources) (`EBIT`=0x80000000, `TMODE`=0x40000000,
 `CLKMUX_MA`=0x03000000, `TCDR_MA`=bits 20:19, `RCDR_MA`=bits 18:16, `N_MA`=14:0).
-`CLKMUX` = 00 selects x1_sys_osc/2 (= 29.4912/2 = 14.7456 MHz); `CLKMUX` = 01
-selects BCLK = the BBus clock = AHB/2 = f_vco/8 ≈ 44.24 MHz [HWRef p.566 Table 400](#sources).
+`CLKMUX` = 00 selects x1_sys_osc/2 ($= 29.4912/2 = 14.7456\,\text{MHz}$); `CLKMUX` = 01
+selects BCLK (the BBus clock) $= \text{AHB}/2 = f_\text{vco}/8 \approx 44.24\,\text{MHz}$ [HWRef p.566 Table 400](#sources).
 Example N values for x1_sys_osc/2 at 16× oversampling: 115200 baud → N = 7,
 9600 baud → N = 95, 38400 baud → N = 23 [HWRef p.591, Table 407](#sources).
 
 ```{admonition} Baud divisor convention
 :class: note
 
-Digi's U-Boot serial driver computes `N = ((CONFIG_SYS_CLK_FREQ / 8) /
-(baud × 16)) - 1`, i.e. BBus clock = system(PLL)/8, using `CLKMUX = BCLK`
+Digi's U-Boot serial driver computes $N = \dfrac{\text{CONFIG\_SYS\_CLK\_FREQ}/8}{\text{baud} \times 16} - 1$,
+i.e. BBus clock = system(PLL)/8, using `CLKMUX = BCLK`
 [u-boot ns9750_serial.c](#sources). With the correct PLL/system clock (≈354 MHz), that
 BBus clock is ≈44.2 MHz, so 115200 8N1 (16×) gives N = 23. The clean
 datasheet-grounded alternative is `CLKMUX = x1_sys_osc/2` (14.7456 MHz), for which
@@ -1088,8 +1088,8 @@ Master commands (CMD field): 0x00 `M_NOP`, 0x04 `M_READ`, 0x05 `M_WRITE`,
 enable, default 1), bits 10:1 `SDA` (default 0x7F), bit 0 `SAM` [HWRef p.516](#sources).
 `Configuration` (0x0C): bit 15 `IRQD` (mask CPU interrupt — keep 0), bit 14 `TMDE`
 (0 = standard, 1 = fast), bit 13 `VSCD` (keep 0), bits 12:9 `SFW` (spike-filter
-width), bits 8:0 `CLREF` (clk_ref[9:1], must be > 3; bus clock = clk / ((CLREF×2)
-+ 4 + scl_delay), clk = cpu_clk/4) [HWRef p.517-518](#sources). Interrupt codes reported in
+width), bits 8:0 `CLREF` (clk_ref[9:1], must be > 3; $\text{bus clock} = \dfrac{\text{clk}}{(\text{CLREF} \times 2) + 4 + \text{scl\_delay}}$,
+$\text{clk} = \text{cpu\_clk}/4$) [HWRef p.517-518](#sources). Interrupt codes reported in
 `IRQCD` include `M_ARBIT_LOST` (1), `M_NO_ACK` (2), `M_TX_DATA` (3), `M_RX_DATA`
 (4), `M_CMD_ACK` (5), and slave codes 8-F [HWRef p.518-519](#sources).
 

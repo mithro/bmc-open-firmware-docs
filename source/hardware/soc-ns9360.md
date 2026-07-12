@@ -189,13 +189,15 @@ A crystal (or external oscillator) feeds an on-chip PLL. The PLL VCO output is
 divided down by fixed ratios to the CPU, AHB (system + memory bus), and BBus
 (peripheral bus) clocks [HWRef p.36, p.153, Figure 39]:
 
-```
-f_vco  = f_osc x (ND+1) / FS          FS in {1,2,4,8}, ND+1 = PLL multiplier
-f_cpu  = f_vco / 2                     ARM926EJ-S core clock
-f_ahb  = f_vco / 4                     AHB / system + memory bus  (= f_cpu / 2)
-f_bbus = f_vco / 8                     BBus / peripheral bus       (= f_ahb / 2)
-f_lcd  = f_vco / {4,8,16,32}           programmable (or external)
-```
+$$
+\begin{aligned}
+f_\text{vco} &= f_\text{osc} \times (ND+1) / FS & &FS \in \{1,2,4,8\},\ ND+1 = \text{PLL multiplier}\\
+f_\text{cpu} &= f_\text{vco} / 2 & &\text{ARM926EJ-S core clock}\\
+f_\text{ahb} &= f_\text{vco} / 4 & &(= f_\text{cpu} / 2)\\
+f_\text{bbus} &= f_\text{vco} / 8 & &(= f_\text{ahb} / 2)\\
+f_\text{lcd} &= f_\text{vco} / \{4,8,16,32\} & &\text{programmable (or external)}
+\end{aligned}
+$$
 
 So the fixed ratio is **cpu : ahb : bbus = 4 : 2 : 1**. With the board's
 29.4912 MHz crystal at the 177 MHz grade (ND+1 = 24, FS = ÷2), f_vco =
@@ -203,8 +205,8 @@ So the fixed ratio is **cpu : ahb : bbus = 4 : 2 : 1**. With the board's
 [HWRef p.36 Table 3][REFERENCE-MATERIAL.md]. Speed grades: 177 MHz (0-70 °C),
 155 MHz (-40..+85 °C), 103 MHz [HWRef p.29](#sources).
 
-Linux computes the same tree: `systemclock = CRYSTAL x (ND+1) >> FS` (the raw VCO
-output) and `cpuclock = systemclock / 2`, with `CRYSTAL = 29491200`
+Linux computes the same tree: $\text{systemclock} = \text{CRYSTAL} \times (ND+1) \gg FS$ (the raw VCO
+output) and $\text{cpuclock} = \text{systemclock} / 2$, with $\text{CRYSTAL} = 29491200$
 [mach-ns9xxx processor-ns9360.c](#sources). U-Boot's `ns9750dev.h` states the full tree
 explicitly as CPU = system/2, AHB = system/4, BBus = system/8 [u-boot ns9750dev.h](#sources).
 
@@ -729,7 +731,7 @@ ND = bits 20:16 match [mach-ns9xxx regs-sys-ns9360.h](#sources) (`SYS_PLL_FS`,
 * - 4:0
   - NDSW
   - R/W
-  - PLL multiplier ND (f_vco = f_osc × (ND+1) / FS)
+  - PLL multiplier ND ($f_\text{vco} = f_\text{osc} \times (ND+1) / FS$)
 ```
 
 ### Clock Configuration register

@@ -77,12 +77,12 @@ Read-only, two bytes, MSB byte first, left-justified two's-complement; reads 0 �
 until the first conversion completes. [TMP75 DS p.17](#sources) [LM75 DS p.16](#sources)
 
 - **TMP75:** 12-bit. Byte 1 = T11..T4, Byte 2 = T3..T0 in bits [7:4], bits [3:0] = 0.
-  Convert: `T(°C) = sign_extend12(word >> 4) × LSB`. LSB depends on the resolution
+  Convert: $T(\text{°C}) = \operatorname{sign\_extend12}(\text{word} \gg 4) \times \text{LSB}$. LSB depends on the resolution
   setting (0.5 / 0.25 / 0.125 / 0.0625 °C). Example: −25 °C → `0xE70`
-  (0xE70 = 3696 − 4096 = −400; −400 × 0.0625 = −25 °C). [TMP75 DS p.9,17,19](#sources)
+  (`0xE70` $= 3696 - 4096 = -400$; $-400 \times 0.0625 = -25\,\text{°C}$). [TMP75 DS p.9,17,19](#sources)
 - **LM75:** 9-bit. Bits D15 (MSB)..D7 (LSB) hold the value; D6..D0 undefined.
-  Convert: `T(°C) = sign_extend9(word >> 7) × 0.5`. Example: −25 °C → `0x1CE`
-  (0x1CE = 462 − 512 = −50; −50 × 0.5 = −25 °C). [LM75 DS p.14,16](#sources)
+  Convert: $T(\text{°C}) = \operatorname{sign\_extend9}(\text{word} \gg 7) \times 0.5$. Example: −25 °C → `0x1CE`
+  (`0x1CE` $= 462 - 512 = -50$; $-50 \times 0.5 = -25\,\text{°C}$). [LM75 DS p.14,16](#sources)
 
 ## Configuration register (0x01) bitfields
 

@@ -432,7 +432,9 @@ the internal counter starts when the DLL LSB is written. `[DS §26.3.1 p.285-286
 
 The reference clock is 24 MHz (shared with the USB reference). `[DS §18 p.212](#sources)`
 
-$$\text{Baud} = \frac{24\,\text{MHz}}{16 \times \text{divisor}}$$
+$$
+\text{Baud} = \frac{24\,\text{MHz}}{16 \times \text{divisor}}
+$$
 
 `[DS §26.3.1 p.285](#sources)`
 
@@ -485,7 +487,7 @@ $$\text{Baud} = \frac{24\,\text{MHz}}{16 \times \text{divisor}}$$
   - Enable MUX of UART1 pins (UART1+UART2 share the UART1 pins/connector)
   - 0
 * - 12
-  - Reference-clock divider: `0` → baud = 24 MHz/(16·div); `1` → baud = (24 MHz/13)/(16·div)
+  - Reference-clock divider: `0` → $\text{baud} = \frac{24\,\text{MHz}}{16 \cdot \text{div}}$; `1` → $\text{baud} = \frac{24\,\text{MHz}/13}{16 \cdot \text{div}}$
   - 0
 ```
 

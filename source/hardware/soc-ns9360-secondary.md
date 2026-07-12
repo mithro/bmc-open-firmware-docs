@@ -127,7 +127,7 @@ system-control module [HWRef p.144, Table 48](#sources).
   - PPL
   - R/W
   - 0x00
-  - Pixels-per-line = 16 × (PPL+1); 16–1024 pixels
+  - Pixels-per-line $= 16 \times (\text{PPL}+1)$; 16–1024 pixels
 * - D01:00
   - reserved
   - N/A
@@ -233,7 +233,7 @@ system-control module [HWRef p.144, Table 48](#sources).
   - PCD
   - R/W
   - 0x00
-  - Panel clock divisor: CLCP = CLCDCLK/(PCD+2)
+  - Panel clock divisor: $\text{CLCP} = \text{CLCDCLK}/(\text{PCD}+2)$
 ```
 
 ### LCDTiming3 (0x00C) — line-end control [HWRef p.551, Table 390](#sources)

@@ -232,7 +232,7 @@ exist". [DS §28.1 p.290](#sources) [DS revision history, v0.92 (Mar 05 2008)](#
 
 The **H** divider stage is power-of-two (`0000`=÷1, `0001`=÷2, `0010`=÷4 …
 `1111`=÷32768); the **L** divider stage is even-valued (`0000`=÷1, `0001`=÷2,
-`0010`=÷4, `0011`=÷6 … `1111`=÷30). PWMCLK = 24 MHz ÷ (H × L). [DS p.291-292](#sources)
+`0010`=÷4, `0011`=÷6 … `1111`=÷30). $\text{PWMCLK} = 24\,\text{MHz} \div (H \times L)$. [DS p.291-292](#sources)
 
 ```{list-table} PTCR04 fields
 :header-rows: 1
@@ -368,7 +368,7 @@ stride. [DS p.294](#sources)
 Fan speed is derived from the raw value with the datasheet formula (printed as a
 footnote to the register table):
 
-> `RPM = (24000000 * 60) / (2 * TachoValue * TachoClkDivision)`
+> $\text{RPM} = \dfrac{24000000 \times 60}{2 \times \text{TachoValue} \times \text{TachoClkDivision}}$
 
 where *TachoValue* is `PTCR2C[19:0]` and *TachoClkDivision* is the Type M/N
 fan-tach clock divide from `PTCR10[3:1]` / `PTCR18[3:1]` (÷4…÷65536). [DS p.295](#sources)

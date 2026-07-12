@@ -74,7 +74,7 @@ to re-lock. [DS §18.1 p.204](#sources) [DS §9 p.97](#sources) [hwreg.h:77](#so
   - SCU14 Frequency Counter Measurement
   - 0x00000000
   - RO
-  - 14-bit measured counter value; `freq = (24MHz/512)*(value+1)`. [DS p.211](#sources)
+  - 14-bit measured counter value; $\text{freq} = \dfrac{24\,\text{MHz}}{512} \times (\text{value}+1)$. [DS p.211](#sources)
 * - 0x18
   - SCU18 Interrupt Control & Status
   - 0x00000000
@@ -84,7 +84,7 @@ to re-lock. [DS §18.1 p.204](#sources) [DS §9 p.97](#sources) [hwreg.h:77](#so
   - SCU1C 32.768 KHz Error Correction
   - 0x0000001B
   - RW
-  - Fine-tunes the RTC 32.768 KHz source: `RTCclk = 12MHz*128/(46848+corr)`. [DS p.211](#sources) [hwreg.h:86](#sources)
+  - Fine-tunes the RTC 32.768 KHz source: $\text{RTCclk} = \dfrac{12\,\text{MHz} \times 128}{46848 + \text{corr}}$. [DS p.211](#sources) [hwreg.h:86](#sources)
 * - 0x20
   - SCU20 M-PLL Parameter
   - 0x00004291
@@ -380,7 +380,7 @@ calibrate clocks against the 24 MHz reference. [DS p.210-211](#sources) [hwreg.h
 ```
 
 Measurement algorithm: reference `CLK24M` counts 0→512 while `OSCCLK` is counted,
-giving `OSCCLK = (24MHz/512)*(SCU14+1)`. SCU14[13:0] holds the count; SCU28
+giving $\text{OSCCLK} = \dfrac{24\,\text{MHz}}{512} \times (\text{SCU14}+1)$. SCU14[13:0] holds the count; SCU28
 holds the pass/fail comparison window (upper limit [29:16], lower limit [13:0]).
 [DS p.210-211, §SCU28 p.213](#sources)
 
@@ -411,7 +411,7 @@ init reads to pick a baud divisor. [DS p.213](#sources)
 * - 12
   - UART div13 reference-clock enable
   - RW
-  - 0: baud = 24MHz/(16·div); 1: baud = (24MHz/13)/(16·div). [DS p.213](#sources)
+  - 0: $\text{baud} = \dfrac{24\,\text{MHz}}{16 \cdot \text{div}}$; 1: $\text{baud} = \dfrac{24\,\text{MHz}/13}{16 \cdot \text{div}}$. [DS p.213](#sources)
 * - 11
   - Invert YCLK
   - RW
@@ -590,19 +590,19 @@ are simple integer divisions of the 24 MHz reference. USB2.0 has its own PHY PLL
 H-PLL and M-PLL share an identical field layout and output equation. The vendor
 formula printed in the datasheet is:
 
-```
-F_out = 24MHz * (2 - OD) * [ (Numerator + 2) / (Denumerator + 1) ]
-```
+$$
+F_\text{out} = 24\,\text{MHz} \times (2 - \text{OD}) \times \frac{\text{Numerator} + 2}{\text{Denumerator} + 1}
+$$
 
 where **OD** is the output-divider bit, **Numerator** = bits[10:5],
 **Denumerator** = bits[3:0]. The **post-divider** field (bits[14:12]) then
-divides `F_out` further (÷1/2/4/8/16). Worked example: the SCU24 reset value
-`0x00004291` decodes to N=20, OD=1, D=1, post=÷2 → `24·(2−1)·(22/2)/2 = 132 MHz`,
+divides $F_\text{out}$ further (÷1/2/4/8/16). Worked example: the SCU24 reset value
+`0x00004291` decodes to N=20, OD=1, D=1, post=÷2 → $24 \cdot (2-1) \cdot (22/2) / 2 = 132\,\text{MHz}$,
 matching the datasheet's stated 133 MHz H-PLL default. [DS §SCU24 p.212,
 §SCU20 p.211-212]
 
 This is the same equation the mainline AST2400 clock driver implements
-(`F = 24MHz * (2-OD) * ((N+2)/(D+1))`, with N=`(val>>5)&0x3f`, OD=`(val>>4)&1`,
+($F = 24\,\text{MHz} \times (2-\text{OD}) \times \frac{N+2}{D+1}$, with N=`(val>>5)&0x3f`, OD=`(val>>4)&1`,
 D=`val&0xf`), which corroborates the field decode across G3 and G4.
 [codebrowser clk-aspeed.c](#sources) [DS p.212](#sources)
 
@@ -1138,7 +1138,7 @@ silicon check is dead/unused (the subsequent `set_MPLL` writes literal
     reset/WDT porting notes.
 - **Web cross-references:**
   - Mainline Linux `drivers/clk/clk-aspeed.c` (AST2400/G4) — H-PLL formula
-    `F = 24MHz*(2-OD)*((N+2)/(D+1))`, strap decode:
+    $F = 24\,\text{MHz} \times (2-\text{OD}) \times \frac{N+2}{D+1}$, strap decode:
     <https://codebrowser.dev/linux/linux/drivers/clk/clk-aspeed.c.html>
   - Aspeed SCU device-tree binding (context):
     <https://www.kernel.org/doc/Documentation/devicetree/bindings/mfd/aspeed-scu.txt>

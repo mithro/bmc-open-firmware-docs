@@ -499,8 +499,8 @@ Confirmed offset agreements include SCM `PLL`=0x188, `CLOCK`=0x17C, `RESET`=0x18
 block (0x20-0x58), and static config (0x200); the BBus GPIO config/ctrl/status
 (0x10/0x30/0x40) with the output-direction bit at nibble bit 3; and the four
 serial channel bases (0x90200000/40, 0x90300000/40). The PLL field split (FS bits
-24:23, ND bits 20:16) and the clock derivation `systemclock = crystal × (ND+1) >>
-FS`, `cpuclock = systemclock/2` are identical across both code bases and the
+24:23, ND bits 20:16) and the clock derivation $\text{systemclock} = \text{crystal} \times (ND+1) \gg FS$,
+$\text{cpuclock} = \text{systemclock}/2$ are identical across both code bases and the
 datasheet [mach-ns9xxx processor-ns9360.c][u-boot ns9750dev.h][HWRef p.153].
 
 ## Sources
