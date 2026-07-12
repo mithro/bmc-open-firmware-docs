@@ -3,16 +3,16 @@
 The **Digi (NetSilicon) NS9360** is a single-chip 0.13 µm CMOS network-attached
 processor from the NET+ARM family, built around an **ARM926EJ-S** (ARMv5TEJ)
 core. It powers the HPE Intelligent Modular PDU (AF531A), whose stock firmware
-is Digi **NET+OS** (a ThreadX-based RTOS), not Linux [ANALYSIS.md]. This page is
+is Digi **NET+OS** (a ThreadX-based RTOS), not Linux [ANALYSIS.md](#sources). This page is
 a register-by-register reference for every on-chip block a Linux, U-Boot, or
 Zephyr port must drive.
 
 The authority for this document is the **NS9360 Hardware Reference**, Digi part
-number 90000675 rev J (cited `[HWRef p.N]`, where the printed page number equals
+number 90000675 rev J (cited `[HWRef p.N](#sources)`, where the printed page number equals
 the PDF page number), supported by the **NS9360 Datasheet** 91001326 rev D
-(`[Datasheet]`). Every register base address and offset below is independently
+(`[Datasheet](#sources)`). Every register base address and offset below is independently
 cross-checked against the archived open-source Linux `arch/arm/mach-ns9xxx`
-(cited `[mach-ns9xxx]`) and the U-Boot NS9750 support (`[u-boot ns9750]`); those
+(cited `[mach-ns9xxx](#sources)`) and the U-Boot NS9750 support (`[u-boot ns9750](#sources)`); those
 two code bases agree on every base and offset, and that agreement is noted where
 it matters. See the Sources section at the end of this page.
 
@@ -27,7 +27,7 @@ it matters. See the Sources section at the end of this page.
   `RW1TC` / `R/C` read, write-1-to-clear (or clear-on-read).
 - **Single-access rule.** For every block in this SoC the configuration
   registers "must be accessed as 32-bit words and as single accesses only.
-  Bursting is not allowed" [HWRef p.462, p.281, p.341, p.463].
+  Bursting is not allowed" [HWRef p.462, p.281, p.341, p.463](#sources).
 - **Public-safe.** No credentials, MAC addresses, private IP addresses, or host
   names appear here; the firmware's factory-default network identity is
   deliberately omitted.
@@ -47,44 +47,44 @@ it matters. See the Sources section at the end of this page.
 * - CPU
   - ARM926EJ-S (ARMv5TEJ), 5-stage pipeline, Harvard, 8 KB I-cache + 4 KB
     D-cache, MMU with TLB, DSP extensions, Jazelle Java, EmbeddedICE-RT/JTAG.
-    Grades 103 / 155 / 177 MHz [HWRef p.24-25]
+    Grades 103 / 155 / 177 MHz [HWRef p.24-25](#sources)
 * - Memory controller
   - AMBA AHB MultiPort Memory Controller (PL172/PL175-style): 4 dynamic
     (SDRAM/LP-SDRAM) + 4 static (ROM/Flash/SRAM) chip selects, 8/16/32-bit,
-    1-32 wait states, 2 external DMA channels [HWRef p.25, p.196]
+    1-32 wait states, 2 external DMA channels [HWRef p.25, p.196](#sources)
 * - Ethernet
   - 10/100 Mbps MAC with MII **or** RMII to an external PHY; 2 KB RX FIFO,
     256-byte TX FIFO, four RX descriptor rings + one TX ring, separate RX/TX
-    DMA, 39 statistics counters [HWRef p.26, p.319]
+    DMA, 39 statistics counters [HWRef p.26, p.319](#sources)
 * - Serial (×4)
   - Four independent channels A-D, each UART **or** SPI-master **or**
-    SPI-slave; 32-byte TX + 32-byte RX FIFO; DMA-capable [HWRef p.27, p.564]
+    SPI-slave; 32-byte TX + 32-byte RX FIFO; DMA-capable [HWRef p.27, p.564](#sources)
 * - I2C
   - One master/slave port, 100 kHz (standard) / 400 kHz (fast), 7- and 10-bit
-    addressing, multi-master arbitration [HWRef p.27, p.508]
+    addressing, multi-master arbitration [HWRef p.27, p.508](#sources)
 * - GPIO
   - 73 pins (gpio0-gpio72), each 4-way muxed (3 peripheral functions + GPIO),
-    per-pin direction/inversion; 4 external interrupt pins [HWRef p.29, p.462]
+    per-pin direction/inversion; 4 external interrupt pins [HWRef p.29, p.462](#sources)
 * - Timers
   - 8 general-purpose 16/32-bit timer/counters (concatenatable, PWM), plus a
-    software watchdog and a bus monitor [HWRef p.28, p.144]
+    software watchdog and a bus monitor [HWRef p.28, p.144](#sources)
 * - Interrupt controller
   - Vectored interrupt controller (VIC): 32 priority levels, IRQ/FIQ, 32
-    sources [HWRef p.147]
+    sources [HWRef p.147](#sources)
 * - RTC
   - On-chip real-time clock/calendar (10 ms resolution) with alarm and rollover
-    interrupts [HWRef p.489]
+    interrupts [HWRef p.489](#sources)
 * - USB
   - USB 2.0 full/low speed: independent OHCI Host + Device, internal PHY (+
-    external PHY option) [HWRef p.26]
+    external PHY option) [HWRef p.26](#sources)
 * - LCD
   - TFT/STN LCD controller (AHB DMA master) up to 1024×768, up to 64K colours
-    [HWRef p.524]
+    [HWRef p.524](#sources)
 * - IEEE 1284
-  - Parallel peripheral port (compatibility/nibble/byte/ECP) [HWRef p.626]
+  - Parallel peripheral port (compatibility/nibble/byte/ECP) [HWRef p.626](#sources)
 * - Clocking
   - On-chip PLL from an external crystal; software-programmable multiplier;
-    separate PLL for USB [HWRef p.29]
+    separate PLL for USB [HWRef p.29](#sources)
 ```
 
 The board using this SoC pairs 32 MB SDRAM (ISSI IS42S32800D, 32-bit), 16 MB NOR
@@ -94,7 +94,7 @@ flash (2× Macronix MX29LV640EB on CS0/CS1), an ICS1893 Ethernet PHY, and a
 ### System (AHB) address map
 
 The AHB decoder assigns the 256 MB windows below at reset; the low chip-select
-windows are re-mappable by software after boot [HWRef p.142-144, Table 47].
+windows are re-mappable by software after boot [HWRef p.142-144, Table 47](#sources).
 
 ```{list-table} System address map
 :header-rows: 1
@@ -148,8 +148,8 @@ windows are re-mappable by software after boot [HWRef p.142-144, Table 47].
 ```
 
 The BBus peripheral space (base 0x9000_0000) sub-decodes as follows
-[HWRef p.415-416, Table 305]; confirmed by [mach-ns9xxx hardware.h] and
-[u-boot ns9750_ser.h].
+[HWRef p.415-416, Table 305](#sources); confirmed by [mach-ns9xxx hardware.h](#sources) and
+[u-boot ns9750_ser.h](#sources).
 
 ```{list-table} BBus peripheral base addresses
 :header-rows: 1
@@ -201,12 +201,12 @@ So the fixed ratio is **cpu : ahb : bbus = 4 : 2 : 1**. With the board's
 29.4912 MHz crystal at the 177 MHz grade (ND+1 = 24, FS = ÷2), f_vco =
 353.8944 MHz, giving CPU 176.9472 MHz, AHB 88.4736 MHz, BBus 44.2368 MHz
 [HWRef p.36 Table 3][REFERENCE-MATERIAL.md]. Speed grades: 177 MHz (0-70 °C),
-155 MHz (-40..+85 °C), 103 MHz [HWRef p.29].
+155 MHz (-40..+85 °C), 103 MHz [HWRef p.29](#sources).
 
 Linux computes the same tree: `systemclock = CRYSTAL x (ND+1) >> FS` (the raw VCO
 output) and `cpuclock = systemclock / 2`, with `CRYSTAL = 29491200`
-[mach-ns9xxx processor-ns9360.c]. U-Boot's `ns9750dev.h` states the full tree
-explicitly as CPU = system/2, AHB = system/4, BBus = system/8 [u-boot ns9750dev.h].
+[mach-ns9xxx processor-ns9360.c](#sources). U-Boot's `ns9750dev.h` states the full tree
+explicitly as CPU = system/2, AHB = system/4, BBus = system/8 [u-boot ns9750dev.h](#sources).
 
 ```{admonition} "System clock" naming caveat
 :class: warning
@@ -222,7 +222,7 @@ the datasheet tree above (BBus = f_vco/8 ≈ 44.2 MHz) when computing baud rates
 ```
 
 USB is clocked by a **separate PLL** from an external 48 MHz crystal/oscillator
-[HWRef p.38].
+[HWRef p.38](#sources).
 
 ### Boot and reset
 
@@ -231,21 +231,21 @@ strap sampled at power-up [HWRef p.32-35]:
 
 - **`reset_done` = 1 (default): boot from flash/ROM** on the system memory bus
   (8-, 16-, or 32-bit static memory). The board boots from NOR flash on CS0
-  [ANALYSIS.md].
+  [ANALYSIS.md](#sources).
 - **`reset_done` = 0: boot from SDRAM via a serial SPI-EEPROM.** An on-chip boot
   engine drives Serial channel B in SPI-master mode, reads a 128-130 byte
   configuration header (memory-controller + SDRAM mode settings) from EEPROM
   address 0, programs the memory controller, copies the image into SDRAM at
-  address 0, then releases the CPU [HWRef p.32-34, p.425-427].
+  address 0, then releases the CPU [HWRef p.32-34, p.425-427](#sources).
 
 At power-on reset, **static CS1 is mirrored onto CS0 and CS4**; clearing the
 address-mirror bit (`M`) in the memory-controller Control register makes the
-chip selects independent [HWRef p.198]. Reset sources differ in scope: only the
+chip selects independent [HWRef p.198](#sources). Reset sources differ in scope: only the
 hard `reset_n` pin re-samples the PLL/endian/GPIO bootstrap straps; `sreset_n`,
-the watchdog reset, and a PLL software-change reset do not [HWRef p.33 Table 1].
+the watchdog reset, and a PLL software-change reset do not [HWRef p.33 Table 1](#sources).
 The `Reset and Sleep Control` register records the last reset cause (see the SCM
 "Reset and Sleep Control register" section below). Hardware reset needs ~4 ms for PLL
-lock; a software reset lasts 128 CPU clocks [HWRef p.35].
+lock; a software reset lasts 128 CPU clocks [HWRef p.35](#sources).
 
 ### Bootstrap / strapping pins
 
@@ -279,7 +279,7 @@ pull-down [HWRef p.153-156, Table 49][ANALYSIS.md].
 ```
 
 The 5-bit ND strap does not map linearly; e.g. code `10010` = multiplier 24
-(the 176.9472 MHz grade) [HWRef p.155-156, Table 50]. The board boots big-endian
+(the 176.9472 MHz grade) [HWRef p.155-156, Table 50](#sources). The board boots big-endian
 (gpio[44] = 0) and a software stub then switches the CPU and buses to
 little-endian to reuse the little-endian Digi/Linux/U-Boot code base
 [REFERENCE-MATERIAL.md][PLAN-INCREMENTAL-PORT.md].
@@ -291,14 +291,14 @@ The core is a standard **ARM926EJ-S** (ARMv5TEJ): 32-bit ARM + 16-bit Thumb +
 Jazelle (Java) instruction sets, a Harvard cached micro-architecture with
 separate instruction and data AHB interfaces, an integer core with single-cycle
 MAC / DSP extensions, an 8 KB instruction cache and 4 KB data cache, an MMU with
-TLB, and EmbeddedICE-RT debug over JTAG [HWRef p.24, p.67-70]. The CP15 system
+TLB, and EmbeddedICE-RT debug over JTAG [HWRef p.24, p.67-70](#sources). The CP15 system
 control coprocessor (accessed via `MRC`/`MCR` in privileged mode) governs the
 cache, MMU, and three address spaces — VA (core), MVA (cache/MMU, via the FCSE
-PID), and PA (AMBA/physical) [HWRef p.71-72]. CP15 and MMU page-table behaviour
+PID), and PA (AMBA/physical) [HWRef p.71-72](#sources). CP15 and MMU page-table behaviour
 are the generic ARM926EJ-S definitions and are not repeated here; the SoC-specific
 programming lives in the blocks below. One SoC hook: CP15 control-register bit 7
 (CPU endianness) is one of the four bits the boot stub clears when switching
-big→little endian [PLAN-INCREMENTAL-PORT.md].
+big→little endian [PLAN-INCREMENTAL-PORT.md](#sources).
 
 ## System Control Module (SCM)
 
@@ -308,7 +308,7 @@ big→little endian [PLAN-INCREMENTAL-PORT.md].
 The SCM contains the AHB bus arbiter, system address decoding (the chip-select
 base/mask registers), the programmable timers, the software watchdog, the
 vectored interrupt controller, the PLL/clock configuration, reset/sleep control,
-and the RTC clock divider [HWRef p.136].
+and the RTC clock divider [HWRef p.136](#sources).
 
 ### SCM register map
 
@@ -390,18 +390,18 @@ and the RTC clock divider [HWRef p.136].
   - RTC clock divider (generates 100 Hz)
 ```
 
-Register offsets are confirmed bit-for-bit by [u-boot ns9750_sys.h] (`PLL`=0x188,
+Register offsets are confirmed bit-for-bit by [u-boot ns9750_sys.h](#sources) (`PLL`=0x188,
 `CLOCK`=0x17C, `RESET`=0x180, `MISC`=0x184, `ISRADDR`=0x164, `TIMER_*`,
-`CS_*_BASE/MASK`) and [mach-ns9xxx regs-sys-ns9360.h] / `regs-sys-common.h`
+`CS_*_BASE/MASK`) and [mach-ns9xxx regs-sys-ns9360.h](#sources) / `regs-sys-common.h`
 (`SYS_PLL`=0xa0900188, `SYS_ISA`=0xa0900168, `SYS_TC`=0xa0900190, etc.).
 
 ### AHB bus arbiter (BRC0-BRC3)
 
 The main arbiter holds a 16-entry Bus Request Config (BRC) set, four 8-bit
 channels per 32-bit register (BRC0 = channels 0-3 … BRC3 = channels 12-15). At
-power-up only the CPU is assigned, on a 100 %-bandwidth channel [HWRef p.136-140].
+power-up only the CPU is assigned, on a 100 %-bandwidth channel [HWRef p.136-140](#sources).
 
-```{list-table} BRC per-channel byte fields [HWRef p.163]
+```{list-table} BRC per-channel byte fields [HWRef p.163](#sources)
 :header-rows: 1
 :widths: 12 14 12 62
 
@@ -428,19 +428,19 @@ power-up only the CPU is assigned, on a 100 %-bandwidth channel [HWRef p.136-140
 ```
 
 `AHB Arbiter Gen Config` (0x000) bit 0 `EXMA`: 0 = CPU direct external-memory
-access via slave port 1; 1 = arbitrate through slave port 0 [HWRef p.162].
+access via slave port 1; 1 = arbitrate through slave port 0 [HWRef p.162](#sources).
 Hmaster encodings: ARM I/D = 0000, Ethernet Rx = 0001, Ethernet Tx = 0010,
-BBus = 0101, LCD = 0110 [HWRef p.144, Table 48].
+BBus = 0101, LCD = 0110 [HWRef p.144, Table 48](#sources).
 
 ### Programmable timers
 
 There are **8 general-purpose 16/32-bit timer/counters** (Timer 0-7), each with a
 16-bit counter and 16-bit prescaler, individually enabled, concatenatable to form
 32-bit (or longer) counters, and usable in internal-timer, gated, or
-event-counter modes; two timers can be paired for PWM output [HWRef p.144-147].
+event-counter modes; two timers can be paired for PWM output [HWRef p.144-147](#sources).
 Each has a Reload Count register (0x044+), a read-back register (0x084+), and a
 control register (0x190+). Linux uses timer 0 as clocksource and timer 1 as
-clockevent, both clocked at the CPU rate [mach-ns9xxx time-ns9360.c].
+clockevent, both clocked at the CPU rate [mach-ns9xxx time-ns9360.c](#sources).
 
 ```{admonition} Timer count discrepancy
 :class: note
@@ -448,10 +448,10 @@ clockevent, both clocked at the CPU rate [mach-ns9xxx time-ns9360.c].
 The datasheet states "8" general-purpose timers in one place (p.28) and
 "sixteen" in another (p.31); the register map exposes Timer 0-7 control/reload/read
 registers, while the `Timer Interrupt Status` register reports 16 timer interrupt
-bits [HWRef p.28, p.31, p.172]. Treat the programmable set as Timer 0-7.
+bits [HWRef p.28, p.31, p.172](#sources). Treat the programmable set as Timer 0-7.
 ```
 
-```{list-table} Timer 0-7 Control register (0x190 + n*4) [HWRef p.165-167]
+```{list-table} Timer 0-7 Control register (0x190 + n*4) [HWRef p.165-167](#sources)
 :header-rows: 1
 :widths: 12 14 12 62
 
@@ -505,14 +505,14 @@ bits [HWRef p.28, p.31, p.172]. Treat the programmable set as Timer 0-7.
   - Reload enable: 0 = halt at terminal count, 1 = reload and continue
 ```
 
-Bit positions match [u-boot ns9750_sys.h] (TEN=15, INTC=9, TLCS=8:6, TM=5:4,
-INTS=3, UDS=2, TSZ=1, REN=0) and [mach-ns9xxx regs-sys-ns9360.h]. The
+Bit positions match [u-boot ns9750_sys.h](#sources) (TEN=15, INTC=9, TLCS=8:6, TM=5:4,
+INTS=3, UDS=2, TSZ=1, REN=0) and [mach-ns9xxx regs-sys-ns9360.h](#sources). The
 `Timer Interrupt Status` register (0x170) bits 15:0 = per-timer requests (1 =
-active) [HWRef p.172].
+active) [HWRef p.172](#sources).
 
 ### Software watchdog
 
-```{list-table} Software Watchdog Config (0x174) [HWRef p.173-174]
+```{list-table} Software Watchdog Config (0x174) [HWRef p.173-174](#sources)
 :header-rows: 1
 :widths: 12 14 12 62
 
@@ -555,19 +555,19 @@ active) [HWRef p.172].
 ```
 
 Write the `Software Watchdog Timer` register (0x178) to service the watchdog; a
-read returns the current value without changing it [HWRef p.174].
+read returns the current value without changing it [HWRef p.174](#sources).
 
 ### Interrupt controller (VIC)
 
 The vectored interrupt controller has **32 priority levels** (line 0 = highest,
 line 31 = lowest) and two classes, IRQ and FIQ; the single FIQ source must be
-assigned to level 0 [HWRef p.147-149]. Each level has an `Int Config` field
+assigned to level 0 [HWRef p.147-149](#sources). Each level has an `Int Config` field
 (assign a source, set polarity, IRQ/FIQ, enable) and an `Interrupt Vector
 Address` register (the ISR entry point). The highest-priority active level drives
 `ISRADDR`; reading `ISRADDR` masks that and all lower priorities (nested
-handling), and writing any value to `ISRADDR` clears the mask [HWRef p.151, p.170].
+handling), and writing any value to `ISRADDR` clears the mask [HWRef p.151, p.170](#sources).
 
-```{list-table} Int Config field, one 8-bit field per source-level (0x144+) [HWRef p.169-170]
+```{list-table} Int Config field, one 8-bit field per source-level (0x144+) [HWRef p.169-170](#sources)
 :header-rows: 1
 :widths: 12 14 12 62
 
@@ -596,7 +596,7 @@ handling), and writing any value to `ISRADDR` clears the mask [HWRef p.151, p.17
 `Interrupt Vector Address 0-31` (0x0C4+) each hold a 32-bit ISR address.
 `Interrupt Status Active` (0x168) reports active + enabled levels; `Interrupt
 Status Raw` (0x16C) reports all levels; `Active Interrupt Level Status` (0x18C,
-bits 5:0) reports the current level [HWRef p.168, p.171, p.182].
+bits 5:0) reports the current level [HWRef p.168, p.171, p.182](#sources).
 
 The 32 interrupt source IDs are hardwired [HWRef p.150-151]:
 
@@ -677,12 +677,12 @@ The 32 interrupt source IDs are hardwired [HWRef p.150-151]:
 ### PLL Configuration register
 
 **Offset 0x188.** Multiplier and divider fields, plus a software-change trigger
-that resets the chip to lock new settings [HWRef p.181-182]. FS = bits 24:23 and
-ND = bits 20:16 match [mach-ns9xxx regs-sys-ns9360.h] (`SYS_PLL_FS`,
-`SYS_PLL_ND`, `SYS_PLL_SWC`) and [u-boot ns9750_sys.h] (`PLL_PLLFS_MA`=0x01800000,
+that resets the chip to lock new settings [HWRef p.181-182](#sources). FS = bits 24:23 and
+ND = bits 20:16 match [mach-ns9xxx regs-sys-ns9360.h](#sources) (`SYS_PLL_FS`,
+`SYS_PLL_ND`, `SYS_PLL_SWC`) and [u-boot ns9750_sys.h](#sources) (`PLL_PLLFS_MA`=0x01800000,
 `PLL_PLLND_MA`=0x001F0000, `PLL_PLLSW`=0x00008000).
 
-```{list-table} PLL Configuration (0x188) [HWRef p.181-182]
+```{list-table} PLL Configuration (0x188) [HWRef p.181-182](#sources)
 :header-rows: 1
 :widths: 12 14 12 62
 
@@ -736,10 +736,10 @@ ND = bits 20:16 match [mach-ns9xxx regs-sys-ns9360.h] (`SYS_PLL_FS`,
 
 **Offset 0x17C — per-peripheral clock gating.** Most peripheral clocks reset
 *enabled* (1 = enabled); the exception is the memory-clock MC0 field, whose sense
-is inverted (0 = enabled) [HWRef p.175-177]. There is no GPIO clock-enable here —
+is inverted (0 = enabled) [HWRef p.175-177](#sources). There is no GPIO clock-enable here —
 GPIO/BBus utility is not clock-gated in this register.
 
-```{list-table} Clock Configuration (0x17C) [HWRef p.175-177]
+```{list-table} Clock Configuration (0x17C) [HWRef p.175-177](#sources)
 :header-rows: 1
 :widths: 12 14 12 62
 
@@ -813,15 +813,15 @@ GPIO/BBus utility is not clock-gated in this register.
   - Ethernet MAC clock (reset 1)
 ```
 
-Bit assignments match [u-boot ns9750_sys.h] (`CLOCK_BBC`=0x40, `CLOCK_LCC`=0x20,
+Bit assignments match [u-boot ns9750_sys.h](#sources) (`CLOCK_BBC`=0x40, `CLOCK_LCC`=0x20,
 `CLOCK_MCC`=0x10, `CLOCK_MACC`=0x01, `CLOCK_LPCS_MA`=0x380).
 
 ### Reset and Sleep Control register
 
 **Offset 0x180.** Individual module resets, CPU sleep entry, wake-up source
-enables, and (read-only) last-reset cause [HWRef p.177-179].
+enables, and (read-only) last-reset cause [HWRef p.177-179](#sources).
 
-```{list-table} Reset and Sleep Control (0x180) [HWRef p.177-179]
+```{list-table} Reset and Sleep Control (0x180) [HWRef p.177-179](#sources)
 :header-rows: 1
 :widths: 12 14 12 62
 
@@ -895,15 +895,15 @@ enables, and (read-only) last-reset cause [HWRef p.177-179].
   - Ethernet MAC: 0 = reset, 1 = enabled (reset 1)
 ```
 
-Field bits match [u-boot ns9750_sys.h] (`RESET_CSE`=0x00080000, `RESET_BBT`=0x40,
+Field bits match [u-boot ns9750_sys.h](#sources) (`RESET_CSE`=0x00080000, `RESET_BBT`=0x40,
 `RESET_MEMC`=0x10, `RESET_MACM`=0x01).
 
 ### Miscellaneous System Config and Status register
 
 **Offset 0x184.** Revision/ID, strap status, and the CPU-visible **endian bit
-ENDM** [HWRef p.179-181].
+ENDM** [HWRef p.179-181](#sources).
 
-```{list-table} Misc System Config and Status (0x184) [HWRef p.179-181]
+```{list-table} Misc System Config and Status (0x184) [HWRef p.179-181](#sources)
 :header-rows: 1
 :widths: 12 14 12 62
 
@@ -970,16 +970,16 @@ the inverse encoding of the pin. Both are as printed; the board straps gpio[44] 
 (big-endian boot) and software later selects little-endian
 [HWRef p.154, p.181][REFERENCE-MATERIAL.md]. Endianness lives in four places that
 the BE→LE stub clears together: memory-controller Config bit 0, this ENDM bit,
-BBus Endian Config, and CP15 R1 bit 7 [PLAN-INCREMENTAL-PORT.md].
+BBus Endian Config, and CP15 R1 bit 7 [PLAN-INCREMENTAL-PORT.md](#sources).
 ```
 
 ### System memory chip-select base/mask registers
 
 Four dynamic (0x1D0-0x1EC) and four static (0x1F0-0x20C) chip selects, each a
 base+mask pair. In both, base bits 31:12 set the region base; mask bits 31:12 set
-the size and bit 0 is the enable (minimum region 4 KB) [HWRef p.183-191].
+the size and bit 0 is the enable (minimum region 4 KB) [HWRef p.183-191](#sources).
 
-```{list-table} Chip-select base/mask register pairs [HWRef p.183-191]
+```{list-table} Chip-select base/mask register pairs [HWRef p.183-191](#sources)
 :header-rows: 1
 :widths: 16 14 14 14 42
 
@@ -1030,52 +1030,52 @@ the size and bit 0 is the enable (minimum region 4 KB) [HWRef p.183-191].
   - 0x7000_0000-0x7FFF_FFFF
 ```
 
-These match [mach-ns9xxx regs-sys-ns9360.h] (`SYS_SMCSDMB/DMM`=0x1d0/0x1d4,
-`SYS_SMCSSMB/SMM`=0x1f0/0x1f4) and [u-boot ns9750_sys.h]
+These match [mach-ns9xxx regs-sys-ns9360.h](#sources) (`SYS_SMCSDMB/DMM`=0x1d0/0x1d4,
+`SYS_SMCSSMB/SMM`=0x1f0/0x1f4) and [u-boot ns9750_sys.h](#sources)
 (`CS_DYN_BASE/MASK`, `CS_STATIC_BASE/MASK`). U-Boot's `dram_init` reads
-`CS_DYN_MASK(0)` to size SDRAM [PLAN-INCREMENTAL-PORT.md].
+`CS_DYN_MASK(0)` to size SDRAM [PLAN-INCREMENTAL-PORT.md](#sources).
 
 ### External interrupt control and RTC clock
 
 `External Interrupt 0-3 Control` (0x214-0x220): bit 3 `STS` (raw signal), bit 2
 `CLR` (write 1 then 0), bit 1 `PLTY` (polarity/edge), bit 0 `LVEDG` (0 = level,
-1 = edge) [HWRef p.192-193]; fields match [mach-ns9xxx] `SYS_EIC_*` and
-[u-boot ns9750_sys.h] `EXT_INT_CTRL_*`.
+1 = edge) [HWRef p.192-193](#sources); fields match [mach-ns9xxx](#sources) `SYS_EIC_*` and
+[u-boot ns9750_sys.h](#sources) `EXT_INT_CTRL_*`.
 
 `RTC Clock Control` (0x224): 32-bit divider that generates the 100 Hz RTC clock;
-program to (PLL output frequency)/200 [HWRef p.193-194].
+program to (PLL output frequency)/200 [HWRef p.193-194](#sources).
 
 ## Sources
 
 Primary datasheets (in-repo, the authority for the register map):
 
-- **NS9360 Hardware Reference**, Digi 90000675 rev J — `[HWRef p.N]`
+- **NS9360 Hardware Reference**, Digi 90000675 rev J — `[HWRef p.N](#sources)`
   (`hpe-ipdu-firmware/datasheets/NS9360_HW_Reference_90000675_J.pdf`);
   online: <https://ftp1.digi.com/support/documentation/90000675_J.pdf>.
-- **NS9360 Datasheet**, Digi 91001326 rev D — `[Datasheet]`
+- **NS9360 Datasheet**, Digi 91001326 rev D — `[Datasheet](#sources)`
   (`hpe-ipdu-firmware/datasheets/NS9360_datasheet_91001326_D.pdf`);
   online: <https://ftp1.digi.com/support/documentation/91001326_D.pdf>.
 
 In-repo analysis and port planning (board specifics, firmware evidence):
 
-- `[ANALYSIS.md]` — `hpe-ipdu-firmware/ANALYSIS.md` (board inventory, NS9360 I/O
+- `[ANALYSIS.md](#sources)` — `hpe-ipdu-firmware/ANALYSIS.md` (board inventory, NS9360 I/O
   map, firmware register usage).
-- `[REFERENCE-MATERIAL.md]` — `hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md`.
-- `[PLAN-INCREMENTAL-PORT.md]` — `hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md`
+- `[REFERENCE-MATERIAL.md](#sources)` — `hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md`.
+- `[PLAN-INCREMENTAL-PORT.md](#sources)` — `hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md`
   (register quick reference and clock/baud derivation).
 
 Independent open-source cross-reference (register names, bases, bitfields):
 
-- `[mach-ns9xxx]` — Linux kernel `arch/arm/mach-ns9xxx` at tag v2.6.39:
+- `[mach-ns9xxx](#sources)` — Linux kernel `arch/arm/mach-ns9xxx` at tag v2.6.39:
   `include/mach/regs-sys-ns9360.h`, `regs-sys-common.h`, `regs-bbu.h`,
   `regs-mem.h`, `hardware.h`, `processor-ns9360.c`, `time-ns9360.c`,
   `gpio-ns9360.c`. Raw source, e.g.
   <https://raw.githubusercontent.com/torvalds/linux/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-sys-ns9360.h>.
-- `[u-boot ns9750]` — U-Boot at tag v2012.10: `include/ns9750_sys.h`,
+- `[u-boot ns9750](#sources)` — U-Boot at tag v2012.10: `include/ns9750_sys.h`,
   `ns9750_mem.h`, `ns9750_bbus.h`, `ns9750_ser.h`, `include/configs/ns9750dev.h`,
   `drivers/serial/ns9750_serial.c`. Raw source, e.g.
   <https://raw.githubusercontent.com/u-boot/u-boot/v2012.10/include/ns9750_sys.h>.
-- `[u-boot ns9750_eth.h]` — the Ethernet register header is not in mainline
+- `[u-boot ns9750_eth.h](#sources)` — the Ethernet register header is not in mainline
   U-Boot; the Digi-derived version is preserved in a mirror at
   <https://raw.githubusercontent.com/true-systems/om5p-ac-v2-unlocker/master/u-boot_mr1750/include/ns9750_eth.h>.
 

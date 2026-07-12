@@ -15,12 +15,12 @@ they matter for a faithful re-implementation.
 
 Citation keys:
 
-- `[DS §x p.N]` — *ASPEED AST2050/AST1100 A3 Datasheet V1.05* (2010-05-25), the
+- `[DS §x p.N](#sources)` — *ASPEED AST2050/AST1100 A3 Datasheet V1.05* (2010-05-25), the
   in-repo PDF (`datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`, titled
   "AST1100 Software Programming Guide").
-- `[ftgmac100.h]` / `[ftgmac100.c]` — mainline Linux
+- `[ftgmac100.h](#sources)` / `[ftgmac100.c](#sources)` — mainline Linux
   `drivers/net/ethernet/faraday/ftgmac100.{h,c}`.
-- `[RTL8201CP DS §x p.N]` — *Realtek RTL8201CP Single-Chip/Port 10/100 Fast Ethernet
+- `[RTL8201CP DS §x p.N](#sources)` — *Realtek RTL8201CP Single-Chip/Port 10/100 Fast Ethernet
   PHYceiver Datasheet*, Track ID JATR-1076-21 Rev. 1.24.
 - Repo file references are given by path under the private analysis repo
   `ai-shenanigans-for-bmcs/`.
@@ -35,7 +35,7 @@ The AST2050 integrates **two identical** 10/100 Ethernet MAC modules. They are
 enabled/disabled independently and differ only in base address. Each is a Faraday
 FTGMAC100 IP block; the AST2050 datasheet documents a *superset* register map
 (1000 Mbps / GMII fields are present in the definitions but **only 10/100 is
-supported** on this chip). [DS §14.1 p.124]
+supported** on this chip). [DS §14.1 p.124](#sources)
 
 :::{list-table} MAC module address & interrupt map
 :header-rows: 1
@@ -58,16 +58,16 @@ supported** on this chip). [DS §14.1 p.124]
   - `AST_MAC2_BASE` in repo `hwreg.h`
 :::
 
-- Base addresses: [DS §14.3 p.125], memory map [DS §9 p.? "1E66:0000 … Fast Ethernet
+- Base addresses: [DS §14.3 p.125](#sources), memory map [DS §9 p.? "1E66:0000 … Fast Ethernet
   MAC Controller #1"], repo `asus-kgpe-d16-firmware/hwreg.h` (`AST_MAC1_BASE
   0x1E660000`, `AST_MAC2_BASE 0x1E680000`).
 - Interrupts: VIC IRQ 2 = "MAC1 interrupt", IRQ 3 = "MAC2 interrupt", both
-  *sensitive high-level trigger* [DS §16 interrupt table p.? "MAC1/MAC2 interrupt"];
+  *sensitive high-level trigger* [DS §16 interrupt table p.? "MAC1/MAC2 interrupt"](#sources);
   the Raptor port maps these as `IRQ 2: MAC0`, `IRQ 3: MAC1`
   (`asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md`).
-- Physical address = base + offset. [DS §14.3 p.125]
+- Physical address = base + offset. [DS §14.3 p.125](#sources)
 - Only **one GMII** interface exists (pin-count limited), so if GMII were used only
-  one MAC could be enabled — moot on AST2050 which is 10/100 only. [DS §14.1 p.124]
+  one MAC could be enabled — moot on AST2050 which is 10/100 only. [DS §14.1 p.124](#sources)
 
 Feature summary [DS §14.2 p.124]: dual IEEE 802.3 MAC; MII×1 / RMII×2 (GMII×1 in the
 superset); AHB bus-master + slave; integrated link-list DMA engine with direct M-Bus
@@ -83,7 +83,7 @@ duplex). The Faraday IP is the same block mainline Linux drives as
 ## 2. Full MAC register map (offset 0x00–0xC8)
 
 Reset ("Init") values and access are from the datasheet register definitions
-[DS §14.3 p.125–143]; the offset/name column is cross-checked against `[ftgmac100.h]`
+[DS §14.3 p.125–143](#sources); the offset/name column is cross-checked against `[ftgmac100.h](#sources)`
 `FTGMAC100_OFFSET_*` (which describes the identical Faraday IP). Where the Faraday
 header and the AST2050 datasheet **disagree**, the datasheet governs for AST2050 and
 the divergence is footnoted.
@@ -358,15 +358,15 @@ the divergence is footnoted.
   - `OFFSET_RX_COL_LOST`
 :::
 
-Sources for the whole table: [DS §14.3 p.125–143] and `[ftgmac100.h]`.
+Sources for the whole table: [DS §14.3 p.125–143](#sources) and `[ftgmac100.h](#sources)`.
 
 :::{note}
 **Register-map divergences between the AST2050 datasheet and the Faraday header.**
 
 - **`0x40`** — the AST2050 register list has no `0x40` entry (jumps `0x3C` → `0x44`);
-  `[ftgmac100.h]` names it `REVR`. Treat as undocumented/reserved on AST2050.
+  `[ftgmac100.h](#sources)` names it `REVR`. Treat as undocumented/reserved on AST2050.
 - **`0x70`** — the AST2050 datasheet defines `0x70` as **PWRTC** (Power Control:
-  `SW_PDNPHY` bit 18, `PWRSAV` bit 15) [DS §14.3 p.141]. The Faraday header labels
+  `SW_PDNPHY` bit 18, `PWRSAV` bit 15) [DS §14.3 p.141](#sources). The Faraday header labels
   `0x70` `WOLCR` (Wake-on-LAN Control) and `0x74`–`0x8C` as the WOL block. The
   AST2050 register list does **not** define `0x74`–`0x8C` at all. For a faithful
   AST2050 model, follow the datasheet (PWRTC at `0x70`, `0x74`–`0x8C` reserved).
@@ -419,7 +419,7 @@ The BADR registers point to descriptor rings in system memory; each descriptor i
   - First / Last receive segment.
 :::
 
-Descriptor bit definitions: [DS §14.4.1 TXDES p.144–145], [DS §14.4.2 RXDES p.146].
+Descriptor bit definitions: [DS §14.4.1 TXDES p.144–145](#sources), [DS §14.4.2 RXDES p.146](#sources).
 The `OWN`/`EDOTR` semantics were used directly in the project's on-hardware TX-ring
 probe (`asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md`, "TX descriptor ring
 probe" section — U-Boot's 1-descriptor ring with `EDOTR` set, `OWN=SW`).
@@ -429,7 +429,7 @@ probe" section — U-Boot's 1-descriptor ring with `EDOTR` set, `OWN=SW`).
 ## 3. Interrupt Status (ISR, `0x00`) & Interrupt Enable (IER, `0x04`)
 
 ISR bits are **write-1-to-clear**. IER `0x04` holds one enable bit per ISR bit at the
-same bit position (e.g. IER[10] enables ISR[10]). [DS §14.3 p.125–126]
+same bit position (e.g. IER[10] enables ISR[10]). [DS §14.3 p.125–126](#sources)
 
 :::{list-table} MAC00 ISR / MAC04 IER bitfields
 :header-rows: 1
@@ -476,8 +476,8 @@ same bit position (e.g. IER[10] enables ISR[10]). [DS §14.3 p.125–126]
   - RXDMA delivered packet(s) to RX buffer successfully.
 :::
 
-[DS §14.3 p.125–126]. The Faraday driver programs the same enables in `IER`
-(`FTGMAC100_INT_*` in `[ftgmac100.c]`); bit positions are identical.
+[DS §14.3 p.125–126](#sources). The Faraday driver programs the same enables in `IER`
+(`FTGMAC100_INT_*` in `[ftgmac100.c](#sources)`); bit positions are identical.
 
 ---
 
@@ -553,7 +553,7 @@ Lets the engine auto-poll descriptors instead of relying on poll-demand writes. 
   - RX auto-poll period; 0 = no auto-poll of RX descriptor.
 :::
 
-[DS §14.3 p.131]
+[DS §14.3 p.131](#sources)
 
 ### 4.3 DBLAC — DMA Burst Length & Arbitration (`0x38`, reset `0x0002_2F00`, recommended `0x0002_2F72`)
 
@@ -599,7 +599,7 @@ Lets the engine auto-poll descriptors instead of relying on poll-demand writes. 
   - RX-FIFO low threshold — TXDMA regains priority at/below it (must be `< HTHR`).
 :::
 
-[DS §14.3 p.132–133]. `DMAFIFOS` (`0x3C`, reset `0x0C00_0000`, read-only) exposes the
+[DS §14.3 p.132–133](#sources). `DMAFIFOS` (`0x3C`, reset `0x0C00_0000`, read-only) exposes the
 TX/RX DMA request/grant, FIFO-empty flags and DMA state machines for debug [DS §14.3
 p.134].
 
@@ -608,15 +608,15 @@ p.134].
 `TPAFCR` sets TX/RX FIFO sizes ([29:27]/[26:24]; `000`=2K, others invalid on this
 part), Early-TX-threshold [23:16] and Early-RX-threshold [15:8] (unit 64 bytes),
 plus high/normal-priority packet thresholds [7:4]/[3:0]. `RBSR` sets the receive
-buffer size in bits [13:3] (unit 1 byte, 8-byte aligned). [DS §14.3 p.135–136]
+buffer size in bits [13:3] (unit 1 byte, 8-byte aligned). [DS §14.3 p.135–136](#sources)
 
 ---
 
 ## 5. MACCR — MAC Control Register (`0x50`, reset `0x0`) — full bitfields
 
 This is the central control register. Bits below are the AST2050 datasheet
-definitions [DS §14.3 p.137–138]; the last column gives the matching mainline macro
-`[ftgmac100.h]`. **Two positions diverge** (bits 6 and 11) and are footnoted.
+definitions [DS §14.3 p.137–138](#sources); the last column gives the matching mainline macro
+`[ftgmac100.h](#sources)`. **Two positions diverge** (bits 6 and 11) and are footnoted.
 
 :::{list-table} MAC50 MACCR — every bit
 :header-rows: 1
@@ -742,7 +742,7 @@ definitions [DS §14.3 p.137–138]; the last column gives the matching mainline
 † **Bit-6 / bit-11 divergence.** The generic Faraday `ftgmac100.h` assigns bit 6 =
 `LOOP_EN` and bit 11 = `PHY_LINK_LEVEL`. The AST2050 datasheet instead documents
 bit 6 as **PHY link-status detection mode** (edge vs. level) and marks bit 11
-**reserved** [DS §14.3 p.137–138]. Aspeed's integration of the Faraday IP is
+**reserved** [DS §14.3 p.137–138](#sources). Aspeed's integration of the Faraday IP is
 authoritative for AST2050 behaviour; a faithful model should follow the datasheet
 and treat the mainline names as aliases at those two positions.
 
@@ -757,7 +757,7 @@ enabling DMA, then reaches `0x0008_050F` after also setting
 
 ## 6. MACSR — MAC Status Register (`0x54`, reset 0)
 
-Status/statistics, **write-1-to-clear**. [DS §14.3 p.138]
+Status/statistics, **write-1-to-clear**. [DS §14.3 p.138](#sources)
 
 :::{list-table} MAC54 MACSR bitfields
 :header-rows: 1
@@ -807,23 +807,23 @@ Status/statistics, **write-1-to-clear**. [DS §14.3 p.138]
   - Incoming multicast packet.
 :::
 
-[DS §14.3 p.138]. The `TM` test register (`0x58`) holds polling-/interrupt-timer test
+[DS §14.3 p.138](#sources). The `TM` test register (`0x58`) holds polling-/interrupt-timer test
 modes (bits 20/19), transmit-collision test (bit 15), backoff value [14:5] and retry
-limit [4:0] [DS §14.3 p.138–139].
+limit [4:0] [DS §14.3 p.138–139](#sources).
 
 ### 6.1 Address filtering (uses MACCR + MADR/LADR + MAHT0/1)
 
 Reception is filtered by the combination of MACCR bits **RX ALLADR (14)**,
 **RX MULTIPKT (16)**, **RX BROADPKT (17)** and **RX HT EN (15)** against the unicast
 address (MADR/LADR, `0x08`/`0x0C`) and the 64-bit multicast hash table
-(MAHT0/MAHT1, `0x10`/`0x14`). [DS §14.4.5 p.149]
+(MAHT0/MAHT1, `0x10`/`0x14`). [DS §14.4.5 p.149](#sources)
 
 ---
 
 ## 7. MDIO / MII management interface (PHYCR + PHYDATA)
 
 The MAC embeds a clause-22 MII management (MDC/MDIO) controller. All PHY register
-access goes through **PHYCR (`0x60`)** and **PHYDATA (`0x64`)**. [DS §14.4.6 p.150]
+access goes through **PHYCR (`0x60`)** and **PHYDATA (`0x64`)**. [DS §14.4.6 p.150](#sources)
 
 ### 7.1 PHYCR — PHY Control Register (`0x60`, reset `0x0000_0034`)
 
@@ -873,7 +873,7 @@ access goes through **PHYCR (`0x60`)** and **PHYDATA (`0x64`)**. [DS §14.4.6 p.
   - `PHYCR_MDC_CYCTHR(x)` = `x & 0x3f`
 :::
 
-[DS §14.3 p.139] + `[ftgmac100.h]`.
+[DS §14.3 p.139](#sources) + `[ftgmac100.h](#sources)`.
 
 ### 7.2 PHYDATA — PHY Data Register (`0x64`, reset 0)
 
@@ -898,7 +898,7 @@ access goes through **PHYCR (`0x60`)** and **PHYDATA (`0x64`)**. [DS §14.4.6 p.
   - `PHYDATA_MIIWDATA(x)` = `x & 0xffff`
 :::
 
-[DS §14.3 p.139–140] + `[ftgmac100.h]`.
+[DS §14.3 p.139–140](#sources) + `[ftgmac100.h](#sources)`.
 
 ### 7.3 Clause-22 frame format
 
@@ -939,7 +939,7 @@ The MDIO bit stream is sampled on the rising edge of MDC [DS §14.4.6 p.150]:
 
 ### 7.4 How the driver issues a read / write
 
-Sequence used by `[ftgmac100.c]` (`ftgmac100_mdiobus_read`/`_write`), consistent with
+Sequence used by `[ftgmac100.c](#sources)` (`ftgmac100_mdiobus_read`/`_write`), consistent with
 the datasheet:
 
 - **Read (register r on PHY p):** write `PHYCR = PHYAD(p) | REGAD(r) | MDC_CYCTHR |
@@ -949,7 +949,7 @@ the datasheet:
   `PHYCR = PHYAD(p) | REGAD(r) | MDC_CYCTHR | MIIWR` (set bit 27). Poll PHYCR until
   `MIIWR` (bit 27) auto-clears.
 
-[DS §14.3 p.139 + §14.4.6 p.150], `[ftgmac100.c]`.
+[DS §14.3 p.139 + §14.4.6 p.150](#sources), `[ftgmac100.c](#sources)`.
 
 :::{note}
 **RMII / PHY-mode caveat observed on the KGPE-D16 rig.** With the DT set to the real
@@ -1030,7 +1030,7 @@ default and, tested on real HW, does **not** fix RMII TX). Details:
 :::
 
 `PWRTC` (`0x70`, reset 0): bit 18 `SW_PDNPHY` (software power-down PHY), bit 15
-`PWRSAV` (power-saving mode), rest reserved. [DS §14.3 p.140–141]
+`PWRSAV` (power-saving mode), rest reserved. [DS §14.3 p.140–141](#sources)
 
 ---
 
@@ -1063,7 +1063,7 @@ RMII interface (the mainline `ftgmac100_26` driver also lists RTL8201EL / RTL820
 RTL8211BN as supported PHYs;
 `asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md`). The RTL8201CP
 exposes the standard IEEE 802.3 clause-22 register set (registers 0–6) plus Realtek
-vendor registers (16–31). [RTL8201CP DS §6 p.8–13]
+vendor registers (16–31). [RTL8201CP DS §6 p.8–13](#sources)
 
 ### 10.1 PHY identification (registers 2 & 3)
 
@@ -1085,7 +1085,7 @@ vendor registers (16–31). [RTL8201CP DS §6 p.8–13]
   - PHY identifier word 2 (RO) — the recognisable "8201" tag.
 :::
 
-[RTL8201CP DS §6.3–6.4 p.9]. A driver reads REGAD=2/3 via PHYCR/PHYDATA (§7) and
+[RTL8201CP DS §6.3–6.4 p.9](#sources). A driver reads REGAD=2/3 via PHYCR/PHYDATA (§7) and
 matches `0x0000_8201`.
 
 ### 10.2 Register 0 — BMCR (Basic Mode Control Register)
@@ -1136,7 +1136,7 @@ matches `0x0000_8201`.
   - (Standard clause-22 bit 7 = Collision-Test; reserved here.)
 :::
 
-[RTL8201CP DS §6.1 p.8]
+[RTL8201CP DS §6.1 p.8](#sources)
 
 ### 10.3 Register 1 — BMSR (Basic Mode Status Register)
 
@@ -1202,7 +1202,7 @@ matches `0x0000_8201`.
   - Extended register set present.
 :::
 
-[RTL8201CP DS §6.2 p.9]
+[RTL8201CP DS §6.2 p.9](#sources)
 
 ### 10.4 Register 4 — ANAR (Auto-Negotiation Advertisement)
 
@@ -1264,11 +1264,11 @@ matches `0x0000_8201`.
   - Protocol selector = CSMA/CD.
 :::
 
-[RTL8201CP DS §6.5 p.10]. **Register 5 ANLPAR** (link-partner ability) mirrors ANAR
+[RTL8201CP DS §6.5 p.10](#sources). **Register 5 ANLPAR** (link-partner ability) mirrors ANAR
 but is read-only and reflects the partner's advertised abilities [RTL8201CP DS §6.6
 p.10–11]. **Register 6 ANER** holds AN-expansion status: bit 4 `MLF` (multiple link
 fault), bit 3 `LP_NP_ABLE`, bit 2 `NP_ABLE`, bit 1 `PAGE_RX`, bit 0 `LP_NW_ABLE`
-[RTL8201CP DS §6.7 p.11].
+[RTL8201CP DS §6.7 p.11](#sources).
 
 ### 10.5 Vendor registers 16–19 (incl. the RMII indicator)
 
@@ -1298,9 +1298,9 @@ fault), bit 3 `LP_NP_ABLE`, bit 2 `NP_ABLE`, bit 1 `PAGE_RX`, bit 0 `LP_NW_ABLE`
   - SNR display (diagnostic).
 :::
 
-[RTL8201CP DS §6.8–6.11 p.12–13]. Note the RTL8201CP selects **RMII vs. MII by pin
+[RTL8201CP DS §6.8–6.11 p.12–13](#sources). Note the RTL8201CP selects **RMII vs. MII by pin
 strapping**, not by a writeable register — register 17 bit 0 (`RMIIMODE`) is a
-**read-only** reflection of the strap. [RTL8201CP DS §6.9 p.12]
+**read-only** reflection of the strap. [RTL8201CP DS §6.9 p.12](#sources)
 
 ### 10.6 RMII specifics and the reference-clock requirement
 
@@ -1311,16 +1311,16 @@ strapping**, not by a writeable register — register 17 bit 0 (`RMIIMODE`) is a
   "RMIIRCLK … RMII 1 50MHz reference clock"; DS §4.7.2 p.68]
 - In RMII mode the AST2050 exposes 2-bit data buses `RMIITXD[1:0]` / `RMIIRXD[1:0]`,
   plus `RMIITXEN`, `RMIICRSDV` (carrier-sense/data-valid) and `RMIIRXER`; the MII-mode
-  4-bit `MIITXD[3:0]`/`MIIRXD[3:0]` are unused. [DS §3 pin table; DS §4.7.2 p.68]
+  4-bit `MIITXD[3:0]`/`MIIRXD[3:0]` are unused. [DS §3 pin table; DS §4.7.2 p.68](#sources)
 - MDC/MDIO management pins are `MIIMDC` (pin A3, output) and `MIIMDIO` (pin A2,
-  bidirectional). [DS §3 pin table "MIIMDC / MIIMDIO"]
+  bidirectional). [DS §3 pin table "MIIMDC / MIIMDIO"](#sources)
 - The mainline driver treats RMII RCLK as an optional clock ("RCLK is for RMII,
   typically used for NCSI"), skipping it for the AST2400-class MAC; on AST2050 the
   50 MHz refclk path must physically exist for RMII TX/RX to clock.
-  [`ftgmac100.c`, `asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch`]
+  [`ftgmac100.c`, `asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch`](#sources)
 
 RMII/MII AC timing (for board bring-up): TX/RX clock cycle 40 ns (25 MHz MII), data
-output setup 30 ns / hold 2.5 ns, data input setup 5 ns / hold 0 ns. [DS §4.7.2 p.68]
+output setup 30 ns / hold 2.5 ns, data input setup 5 ns / hold 0 ns. [DS §4.7.2 p.68](#sources)
 
 ---
 
@@ -1340,27 +1340,27 @@ de-asserts its reset, routes its pins, and selects the interface mode. Relevant 
 * - `SCU04` (reset `0x000FFE5C`)
   - Reset MAC#1 / MAC#2 Controller
   - 11 / 12
-  - 1 = hold MAC in async reset (**default = held**); software writes 0 to release. [DS §18.2 SCU04]
+  - 1 = hold MAC in async reset (**default = held**); software writes 0 to release. [DS §18.2 SCU04](#sources)
 * - `SCU08` (reset `0xE3F00070`)
   - Clock selection
   - —
-  - General SoC clock tree; the MAC is clocked from HCLK — no dedicated MAC clock-select field. [DS §18.2 SCU08]
+  - General SoC clock tree; the MAC is clocked from HCLK — no dedicated MAC clock-select field. [DS §18.2 SCU08](#sources)
 * - `SCU0C` (reset `0x000C3E8B`)
   - Clock-stop control
   - —
-  - No dedicated MAC clock-stop bit (MAC runs on HCLK, which is not in the stop list). [DS §18.2 SCU0C]
+  - No dedicated MAC clock-stop bit (MAC runs on HCLK, which is not in the stop list). [DS §18.2 SCU0C](#sources)
 * - `SCU40` (SOC scratch, reset 0)
   - MAC#1 PHY Mode / MAC#2 PHY Mode
   - 15:14 / 13:12
-  - `00` Dedicated PHY, `01` NCSI, `10` Intel NCSI EVB, `11` reserved — the ARM firmware passes this to the kernel. [DS §18.2 SCU40]
+  - `00` Dedicated PHY, `01` NCSI, `10` Intel NCSI EVB, `11` reserved — the ARM firmware passes this to the kernel. [DS §18.2 SCU40](#sources)
 * - `SCU70` (HW trapping, strap-loaded)
   - MAC interface mode selection
   - 8:6
-  - `011` MII(MAC#1) only, `100` RMII(MAC#1) only, `110` RMII(MAC#1)+RMII(MAC#2), `111` disable MAC (000–010,101 reserved). [DS §18.2 SCU70]
+  - `011` MII(MAC#1) only, `100` RMII(MAC#1) only, `110` RMII(MAC#1)+RMII(MAC#2), `111` disable MAC (000–010,101 reserved). [DS §18.2 SCU70](#sources)
 * - `SCU74` (reset `0x40048000`)
   - MAC pin enables
   - 27 / 25 / 20
-  - 27 = GPIOE pins shared with MAC (for SCU70[8:6]=2/4/7); 25 = MAC PHY#1 `PHYLINK`/`PHYPD#` pins; 20 = MAC#2 MDC/MDIO pins. [DS §18.2 SCU74]
+  - 27 = GPIOE pins shared with MAC (for SCU70[8:6]=2/4/7); 25 = MAC PHY#1 `PHYLINK`/`PHYPD#` pins; 20 = MAC#2 MDC/MDIO pins. [DS §18.2 SCU74](#sources)
 :::
 
 **Cross-check against real AST2050 hardware.** Registers dumped over P2A while U-Boot

@@ -6,10 +6,10 @@ console **UARTs**, the **Vector Interrupt Controller (VIC)**, and the **timers**
 The PCI/VGA/USB endpoint and the AHB debug bridges are on
 {doc}`pcie-vga-usb-bridges`.
 
-Citations use these short forms: `[DS §N p.P]` = the *AST2050/AST1100 A3
+Citations use these short forms: `[DS §N p.P](#sources)` = the *AST2050/AST1100 A3
 Datasheet V1.05* (25 May 2010), chapter N / printed page P; repository filenames
-(e.g. `[g3-vic patch]`, `[TIMER-RCA]`, `[P2A-BOOT]`, `[CULVERT-G3]`,
-`[hwreg.h]`, `[ast2050.h]`) = hardware-verified reverse-engineering in the
+(e.g. `[g3-vic patch](#sources)`, `[TIMER-RCA](#sources)`, `[P2A-BOOT](#sources)`, `[CULVERT-G3](#sources)`,
+`[hwreg.h](#sources)`, `[ast2050.h](#sources)`) = hardware-verified reverse-engineering in the
 program repo; named URLs = external cross-references (see **Sources**). Every
 load-bearing value is backed by at least two of these.
 
@@ -23,13 +23,13 @@ nonexistent registers. The one that bit this project hardest: the **VIC** is a
 compact 32-source map at `0x1E6C0000` (§16), whereas the AST2400+ "new" VIC lives
 at `0x1E6C0080` with an interleaved layout that mainline `irq-aspeed-vic.c`
 drives — its writes miss the G3 entirely, so no interrupt is ever enabled and the
-timer clockevent is dead. `[TIMER-RCA]`, `[g3-vic patch]`
+timer clockevent is dead. `[TIMER-RCA](#sources)`, `[g3-vic patch](#sources)`
 ```
 
 ## Address map & clock/reset context
 
 ARM address-space decode (relevant slices of the full table). All peripheral
-register blocks are byte/half/word accessible unless noted. `[DS §9 p.97]`
+register blocks are byte/half/word accessible unless noted. `[DS §9 p.97](#sources)`
 
 ```{list-table} ARM address space — peripheral blocks used here
 :header-rows: 1
@@ -43,7 +43,7 @@ register blocks are byte/half/word accessible unless noted. `[DS §9 p.97]`
   - Static Memory (boot-up default = flash CE2 alias); becomes **SDRAM after re-map** (AHBC8C[0]=1)
 * - `0x14000000` (in `0x1000_0000–0x15FF_FFFF`)
   - 96M
-  - Static Memory window; CE2 SPI-NOR boot flash decodes here `[CULVERT-G3]`
+  - Static Memory window; CE2 SPI-NOR boot flash decodes here `[CULVERT-G3](#sources)`
 * - `0x16000000–0x17FFFFFF`
   - 32M
   - Static Memory Controller (SMC) registers
@@ -97,7 +97,7 @@ register blocks are byte/half/word accessible unless noted. `[DS §9 p.97]`
   - **LPC Controller** (holds the iLPC-to-AHB bridge regs)
 * - `0x40000000–0x4FFFFFFF`
   - 256M
-  - SDRAM (DDR2; 64 MB populated on the KGPE-D16 BMC) `[P2A-BOOT]`
+  - SDRAM (DDR2; 64 MB populated on the KGPE-D16 BMC) `[P2A-BOOT](#sources)`
 ```
 
 ```{admonition} Silicon identity
@@ -105,13 +105,13 @@ register blocks are byte/half/word accessible unless noted. `[DS §9 p.97]`
 
 `SCU7C` (Silicon Revision ID, `0x1E6E207C`) reads **`0x00000202`** on the
 KGPE-D16 board = AST2050-A2/A3 (and AST1100-A2/A3 share the same code).
-`[DS §18 p.220]`, `[CULVERT-G3]`
+`[DS §18 p.220](#sources)`, `[CULVERT-G3](#sources)`
 ```
 
 Clock gates and PLLs relevant to these blocks live in the SCU
 (`base 0x1E6E2000`), covered in the SCU register reference and summarised in the SCU-posture table on {doc}`pcie-vga-usb-bridges`.
 Key gates: `SCU0C[15]` UARTCLK, `SCU0C[5]` VGA DCLK, `SCU0C[4]` PCI-slave BCLK,
-`SCU0C[14]` USB2.0 clock, `SCU0C[0]` Video-Engine ECLK. `[DS §18 p.209-210]`
+`SCU0C[14]` USB2.0 clock, `SCU0C[0]` Video-Engine ECLK. `[DS §18 p.209-210](#sources)`
 
 ---
 
@@ -120,7 +120,7 @@ Key gates: `SCU0C[15]` UARTCLK, `SCU0C[5]` VGA DCLK, `SCU0C[4]` PCI-slave BCLK,
 The AST2050 integrates **two** 16550-compatible UARTs, each with a 16×8
 transmit/receive FIFO and a programmable baud generator, plus the LPC-side
 Virtual UART / Pass-through UART (`0x1E787000` / `0x1E788000`, §29 — not detailed
-here). `[DS §26 p.279]`, `[ast2050.h]`
+here). `[DS §26 p.279](#sources)`, `[ast2050.h](#sources)`
 
 ```{list-table} UART instances
 :header-rows: 1
@@ -133,16 +133,16 @@ here). `[DS §26 p.279]`, `[ast2050.h]`
   - `0x1E783000`
   - Dedicated flow-control pins. Reserved to UART1 in rev A1; can be muxed to
     UART2 pins via `SCU2C[14]` in rev A2+. **Not physically connected** on the
-    KGPE-D16 BMC debug header (0 edges when driven). `[P2A-BOOT]`
+    KGPE-D16 BMC debug header (0 edges when driven). `[P2A-BOOT](#sources)`
 * - **UART2**
   - `0x1E784000`
   - Flow-control pins shared with GPIO. **This is the KGPE-D16 BMC console.**
     Raptor's U-Boot `.Done` debug output goes here (`CONFIG_CONS_INDEX 2`).
-    `[ast2050.h]`, `[P2A-BOOT]`
+    `[ast2050.h](#sources)`, `[P2A-BOOT](#sources)`
 ```
 
 The two units share one register layout; the register address is
-`base + offset`. `[DS §26.3 p.280]`
+`base + offset`. `[DS §26.3 p.280](#sources)`
 
 ### UART register map
 
@@ -220,7 +220,7 @@ The two units share one register layout; the register address is
 Bits `[31:8]` of every UART register are Reserved (0). The DLL/DLH latches
 **alias** RBR/THR/IER at offsets `0x00`/`0x04` and are selected by `LCR[7]`
 (DLAB); restore `LCR[7]=0` after setting the divisor to regain access to the
-other registers. `[DS §26.3.1 p.285]`
+other registers. `[DS §26.3.1 p.285](#sources)`
 
 ### Bitfield detail
 
@@ -329,7 +329,7 @@ other registers. `[DS §26.3.1 p.285]`
   - Char length: `00`=5 · `01`=6 · `10`=7 · `11`=8 bits
 ```
 
-For 8N1 set `LCR=0x03`; to enter the divisor latch, `LCR=0x83`. `[P2A-BOOT]`
+For 8N1 set `LCR=0x03`; to enter the divisor latch, `LCR=0x83`. `[P2A-BOOT](#sources)`
 
 ```{list-table} MCR (0x10)
 :header-rows: 1
@@ -426,15 +426,15 @@ For 8N1 set `LCR=0x03`; to enter the divisor latch, `LCR=0x83`. `[P2A-BOOT]`
 
 `DLL` (0x00, DLAB=1) and `DLH` (0x04, DLAB=1) each carry 8 bits `[7:0]` of the
 16-bit baud divisor; `[31:8]` Reserved. Write DLH (MSB) first, then DLL (LSB) —
-the internal counter starts when the DLL LSB is written. `[DS §26.3.1 p.285-286]`
+the internal counter starts when the DLL LSB is written. `[DS §26.3.1 p.285-286](#sources)`
 
 ### Baud rate and the UART clock gate
 
-The reference clock is 24 MHz (shared with the USB reference). `[DS §18 p.212]`
+The reference clock is 24 MHz (shared with the USB reference). `[DS §18 p.212](#sources)`
 
 $$\text{Baud} = \frac{24\,\text{MHz}}{16 \times \text{divisor}}$$
 
-`[DS §26.3.1 p.285]`
+`[DS §26.3.1 p.285](#sources)`
 
 ```{list-table} Divisor examples (24 MHz UARTCLK, SCU2C[12]=0)
 :header-rows: 1
@@ -447,12 +447,12 @@ $$\text{Baud} = \frac{24\,\text{MHz}}{16 \times \text{divisor}}$$
 * - **1200**
   - **1250** (`0x04E2`)
   - `0x04` / `0xE2`
-  - **KGPE-D16 BMC console (UART2)** as observed on the rig `[P2A-BOOT]` — but the
+  - **KGPE-D16 BMC console (UART2)** as observed on the rig `[P2A-BOOT](#sources)` — but the
     firmware config is 115200 (see the baud-discrepancy note below)
 * - 115200
   - 13 (`0x000D`)
   - `0x00` / `0x0D`
-  - Raptor U-Boot default `CONFIG_BAUDRATE` `[ast2050.h]`, `[P2A-BOOT]`
+  - Raptor U-Boot default `CONFIG_BAUDRATE` `[ast2050.h](#sources)`, `[P2A-BOOT](#sources)`
 ```
 
 ```{admonition} Two things that make the console look dead
@@ -461,15 +461,15 @@ $$\text{Baud} = \frac{24\,\text{MHz}}{16 \times \text{divisor}}$$
 1. **Baud (unresolved)** — the Raptor firmware configures UART2 at **115200**
    (`console=ttyS1,115200`; 38400 for DRAM-init), but the rig bring-up observed
    the console at **1200** (divisor 1250). Both are documented; probe before
-   relying on one. `[P2A-BOOT]`, `[ast2050.h]` (see {doc}`../../systems/kgpe-d16` §2.2)
+   relying on one. `[P2A-BOOT](#sources)`, `[ast2050.h](#sources)` (see {doc}`../../systems/kgpe-d16` §2.2)
 2. **Clock gate** — the UART clock is gated by `SCU0C[15]` **Stop UARTCLK**
    (`0`=running, `1`=stopped; default running). It must be running (and
    `SCU2C[12]=0` for the plain 24 MHz reference) for either UART to clock out.
-   `[DS §18 p.210, p.213]`, `[P2A-BOOT]`
+   `[DS §18 p.210, p.213](#sources)`, `[P2A-BOOT](#sources)`
 ```
 
 `SCU2C` (Misc. Control) also holds the UART routing/clock-select bits
-(rev A2+ additions): `[DS §18 p.213]`
+(rev A2+ additions): `[DS §18 p.213](#sources)`
 
 ```{list-table} SCU2C bits affecting the UARTs
 :header-rows: 1
@@ -499,17 +499,17 @@ level-high; see the [interrupt source table](#interrupt-source-table-table-36)).
 The G3 VIC is an AMBA slave on the AHB bus that interrupts the ARM926EJ-S with
 two priority classes — **FIQ** (high priority / low latency) and **IRQ**
 (general). It supports **32** interrupt sources, each independently programmable
-for edge/level and polarity. `[DS §16.1 p.179]`
+for edge/level and polarity. `[DS §16.1 p.179](#sources)`
 
 ```{admonition} Base address 0x1E6C0000 — compact, non-interleaved
 :class: important
 
-`Base of VIC = 0x1E6C0000`; physical = base + offset. `[DS §16.1 p.179]`,
-`[hwreg.h]` (`AST_IC_BASE`). This is a **single 32-bit word per register**
+`Base of VIC = 0x1E6C0000`; physical = base + offset. `[DS §16.1 p.179](#sources)`,
+`[hwreg.h](#sources)` (`AST_IC_BASE`). This is a **single 32-bit word per register**
 (non-interleaved), unlike the AST2400+ "new" VIC (interleaved high/low at
 `0x1E6C0080`). Using the G4 driver/offsets on the G3 enables **no** interrupts —
 the timer clockevent never fires, `hrtimers` hang, and boot stalls at
-`local_irq_enable()`. `[TIMER-RCA]`, `[g3-vic patch]`
+`local_irq_enable()`. `[TIMER-RCA](#sources)`, `[g3-vic patch](#sources)`
 ```
 
 ### VIC register map
@@ -584,20 +584,20 @@ the timer clockevent never fires, `hrtimers` hang, and boot stalls at
   - Write `1` clears the edge-detection latch for that source (W1C). For edge sources, clear here *before* enabling in VIC10, else a stale latched status re-fires
 ```
 
-All defined registers reset to 0 (VIC30 = X). `[DS §16.3 p.180-182]`
+All defined registers reset to 0 (VIC30 = X). `[DS §16.3 p.180-182](#sources)`
 
 The compact map corresponds one-to-one to the classic **ARM PrimeCell PL190**
 VIC base registers (VICIRQStatus/VICFIQStatus/VICRawIntr/VICIntSelect/
 VICIntEnable/VICIntEnClear/VICSoftInt/VICSoftIntClear/VICProtection), *plus*
 Aspeed's programmable **SENSE/DUAL/EVENT** and the **EDGE_CLR** at `0x38`.
 Raptor's U-Boot `platform.S` already drives this base — it polls Timer3 status at
-`0x1E6C0008` and clears it via `0x1E6C0038`. `[TIMER-RCA]`, `[hwreg.h]`,
+`0x1E6C0008` and clears it via `0x1E6C0038`. `[TIMER-RCA](#sources)`, `[hwreg.h](#sources)`,
 [ARM PL190 TRM][pl190]
 
 ### Interrupt source table (Table 36)
 
 The 32 sources and their **hardware-fixed trigger attributes**. This table drives
-the SENSE/EVENT/DUAL configuration below. `[DS §10 p.99]`
+the SENSE/EVENT/DUAL configuration below. `[DS §10 p.99](#sources)`
 
 ```{list-table} AST2050 interrupt sources — Table 36
 :header-rows: 1
@@ -712,13 +712,13 @@ match (count reaches the match value / zero) and holds the line until the ISR
 acks it via **VIC38**. If the VIC is left at its power-on default (SENSE/EVENT
 all 0 → *falling*-edge on every source), the timer edge is never latched and the
 clockevent is dead. The reset-boot path has no vendor firmware to program the
-VIC, so the driver must set it up itself. `[TIMER-RCA]`, `[g3-vic patch]`
+VIC, so the driver must set it up itself. `[TIMER-RCA](#sources)`, `[g3-vic patch](#sources)`
 ```
 
 ### Config values and their derivation
 
 From Table 36, with `SENSE 1=level`, `EVENT 1=high/rising`, `DUAL 1=both-edge`:
-`[g3-vic patch]`
+`[g3-vic patch](#sources)`
 
 ```{list-table} G3 VIC power-on configuration (driver-programmed)
 :header-rows: 1
@@ -746,11 +746,11 @@ Bit-sum check for `SENSE`: bits 1–10 (`0x7FE`) + 12 (`0x1000`) + 15 (`0x8000`)
 19 (`0x80000`) + 20 (`0x100000`) + 21 (`0x200000`) + 28 (`0x10000000`) + 31
 (`0x80000000`) = **`0x903897FE`**. `EVENT` adds bits 16/17/18 (`0x70000`) + 27
 (`0x08000000`) → **`0x983F97FE`**. `DUAL` = bits 22–26 = **`0x07C00000`**.
-(Reserved sources 0, 11, 13, 14, 29, 30 stay 0 in all three.) `[g3-vic patch]`
+(Reserved sources 0, 11, 13, 14, 29, 30 stay 0 in all three.) `[g3-vic patch](#sources)`
 
 ### Bring-up sequence (no firmware present)
 
-The verified G3 VIC init (`g3vic_init_hw`): `[g3-vic patch]`
+The verified G3 VIC init (`g3vic_init_hw`): `[g3-vic patch](#sources)`
 
 1. `VIC14 = 0xFFFFFFFF` (disable all) and `VIC1C = 0xFFFFFFFF` (clear soft ints).
 2. `VIC0C = 0` (all sources as IRQ, none FIQ).
@@ -761,7 +761,7 @@ The verified G3 VIC init (`g3vic_init_hw`): `[g3-vic patch]`
    pending from `VIC00` and dispatch `ffs(status)-1`.
 
 Hardware result: clockevent ticks ~1 kHz, `eth0` links with real interrupts,
-kernel IP-config completes. `[TIMER-RCA]`, `[g3-vic patch]`
+kernel IP-config completes. `[TIMER-RCA](#sources)`, `[g3-vic patch](#sources)`
 
 ```{admonition} The P2A "VGA" window is BLIND to the VIC block
 :class: warning
@@ -772,12 +772,12 @@ reads `0x00000000` and writes go nowhere — regardless of the real VIC state �
 while P2A concurrently reads/writes DRAM, SCU and the timer fine. Every VIC
 observation must come from the **ARM core itself** (in-band), never from P2A; a
 long stretch of this project's early "the timer IRQ never reaches the VIC"
-analysis was reading phantom zeros. `[TIMER-RCA]`
+analysis was reading phantom zeros. `[TIMER-RCA](#sources)`
 ```
 
 DT binding used on hardware: `compatible = "aspeed,ast2050-vic"`,
 `reg = <0x1E6C0000 0x1000>`, `#interrupt-cells = <1>` (or two-cell via
-`irq_domain_xlate_onetwocell`). `[g3-vic patch]`
+`irq_domain_xlate_onetwocell`). `[g3-vic patch](#sources)`
 
 ---
 
@@ -787,15 +787,15 @@ Three independent 32-bit **down-counters** (Faraday FTTMR010 block). Each counte
 has a reload value, two match registers, and a status (current-count) register,
 plus one shared control register. Interrupts can be generated on match and/or on
 overflow (count reaching zero → reload). The clock source is per-counter
-selectable: APB `PCLK` or an external 1 MHz. `[DS §25.1-25.2 p.275]`,
+selectable: APB `PCLK` or an external 1 MHz. `[DS §25.1-25.2 p.275](#sources)`,
 [Faraday FTTMR010 / timer-fttmr010.c][fttmr]
 
 ```{admonition} Base address 0x1E782000
 :class: note
 
-`Base of Timer = 0x1E782000`; physical = base + offset. `[DS §25.3 p.275]`,
-`[hwreg.h]` (`AST_TIMER_BASE`). Raptor's U-Boot uses Timer1 here with the 1 MHz
-external clock (`CONFIG_SYS_HZ = 1e6`). `[ast2050.h]`
+`Base of Timer = 0x1E782000`; physical = base + offset. `[DS §25.3 p.275](#sources)`,
+`[hwreg.h](#sources)` (`AST_TIMER_BASE`). Raptor's U-Boot uses Timer1 here with the 1 MHz
+external clock (`CONFIG_SYS_HZ = 1e6`). `[ast2050.h](#sources)`
 ```
 
 ### Timer register map
@@ -862,7 +862,7 @@ external clock (`CONFIG_SYS_HZ = 1e6`). `[ast2050.h]`
   - Combined control register (per-counter enable / clock-select / overflow-int)
 ```
 
-Offsets `0x34`–end of the 4K block are unused / reserved. `[DS §25.3 p.275-277]`
+Offsets `0x34`–end of the 4K block are unused / reserved. `[DS §25.3 p.275-277](#sources)`
 
 ### TMC30 — control register
 
@@ -917,7 +917,7 @@ Programming sequence (per counter): set **Reload**, set the overflow-int enable
 (`TMC30[2/6/10]` if using overflow), then **enable** the counter. When Reload = N,
 the count sequence is N, …, 2, 1, 0, N, …. A **match** or reaching **zero**
 generates an **edge-triggered** interrupt to the CPU — which is exactly why the
-VIC lists timer INT#16–18 as *rising-edge*. `[DS §25.4 p.278]`,
+VIC lists timer INT#16–18 as *rising-edge*. `[DS §25.4 p.278](#sources)`,
 [timer-fttmr010.c][fttmr]
 
 ```{admonition} Programming notes (two real footguns)
@@ -926,17 +926,17 @@ VIC lists timer INT#16–18 as *rising-edge*. `[DS §25.4 p.278]`,
 - **`TMC30[2]` (the "interrupt enable") does not gate the *match* interrupt** —
   it only gates the *overflow* interrupt. If you are not using the match
   registers, write them to `0xFFFFFFFF` so they never coincidentally fire.
-  `[DS §25.5 p.278]`
+  `[DS §25.5 p.278](#sources)`
 - The clockevent uses a **match at 0** producing one rising pulse per period; the
   VIC must be edge/rising for INT#16 and the ISR must ack via `VIC38`, or the
-  pulse is lost. `[TIMER-RCA]`
+  pulse is lost. `[TIMER-RCA](#sources)`
 ```
 
 Timekeeping split observed on hardware: the FTTMR010 registers a read-based
 **clocksource** on TIMER2 (works with no interrupts) and a **clockevent** on
 TIMER1 (needs the VIC edge path). Early boot reaches userspace on the clocksource
 + `udelay`; the first `hrtimer`/`usleep_range` hangs until the clockevent's VIC
-delivery is fixed. `[TIMER-RCA]`
+delivery is fixed. `[TIMER-RCA](#sources)`
 
 ---
 

@@ -4,9 +4,9 @@ The TMP89FM42LUG is a Toshiba **TLCS-870/C1** single-chip 8-bit CMOS
 microcontroller. On the iPDU it is the front-panel "Display Module" controller
 (7-segment display, LEDs, buzzer) and talks to the NS9360 over a UART (through a
 MAX3243EI RS-232 shifter). Its 3.6864 MHz crystal (Y6) is a UART baud-rate
-crystal that divides evenly to 115200/57600/…/9600 baud. `[ANALYSIS.md]`
+crystal that divides evenly to 115200/57600/…/9600 baud. `[ANALYSIS.md](#sources)`
 
-## Device overview `[TMP89 DS p.1-2]`
+## Device overview `[TMP89 DS p.1-2](#sources)`
 
 ```{list-table} TMP89FM42LUG summary
 :header-rows: 0
@@ -39,7 +39,7 @@ crystal that divides evenly to 115200/57600/…/9600 baud. `[ANALYSIS.md]`
 ## Interface to the NS9360 (serial / pin mapping)
 
 The relevant serial pins on the TMP89 (from the pin assignment)
-`[TMP89 DS p.3]`:
+`[TMP89 DS p.3](#sources)`:
 
 ```{list-table} TMP89 serial/interface pins
 :header-rows: 1
@@ -75,9 +75,9 @@ The NS9360 side of this link is one of its UART/SIO serial ports through a
 MAX3243EI; `ANALYSIS.md` identifies the display path as NS9360 **Serial Port B**
 (primary comms, DMA channel 7). On-chip debug (OCD) shares P20/P21 with UART0,
 which is consistent with the J10 "PIC JTAG" sub-MCU programming header.
-`[ANALYSIS.md]` `[HEADERS-J1-J6.md]`
+`[ANALYSIS.md](#sources)` `[HEADERS-J1-J6.md](#sources)`
 
-## UART0 register set `[TMP89 DS p.222-224]`
+## UART0 register set `[TMP89 DS p.222-224](#sources)`
 
 ```{list-table} UART0 SFR addresses
 :header-rows: 1
@@ -103,7 +103,7 @@ which is consistent with the J10 "PIC JTAG" sub-MCU programming header.
   - Transmit / receive data buffers
 ```
 
-**UART0CR1 (0x001A)** `[TMP89 DS p.222]`
+**UART0CR1 (0x001A)** `[TMP89 DS p.222](#sources)`
 
 ```{list-table} UART0CR1 bit fields
 :header-rows: 1
@@ -147,12 +147,12 @@ which is consistent with the J10 "PIC JTAG" sub-MCU programming header.
   - Reserved
 ```
 
-**UART0CR2 (0x001B)** `[TMP89 DS p.223]`: bits 5:3 RTSEL (RT-clock count per
+**UART0CR2 (0x001B)** `[TMP89 DS p.223](#sources)`: bits 5:3 RTSEL (RT-clock count per
 frame bit), bits 2:1 RXDNC (RX noise-rejection width), bit 0 STOPBR (receive
-stop-bit length). **UART0DR (0x001C)** `[TMP89 DS p.223]`: 8-bit baud-rate
+stop-bit length). **UART0DR (0x001C)** `[TMP89 DS p.223](#sources)`: 8-bit baud-rate
 divisor (set TXE/RXE = 0 before changing).
 
-**UART0SR (0x001D)** `[TMP89 DS p.224]`
+**UART0SR (0x001D)** `[TMP89 DS p.224](#sources)`
 
 ```{list-table} UART0SR status bits
 :header-rows: 1
@@ -193,7 +193,7 @@ The firmware's display link is implemented in a source module `Dialog.c`, over a
 port defined by `APP_DIALOG_PORT`; the protocol handshake string is `HpBlSeR09`
 ("HP Bezel Serial, rev 09"). The link runs at a configurable baud rate ("error
 when change baud rate in Dialog.c"). Capabilities the MCU exposes to the NS9360:
-`[ANALYSIS.md]`
+`[ANALYSIS.md](#sources)`
 
 - 7-segment display (`7seg` CLI test), error LED, per-outlet blue UID LEDs,
   buzzer with "LED Beep Codes".

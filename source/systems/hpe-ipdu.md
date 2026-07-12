@@ -57,7 +57,7 @@ TAP IDCODE is `0x09105031`.
 The Core Unit controller board is a single-SoC design: the NS9360 is the only
 general-purpose processor. The MAXQ3180 (metering) and TMP89FM42 (display) are
 satellite devices on dedicated serial links, and the Ethernet PHY hangs off the
-NS9360 MII/MAC. `[ANALYSIS.md]`
+NS9360 MII/MAC. `[ANALYSIS.md](#sources)`
 
 ```{list-table} Signal-chain overview
 :header-rows: 1
@@ -92,14 +92,14 @@ NS9360 MII/MAC. `[ANALYSIS.md]`
 ```text
                      Ethernet RJ-45 (mgmt)
                             |
-                    [ICS1893 PHY U10]  <-- 25 MHz xtal Y2
+                    [ICS1893 PHY U10](#sources)  <-- 25 MHz xtal Y2
                             | MII + MDIO/MDC
                        [ NS9360 U1 ]  <-- 29.4912 MHz xtal Y1
              SPI /       |      |      \  UART        \ UART
              DMA         |   I2C(J27)   \              \
-        [MAXQ3180 U15]   |             [MAX3243EI]      [MAX3243EI]
+        [MAXQ3180 U15](#sources)   |             [MAX3243EI](#sources)      [MAX3243EI](#sources)
          8 MHz Y4        |               |                |
-      V/I/P sense        |          [TMP89FM42 U45]     daisy-chain
+      V/I/P sense        |          [TMP89FM42 U45](#sources)     daisy-chain
       (CT PT1)       ext-bar bus     3.6864 MHz Y6      (conn 7)
                      J2/29 J3/30      front bezel
                      J4/31            7-seg/LED/buzzer
@@ -157,15 +157,15 @@ NS9360 MII/MAC. `[ANALYSIS.md]`
   - NS9360 `bist_en_n` (BGA V5)
 ```
 
-Sources: `[ANALYSIS.md]`, `[HEADERS-J1-J6.md]`. Physical form factors are
+Sources: `[ANALYSIS.md](#sources)`, `[HEADERS-J1-J6.md](#sources)`. Physical form factors are
 confirmed from board photos; exact J1/J6 pin-to-signal mapping still requires
-board tracing (open item in `[STATUS.md]`).
+board tracing (open item in `[STATUS.md](#sources)`).
 
 ### J1 — 20-pin ARM JTAG (standard Multi-ICE pinout)
 
 J1's ribbon form factor matches the standard 20-pin ARM JTAG connector used in
 the NS9360 reference design ("JTAG 20 PIN HEADER", `HEADER 10X2.1SP`). If J1
-follows that standard, the pinout is: `[HEADERS-J1-J6.md]`
+follows that standard, the pinout is: `[HEADERS-J1-J6.md](#sources)`
 
 ```{list-table} J1 candidate pinout (standard ARM 20-pin JTAG)
 :header-rows: 1
@@ -277,14 +277,14 @@ follows that standard, the pinout is: `[HEADERS-J1-J6.md]`
 ```
 
 - TAP parameters (confirmed on the NS9360 via Amontec JTAGkey): **IRLen = 4,
-  IDCODE = 0x09105031**, core = `arm926ejs`, little-endian. `[HEADERS-J1-J6.md]`
+  IDCODE = 0x09105031**, core = `arm926ejs`, little-endian. `[HEADERS-J1-J6.md](#sources)`
 - ARM debug is gated by `bist_en_n` (V5). Production boards strap it low
   (debug disabled) — OpenOCD then reads "unknown EmbeddedICE version (comms
   ctrl: 0x00000000)". Re-strapping the "BIST EN" test point to a pull-up
-  enables halt-mode debug. `[HEADERS-J1-J6.md]`
+  enables halt-mode debug. `[HEADERS-J1-J6.md](#sources)`
 - The ARM926EJ-S uses **EmbeddedICE-RT over raw JTAG** (not CoreSight/SWD), so
   CMSIS-DAP / SWD-only probes cannot debug it; J-Link, FT2232H (TUMPA/JTAGkey),
-  or an RPi `bcm2835gpio` bitbang adapter are required. `[HEADERS-J1-J6.md]`
+  or an RPi `bcm2835gpio` bitbang adapter are required. `[HEADERS-J1-J6.md](#sources)`
 
 ---
 

@@ -6,11 +6,11 @@ Continuation of {doc}`soc-ns9360`: the BBus utility/GPIO block, the AHB and BBus
 
 
 **Base address: 0x9060_0000** [HWRef p.463][mach-ns9xxx regs-bbu.h]
-[u-boot ns9750_bbus.h]. This block owns the 73 GPIO pins, the master reset that
+[u-boot ns9750_bbus.h](#sources). This block owns the 73 GPIO pins, the master reset that
 holds the other BBus peripherals in reset out of power-up, the endian
 configuration for the bus masters, and USB configuration.
 
-```{list-table} BBus utility registers (offset from 0x9060_0000) [HWRef p.463]
+```{list-table} BBus utility registers (offset from 0x9060_0000)
 :header-rows: 1
 :widths: 16 26 58
 
@@ -60,18 +60,18 @@ configuration for the bus masters, and USB configuration.
 
 Note the split layout: GPIO config #1-#7 at 0x010-0x028, then #8-#10 at
 0x100-0x108; control #1-#2 at 0x030/0x034, then #3 at 0x120; status #1-#2 at
-0x040/0x044, then #3 at 0x130 [HWRef p.463]. Bases and offsets match
-[mach-ns9xxx regs-bbu.h] (`BBU_GCONFb1`=0x…010, `BBU_GCONFb2`=0x…100,
-`BBU_GCTRL1`=0x…030, `BBU_GSTAT1`=0x…040) and [u-boot ns9750_bbus.h]
+0x040/0x044, then #3 at 0x130 [HWRef p.463](#sources). Bases and offsets match
+[mach-ns9xxx regs-bbu.h](#sources) (`BBU_GCONFb1`=0x…010, `BBU_GCONFb2`=0x…100,
+`BBU_GCTRL1`=0x…030, `BBU_GSTAT1`=0x…040) and [u-boot ns9750_bbus.h](#sources)
 (`MASTER_RESET`=0x00, `GPIO_CFG_BASE`=0x10, `GPIO_CTRL_BASE`=0x30,
 `GPIO_STAT_BASE`=0x40, `ENDIAN_CFG`=0x80).
 
 ### GPIO configuration field
 
 Each pin is configured by a **4-bit field**; eight pins pack into each 32-bit
-config register, lowest-numbered pin in the least-significant nibble [HWRef p.466-473].
+config register, lowest-numbered pin in the least-significant nibble [HWRef p.466-473](#sources).
 
-```{list-table} Per-pin GPIO config nibble [HWRef p.473, Table 344]
+```{list-table} Per-pin GPIO config nibble [HWRef p.473, Table 344](#sources)
 :header-rows: 1
 :widths: 12 14 12 62
 
@@ -94,12 +94,12 @@ config register, lowest-numbered pin in the least-significant nibble [HWRef p.46
 ```
 
 **Reset default per nibble = 0x3** → every pin comes up as **GPIO, input, no
-inversion** [HWRef p.473]. This matches [mach-ns9xxx regs-bbu.h] (`BBU_GCONFx_DIR`
-= nibble bit 3, `_INV` = bit 2, `_FUNC` = bits 1:0) and [u-boot ns9750_bbus.h]
+inversion** [HWRef p.473](#sources). This matches [mach-ns9xxx regs-bbu.h](#sources) (`BBU_GCONFx_DIR`
+= nibble bit 3, `_INV` = bit 2, `_FUNC` = bits 1:0) and [u-boot ns9750_bbus.h](#sources)
 (`GPIO_CFG_OUTPUT`=0x08, `GPIO_CFG_FUNC_GPIO`=0x03). Because eight pins share one
-register, a driver must read-modify-write [PLAN-INCREMENTAL-PORT.md].
+register, a driver must read-modify-write [PLAN-INCREMENTAL-PORT.md](#sources).
 
-```{list-table} GPIO config register coverage [HWRef p.466-472]
+```{list-table} GPIO config register coverage [HWRef p.466-472](#sources)
 :header-rows: 1
 :widths: 22 18 60
 
@@ -141,11 +141,11 @@ register, a driver must read-modify-write [PLAN-INCREMENTAL-PORT.md].
 Output values are written to GPIO Control #1/#2/#3 (0x030 / 0x034 / 0x120; one bit
 per pin, reset 0) and inputs are read from GPIO Status #1/#2/#3 (0x040 / 0x044 /
 0x130; read-only, reset undefined). Control/Status #3 hold gpio64-gpio72 in bits
-8:0 [HWRef p.473-482].
+8:0 [HWRef p.473-482](#sources).
 
 ### Master Reset register
 
-```{list-table} Master Reset (0x000) — all bits R/W, active high [HWRef p.464]
+```{list-table} Master Reset (0x000) — all bits R/W, active high [HWRef p.464](#sources)
 :header-rows: 1
 :widths: 12 16 12 60
 
@@ -194,11 +194,11 @@ per pin, reset 0) and inputs are read from GPIO Status #1/#2/#3 (0x040 / 0x044 /
 All BBus peripherals except the bridge are held in reset after power-up; software
 must clear these bits (write 0) before touching a peripheral's registers
 [HWRef p.464][PLAN-INCREMENTAL-PORT.md]. Bit assignments match
-[u-boot ns9750_bbus.h] (`MASTER_RESET_I2C`=0x80, `_SER1..4`, `_DMA`=0x01).
+[u-boot ns9750_bbus.h](#sources) (`MASTER_RESET_I2C`=0x80, `_SER1..4`, `_DMA`=0x01).
 
 ### Endian and USB configuration
 
-```{list-table} Endian Configuration (0x080) — 0 = little, 1 = big [HWRef p.486-487]
+```{list-table} Endian Configuration (0x080) — 0 = little, 1 = big [HWRef p.486-487](#sources)
 :header-rows: 1
 :widths: 12 16 14 58
 
@@ -233,24 +233,24 @@ must clear these bits (write 0) before touching a peripheral's registers
 ```
 
 gpio[44] is the endian strap: AHBM, USBHST, and DMA reset to its value; the serial
-ports reset little-endian [HWRef p.486]. This is the third register the BE→LE boot
-stub clears (bits 0x1201) [PLAN-INCREMENTAL-PORT.md]. `USB Configuration` (0x070):
+ports reset little-endian [HWRef p.486](#sources). This is the third register the BE→LE boot
+stub clears (bits 0x1201) [PLAN-INCREMENTAL-PORT.md](#sources). `USB Configuration` (0x070):
 bit 5 `EXT_PHY`, bit 4 `INT_PHY` (host/device), bit 2 `SPEED`; write only while the
-USB module is in reset [HWRef p.485-486]. `BBus Timeout` (0x050): bit 31 `EN`,
-bits 15:0 `COUNT` (max BBus cycle length, keep ≥ 255) [HWRef p.482]. `BBus DMA
+USB module is in reset [HWRef p.485-486](#sources). `BBus Timeout` (0x050): bit 31 `EN`,
+bits 15:0 `COUNT` (max BBus cycle length, keep ≥ 255) [HWRef p.482](#sources). `BBus DMA
 Interrupt Status`/`Enable` (0x060/0x064) carry per-channel (1-16) flags for the
-BBus DMA controller [HWRef p.482-485]. `ARM Wake-up` (0x090) is the 32-bit
-serial-match wake word [HWRef p.488].
+BBus DMA controller [HWRef p.482-485](#sources). `ARM Wake-up` (0x090) is the 32-bit
+serial-match wake word [HWRef p.488](#sources).
 
 ## BBus Bridge and AHB DMA
 
 
-**Base address: 0xA0400000** [HWRef p.415, p.428]. The bridge connects the AHB and
+**Base address: 0xA0400000** [HWRef p.415, p.428](#sources). The bridge connects the AHB and
 the BBus (BBus runs at half the AHB clock), arbitrates BBus mastership, hosts a
 two-channel AHB DMA controller (the only one that supports memory-to-memory), and
-contains the SPI-EEPROM boot engine [HWRef p.409-416].
+contains the SPI-EEPROM boot engine [HWRef p.409-416](#sources).
 
-```{list-table} BBus bridge control/status registers (offset from 0xA0400000) [HWRef p.429]
+```{list-table} BBus bridge control/status registers (offset from 0xA0400000) [HWRef p.429](#sources)
 :header-rows: 1
 :widths: 18 30 52
 
@@ -280,7 +280,7 @@ contains the SPI-EEPROM boot engine [HWRef p.409-416].
   - Per-master octal-word prefetch enable
 ```
 
-```{list-table} AHB DMA Channel Control (0x0004 / 0x0024) — key fields [HWRef p.431-434]
+```{list-table} AHB DMA Channel Control (0x0004 / 0x0024) — key fields [HWRef p.431-434](#sources)
 :header-rows: 1
 :widths: 12 14 12 62
 
@@ -337,11 +337,11 @@ contains the SPI-EEPROM boot engine [HWRef p.409-416].
 The Status/Interrupt-Enable register (0x0008/0x0028) has the pending flags
 (bit 31 `NCIP` normal complete, 30 `ECIP` error, 29 `NRIP` buffer-not-ready, 28
 `CAIP` abort, 27 `PCIP` premature complete, all RW1TC) and matching enables
-(24-20), plus debug fields [HWRef p.435-437]. Buffer descriptors are 16 bytes
+(24-20), plus debug fields [HWRef p.435-437](#sources). Buffer descriptors are 16 bytes
 (source, length, destination, {W/I/L/F flags + status}); up to 64 per channel in a
-1 KB circular list [HWRef p.417-419]. The Bridge Interrupt Status/Enable (0x1000/
+1 KB circular list [HWRef p.417-419](#sources). The Bridge Interrupt Status/Enable (0x1000/
 0x1004) aggregate every BBus peripheral plus the two AHB DMA channels into the
-single `bbus_int` (interrupt source ID 2) [HWRef p.438-441].
+single `bbus_int` (interrupt source ID 2) [HWRef p.438-441](#sources).
 
 ### SPI-EEPROM boot logic
 
@@ -349,9 +349,9 @@ When strapped for SPI-EEPROM boot (`boot_cfg` = 11), the on-chip boot engine
 drives Serial channel B as an SPI master (SPI mode 0, ~1.5 MHz), reads a
 128-130-byte configuration header from EEPROM address 0 (SDRAM mode value plus the
 memory-controller timing registers), programs the memory controller, copies the
-image into SDRAM, and releases the CPU [HWRef p.425-427]. During this the hardware
+image into SDRAM, and releases the CPU [HWRef p.425-427](#sources). During this the hardware
 loads channel B's Control A/B and Bit-rate registers automatically (CE=1, WLS=8,
-SPI master, MSB-first, BCLK reference, N=0x00F) [HWRef p.426]. This is the
+SPI master, MSB-first, BCLK reference, N=0x00F) [HWRef p.426](#sources). This is the
 alternative to flash boot and is documented here because it fully drives the
 serial and memory-controller blocks.
 
@@ -361,10 +361,10 @@ serial and memory-controller blocks.
 **Base addresses: 0x9000_0000 (DMA1, BBus peripherals) and 0x9091_0000 (DMA2, USB
 device).** Two controllers, 16 channels each, moving data between external memory
 and internal peripherals in fly-by mode only — no memory-to-memory and no
-external-peripheral DMA (those use the AHB DMA in the bridge) [HWRef p.443-445].
-Each channel is hard-wired to a peripheral [HWRef p.450-452].
+external-peripheral DMA (those use the AHB DMA in the bridge) [HWRef p.443-445](#sources).
+Each channel is hard-wired to a peripheral [HWRef p.450-452](#sources).
 
-```{list-table} BBus DMA1 channel assignments [HWRef p.451]
+```{list-table} BBus DMA1 channel assignments [HWRef p.451](#sources)
 :header-rows: 1
 :widths: 14 40 46
 
@@ -395,12 +395,12 @@ Each channel is hard-wired to a peripheral [HWRef p.450-452].
 ```
 
 DMA2 channels 1-12 map to the USB device control endpoints and endpoints 1-10
-[HWRef p.452]. Each channel exposes, at a 0x20 stride from its controller base,
+[HWRef p.452](#sources). Each channel exposes, at a 0x20 stride from its controller base,
 a Buffer Descriptor Pointer (+0x00), a Control register (+0x10, fields CE/CA/MODE
 fly-by/BTE burst/BDR refetch/RST/STATE/INDEX), and a Status/Interrupt-Enable
-register (+0x14, NCIP/ECIP/NRIP/CAIP/PCIP pending + enables) [HWRef p.453-460]. The
+register (+0x14, NCIP/ECIP/NRIP/CAIP/PCIP pending + enables) [HWRef p.453-460](#sources). The
 firmware's heaviest users are the serial channels feeding the display link and the
-metering SPI [ANALYSIS.md].
+metering SPI [ANALYSIS.md](#sources).
 
 ## LCD, IEEE 1284, USB host & USB device (secondary blocks)
 
@@ -413,7 +413,7 @@ full per-bit register depth on a dedicated page: {doc}`soc-ns9360-secondary`
 
 Every GPIO pin has up to four functions; function 3 is always plain GPIO, and
 functions 0/1/2 are peripheral roles selected by the config nibble above. The
-full 73-pin table is in the datasheet [HWRef p.50-59, Table 9]; the rows a port
+full 73-pin table is in the datasheet [HWRef p.50-59, Table 9](#sources); the rows a port
 must set for this board are [ANALYSIS.md][HWRef p.50-63]:
 
 ```{list-table} Key GPIO peripheral functions
@@ -450,9 +450,9 @@ must set for this board are [ANALYSIS.md][HWRef p.50-63]:
 ```
 
 The I2C pins default to GPIO and the I2C module is held in reset until its pins are
-configured to function 0 [HWRef p.50, p.63]. Full firmware-observed GPIO config
+configured to function 0 [HWRef p.50, p.63](#sources). Full firmware-observed GPIO config
 values (e.g. GPIO Config #1 = 0x33333333, all of Serial B as GPIO inputs) are in
-[ANALYSIS.md].
+[ANALYSIS.md](#sources).
 
 ## Open-source cross-reference
 
@@ -507,32 +507,32 @@ datasheet [mach-ns9xxx processor-ns9360.c][u-boot ns9750dev.h][HWRef p.153].
 
 Primary datasheets (in-repo, the authority for the register map):
 
-- **NS9360 Hardware Reference**, Digi 90000675 rev J — `[HWRef p.N]`
+- **NS9360 Hardware Reference**, Digi 90000675 rev J — `[HWRef p.N](#sources)`
   (`hpe-ipdu-firmware/datasheets/NS9360_HW_Reference_90000675_J.pdf`);
   online: <https://ftp1.digi.com/support/documentation/90000675_J.pdf>.
-- **NS9360 Datasheet**, Digi 91001326 rev D — `[Datasheet]`
+- **NS9360 Datasheet**, Digi 91001326 rev D — `[Datasheet](#sources)`
   (`hpe-ipdu-firmware/datasheets/NS9360_datasheet_91001326_D.pdf`);
   online: <https://ftp1.digi.com/support/documentation/91001326_D.pdf>.
 
 In-repo analysis and port planning (board specifics, firmware evidence):
 
-- `[ANALYSIS.md]` — `hpe-ipdu-firmware/ANALYSIS.md` (board inventory, NS9360 I/O
+- `[ANALYSIS.md](#sources)` — `hpe-ipdu-firmware/ANALYSIS.md` (board inventory, NS9360 I/O
   map, firmware register usage).
-- `[REFERENCE-MATERIAL.md]` — `hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md`.
-- `[PLAN-INCREMENTAL-PORT.md]` — `hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md`
+- `[REFERENCE-MATERIAL.md](#sources)` — `hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md`.
+- `[PLAN-INCREMENTAL-PORT.md](#sources)` — `hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md`
   (register quick reference and clock/baud derivation).
 
 Independent open-source cross-reference (register names, bases, bitfields):
 
-- `[mach-ns9xxx]` — Linux kernel `arch/arm/mach-ns9xxx` at tag v2.6.39:
+- `[mach-ns9xxx](#sources)` — Linux kernel `arch/arm/mach-ns9xxx` at tag v2.6.39:
   `include/mach/regs-sys-ns9360.h`, `regs-sys-common.h`, `regs-bbu.h`,
   `regs-mem.h`, `hardware.h`, `processor-ns9360.c`, `time-ns9360.c`,
   `gpio-ns9360.c`. Raw source, e.g.
   <https://raw.githubusercontent.com/torvalds/linux/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-sys-ns9360.h>.
-- `[u-boot ns9750]` — U-Boot at tag v2012.10: `include/ns9750_sys.h`,
+- `[u-boot ns9750](#sources)` — U-Boot at tag v2012.10: `include/ns9750_sys.h`,
   `ns9750_mem.h`, `ns9750_bbus.h`, `ns9750_ser.h`, `include/configs/ns9750dev.h`,
   `drivers/serial/ns9750_serial.c`. Raw source, e.g.
   <https://raw.githubusercontent.com/u-boot/u-boot/v2012.10/include/ns9750_sys.h>.
-- `[u-boot ns9750_eth.h]` — the Ethernet register header is not in mainline
+- `[u-boot ns9750_eth.h](#sources)` — the Ethernet register header is not in mainline
   U-Boot; the Digi-derived version is preserved in a mirror at
   <https://raw.githubusercontent.com/true-systems/om5p-ac-v2-unlocker/master/u-boot_mr1750/include/ns9750_eth.h>.

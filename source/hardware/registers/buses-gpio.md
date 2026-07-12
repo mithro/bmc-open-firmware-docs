@@ -17,14 +17,14 @@ drivers are used below as an independent cross-check of the datasheet.
 Every register fact is cross-referenced against at least two sources. Inline
 citations use these tags (full list under [Sources](#sources)):
 
-- **[DS §N p.M]** — *ASPEED AST2050/AST1100 A3 Datasheet, V1.05* (2010-05-25),
+- **[DS §N p.M](#sources)** — *ASPEED AST2050/AST1100 A3 Datasheet, V1.05* (2010-05-25),
   the primary datasheet. Page numbers are the printed page numbers.
-- **[hwreg.h]**, **[ast2050.h]** — Raptor Engineering AST2050 U-Boot headers
+- **[hwreg.h](#sources)**, **[ast2050.h](#sources)** — Raptor Engineering AST2050 U-Boot headers
   vendored in the repo.
-- **[i2c-aspeed.c]**, **[gpio-aspeed.c]** — mainline Linux drivers (register
+- **[i2c-aspeed.c](#sources)**, **[gpio-aspeed.c](#sources)** — mainline Linux drivers (register
   offsets are identical to the AST2050 datasheet).
-- **[RAPTOR-ANALYSIS]**, **[drivers-analysis]**, **[gpio-pin-mapping]**,
-  **[culvert]** — reverse-engineering notes in the repo.
+- **[RAPTOR-ANALYSIS](#sources)**, **[drivers-analysis](#sources)**, **[gpio-pin-mapping](#sources)**,
+  **[culvert](#sources)** — reverse-engineering notes in the repo.
 
 Values are register **offsets** unless a full physical address is given. All
 registers are 32-bit and accessed on the APB bus (little-endian).
@@ -32,8 +32,8 @@ registers are 32-bit and accessed on the APB bus (little-endian).
 
 ## SoC address map (relevant bases)
 
-From the ARM Address Space Mapping table [DS §9 p.97], cross-checked against the
-Raptor U-Boot headers [hwreg.h], [ast2050.h]:
+From the ARM Address Space Mapping table [DS §9 p.97](#sources), cross-checked against the
+Raptor U-Boot headers [hwreg.h](#sources), [ast2050.h]:
 
 ```{list-table}
 :header-rows: 1
@@ -45,62 +45,62 @@ Raptor U-Boot headers [hwreg.h], [ast2050.h]:
 * - Static memory (boot-up default)
   - `0x00000000`–`0x01FFFFFF`
   - 32 MiB; the boot chip-select is aliased here so the CPU fetches reset code
-    from `0x00000000` [DS §9 p.97], [DS §11.3 p.105]
+    from `0x00000000` [DS §9 p.97](#sources), [DS §11.3 p.105](#sources)
 * - SDRAM (after re-map)
   - `0x00000000`–`0x0FFFFFFF`
-  - DRAM is re-mapped over low memory after init [DS §9 p.97]
+  - DRAM is re-mapped over low memory after init [DS §9 p.97](#sources)
 * - Static memory (flash data window)
   - `0x10000000`–`0x15FFFFFF`
   - 96 MiB; CE0/CE1/CE2 flash **data/execute** windows. Architectural CE0 base
-    `0x10000000` [DS §11.1 p.100]. The Raptor/ASUS boot SPI flash is accessed
+    `0x10000000` [DS §11.1 p.100](#sources). The Raptor/ASUS boot SPI flash is accessed
     at `0x14000000` (`PHYS_FLASH_1`) with an alias base `0x10000000`
-    (`PHYS_FLASH_2_BASE`) [ast2050.h]
+    (`PHYS_FLASH_2_BASE`) [ast2050.h](#sources)
 * - **Static Memory Controller (SMC) registers**
   - `0x16000000`–`0x17FFFFFF`
-  - Control window; `AST_SMC_BASE` [hwreg.h], "Base address of SMC = 0x1600_0000"
-    [DS §11.1 p.100]
+  - Control window; `AST_SMC_BASE` [hwreg.h](#sources), "Base address of SMC = 0x1600_0000"
+    [DS §11.1 p.100](#sources)
 * - AHB Bus Controller (AHBC)
   - `0x1E600000`
-  - Holds the address-remap register `AHB_ADDR_REMAP_REG` (`+0x8C`) [hwreg.h]
+  - Holds the address-remap register `AHB_ADDR_REMAP_REG` (`+0x8C`) [hwreg.h](#sources)
 * - Interrupt controller (VIC)
   - `0x1E6C0000`
-  - Compact G3 layout [hwreg.h]
+  - Compact G3 layout [hwreg.h](#sources)
 * - SDRAM controller / SCU
   - `0x1E6E0000` / `0x1E6E2000`
-  - lock-key protected [hwreg.h]
+  - lock-key protected [hwreg.h](#sources)
 * - **GPIO controller**
   - `0x1E780000`
-  - `AST_GPIO_BASE` [hwreg.h]; [DS §9 p.97], [DS §23.3 p.262]
+  - `AST_GPIO_BASE` [hwreg.h](#sources); [DS §9 p.97](#sources), [DS §23.3 p.262](#sources)
 * - **LPC controller**
   - `0x1E789000`
-  - [DS §9 p.97], [DS §30.3 p.311]
+  - [DS §9 p.97](#sources), [DS §30.3 p.311](#sources)
 * - **I2C/SMBus controller**
   - `0x1E78A000`
-  - [DS §9 p.97], [DS §31.4 p.334]; `0x40` stride per engine [RAPTOR-ANALYSIS]
+  - [DS §9 p.97](#sources), [DS §31.4 p.334](#sources); `0x40` stride per engine [RAPTOR-ANALYSIS](#sources)
 ```
 
 ---
 
 ## I2C / SMBus controller
 
-Base `0x1E78A000` [DS §31.1 p.327]. The block is **one global register set plus
+Base `0x1E78A000` [DS §31.1 p.327](#sources). The block is **one global register set plus
 seven identical 64-byte device (channel) register sets**, followed by a 256-byte
-shared buffer pool [DS §31.1 p.327], [DS §31.4.1 p.334]. Each device is an
+shared buffer pool [DS §31.1 p.327](#sources), [DS §31.4.1 p.334](#sources). Each device is an
 independent I2C/SMBus master **and/or** slave engine. Devices #1 and #2 are the
 only ones that additionally support FML mode, SMBus alert pins, and DMA buffers
-[DS §31.2 p.327-328].
+[DS §31.2 p.327-328](#sources).
 
 ```{admonition} How many I2C buses does the AST2050 really have? — 7, not 14
 :class: warning
 
 The datasheet is explicit: *"I2C/SMBus Controller implements one set of global
 registers and **7 sets of device registers**"* and *"Support totally **7**
-I2C/SMBus devices"* [DS §31.1 p.327], [DS §31.2.5 p.328]. The address table only
-allocates Device 1–7 [DS §31.4.1 p.334].
+I2C/SMBus devices"* [DS §31.1 p.327](#sources), [DS §31.2.5 p.328](#sources). The address table only
+allocates Device 1–7 [DS §31.4.1 p.334](#sources).
 
 The reconstructed KGPE-D16 device tree lists **14** buses (`i2c0`…`i2c13` at
 `i2c-bus@40 … @480`) and the Aspeed vendor SDK `i2c-ast.c` registers 14 platform
-devices [RAPTOR-ANALYSIS], because both are templated from the **AST2400 (G4)**,
+devices [RAPTOR-ANALYSIS](#sources), because both are templated from the **AST2400 (G4)**,
 which has 14 engines. On the AST2050 only the first 7 (offsets `0x40`–`0x1FF`)
 are physically present; the `@300`–`@480` nodes have no backing hardware.
 ```
@@ -143,7 +143,7 @@ Global registers occupy `0x000`–`0x03F`; each device occupies a 64-byte
   - 64 B
 * - Buffer Pool
   - `0x200`–`0x2FF`
-  - 256 B shared internal SRAM (Pool-buffer mode) [DS §31.2.5 p.328]
+  - 256 B shared internal SRAM (Pool-buffer mode) [DS §31.2.5 p.328](#sources)
 ```
 
 ### Global registers (`0x000`–`0x03F`)
@@ -161,18 +161,18 @@ Global registers occupy `0x000`–`0x03F`; each device occupies a 64-byte
   - R
   - Summary of interrupt events from all 7 devices. Bit 0 = Dev #1 …
     Bit 6 = Dev #7 (1 = interrupt occurs). Bits 31:7 reserved. Read-only
-    summary — cleared by clearing the source device's status [DS §31.4.2 p.334]
+    summary — cleared by clearing the source device's status [DS §31.4.2 p.334](#sources)
 * - `0x04`
   - I2CG04 I2C6/I2C7 Pin Multiplexing
   - RW
   - Bits 1:0 select the pin mux for I2C1/I2C2/I2C6/I2C7: `00` = 7-set I2C;
     `01` = 6-set I2C + 2 Alert (I2C1/2); `10` = 6-set I2C + 1 FML (I2C1);
-    `11` = 5-set I2C + 2 FML (I2C1/2). Bits 31:2 reserved [DS §31.4.2 p.335]
+    `11` = 5-set I2C + 2 FML (I2C1/2). Bits 31:2 reserved [DS §31.4.2 p.335](#sources)
 ```
 
 ### Per-device register map (offsets within each `0x40` window)
 
-Confirmed identical to mainline [i2c-aspeed.c] offsets (`FUN_CTRL 0x00`,
+Confirmed identical to mainline [i2c-aspeed.c](#sources) offsets (`FUN_CTRL 0x00`,
 `AC_TIMING_REG1 0x04`, `AC_TIMING_REG2 0x08`, `INTR_CTRL 0x0c`, `INTR_STS 0x10`,
 `CMD 0x14`, `DEV_ADDR 0x18`, `BYTE_BUF 0x20`).
 
@@ -189,57 +189,57 @@ Confirmed identical to mainline [i2c-aspeed.c] offsets (`FUN_CTRL 0x00`,
   - I2CD00 Function Control
   - RW
   - `0`
-  - Master/slave enable, address-response enables, drive modes [DS §31.4.3 p.335]
+  - Master/slave enable, address-response enables, drive modes [DS §31.4.3 p.335](#sources)
 * - `0x04`
   - I2CD04 Clock & AC Timing #1
   - RW
   - `X`
-  - Base-clock divisors + tBUF/tHDSTA/tACST/tCKHigh/tCKLow/tHDDAT [DS §31.4.3 p.337]
+  - Base-clock divisors + tBUF/tHDSTA/tACST/tCKHigh/tCKLow/tHDDAT [DS §31.4.3 p.337](#sources)
 * - `0x08`
   - I2CD08 Clock & AC Timing #2
   - RW
   - `X`
-  - SCL clock-low timeout cycles [DS §31.4.3 p.338]
+  - SCL clock-low timeout cycles [DS §31.4.3 p.338](#sources)
 * - `0x0C`
   - I2CD0C Interrupt Control
   - RW
   - `0`
-  - Per-event interrupt enables [DS §31.4.3 p.338]
+  - Per-event interrupt enables [DS §31.4.3 p.338](#sources)
 * - `0x10`
   - I2CD10 Interrupt Status
   - RW (W1C)
   - `0`
-  - Per-event interrupt status; write-1-to-clear [DS §31.4.3 p.339]
+  - Per-event interrupt status; write-1-to-clear [DS §31.4.3 p.339](#sources)
 * - `0x14`
   - I2CD14 Command / Status
   - RW / R
   - `0`
-  - Master/slave commands + line/bus state + debug state machine [DS §31.4.3 p.340]
+  - Master/slave commands + line/bus state + debug state machine [DS §31.4.3 p.340](#sources)
 * - `0x18`
   - I2CD18 Slave Device Address
   - RW
   - `X`
-  - Bits 6:0 = 7-bit slave address; 31:7 reserved [DS §31.4.3 p.342]
+  - Bits 6:0 = 7-bit slave address; 31:7 reserved [DS §31.4.3 p.342](#sources)
 * - `0x1C`
   - I2CD1C Pool Buffer Control
   - RW / R
   - `X`
-  - Tx/Rx pool-buffer base/end pointers + received-count pointer [DS §31.4.3 p.343]
+  - Tx/Rx pool-buffer base/end pointers + received-count pointer [DS §31.4.3 p.343](#sources)
 * - `0x20`
   - I2CD20 Tx/Rx Byte Buffer
   - RW / R
   - `X`
-  - Byte-buffer mode: 7:0 Tx (RW), 15:8 Rx (R); 31:16 reserved [DS §31.4.3 p.343]
+  - Byte-buffer mode: 7:0 Tx (RW), 15:8 Rx (R); 31:16 reserved [DS §31.4.3 p.343](#sources)
 * - `0x24`
   - I2CD24 DMA Mode Control *(Dev #1/#2 only)*
   - RW
   - `X`
-  - 27:12 DMA buffer base (4 KiB aligned), 11:0 DMA size; 31:28 reserved [DS §31.4.3 p.343]
+  - 27:12 DMA buffer base (4 KiB aligned), 11:0 DMA size; 31:28 reserved [DS §31.4.3 p.343](#sources)
 * - `0x28`
   - I2CD28 DMA Mode Status *(Dev #1/#2 only)*
   - R
   - `X`
-  - 11:0 last-accessed DMA address / byte count; 31:12 reserved [DS §31.4.3 p.344]
+  - 11:0 last-accessed DMA address / byte count; 31:12 reserved [DS §31.4.3 p.344](#sources)
 * - `0x2C`–`0x3F`
   - *(reserved)*
   - —
@@ -247,7 +247,7 @@ Confirmed identical to mainline [i2c-aspeed.c] offsets (`FUN_CTRL 0x00`,
   - Not defined; do not access
 ```
 
-#### I2CD00 — Function Control Register (`+0x00`) [DS §31.4.3 p.335-336]
+#### I2CD00 — Function Control Register (`+0x00`) [DS §31.4.3 p.335-336](#sources)
 
 ```{list-table}
 :header-rows: 1
@@ -313,12 +313,12 @@ Confirmed identical to mainline [i2c-aspeed.c] offsets (`FUN_CTRL 0x00`,
 ```{note}
 When both master and slave functions are disabled simultaneously, the device's
 interrupt-control (`I2CD0C`), interrupt-status (`I2CD10`) and command
-(`I2CD14`) registers are reset [DS §31.4.3 p.336]. In that state
+(`I2CD14`) registers are reset [DS §31.4.3 p.336](#sources). In that state
 `I2CD14[15:12]` become direct GPIO drives of SCL/SDA for manual bus-lock
 recovery.
 ```
 
-#### I2CD04 — Clock & AC Timing Control #1 (`+0x04`) [DS §31.4.3 p.337-338]
+#### I2CD04 — Clock & AC Timing Control #1 (`+0x04`) [DS §31.4.3 p.337-338](#sources)
 
 ```{list-table}
 :header-rows: 1
@@ -341,7 +341,7 @@ recovery.
   - —
 * - 18:16
   - tCKHigh — SCL high pulse width
-  - `000`–`111`; value depends on FML-enable and Base-Clock #1 divisor [DS §31.4.3 p.337]
+  - `000`–`111`; value depends on FML-enable and Base-Clock #1 divisor [DS §31.4.3 p.337](#sources)
 * - 15
   - Reserved
   - —
@@ -363,11 +363,11 @@ recovery.
 ```
 
 `Freq(SCL) = Freq(CoreClock) / (tBaseCyc × (tCKLow + tCKHigh))`, with
-`tBaseCyc ∈ {1,2,4,…,32768}` and `tCKLow, tCKHigh ∈ {1..8}` [DS §31.3 p.329].
+`tBaseCyc ∈ {1,2,4,…,32768}` and `tCKLow, tCKHigh ∈ {1..8}` [DS §31.3 p.329](#sources).
 A full divisor→(Base clock, tCKHigh, tCKLow) lookup is tabulated at [DS §31.3.1
-p.333]. Corroborated by [i2c-aspeed.c]'s `aspeed_i2c_24xx_get_clk_reg_val`.
+p.333]. Corroborated by [i2c-aspeed.c](#sources)'s `aspeed_i2c_24xx_get_clk_reg_val`.
 
-#### I2CD08 — Clock & AC Timing Control #2 (`+0x08`) [DS §31.4.3 p.338]
+#### I2CD08 — Clock & AC Timing Control #2 (`+0x08`) [DS §31.4.3 p.338](#sources)
 
 Bits 31:3 reserved. Bits **2:0** = cycles of clock-low timeout (`tTimeOut`):
 `000` = no timeout control, `001` = 1–2 … `111` = 7–8 cycles of the Timeout
@@ -376,7 +376,7 @@ Base Clock (one cycle of uncertainty because the timeout counter free-runs).
 #### I2CD0C / I2CD10 — Interrupt Control / Status (`+0x0C` / `+0x10`)
 
 `I2CD0C` (enable, RW, reset 0) and `I2CD10` (status, W1C, reset 0) share the same
-bit layout [DS §31.4.3 p.338-340]. Bits 31:14 reserved.
+bit layout [DS §31.4.3 p.338-340](#sources). Bits 31:14 reserved.
 
 ```{list-table}
 :header-rows: 1
@@ -415,13 +415,13 @@ bit layout [DS §31.4.3 p.338-340]. Bits 31:14 reserved.
 ```
 
 `I2CD10` bits are cleared by writing `1` ("WC"). Software must clear the Receive
-Done status (bit 2) to allow the next byte reception [DS §31.4.3 p.340].
+Done status (bit 2) to allow the next byte reception [DS §31.4.3 p.340](#sources).
 
-#### I2CD14 — Command / Status Register (`+0x14`) [DS §31.4.3 p.340-342]
+#### I2CD14 — Command / Status Register (`+0x14`) [DS §31.4.3 p.340-342](#sources)
 
 The command half (RW) fires transfers; the status half (R) exposes line/bus
 state and the transfer state machine. Command bit positions match mainline
-[i2c-aspeed.c] (`M_START_CMD BIT(0)`, `M_TX_CMD BIT(1)`, `M_RX_CMD BIT(3)`,
+[i2c-aspeed.c](#sources) (`M_START_CMD BIT(0)`, `M_TX_CMD BIT(1)`, `M_RX_CMD BIT(3)`,
 `M_S_RX_CMD_LAST BIT(4)`, `M_STOP_CMD BIT(5)`).
 
 ```{list-table}
@@ -520,9 +520,9 @@ When several commands are written together they execute in priority order:
 (1) Master Start, (2) Master Transmit, (3) Slave Transmit **or** Master Receive,
 (4) Master Stop. Hardware clears each on completion, and clears **all** on
 arbitration loss or an invalid Start/Stop. Master and Slave commands must not be
-active at the same time [DS §31.4.3 p.342].
+active at the same time [DS §31.4.3 p.342](#sources).
 
-#### I2CD1C — Pool Buffer Control (`+0x1C`) [DS §31.4.3 p.343]
+#### I2CD1C — Pool Buffer Control (`+0x1C`) [DS §31.4.3 p.343](#sources)
 
 ```{list-table}
 :header-rows: 1
@@ -552,22 +552,22 @@ active at the same time [DS §31.4.3 p.342].
 
 - **I2C master**: Philips I2C-BUS v2.1 compatible; multi-master; 0.5 Kbps–8 Mbps
   at 50 MHz core clock; clock stretching; arbitration-lost interrupt with
-  automatic transfer cancel; bus-lock recovery [DS §31.2.1 p.327].
+  automatic transfer cancel; bus-lock recovery [DS §31.2.1 p.327](#sources).
 - **I2C slave**: 7-bit addressing only; controllable General-Call response;
-  clock stretching; automatic ACK/NACK [DS §31.2.2 p.327].
+  clock stretching; automatic ACK/NACK [DS §31.2.2 p.327](#sources).
 - **SMBus**: SBS SMBus 2.0 compatible; controllable ARP Host Address
   (`0001_000`), ARP Device Default Address (`1100_001`), Alert Response Address
   (`0001_100`); **two alert pins** for the two SMBus/I2C controllers (Devices #1
-  and #2) supporting master-alert interrupt and slave-alert [DS §31.2.3 p.328].
+  and #2) supporting master-alert interrupt and slave-alert [DS §31.2.3 p.328](#sources).
 - **FML**: Devices #1/#2 can be programmed as FML controllers, up to 8 Mbps
-  [DS §31.2.4 p.328].
+  [DS §31.2.4 p.328](#sources).
 - **Buffer modes**: Byte buffer (dedicated register `I2CD20`), Pool buffer
   (256 B shared SRAM at `0x200`), DMA buffer (up to 4 KiB from SDRAM, Devices
-  #1/#2 only) [DS §31.2.5 p.328]. Initialization order: write `I2CD00` enable,
-  `I2CD04`, `I2CD08`, `I2CD10=0xFFFFFFFF`, `I2CD0C` enables [DS §31.5.1 p.344].
+  #1/#2 only) [DS §31.2.5 p.328](#sources). Initialization order: write `I2CD00` enable,
+  `I2CD04`, `I2CD08`, `I2CD10=0xFFFFFFFF`, `I2CD0C` enables [DS §31.5.1 p.344](#sources).
 - Board usage: on the Dell C410X, I2C engine 3 (bus `0xF3`) drives the PEX PCIe
   switches; expander/sensor buses `0xF0`–`0xF6` hang off the other engines
-  [gpio-pin-mapping]. Corroborated by mainline [i2c-aspeed.c]
+  [gpio-pin-mapping](#sources). Corroborated by mainline [i2c-aspeed.c](#sources)
   (`aspeed,ast2400-i2c-bus`), whose register map matches the above.
 
 ---
@@ -576,29 +576,29 @@ active at the same time [DS §31.4.3 p.342].
 
 The AST2050 uses the **legacy Static Memory Controller (SMC)** — *not* the newer
 FMC/SPI controllers of the AST2400+. Register (control) window base
-`0x16000000` [DS §11.1 p.100], [hwreg.h]; flash **data/execute** windows live in
-the `0x10000000`–`0x15FFFFFF` static-memory region [DS §9 p.97].
+`0x16000000` [DS §11.1 p.100](#sources), [hwreg.h](#sources); flash **data/execute** windows live in
+the `0x10000000`–`0x15FFFFFF` static-memory region [DS §9 p.97](#sources).
 
 The SMC implements **8 × 32-bit registers** and can drive up to three chip
 selects (CE0/CE1/CE2), each independently programmable as **NOR / NAND / SPI**
 flash. **On the AST2050/AST1100, only the SPI-flash interface is supported** —
 the NOR/NAND register views are documented as a superset and are inert on this
-part [DS §11.1 p.100].
+part [DS §11.1 p.100](#sources).
 
 ```{admonition} Flash address windows
 :class: note
 
 - Architectural CE0 base = `0x10000000`; CE1 = `0x10000000 + SegSize`;
   CE2 = `0x10000000 + 2×SegSize`, where SegSize is set by `SMC00[1:0]`
-  (32/16/8/4 MiB) [DS §11.1 p.100], [DS §11.3 p.105].
+  (32/16/8/4 MiB) [DS §11.1 p.100](#sources), [DS §11.3 p.105](#sources).
 - Only one CE can be the CPU-boot chip select (mapped to `0x00000000`); default
-  types are CE0=NOR, CE1=NAND, CE2=SPI [DS §11.1 p.100].
+  types are CE0=NOR, CE1=NAND, CE2=SPI [DS §11.1 p.100](#sources).
 - The Raptor/ASUS single-SPI board maps its boot flash at `0x14000000`
-  (`PHYS_FLASH_1`) with alias `0x10000000` (`PHYS_FLASH_2_BASE`) [ast2050.h].
-- The SMC **register** window (this block) is at `0x16000000` [hwreg.h].
+  (`PHYS_FLASH_1`) with alias `0x10000000` (`PHYS_FLASH_2_BASE`) [ast2050.h](#sources).
+- The SMC **register** window (this block) is at `0x16000000` [hwreg.h](#sources).
 ```
 
-### Register map (base `0x16000000`) [DS §11.3 p.105-112]
+### Register map (base `0x16000000`) [DS §11.3 p.105-112](#sources)
 
 ```{list-table}
 :header-rows: 1
@@ -651,7 +651,7 @@ part [DS §11.1 p.100].
   - ECC pass/fail + error position
 ```
 
-#### SMC00 — CE Segment / AC Timing (`+0x00`) [DS §11.3 p.105]
+#### SMC00 — CE Segment / AC Timing (`+0x00`) [DS §11.3 p.105](#sources)
 
 ```{list-table}
 :header-rows: 1
@@ -689,7 +689,7 @@ part [DS §11.1 p.100].
   - Segment size: `00` **32 MB (default)**, `01` 16 MB, `10` 8 MB, `11` 4 MB
 ```
 
-#### SMC04/08/0C — CE Control, **SPI-flash view** (`+0x04/08/0C`) [DS §11.3 p.107-108]
+#### SMC04/08/0C — CE Control, **SPI-flash view** (`+0x04/08/0C`) [DS §11.3 p.107-108](#sources)
 
 This is the operative view on the AST2050. The register meaning switches on the
 CE's type field in `SMC00`.
@@ -754,7 +754,7 @@ setting `SMC04[12]=1` disables this (with a performance penalty) [DS §11.3
 p.107]. Except in User Mode the address space supports up to 16 MiB [DS §11.3
 p.108]. Boot/execute reads use Normal Read (`03h`) at HCLK/16, MSB-first, no
 dummy cycles by reset default. The AST2050 SMC read path binds unchanged in the
-QEMU/kernel G3 model [drivers-analysis].
+QEMU/kernel G3 model [drivers-analysis](#sources).
 ```
 
 For completeness the same register has a **NOR-flash view** (bits: 31:30 timer
@@ -763,9 +763,9 @@ t-CEH, 23:20 t-ACT2CE, 19:16 t-WEH, 15:12 t-WEL, 11:8 t-OEH, 7:4 t-OEL, 3:0
 t-CE2ACT) and a **NAND-flash view** (31:28 t-WEH, 27:24 t-WEL, 23:20 t-REH,
 19:16 t-REL, 15:12 t-CESH, 11:10 t-WTR, 9:4 boot-read busy wait time, 3 user-mode
 row-address cycles, 2 user-mode CE# active, 1 random-read, 0 boot/user mode)
-[DS §11.3 p.105-108]. Both views are inert on the AST2050.
+[DS §11.3 p.105-108](#sources). Both views are inert on the AST2050.
 
-#### SMC10 — Misc. Control (`+0x10`) [DS §11.3 p.109-111]
+#### SMC10 — Misc. Control (`+0x10`) [DS §11.3 p.109-111](#sources)
 
 ```{list-table}
 :header-rows: 1
@@ -818,7 +818,7 @@ row-address cycles, 2 user-mode CE# active, 1 random-read, 0 boot/user mode)
   - R/B# pin supported
 ```
 
-#### SMC14 / SMC18 / SMC1C — NAND ECC (inert on AST2050) [DS §11.3 p.111-112]
+#### SMC14 / SMC18 / SMC1C — NAND ECC (inert on AST2050) [DS §11.3 p.111-112](#sources)
 
 - **SMC14** (`+0x14`): 31:30 reserved(0), 29 ECC reset enable, 28 ECC generation
   enable (max 2048-byte SECDED), 27:0 ECC value (R).
@@ -835,8 +835,8 @@ row-address cycles, 2 user-mode CE# active, 1 random-read, 0 boot/user mode)
 Mainline's `spi-aspeed-smc.c` targets the **AST2400+ FMC/SPI** controllers
 (`aspeed,ast2400-fmc`/`-spi` …) whose register layout differs from the legacy
 AST2050 SMC documented here; the older `drivers/mtd/maps/ast-nor.c` was removed
-upstream [drivers-analysis]. So for this block the datasheet is the sole primary;
-the repo headers [hwreg.h], [ast2050.h] and RE notes corroborate the base
+upstream [drivers-analysis](#sources). So for this block the datasheet is the sole primary;
+the repo headers [hwreg.h](#sources), [ast2050.h](#sources) and RE notes corroborate the base
 addresses and SPI-only usage.
 ```
 
@@ -844,14 +844,14 @@ addresses and SPI-only usage.
 
 ## LPC controller
 
-Base `0x1E789000` [DS §30.3 p.312], [DS §9 p.97]. The block integrates **both**
+Base `0x1E789000` [DS §30.3 p.312](#sources), [DS §9 p.97](#sources). The block integrates **both**
 an LPC **Host** controller and an LPC **Slave** controller (only one enabled at a
 time), plus an IPMI 2.0/1.1 BMC KCS/BT interface, port-80h/81h snooping, two
 Virtual UARTs, and — most relevant to security posture — the **LPC-to-AHB
-bridge** ("iLPC2AHB"). There are **49 registers** [DS §30.1 p.311]. Register
+bridge** ("iLPC2AHB"). There are **49 registers** [DS §30.1 p.311](#sources). Register
 offsets 0x00–0x7C are H8S/2168-compatible.
 
-### Register map (base `0x1E789000`) [DS §30.3 p.311-326]
+### Register map (base `0x1E789000`) [DS §30.3 p.311-326](#sources)
 
 ```{list-table}
 :header-rows: 1
@@ -1021,7 +1021,7 @@ offsets 0x00–0x7C are H8S/2168-compatible.
 This is the mechanism the `culvert` posture tool inspects: an LPC master (the
 host) can be given arbitrary AHB read/write access into the BMC's internal
 memory map. It is **off by default** and confirmed **disabled** on the studied
-KGPE-D16 / C410X boards [culvert], [RAPTOR-ANALYSIS].
+KGPE-D16 / C410X boards [culvert](#sources), [RAPTOR-ANALYSIS](#sources).
 
 ```{list-table}
 :header-rows: 1
@@ -1034,7 +1034,7 @@ KGPE-D16 / C410X boards [culvert], [RAPTOR-ANALYSIS].
 * - HICR5 `0x80`
   - HWMBASE [31:24]
   - 0
-  - LPC-to-AHB bridge address-decoding base bit [31:24] [DS §30.3 p.319]
+  - LPC-to-AHB bridge address-decoding base bit [31:24] [DS §30.3 p.319](#sources)
 * - HICR5 `0x80`
   - ENFWH [10]
   - 0
@@ -1043,7 +1043,7 @@ KGPE-D16 / C410X boards [culvert], [RAPTOR-ANALYSIS].
   - **ENL2H [8]**
   - **0**
   - **Enable LPC-to-AHB bridge** — the master posture bit; `culvert` reads this
-    to report `ilpc: Disabled`/`Permissive` [DS §30.3 p.319], [culvert]
+    to report `ilpc: Disabled`/`Permissive` [DS §30.3 p.319](#sources), [culvert](#sources)
 * - HICR5 `0x80`
   - IRQX/PME/snoop [23:12, 9, 5:0]
   - 0
@@ -1051,7 +1051,7 @@ KGPE-D16 / C410X boards [culvert], [RAPTOR-ANALYSIS].
 * - HICR6 `0x84`
   - HWNCARE [27:24]
   - 0
-  - LPC-to-AHB **address-decoding "don't-care" range** control bit [27:24] [DS §30.3 p.320]
+  - LPC-to-AHB **address-decoding "don't-care" range** control bit [27:24] [DS §30.3 p.320](#sources)
 * - HICR6 `0x84`
   - STR_PME/STR_SNP1W/STR_SNP0W [2:0]
   - 0
@@ -1059,21 +1059,21 @@ KGPE-D16 / C410X boards [culvert], [RAPTOR-ANALYSIS].
 * - HICR7 `0x88`
   - ADRBASE [31:16]
   - 0
-  - LPC-to-AHB **remapping address base** [31:16] [DS §30.3 p.320]
+  - LPC-to-AHB **remapping address base** [31:16] [DS §30.3 p.320](#sources)
 * - HICR8 `0x8C`
   - ADRMASK [31:16]
   - 0
-  - LPC-to-AHB **remapping address mask** [31:16] [DS §30.3 p.321]
+  - LPC-to-AHB **remapping address mask** [31:16] [DS §30.3 p.321](#sources)
 ```
 
 An LPC I/O or memory cycle whose address matches `HWMBASE`/`HWNCARE` is
 translated through `ADRBASE`/`ADRMASK` into an AHB address, giving the host
 full internal-bus access when `ENL2H=1`. On the AST2050 the datasheet documents
 this as the same backdoor family (`p2a`, `ilpc`/`lpc2ahb`) that culvert uses on
-newer parts; only the UART debug console is absent from the G3 [RAPTOR-ANALYSIS].
+newer parts; only the UART debug console is absent from the G3 [RAPTOR-ANALYSIS](#sources).
 The KGPE-D16 has host PCI+LPC wiring so an attacker/host could enable it; the
-C410X has no host CPU so nothing drives the LPC bridge [RAPTOR-ANALYSIS],
-[culvert].
+C410X has no host CPU so nothing drives the LPC bridge [RAPTOR-ANALYSIS](#sources),
+[culvert](#sources).
 
 ### HICR0 / HICR4 — channel + KCS/BT enables (representative slave-side bits)
 
@@ -1088,7 +1088,7 @@ C410X has no host CPU so nothing drives the LPC bridge [RAPTOR-ANALYSIS],
 * - HICR0 `0x00`
   - 7 LPC3E / 6 LPC2E / 5 LPC1E
   - 0
-  - Enable LPC channel #3 / #2 / #1 [DS §30.3 p.313]
+  - Enable LPC channel #3 / #2 / #1 [DS §30.3 p.313](#sources)
 * - HICR0 `0x00`
   - 3 SDWNE / 2 PMEE
   - 0
@@ -1096,7 +1096,7 @@ C410X has no host CPU so nothing drives the LPC bridge [RAPTOR-ANALYSIS],
 * - HICR2 `0x08`
   - 6 LRST / 5 SDWN / 4 ABRT
   - 0
-  - LPC reset / shutdown / abort interrupt status (W0C) [DS §30.3 p.313]
+  - LPC reset / shutdown / abort interrupt status (W0C) [DS §30.3 p.313](#sources)
 * - HICR2 `0x08`
   - 3 IBFIF3 / 2 IBFIF2 / 1 IBFIE1 / 0 ERRIE
   - 0
@@ -1104,14 +1104,14 @@ C410X has no host CPU so nothing drives the LPC bridge [RAPTOR-ANALYSIS],
 * - HICR4 `0x10`
   - 7 LADR12AS
   - U
-  - Channel #1/#2 address select (LADR12H vs LADR12L) [DS §30.3 p.314]
+  - Channel #1/#2 address select (LADR12H vs LADR12L) [DS §30.3 p.314](#sources)
 * - HICR4 `0x10`
   - 2 KCSENBL / 0 BTENBL
   - U / 0
   - Enable KCS (channel #3) / enable BT (channel #3)
 ```
 
-### LHCR0 — LPC Host Controller enable [DS §30.3 p.321-322]
+### LHCR0 — LPC Host Controller enable [DS §30.3 p.321-322](#sources)
 
 ```{list-table}
 :header-rows: 1
@@ -1160,16 +1160,16 @@ C410X has no host CPU so nothing drives the LPC bridge [RAPTOR-ANALYSIS],
 The LPC **Host** side (`LHCR0`–`LHCRB`) lets the BMC master the LPC bus to
 reprogram the host's SPI/FWH BIOS: `LHCR4` supplies command/header, `LHCR5` the
 address, `LHCR6` write data, `LHCR7` latches read data, and writing `LHCR1[0]
-LHFIRE` issues one bus cycle [DS §30.3 p.323-326]. Mainline `aspeed-lpc-ctrl.c` /
+LHFIRE` issues one bus cycle [DS §30.3 p.323-326](#sources). Mainline `aspeed-lpc-ctrl.c` /
 `aspeed-lpc-snoop.c` cover the equivalent G4 blocks (`aspeed,ast2400-lpc-*`)
-[drivers-analysis].
+[drivers-analysis](#sources).
 
 ---
 
 ## GPIO controller
 
-Base `0x1E780000` [DS §23.3 p.262], [hwreg.h]. Up to **64 GPIO pins in 8 port
-groups GPIOA…GPIOH** (8 pins each) [DS §23.1 p.262]. The register file is split
+Base `0x1E780000` [DS §23.3 p.262](#sources), [hwreg.h](#sources). Up to **64 GPIO pins in 8 port
+groups GPIOA…GPIOH** (8 pins each) [DS §23.1 p.262](#sources). The register file is split
 into a base bank covering **GPIOA–GPIOD** (`0x00`–`0x1C`) and an *extended* bank
 covering **GPIOE–GPIOH** (`0x20`–`0x3C`), then shared debounce settings/timers
 (`0x40`–`0x58`).
@@ -1180,19 +1180,19 @@ covering **GPIOE–GPIOH** (`0x20`–`0x3C`), then shared debounce settings/time
 Later Aspeed SoCs (AST2400+) extend the same register pattern to more port
 letters (I…P and beyond), and mainline `gpio-aspeed.c` / the reconstructed
 KGPE-D16 DTS describe those extra banks. **The AST2050 register file only defines
-GPIOA–GPIOH** [DS §23.3 p.262-269]; higher banks are not present. Only the pins
+GPIOA–GPIOH** [DS §23.3 p.262-269](#sources); higher banks are not present. Only the pins
 enumerated in the pin-summary below are actually bonded out.
 ```
 
 Each pin supports: input/output; interrupt enable; interrupt sensitivity
 (level-high/low, rising/falling edge, or dual-edge); WDT-reset tolerance; and
-0/1 µs/1 ms/5 ms/10 ms debounce [DS §23.1 p.262], [DS §23.2 p.263].
+0/1 µs/1 ms/5 ms/10 ms debounce [DS §23.1 p.262](#sources), [DS §23.2 p.263](#sources).
 Register offsets and bank byte-lane layout are identical to mainline
-[gpio-aspeed.c] (`data 0x00, dir 0x04, irq 0x08/0x0c/0x10/0x14/0x18, tolerance
+[gpio-aspeed.c](#sources) (`data 0x00, dir 0x04, irq 0x08/0x0c/0x10/0x14/0x18, tolerance
 0x1c, debounce sel 0x40/0x44, debounce timers 0x50/0x54/0x58, extended data
 0x20`; 8 banks).
 
-### Register map (base `0x1E780000`) [DS §23.3 p.263-269]
+### Register map (base `0x1E780000`) [DS §23.3 p.263-269](#sources)
 
 ```{list-table}
 :header-rows: 1
@@ -1418,18 +1418,18 @@ to a pin [DS §23.3 p.269]:
 ```
 
 `Debounce time = PCLK cycle × Debounce timer value` where the timer value is
-`GPIO50/54/58` bits [23:0] [DS §23.3 p.269]. The minimum input pulse for
-edge-triggered interrupts must exceed 2 PCLK cycles [DS §3.5 p.58].
+`GPIO50/54/58` bits [23:0] [DS §23.3 p.269](#sources). The minimum input pulse for
+edge-triggered interrupts must exceed 2 PCLK cycles [DS §3.5 p.58](#sources).
 
-### Electrical / feature notes [DS §23.2 p.263]
+### Electrical / feature notes [DS §23.2 p.263](#sources)
 
 - 8 dedicated + 56 shared GPIO pins; interrupts supported on all 64.
 - Default **internal pull-down** on each pin; external pull-ups required.
-- 8 of 64 pins have 16 mA drive; the rest 8 mA (per-pin table at [DS §3.5 p.58]).
+- 8 of 64 pins have 16 mA drive; the rest 8 mA (per-pin table at [DS §3.5 p.58](#sources)).
 - Reset tolerance (`GPIO1C`/`GPIO3C`): setting a bit keeps that pin's
-  `GPIO00/04` (or `GPIO20/24`) state across a WDT reset [DS §23.3 p.264].
+  `GPIO00/04` (or `GPIO20/24`) state across a WDT reset [DS §23.3 p.264](#sources).
 
-### Bonded pins (GPIO Summary) [DS §3.5 p.58-59]
+### Bonded pins (GPIO Summary) [DS §3.5 p.58-59](#sources)
 
 Only the following GPIO signals are pinned out on the AST2050; each shares its
 ball with a multi-function alternate (chosen via SCU multi-function control):
@@ -1461,7 +1461,7 @@ ball with a multi-function alternate (chosen via SCU multi-function control):
 * - GPIOE
   - E0–E7 (two mux groups; SCU74[27] selects)
   - 8 mA / TTL, pull-down
-  - group 1: VP0–7 / TACH0–7; group 2: MII/RMII2 TXD/RXD/… [DS §3.5 p.58 note]
+  - group 1: VP0–7 / TACH0–7; group 2: MII/RMII2 TXD/RXD/… [DS §3.5 p.58 note](#sources)
 * - GPIOF
   - F0–F7
   - 8 mA / TTL, pull-down
@@ -1481,7 +1481,7 @@ On the Dell C410X, firmware drives 38 of these on-chip GPIOs through the AESS
 kernel driver — e.g. GPIOA4/A5 as I2C-expander interrupt inputs, GPIOB0–B7 as
 thermal/PSU/PCIe-switch alerts, GPIOE0–E5 as power-sequencing controls, GPIOF6
 as the PEX8696 reset — alongside 80 off-chip PCA9555 expander lines
-[gpio-pin-mapping].
+[gpio-pin-mapping](#sources).
 
 ---
 
@@ -1489,7 +1489,7 @@ as the PEX8696 reset — alongside 80 off-chip PCA9555 expander lines
 
 **Primary datasheet**
 
-- **[DS]** *ASPEED AST2050/AST1100 A3 Datasheet, V1.05* (2010-05-25), in-repo at
+- **[DS](#sources)** *ASPEED AST2050/AST1100 A3 Datasheet, V1.05* (2010-05-25), in-repo at
   `datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`. Sections used:
   - §9 ARM Address Space Mapping (p.97)
   - §11 Static Memory Controller — overview p.100-101, registers p.105-112
@@ -1501,28 +1501,28 @@ as the PEX8696 reset — alongside 80 off-chip PCA9555 expander lines
 
 **In-repo reverse-engineering sources**
 
-- **[hwreg.h]** `asus-kgpe-d16-firmware/hwreg.h` — Raptor AST2100/AST2050 SoC
+- **[hwreg.h](#sources)** `asus-kgpe-d16-firmware/hwreg.h` — Raptor AST2100/AST2050 SoC
   register base addresses (SMC `0x16000000`, GPIO `0x1E780000`, SCU/SDRAM/AHBC).
-- **[ast2050.h]** `asus-kgpe-d16-firmware/ast2050.h` — Raptor U-Boot board config
+- **[ast2050.h](#sources)** `asus-kgpe-d16-firmware/ast2050.h` — Raptor U-Boot board config
   (flash windows `0x14000000`/`0x10000000`, single-SPI boot, `CONFIG_HARD_I2C`).
-- **[RAPTOR-ANALYSIS]** `asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md`
+- **[RAPTOR-ANALYSIS](#sources)** `asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md`
   — I2C engine base `0x1E78A000`, 14-bus SDK templating, AHB backdoor confirmation.
-- **[culvert]** `asus-kgpe-d16-firmware/CULVERT-UART-JTAG-DEBUG.md` and
+- **[culvert](#sources)** `asus-kgpe-d16-firmware/CULVERT-UART-JTAG-DEBUG.md` and
   `CULVERT-G3-HARDWARE-RESULTS.md` — iLPC2AHB / LPC2AHB posture via
   `HICR5[8] ENL2H` + `HICR7 ADRBASE` / `HICR8 ADRMASK`; confirmed disabled on hardware.
-- **[drivers-analysis]** `dell-c410x-firmware/aspeed-mainline-drivers-analysis.md`
+- **[drivers-analysis](#sources)** `dell-c410x-firmware/aspeed-mainline-drivers-analysis.md`
   — mainline driver ↔ AST2050 mapping (i2c-aspeed, gpio-aspeed, spi-aspeed-smc,
   aspeed-lpc-ctrl/snoop).
-- **[gpio-pin-mapping]** `dell-c410x-firmware/io-tables/gpio-pin-mapping.md`
+- **[gpio-pin-mapping](#sources)** `dell-c410x-firmware/io-tables/gpio-pin-mapping.md`
   — C410X on-chip GPIO A/B/E/F usage and per-bit function.
 
 **Secondary (mainline Linux, register cross-check)**
 
-- **[i2c-aspeed.c]** `drivers/i2c/busses/i2c-aspeed.c` (torvalds/linux) — register
+- **[i2c-aspeed.c](#sources)** `drivers/i2c/busses/i2c-aspeed.c` (torvalds/linux) — register
   offsets `0x00/04/08/0c/10/14/18/20` and command bits (START=BIT0, TX=BIT1,
   RX=BIT3, RX_CMD_LAST=BIT4, STOP=BIT5) match §31.4.3; compatibles
   `aspeed,ast2400/2500/2600-i2c-bus`.
-- **[gpio-aspeed.c]** `drivers/gpio/gpio-aspeed.c` (torvalds/linux) — bank layout
+- **[gpio-aspeed.c](#sources)** `drivers/gpio/gpio-aspeed.c` (torvalds/linux) — bank layout
   `data 0x00 / dir 0x04 / irq 0x08,0x0c,0x10,0x14,0x18 / tolerance 0x1c /
   debounce 0x40,0x44 / timers 0x50,0x54,0x58 / ext data 0x20`, 8 banks; matches §23.3.
 - **spi-aspeed-smc.c** (torvalds/linux) — targets the AST2400+ FMC/SPI, whose

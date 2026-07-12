@@ -14,13 +14,13 @@ Where a value is board-specific to the ASUS KGPE-D16 (the reverse-engineering
 oracle), it is marked as such. See [§9](#9-ast2050-specific-vs-shared-with-ast2400).
 
 - **Controller base address:** `0x1E6E0000` (registers are named `MCRnn` by
-  their offset, e.g. `MCR04` = `0x1E6E0004`) [DS §17.3 p.184] [hwreg.h:37-71].
+  their offset, e.g. `MCR04` = `0x1E6E0004`) [DS §17.3 p.184](#sources) [hwreg.h:37-71](#sources).
 - **Register unlock key (MCR00):** write `0xFC600309` to `0x1E6E0000` to unlock
   `MCR04`..`MCR7C`; write anything else (e.g. `0x00000000`) to re-lock.
   Reads back `0x00000001` when unlocked, `0x00000000` when locked
-  [DS §17.3 p.184 MCR00] [platform.S:287-289].
+  [DS §17.3 p.184 MCR00](#sources) [platform.S:287-289](#sources).
 - **A companion SCU unlock** (`0x1E6E2000` = `0x1688A8A8`) is required because
-  init also programs the M-PLL and scratch registers [DS §18 p.205] [platform.S:132-134].
+  init also programs the M-PLL and scratch registers [DS §18 p.205](#sources) [platform.S:132-134](#sources).
 
 ---
 
@@ -35,45 +35,45 @@ oracle), it is marked as such. See [§9](#9-ast2050-specific-vs-shared-with-ast2
   - Source
 * - CPU / memory master
   - ARM926EJ-S (ARMv5TEJ), ~200 MHz
-  - [DDR2-INIT-REVERSE-ENGINEERING.md §2.1]
+  - [DDR2-INIT-REVERSE-ENGINEERING.md §2.1](#sources)
 * - External DRAM type
   - DDR2 SDRAM, 1.8 V SSTL_18
-  - [DS §17.3 p.196-197 MCR60] (decoded below)
+  - [DS §17.3 p.196-197 MCR60](#sources) (decoded below)
 * - External DDR2 data bus
   - **16-bit** (DQ15:0), single rank
-  - [DS §17.3 p.185 MCR04 bit9:8] [DS §17.5 p.202]
+  - [DS §17.3 p.185 MCR04 bit9:8](#sources) [DS §17.5 p.202](#sources)
 * - Internal data bus
   - 64-bit (all internal IPs 8-byte aligned)
-  - [DS §17.5 p.202]
+  - [DS §17.5 p.202](#sources)
 * - Memory clock (MCLK)
   - ~200 MHz from M-PLL → DDR2-400 (400 MT/s)
-  - [DS §18.2 p.212 SCU20] [platform.S:338-340]
+  - [DS §18.2 p.212 SCU20](#sources) [platform.S:338-340](#sources)
 * - Total DRAM (KGPE-D16, HW-verified)
   - 64 MiB (`MCR04[3:2]=01`)
-  - [DS §17.3 p.185 MCR04 bit3:2] [platform.S:373-375]
+  - [DS §17.3 p.185 MCR04 bit3:2](#sources) [platform.S:373-375](#sources)
 * - Max addressable space
   - 256 MB (28-bit internal address)
-  - [DS §17.4.1 p.201]
+  - [DS §17.4.1 p.201](#sources)
 * - Refresh clock reference
   - 12 MHz source; refresh freq = 12 MHz / MCR0C[15:8]
-  - [DS §17.3 p.186 MCR0C]
+  - [DS §17.3 p.186 MCR0C](#sources)
 * - ECC
   - Supported by family; **disabled** on this board
-  - [DS §17.3 p.185 MCR04 bit3:2 note]
+  - [DS §17.3 p.185 MCR04 bit3:2 note](#sources)
 ```
 
 > **Datasheet correction to prior RE notes.** The reverse-engineering write-up
 > described a "32-bit DDR2 bus". The A3 datasheet is explicit: `MCR04[9:8]` only
 > defines `01 = 16-bit data bus (DQ15..DQ0)`, "others: Reserved", and §17.5 says
-> the *internal* bus is always 64 bits [DS §17.3 p.185] [DS §17.5 p.202]. The
+> the *internal* bus is always 64 bits [DS §17.3 p.185](#sources) [DS §17.5 p.202](#sources). The
 > external DDR2 interface on AST2050/AST1100 is 16 bits wide; `MCR60[25]` and
-> `MCR60[24]` enable both byte lanes DQ[15:8] and DQ[7:0] [DS §17.3 p.196].
+> `MCR60[24]` enable both byte lanes DQ[15:8] and DQ[7:0] [DS §17.3 p.196](#sources).
 
 ### 1.1 Fixed-priority DRAM requestors (REQ0–REQ22)
 
 The arbiter serves up to 23 request sources at fixed priority (REQ0 highest).
 Several MCR registers (`MCR08`, `MCR38`, `MCR3C`, `MCR40`–`MCR48`) are indexed by
-this REQ number, so the table is needed to read them [DS §17.2 p.184].
+this REQ number, so the table is needed to read them [DS §17.2 p.184](#sources).
 
 ```{list-table} Fixed-priority DRAM request sources
 :header-rows: 1
@@ -157,7 +157,7 @@ this REQ number, so the table is needed to read them [DS §17.2 p.184].
 Every offset from the SDRAM controller base `0x1E6E0000`. "Init" is the
 datasheet power-on reset value; "X" means undefined at reset. Offsets not listed
 in the A3 datasheet register table are flagged in the Notes column
-[DS §17.3 p.184-201].
+[DS §17.3 p.184-201](#sources).
 
 ```{list-table} SDRAM controller register map (base 0x1E6E0000)
 :header-rows: 1
@@ -267,7 +267,7 @@ in the A3 datasheet register table are flagged in the Notes column
   - —
   - —
   - —
-  - **Not documented in A3 datasheet.** Written `0` by init [platform.S:427-429]
+  - **Not documented in A3 datasheet.** Written `0` by init [platform.S:427-429](#sources)
 * - `0x50`
   - MCR50
   - —
@@ -348,7 +348,7 @@ in the A3 datasheet register table are flagged in the Notes column
 ### 2.1 SCU registers touched by DDR2 init
 
 DDR2 bring-up also programs a handful of System Control Unit registers (base
-`0x1E6E2000`) [DS §18.2 p.205-220] [hwreg.h:77-94].
+`0x1E6E2000`) [DS §18.2 p.205-220](#sources) [hwreg.h:77-94](#sources).
 
 ```{list-table} SCU registers used during DDR2 init
 :header-rows: 1
@@ -385,7 +385,7 @@ DDR2 bring-up also programs a handful of System Control Unit registers (base
 ## 3. MCR04 — Configuration register (geometry)
 
 `MCR04` encodes the DRAM geometry and **must exactly match the populated SDRAM
-device**, or the controller malfunctions [DS §17.3 p.185].
+device**, or the controller malfunctions [DS §17.3 p.185](#sources).
 
 ```{list-table} MCR04 Configuration Register — bitfields
 :header-rows: 1
@@ -455,13 +455,13 @@ aperture bits read from `SCU70[3:2]` [platform.S:363-377]:
 Both values additionally have `[10]=1` (auto-precharge enabled) and `[5:4]=00`
 before the SCU70 OR. On the ASUS KGPE-D16 the DRAM is **hardware-verified at
 64 MiB**, so the operative constant is `0x00000585`: a **4-bank, 64 MiB**,
-16-bit-bus, 10-column DDR2 device with BL4 [DS §17.3 p.185] [platform.S:373-375].
+16-bit-bus, 10-column DDR2 device with BL4 [DS §17.3 p.185](#sources) [platform.S:373-375](#sources).
 The `0x00000D89` alternative programs a 128 MiB, 8-bank geometry.
 
 > **Naming caveat / open item.** `platform.S` gates these with
-> `#ifdef CONFIG_1G_DDRII` / `#ifdef CONFIG_512M_DDRII` [platform.S:370-375],
+> `#ifdef CONFIG_1G_DDRII` / `#ifdef CONFIG_512M_DDRII` [platform.S:370-375](#sources),
 > but the ASUS board config header defines `CONFIG_DDRII1G_200` and sets
-> `PHYS_SDRAM_1_SIZE = 0x04000000` (64 MiB) [ast2050.h:49,107]. The two macro
+> `PHYS_SDRAM_1_SIZE = 0x04000000` (64 MiB) [ast2050.h:49,107](#sources). The two macro
 > spellings do not match, so which constant a given tree compiles depends on how
 > `CONFIG_*_DDRII` gets defined in the board Makefile — not captured here. The
 > 64 MiB decode of `0x585` is what matches the measured hardware.
@@ -470,7 +470,7 @@ The `0x00000D89` alternative programs a 128 MiB, 8-bank geometry.
 
 `SCU70[3:2]` (two board strap resistors) is masked, shifted left by 2, and ORed
 into `MCR04[5:4]` so the VGA aperture size in `MCR04` always tracks the strap
-[platform.S:363-377] [DS §17.3 p.185 MCR04]. The graphics segment sits at the top
+[platform.S:363-377](#sources) [DS §17.3 p.185 MCR04](#sources). The graphics segment sits at the top
 of DRAM [DS §17.4.2 p.202]:
 
 - `MCR04[5:4]=0`, 8 MB → base `0xF80_0000`
@@ -491,9 +491,9 @@ Figure 66].
 
 `MCR08[n]=1` re-maps requestor REQn into the graphics aperture (top of memory,
 `MCR04[5:4]`); `0` leaves it unchanged. It stops the host CPU from clobbering VGA
-memory [DS §17.3 p.185-186].
+memory [DS §17.3 p.185-186](#sources).
 
-The init value `0x0011030F` sets bits `{0,1,2,3, 8,9, 16, 20}` [platform.S:379-381],
+The init value `0x0011030F` sets bits `{0,1,2,3, 8,9, 16, 20}` [platform.S:379-381](#sources),
 i.e. it protects **REQ0–REQ3** (the four VGA read streams), **REQ8/REQ9** (PCI
 write/read), **REQ16** (2D command-queue read) and **REQ20** (2D engine data) —
 exactly the graphics/PCI/2D masters, cross-referenced against the REQ table in
@@ -539,13 +539,13 @@ Two values are used [platform.S:510-512,538-540]:
 
 > Corrects the earlier RE note that read `[15:0]` as a single ~23048-count
 > period; the datasheet splits it into a 12 MHz-referenced period `[15:8]` and a
-> cycles-per-period field `[3:0]` [DS §17.3 p.186].
+> cycles-per-period field `[3:0]` [DS §17.3 p.186](#sources).
 
 ### 4.3 MCR10/MCR14 — AC timing #1
 
 Same layout for normal-speed (`MCR10`) and low-speed (`MCR14`). The encoding is
 an offset code: read each field's base from the table and add the field value
-[DS §17.3 p.187-188].
+[DS §17.3 p.187-188](#sources).
 
 ```{list-table} MCR10/MCR14 AC Timing #1 — fields and Raptor value 0x22201725
 :header-rows: 1
@@ -655,7 +655,7 @@ an offset code: read each field's base from the table and add the field value
 tRFC=140 ns (covers a 1 Gbit DDR2 device's 127.5 ns), and **write latency = 2T =
 CL(3) − 1** — internally consistent with the `MCR2C` CAS-latency-3 setting in
 [§6](#6-ddr2-mode-register-mrsemrs-programming). These numbers all sit inside
-the JEDEC DDR2-400 envelope [DS §17.3 p.187-189].
+the JEDEC DDR2-400 envelope [DS §17.3 p.187-189](#sources).
 
 ### 4.5 MCR20/MCR24 — Delay control
 
@@ -711,7 +711,7 @@ the JEDEC DDR2-400 envelope [DS §17.3 p.187-189].
 
 Raptor programs `MCR20`, `MCR24` (and `MCR10=MCR14`, `MCR18=MCR1C`) to identical
 values, so the low-speed clock path is never actually used on this board
-[platform.S:383-405] — see [§9](#9-ast2050-specific-vs-shared-with-ast2400).
+[platform.S:383-405](#sources) — see [§9](#9-ast2050-specific-vs-shared-with-ast2400).
 
 ### 4.6 MCR38 / MCR3C / MCR40–MCR48 — arbitration
 
@@ -719,18 +719,18 @@ values, so the low-speed clock path is never actually used on this board
   `[2:0]`=2 (page-miss threshold); `[31:3]` per-REQ mask where bit(n+3) masks
   REQn once its page-miss counter exceeds the threshold. Bits for REQ0–REQ3
   (the VGA/CRT streams) are **0 = never masked**, all others = masked — matching
-  the datasheet's "keep CRT refresh high-priority" guidance [DS §17.3 p.195].
+  the datasheet's "keep CRT refresh high-priority" guidance [DS §17.3 p.195](#sources).
 - **MCR3C Priority Group `0x00000000`** [platform.S:411-413]: every
   `REQ(n)>REQ(n+1)` bit = 0 → strict fixed priority per [§1.1](#11-fixed-priority-dram-requestors-req0req22)
-  [DS §17.3 p.195].
+  [DS §17.3 p.195](#sources).
 - **MCR40/MCR44/MCR48 Max Grant Length = `0`** [platform.S:415-425]: 4 bits per
   REQ (REQ0–REQ22). Field code → length: `0/1`=2, `2/3`=4, … `14/15`=16 grants.
   All zero = 2-grant cap everywhere / no special bandwidth reservation
-  [DS §17.3 p.195-196]. (`0x4C` is written 0 but is undocumented; see the map.)
+  [DS §17.3 p.195-196](#sources). (`0x4C` is written 0 but is undocumented; see the map.)
 
 ### 4.7 MCR60 — IO buffer mode
 
-`MCR60 = 0x032AA02A` [platform.S:447-449] configures the DDR2 pad electricals
+`MCR60 = 0x032AA02A` [platform.S:447-449](#sources) configures the DDR2 pad electricals
 [DS §17.3 p.196-197]:
 
 ```{list-table} MCR60 IO Buffer Mode — decode of 0x032AA02A
@@ -800,7 +800,7 @@ in [§6](#6-ddr2-mode-register-mrsemrs-programming).
 The controller has two DLLs: **DLL1** aligns the input DQS strobes (read data
 capture, DQS0/DQS1), and **DLL3** aligns the CK/CKn and DQS output phase. Getting
 their reset/power sequencing and phase (SADJ) settings right is what makes reads
-sample in the data valid window [DS §17.3 p.197-199].
+sample in the data valid window [DS §17.3 p.197-199](#sources).
 
 ### 5.1 MCR64 — DLL Control #1
 
@@ -860,12 +860,12 @@ Two writes happen, and the difference between them is the crux of DLL training:
   - DLL3 [18]/[21]
   - SADJ [15:8]/[7:0]
   - Meaning
-* - **Early `0x00050000`** [platform.S:358-360]
+* - **Early `0x00050000`** [platform.S:358-360](#sources)
   - pwr=1 / reset=0
   - pwr=1 / reset=0
   - 0 / 0
   - DLLs powered up but **held in reset**
-* - **Final `0x002D3000`** [platform.S:451-453]
+* - **Final `0x002D3000`** [platform.S:451-453](#sources)
   - pwr=1 / **normal=1**
   - pwr=1 / **normal=1**
   - `0x30` / `0x00`
@@ -882,29 +882,29 @@ and CKE assertion, then released once clocks and mode registers are stable.
 > **Why the final DLL block matters.** Omitting the final `MCR64 = 0x002D3000`
 > write leaves the DLLs in reset (or at the wrong output phase), so DQS/CK are
 > not phase-aligned to the data window. On real hardware this produced marginal
-> captures measured at **~0.29 % data errors** [DDR2-INIT-REVERSE-ENGINEERING.md].
+> captures measured at **~0.29 % data errors** [DDR2-INIT-REVERSE-ENGINEERING.md](#sources).
 > The datasheet fields make the mechanism concrete: bits `[21]`/`[19]` move the
 > DLLs from *Reset* to *Normal operation* and `[15:8]` sets the CK/CKn output
-> phase [DS §17.3 p.197-198]. (This supersedes the earlier RE guess that read
+> phase [DS §17.3 p.197-198](#sources). (This supersedes the earlier RE guess that read
 > `0x2D` as a "delay-tap count" — `0x2D` actually lands across the reset/
 > power-down control bits `[21:16]`, and the operative output-phase value is the
 > `0x30` in `[15:8]`.)
 
 ### 5.2 MCR68 — DLL Control #2
 
-`MCR68 = 0x02020202` [platform.S:455-457]. Only `[15:0]` are defined: `[7:0]` =
+`MCR68 = 0x02020202` [platform.S:455-457](#sources). Only `[15:0]` are defined: `[7:0]` =
 DLL1 input-phase SADJ for DQS0, `[15:8]` = DLL1 input-phase SADJ for DQS1 — both
 `0x02`. `[31:16]` are reserved; the upper `0x0202` written to them is harmless
-[DS §17.3 p.198].
+[DS §17.3 p.198](#sources).
 
 ### 5.3 MCR6C — DLL Control #3 (master adjust)
 
-`MCR6C = 0x00909090` [platform.S:354-356]. `[7:0]` = DLL1 master-adjust **MADJ**
+`MCR6C = 0x00909090` [platform.S:354-356](#sources). `[7:0]` = DLL1 master-adjust **MADJ**
 = `0x90` (144), `[23:16]` = DLL3 MADJ = `0x90` (144); `[15:8]` and `[31:24]` are
-reserved [DS §17.3 p.198]. Per the datasheet DLL note, the minimum MADJ is 40 and
+reserved [DS §17.3 p.198](#sources). Per the datasheet DLL note, the minimum MADJ is 40 and
 the operating-frequency relation is `MIN_FREQ = 67·120/MADJ`,
 `MAX_FREQ = 347·120/MADJ`, with output delay `(SADJ+24)/MADJ · Tref + 0.1 ns`
-[DS §17.3 p.199]. MADJ=144 sets the DLL's operating band around the ~200 MHz MCLK.
+[DS §17.3 p.199](#sources). MADJ=144 sets the DLL's operating band around the ~200 MHz MCLK.
 This is written **before** the main register block so the DLL master loop is
 running when `MCR64`'s phase settings take effect.
 
@@ -917,12 +917,12 @@ running when `MCR64`'s phase settings take effect.
 The DDR2 device's own mode registers are programmed indirectly:
 
 - **MCR2C** holds the **MRS** value in `[12:0]` and the **EMRS2** value in
-  `[28:16]` [DS §17.3 p.190].
+  `[28:16]` [DS §17.3 p.190](#sources).
 - **MCR30** holds the **EMRS1** value in `[12:0]` and the **EMRS3** value in
-  `[28:16]` [DS §17.3 p.191].
+  `[28:16]` [DS §17.3 p.191](#sources).
 - **MCR28** fires one command: `[2:1]` selects which mode register, `[0]` is the
   fire bit (hardware clears it and locks the AHB bus until the command's timing
-  completes) [DS §17.3 p.190].
+  completes) [DS §17.3 p.190](#sources).
 
 ```{list-table} MCR28[2:1] mode-register selection (matches JEDEC BA[1:0])
 :header-rows: 1
@@ -954,7 +954,7 @@ The DDR2 device's own mode registers are programmed indirectly:
 > register (selected by `[2:1]`), not the "two-at-once" combinations the earlier
 > RE walkthrough guessed. The selection encoding is identical to JEDEC's bank
 > address for mode commands — `BA=00` MRS, `01` EMRS1, `10` EMRS2, `11` EMRS3
-> [JESD79-2B] — which independently confirms the mapping.
+> [JESD79-2B](#sources) — which independently confirms the mapping.
 
 ### 6.2 MRS value (MCR2C[12:0]) — DDR2 decode
 
@@ -998,7 +998,7 @@ The DDR2 device's own mode registers are programmed indirectly:
 
 `0x732` is issued first (with DLL reset); after refresh is enabled the same
 settings are re-issued as `0x632` with the DLL-reset bit cleared for normal
-operation [platform.S:486-488,514-516] [DS §17.3 p.191].
+operation [platform.S:486-488,514-516](#sources) [DS §17.3 p.191](#sources).
 
 ### 6.3 EMRS1 value (MCR30[12:0]) — DDR2 decode
 
@@ -1036,13 +1036,13 @@ operation [platform.S:486-488,514-516] [DS §17.3 p.191].
 ```
 
 - `0x040` — DLL enabled, 150 Ω ODT, AL=0, OCD in normal/exit state
-  [platform.S:490-492,530-532].
+  [platform.S:490-492,530-532](#sources).
 - `0x3C0` — same but `[9:7]=111` = **OCD calibration default**
-  [platform.S:522-524].
+  [platform.S:522-524](#sources).
 
 EMRS2 and EMRS3 are both programmed as **0** (via the `[28:16]` halves of `MCR2C`
 / `MCR30`, which are left zero): default DDR2-400 operation, no high-temperature
-self-refresh or partial-array self-refresh [platform.S:486-492] [DS §17.3 p.190-191].
+self-refresh or partial-array self-refresh [platform.S:486-492](#sources) [DS §17.3 p.190-191](#sources).
 
 ---
 
@@ -1050,88 +1050,88 @@ self-refresh or partial-array self-refresh [platform.S:486-492] [DS §17.3 p.190
 
 The full ordered sequence, mapped line-for-line to `platform.S`
 (`lowlevel_init`, run from SPI flash before any stack/DRAM exists). Cross-checked
-against JEDEC JESD79-2 DDR2 power-up [JESD79-2B].
+against JEDEC JESD79-2 DDR2 power-up [JESD79-2B](#sources).
 
-1. **Save return address** in `r4` (no stack yet) [platform.S:116].
+1. **Save return address** in `r4` (no stack yet) [platform.S:116](#sources).
 2. **Start Timer4** as an init-duration counter (`0x1E782044` = `0xFFFFFFFF`,
-   `TIMER_CONTROL[13:12]=0b11`) [platform.S:118-128].
-3. **Unlock SCU** — write `0x1688A8A8` to `SCU00` [platform.S:132-134].
-4. **Mark "init in progress"** — `SCU40 |= 0x80` (bit 7) [platform.S:136-139].
+   `TIMER_CONTROL[13:12]=0b11`) [platform.S:118-128](#sources).
+3. **Unlock SCU** — write `0x1688A8A8` to `SCU00` [platform.S:132-134](#sources).
+4. **Mark "init in progress"** — `SCU40 |= 0x80` (bit 7) [platform.S:136-139](#sources).
 5. **Warm-boot guard** — read `SCU40`, isolate **bit 6**; if set (DRAM already
    initialised), branch straight to `reg_lock` and skip the whole sequence
-   [platform.S:142-147]. This prevents a watchdog/soft reset from re-running the
+   [platform.S:142-147](#sources). This prevents a watchdog/soft reset from re-running the
    destructive DLL-reset + PRECHARGE-ALL and wiping still-valid DRAM.
 6. **Coarse M-PLL** — `SCU20 = 0x00004C81` to start the memory PLL near 200 MHz
-   (superseded in step 12) [platform.S:149-159]. A silicon-revision read of
+   (superseded in step 12) [platform.S:149-159](#sources). A silicon-revision read of
    `SCU7C` precedes it; the `beq set_MPLL` target is the next instruction, so the
-   branch is effectively unconditional [platform.S:150-154].
+   branch is effectively unconditional [platform.S:150-154](#sources).
 7. **UART2 debug console** — configure `0x1E784000` (8N1) and print
-   `"\r\nDRAM Init-DDR\r\n"` [platform.S:162-226]. Baud is 38400 on this board
-   (`CONFIG_DRAM_UART_38400`) [ast2050.h:187].
-8. **~100 µs settle** delay loop [platform.S:229-234].
+   `"\r\nDRAM Init-DDR\r\n"` [platform.S:162-226](#sources). Baud is 38400 on this board
+   (`CONFIG_DRAM_UART_38400`) [ast2050.h:187](#sources).
+8. **~100 µs settle** delay loop [platform.S:229-234](#sources).
 9. **Re-unlock + verify SCU** — write `0x1688A8A8`, read back `0x01`; on failure
-   print `"SCU LOCKED"` and abort [platform.S:240-248].
+   print `"SCU LOCKED"` and abort [platform.S:240-248](#sources).
 10. **Scratch = `0x5A000080`** — Linux-boot key `0x5A` in `[31:24]` + init-in-
-    progress bit 7 [platform.S:283-285] [DS §18.2 p.215 SCU40].
+    progress bit 7 [platform.S:283-285](#sources) [DS §18.2 p.215 SCU40](#sources).
 11. **Unlock + verify SDRAM controller** — `MCR00 = 0xFC600309`, read back
-    `0x01`; on failure print `"SDRAM LOCKED"` and abort [platform.S:287-295].
+    `0x01`; on failure print `"SDRAM LOCKED"` and abort [platform.S:287-295](#sources).
 12. **Final M-PLL** — `SCU20 = 0x000041F0` (numerator 15, denumerator 0, output
     divider 1, post-divider ÷2 → 24 MHz·17/1÷2 ≈ **204 MHz ≈ DDR2-400**), then a
-    **~400 µs PLL-lock** delay [platform.S:334-348] [DS §18.2 p.212 SCU20].
+    **~400 µs PLL-lock** delay [platform.S:334-348](#sources) [DS §18.2 p.212 SCU20](#sources).
 13. **Re-unlock SDRAM** (`MCR00 = 0xFC600309`) in case the PLL change bounced the
-    lock [platform.S:350-352].
+    lock [platform.S:350-352](#sources).
 14. **DLL pre-config** — `MCR6C = 0x00909090` (MADJ) and `MCR64 = 0x00050000`
-    (DLLs powered, held in reset) [platform.S:354-360]. See [§5](#5-dll-training).
+    (DLLs powered, held in reset) [platform.S:354-360](#sources). See [§5](#5-dll-training).
 15. **MCR04 geometry** — OR `SCU70[3:2]` (VGA strap) into the geometry constant
     and write `MCR04` (`0x585` = 64 MiB/4-bank on this board)
-    [platform.S:363-377]. See [§3](#3-mcr04--configuration-register-geometry).
-16. **Graphics protection** — `MCR08 = 0x0011030F` [platform.S:379-381].
+    [platform.S:363-377](#sources). See [§3](#3-mcr04--configuration-register-geometry).
+16. **Graphics protection** — `MCR08 = 0x0011030F` [platform.S:379-381](#sources).
 17. **AC timing + delay** — `MCR10=MCR14=0x22201725`, `MCR18=MCR1C=0x1E29011A`,
-    `MCR20=MCR24=0x00C82222` [platform.S:383-405]. See [§4](#4-ac-timing-refresh-arbitration-and-protection-registers).
+    `MCR20=MCR24=0x00C82222` [platform.S:383-405](#sources). See [§4](#4-ac-timing-refresh-arbitration-and-protection-registers).
 18. **Arbitration** — `MCR38=0xFFFFFF82`, `MCR3C=0`, `MCR40=MCR44=MCR48=0`, and
-    the undocumented `0x4C=0` [platform.S:407-429].
+    the undocumented `0x4C=0` [platform.S:407-429](#sources).
 19. **ECC / reserved block** — `MCR50=MCR54=MCR58=MCR5C=0` (named ECC in
-    `hwreg.h`; disabled) [platform.S:431-445].
+    `hwreg.h`; disabled) [platform.S:431-445](#sources).
 20. **IO buffers** — `MCR60 = 0x032AA02A` (16-bit SSTL18, 150 Ω data ODT)
-    [platform.S:447-449]. See [§4.7](#47-mcr60--io-buffer-mode).
+    [platform.S:447-449](#sources). See [§4.7](#47-mcr60--io-buffer-mode).
 21. **DLL final** — `MCR64 = 0x002D3000` (release DLL1+DLL3 from reset, set
     CK/CKn output phase) and `MCR68 = 0x02020202` (DQS input SADJ)
-    [platform.S:451-457]. This is the block whose omission caused ~0.29 % errors.
-22. **BIST off** — `MCR70=MCR74=MCR78=MCR7C=0` [platform.S:459-473].
+    [platform.S:451-457](#sources). This is the block whose omission caused ~0.29 % errors.
+22. **BIST off** — `MCR70=MCR74=MCR78=MCR7C=0` [platform.S:459-473](#sources).
 23. **Assert CKE** — `MCR34 = 0x00000001` (bit 0 = SDRAM CKE Enable), then a
     **~400 µs** delay — the JEDEC "CKE high, then wait ≥400 ns after a ≥200 µs
-    stable-clock/NOP period" requirement [platform.S:475-484] [DS §17.3 p.194]
-    [JESD79-2B]. The controller auto-issues PRECHARGE ALL and the AUTO REFRESH
+    stable-clock/NOP period" requirement [platform.S:475-484](#sources) [DS §17.3 p.194](#sources)
+    [JESD79-2B](#sources). The controller auto-issues PRECHARGE ALL and the AUTO REFRESH
     cycles as part of the mode-set state machine.
 24. **Load MRS/EMRS1 seeds** — `MCR2C = 0x00000732` (MRS=0x732, EMRS2=0),
-    `MCR30 = 0x00000040` (EMRS1=0x040, EMRS3=0) [platform.S:486-492].
+    `MCR30 = 0x00000040` (EMRS1=0x040, EMRS3=0) [platform.S:486-492](#sources).
 25. **Fire EMRS2** — `MCR28 = 0x05` (JEDEC step: program EMRS2 = 0)
-    [platform.S:494-496].
-26. **Fire EMRS3** — `MCR28 = 0x07` (EMRS3 = 0) [platform.S:498-500].
+    [platform.S:494-496](#sources).
+26. **Fire EMRS3** — `MCR28 = 0x07` (EMRS3 = 0) [platform.S:498-500](#sources).
 27. **Fire EMRS1** — `MCR28 = 0x03` (EMRS1 = 0x040: **enable DLL**, 150 Ω ODT)
-    [platform.S:502-504].
+    [platform.S:502-504](#sources).
 28. **Fire MRS with DLL reset** — `MCR28 = 0x01` (MRS = 0x732: BL4, CL3, WR4,
     **DLL reset**); controller also runs PRECHARGE ALL + AUTO REFRESH here
-    [platform.S:506-508].
+    [platform.S:506-508](#sources).
 29. **Enable refresh (init rate)** — `MCR0C = 0x00005A08` (8 refresh cycles/
-    period) [platform.S:510-512].
+    period) [platform.S:510-512](#sources).
 30. **Fire MRS without DLL reset** — `MCR2C = 0x00000632`, `MCR28 = 0x01`
-    (MRS = 0x632, DLL-reset cleared → normal operation) [platform.S:514-520].
+    (MRS = 0x632, DLL-reset cleared → normal operation) [platform.S:514-520](#sources).
 31. **OCD calibration default** — `MCR30 = 0x000003C0`, `MCR28 = 0x03`
-    (EMRS1 = 0x3C0, `[9:7]=111`) [platform.S:522-528].
+    (EMRS1 = 0x3C0, `[9:7]=111`) [platform.S:522-528](#sources).
 32. **OCD calibration exit** — `MCR30 = 0x00000040`, `MCR28 = 0x03`
-    (EMRS1 = 0x040, `[9:7]=000`, back to 150 Ω ODT) [platform.S:530-536].
+    (EMRS1 = 0x040, `[9:7]=000`, back to 150 Ω ODT) [platform.S:530-536](#sources).
 33. **Steady-state refresh** — `MCR0C = 0x00005A21` (1 refresh/period, low-
-    priority refresh enabled) [platform.S:538-540].
+    priority refresh enabled) [platform.S:538-540](#sources).
 34. **Power control** — `MCR34 = 0x00007C03`: CKE enabled, auto power-down on,
     SDRAM ODT + internal ODT auto-ON/OFF for reads and writes, CKE-delay 1T
-    [platform.S:542-544] [DS §17.3 p.193-194].
-35. **Back-compat M-PLL mirror** — `MCR120 = 0x00004C41` [platform.S:546-548].
+    [platform.S:542-544](#sources) [DS §17.3 p.193-194](#sources).
+35. **Back-compat M-PLL mirror** — `MCR120 = 0x00004C41` [platform.S:546-548](#sources).
 36. **Mark init complete** — `SCU40 |= 0x40` (bit 6) so future warm boots take
-    the step-5 skip path [platform.S:559-564].
-37. **Print `"...Done\r\n"`** [platform.S:567-585].
-38. **Re-lock** — `SCU00 = 0`, `MCR00 = 0` [platform.S:588-596].
-39. **Return** — restore `lr` from `r4` [platform.S:600-603].
+    the step-5 skip path [platform.S:559-564](#sources).
+37. **Print `"...Done\r\n"`** [platform.S:567-585](#sources).
+38. **Re-lock** — `SCU00 = 0`, `MCR00 = 0` [platform.S:588-596](#sources).
+39. **Return** — restore `lr` from `r4` [platform.S:600-603](#sources).
 
 **Total cold-boot UART2 output:** `\r\nDRAM Init-DDR\r\n...Done\r\n`.
 
@@ -1165,7 +1165,7 @@ against JEDEC JESD79-2 DDR2 power-up [JESD79-2B].
 
 JEDEC allows the four mode registers to be programmed in any order but requires
 DLL-enable (EMRS1) before the DLL-reset MRS, and the two-step OCD default→exit at
-the end — both of which the Aspeed order honours [JESD79-2B].
+the end — both of which the Aspeed order honours [JESD79-2B](#sources).
 
 ---
 
@@ -1200,14 +1200,14 @@ for a faithful model [DS §17.6-17.7 p.203]:
   (`MCR10/18/20`); the MRS latency (**Raptor CL3/WR4 `0x732`** vs AMI CL4/WR5
   `0x942`); whether low-speed registers differ from normal-speed (Raptor makes
   them identical — no low-speed mode on this board — while AMI programs separate
-  low-speed timing); and VGA grant limits (`MCR40`) [DDR2-INIT-REVERSE-ENGINEERING.md §7.2-7.3].
+  low-speed timing); and VGA grant limits (`MCR40`) [DDR2-INIT-REVERSE-ENGINEERING.md §7.2-7.3](#sources).
 - **AST2050 vs mainline AST2400:** the AST2050 (G3) is register-compatible enough
   that mainline Linux and modern U-Boot reuse the **AST2400 (G4)** SDRAM
   controller model; there is no upstream G3 SDRAM binding. The device tree used
   for this hardware is derived from `aspeed-g4.dtsi` for the same reason
-  [CLAUDE.md]. The chief AST2050 realities to preserve in a model: **16-bit
+  [CLAUDE.md](#sources). The chief AST2050 realities to preserve in a model: **16-bit
   external DDR2 bus**, **64 MiB** on the KGPE-D16, ~200 MHz MCLK, and the M-PLL
-  formula in [DS §18.2 p.212].
+  formula in [DS §18.2 p.212](#sources).
 
 ---
 
@@ -1219,9 +1219,9 @@ Primary (in-repo, read-only reverse-engineering + datasheet):
   Controller" (pp. 183–203, register base `0x1E6E0000`) and Chapter 18 "System
   Control Unit" (SCU20 p.212, SCU40 p.215, SCU7C p.220). In repo at
   `datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`. Cited inline as
-  `[DS §x p.N]` (N = datasheet printed page).
+  `[DS §x p.N](#sources)` (N = datasheet printed page).
 - `asus-kgpe-d16-firmware/platform.S` — Raptor Engineering AST2050 U-Boot
-  `lowlevel_init` (hardware-verified DDR2 init). Cited as `[platform.S:LINE]`.
+  `lowlevel_init` (hardware-verified DDR2 init). Cited as `[platform.S:LINE](#sources)`.
 - `asus-kgpe-d16-firmware/hwreg.h` — register address definitions.
 - `asus-kgpe-d16-firmware/ast2050.h` — board configuration (`CONFIG_DRAM_UART_38400`,
   `PHYS_SDRAM_1_SIZE = 64 MiB`).

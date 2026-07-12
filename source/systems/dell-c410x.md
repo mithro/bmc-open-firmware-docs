@@ -14,7 +14,7 @@ GPIO. Device multiplicities are shown per branch.
 ```
 
 
-```{list-table} AST2050 I2C bus map [io-tables], [gpio-map], [PEX-I2C]
+```{list-table} AST2050 I2C bus map [io-tables](#sources), [gpio-map](#sources), [PEX-I2C](#sources)
 :header-rows: 1
 :widths: 10 30 60
 
@@ -67,7 +67,7 @@ AST2050 BMC (I2C engine)
 ```
 
 `i2cdetect` across all seven buses reproducing this exact map is the natural
-acceptance test for a faithful QEMU model [io-tables].
+acceptance test for a faithful QEMU model [io-tables](#sources).
 
 ---
 
@@ -123,11 +123,11 @@ steady-green, mixing AST2050 on-chip GPIO, PCA9555 #5 outputs, and PEX8696 I2C.
 ```
 
 The staggered every-4th-slot phasing (§3.8) is what keeps the 4-phase order from
-spiking inrush current across the power-distribution bus [gpio-map], [PEX-I2C].
+spiking inrush current across the power-distribution bus [gpio-map](#sources), [PEX-I2C](#sources).
 Note the firmware's internal phase order (§3.8) begins with slots 4/8/12/16; the
 gpio-pin-mapping flow lists 1/5/9/13 first — both describe the same
 one-slot-per-switch-per-phase scheme; the `gpu_un_protect` masks disambiguate the
-actual order (`0x11 → 0x33 → 0x77 → 0xFF`) [gpio-map], [PEX-I2C].
+actual order (`0x11 → 0x33 → 0x77 → 0xFF`) [gpio-map](#sources), [PEX-I2C](#sources).
 
 ---
 
@@ -205,7 +205,7 @@ are:
 
 Interrupt routing summary (6 IRQ sources): GPIOA4 = card presence, GPIOA5 = PSU,
 GPIOB7 = PEX8647 upstream, GPIOE2 = PWRGD, GPIOF6 = PEX8696 downstream, GPIOB4 =
-attention button [gpio-map].
+attention button [gpio-map](#sources).
 
 ---
 
@@ -247,22 +247,22 @@ attention button [gpio-map].
   - 16
   - `0xF0` / `&i2c0` (base `0x1E78A040`)
   - `0x40`–`0x4F` (A1/A0 straps)
-  - Per-PCIe-slot 12 V current/power monitor. [IS_fl.bin.md:165-195] [dts:402-411]
+  - Per-PCIe-slot 12 V current/power monitor. [IS_fl.bin.md:165-195](#sources) [dts:402-411]
 * - ADT7462
   - 2
   - `0xF1` / `&i2c1` (base `0x1E78A080`)
   - `0x58`, `0x5C` behind PCA9544A mux `0x70`
-  - Board temperature zones + 8-fan tach/PWM control. [IS_fl.bin.md:81-95,141-163] [dts:596-663]
+  - Board temperature zones + 8-fan tach/PWM control. [IS_fl.bin.md:81-95,141-163](#sources) [dts:596-663]
 * - TMP75 (per-slot)
   - 16
   - `0xF4` / `&i2c4` (base `0x1E78A140`)
   - `0x5C`, behind 2× PCA9548 mux (`0x70`, `0x71`)
-  - Per-PCIe-slot temperature. Firmware tables call these "TMP100"; DT uses `ti,tmp75`. [IS_fl.bin.md:102-129] [dts:733-851]
+  - Per-PCIe-slot temperature. Firmware tables call these "TMP100"; DT uses `ti,tmp75`. [IS_fl.bin.md:102-129](#sources) [dts:733-851]
 * - LM75 (front board)
   - 1
   - `0xF6` / `&i2c6`
   - `0x4F` (8-bit `0x9E`)
-  - Front-board ambient temperature. [IS_fl.bin.md:131-139] [dts:1104-1119]
+  - Front-board ambient temperature. [IS_fl.bin.md:131-139](#sources) [dts:1104-1119]
 ```
 
 ```{admonition} TMP100 vs TMP75 vs LM75 — chip-identity caveat
@@ -270,7 +270,7 @@ attention button [gpio-map].
 
 The C410X firmware IO tables and symbol table name the per-slot sensor driver
 `G_sOEMTMP100_I2CTEMP_IOSAPI` and read them at **7-bit `0x5C`**.
-[ANALYSIS.md:499] [IS_fl.bin.md:106-107] The standard LM75/TMP75 address range is
+[ANALYSIS.md:499](#sources) [IS_fl.bin.md:106-107](#sources) The standard LM75/TMP75 address range is
 `0x48`–`0x4F`; `0x5C` is outside it, so the physical part is a TMP75/LM75-*class*
 device with non-standard strapping (or a TMP100/TMP1075 variant). The
 reconstructed device tree models them with the register-compatible `ti,tmp75`

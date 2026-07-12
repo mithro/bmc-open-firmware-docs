@@ -17,7 +17,7 @@ for the equivalent block it is cross-checked and cited.
 
 Citations use these short forms:
 
-- `[DS §N p.P]` — the A3 datasheet, chapter N, printed page P (= PDF page).
+- `[DS §N p.P](#sources)` — the A3 datasheet, chapter N, printed page P (= PDF page).
 - Named URLs — mainline Linux drivers and specs (see [Sources](#sources)).
 
 ```{admonition} G3 vs G4+ — offsets differ, but these three blocks mostly match
@@ -52,7 +52,7 @@ One hub controller plus **7 downstream device controllers** and a pool of **21
 programmable endpoints** that can be assigned to any device. USB 2.0 HS/FS,
 integrated DMA (M-bus, bypasses AHB), 32-stage descriptor rings per endpoint,
 2 KB of SRAM split into 16×128-byte IN-transmit pages, RC-independent remote
-wake-up. `[DS §15.1–15.2 p.154]`
+wake-up. `[DS §15.1–15.2 p.154](#sources)`
 
 ### 1.1 Address map (offset from `0x1E6A0000`)
 
@@ -92,7 +92,7 @@ wake-up. `[DS §15.1–15.2 p.154]`
 The **SETUP data buffers** are 8-byte scratch areas holding the raw 8-byte USB
 `SETUP` packet (`bmRequestType`, `bRequest`, `wValue`, `wIndex`, `wLength`) of
 the most recent CONTROL transfer for the root device and for each downstream
-device; they have no bit-field structure. `[DS §15.3.1 p.155]`
+device; they have no bit-field structure. `[DS §15.3.1 p.155](#sources)`
 
 ### 1.2 Root/Global (hub) register file `HUB00…HUB3C`
 
@@ -170,7 +170,7 @@ device; they have no bit-field structure. `[DS §15.3.1 p.155]`
   - RW
 ```
 
-`[DS §15.3.2 p.156–164]`
+`[DS §15.3.2 p.156–164](#sources)`
 
 ```{list-table} HUB00 (0x00) — Root Function Control & Status; reset 0
 :header-rows: 1
@@ -420,7 +420,7 @@ device; they have no bit-field structure. `[DS §15.3.1 p.155]`
 
 Soft reset clears controller status only (not all registers); for a full reset
 use SCU04. Set the bit to 1 to start, 0 to stop; no delay needed between.
-`[DS §15.3.2 p.162]`
+`[DS §15.3.2 p.162](#sources)`
 
 ```{list-table} HUB24 (0x24) — USB Status (debug, read-only); reset X
 :header-rows: 1
@@ -600,12 +600,12 @@ use SCU04. Set the bit to 1 to start, 0 to stop; no delay needed between.
 ```
 
 When any HUB3C bit is non-zero the hub returns this byte on an EP1 IN poll;
-otherwise it NAKs. `[DS §15.3.2 p.164]`
+otherwise it NAKs. `[DS §15.3.2 p.164](#sources)`
 
 ### 1.3 Downstream Device #1–#7 register file `DEV00…DEV0C`
 
 Identical layout for each of the 7 devices; device *N* base = `0x100 + (N−1)·0x10`.
-`[DS §15.3.3 p.165–166]`
+`[DS §15.3.3 p.165–166](#sources)`
 
 ```{list-table} DEV00 (+0x00) — Downstream Device Function Enable Control; reset 0
 :header-rows: 1
@@ -742,7 +742,7 @@ Identical layout for each of the 7 devices; device *N* base = `0x100 + (N−1)·
 ### 1.4 Programmable Endpoint #0–#20 register file `EPP00…EPP0C`
 
 Identical layout for each of the 21 pooled endpoints; endpoint *N* base =
-`0x200 + N·0x10`. `[DS §15.3.4 p.167–171]`
+`0x200 + N·0x10`. `[DS §15.3.4 p.167–171](#sources)`
 
 ```{list-table} EPP00 (+0x00) — Endpoint Configuration; reset 0
 :header-rows: 1
@@ -887,7 +887,7 @@ Identical layout for each of the 21 pooled endpoints; endpoint *N* base =
 Each descriptor-ring stage is an 8-byte entry in memory (pointed to by EPP08),
 not a register in the `0x1E6A0000` window. Bits are numbered by absolute
 descriptor bit (`DES_0` = word at byte offset 0, bits 31:0; `DES_1` = word at
-byte offset 4, bits 63:32). `[DS §15.3.5 p.172–173]`
+byte offset 4, bits 63:32). `[DS §15.3.5 p.172–173](#sources)`
 
 ```{list-table} DES_0 (bits 31:0) — Data Buffer Base Address; reset X
 :header-rows: 1
@@ -949,7 +949,7 @@ byte offset 4, bits 63:32). `[DS §15.3.5 p.172–173]`
 ### 1.6 Register reset table (§15.3.6)
 
 Which reset source clears which register/field (Y = cleared). Registers not
-listed have no reset control. `[DS §15.3.6 p.173]`
+listed have no reset control. `[DS §15.3.6 p.173](#sources)`
 
 ```{list-table} Reset sources per register
 :header-rows: 1
@@ -1070,7 +1070,7 @@ listed have no reset control. `[DS §15.3.6 p.173]`
 ```
 
 *HUB00[10:8] retains its value unless it equals 111 (test loop-back), per the
-datasheet's "Others" column. `[DS §15.3.6 p.173]`
+datasheet's "Others" column. `[DS §15.3.6 p.173](#sources)`
 
 ### 1.7 Mainline cross-check
 
@@ -1094,10 +1094,10 @@ compresses it with a mixed JPEG + Vector-Quantisation codec. Two YUV formats
 (420/444), block-change detection, CRC scene-change detection, arbitrary down-
 scaling with a 4×2 spatial filter, 12 JPEG quality levels, optional RC4
 encryption of the output stream, and a video-mode-change watchdog. Up to
-1920×1200×32bpp @ 60 Hz; ~30 fps at 1280×1024 YUV420. `[DS §20.1–20.2 p.232–233]`
+1920×1200×32bpp @ 60 Hz; ~30 fps at 1280×1024 YUV420. `[DS §20.1–20.2 p.232–233](#sources)`
 
 All registers are protected by the **VR000 key** (write `0x1A03_8AA8` to unlock;
-any other value locks — registers stay readable when locked). `[DS §20.3 p.234]`
+any other value locks — registers stay readable when locked). `[DS §20.3 p.234](#sources)`
 
 ### 2.1 Register file overview
 
@@ -1321,7 +1321,7 @@ any other value locks — registers stay readable when locked). `[DS §20.3 p.23
 
 Undefined offsets between the rows above (e.g. `0x068`, `0x080–0x08C`,
 `0x09C–0x2FC`, `0x318–0x31C`, `0x32C–0x33C`, `0x360–0x3FC`) are not documented
-and read as reserved. `[DS §20.3 p.234–255]`
+and read as reserved. `[DS §20.3 p.234–255](#sources)`
 
 ### 2.2 Key bit-field registers
 
@@ -1396,7 +1396,7 @@ and read as reserved. `[DS §20.3 p.234–255]`
 
 Auto/trigger modes (VR004[3],[5]): 0,0 = single-frame S/W trigger, frame-buffer;
 0,1 = single-frame H/W auto-trigger, frame-buffer; 1,1 = multi-frame H/W
-auto-trigger, stream-buffer (1,0 = N/A). `[DS §20.3 p.235]`
+auto-trigger, stream-buffer (1,0 = N/A). `[DS §20.3 p.235](#sources)`
 
 ```{list-table} VR008 (0x008) — Video Control; reset 0
 :header-rows: 1
@@ -2160,7 +2160,7 @@ the *VGA Device* PCI class when enabled and *Video Device* when disabled; shares
 the top of SDRAM for its frame buffer (size set by external trapping resistors).
 Max 1920×1200 @ 60 Hz (200 MHz video clock), 200 MHz triple RAMDAC, VESA DDC,
 64×64 hardware cursor, 24-bit DVO output. Reset only by PCI-bus reset or
-power-on. `[DS §34.1–34.2 p.368–369]`
+power-on. `[DS §34.1–34.2 p.368–369](#sources)`
 
 Registers are accessed via **legacy VGA I/O ports** (with the 3B*/3D* mono/color
 alias and 3C4/3CE/3C0 index+data pairs) and, for the extended set, also via an
@@ -2210,7 +2210,7 @@ the board-porting-critical part.
   - [7:4] segment read address bit[7:4]; [3:0] segment write address bit[7:4]
 ```
 
-`[DS §34.3 p.369–371]`
+`[DS §34.3 p.369–371](#sources)`
 
 ### 3.2 Sequencer registers (index port 3C4, data port 3C5)
 
@@ -2248,7 +2248,7 @@ the board-porting-critical part.
   - [3] enable Chain-4 mode; [2] odd/even (0 = odd/even, 1 = sequential); [1] extended memory (0 = 64 KB, 1 = 256 KB); [7:4],[0] reserved
 ```
 
-`[DS §34.4 p.371–372]`
+`[DS §34.4 p.371–372](#sources)`
 
 ### 3.3 CRT Controller registers (index port 3B4/3D4, data 3B5/3D5)
 
@@ -2379,7 +2379,7 @@ the board-porting-critical part.
 ```
 
 Indices 19–1D, 20–21, and 23–7F are not defined by §34.5 (reserved / used for
-the extended set from index 80). `[DS §34.5 p.373–377]`
+the extended set from index 80). `[DS §34.5 p.373–377](#sources)`
 
 ### 3.4 Graphics Controller registers (index port 3CE, data 3CF)
 
@@ -2433,7 +2433,7 @@ the extended set from index 80). `[DS §34.5 p.373–377]`
   - —
 ```
 
-`[DS §34.6 p.377–379]`
+`[DS §34.6 p.377–379](#sources)`
 
 ### 3.5 Attribute Controller registers (index+data port 3C0, read 3C1)
 
@@ -2475,7 +2475,7 @@ the extended set from index 80). `[DS §34.5 p.373–377]`
   - —
 ```
 
-`[DS §34.7 p.377–380]`
+`[DS §34.7 p.377–380](#sources)`
 
 ### 3.6 RAMDAC registers (fixed I/O ports 3C6–3C9)
 
@@ -2509,14 +2509,14 @@ the extended set from index 80). `[DS §34.5 p.373–377]`
   - [7:0] RW pallet data bit[7:0]
 ```
 
-`[DS §34.8 p.380–381]`
+`[DS §34.8 p.380–381](#sources)`
 
 ### 3.7 Aspeed Extended CRT registers (§34.9)
 
 Accessed at CRTC index 80h–D7h (data 3B5/3D5) and, per the datasheet, also at
 `MMIO Base + index`. This is the Aspeed-specific set that carries the
 frame-buffer base, scan pitch, extended overflow, mode/PLL controls and the
-hardware-cursor pointer. `[DS §34.9 p.382]`
+hardware-cursor pointer. `[DS §34.9 p.382](#sources)`
 
 ```{list-table} Extended CRT index map (§34.9 overview)
 :header-rows: 1
@@ -2677,7 +2677,7 @@ hardware-cursor pointer. `[DS §34.9 p.382]`
   - [4] H counter read-back[8]; [2:0] V counter read-back[10:8]; [7:5],[3] reserved
 ```
 
-Indices B4 and B5 are reserved (no register defined). `[DS §34.9 p.387]`
+Indices B4 and B5 are reserved (no register defined). `[DS §34.9 p.387](#sources)`
 
 ```{list-table} Extended CRT registers CRB6–CRBA (power / DDC / CRC read-back); reset noted
 :header-rows: 1
@@ -2789,7 +2789,7 @@ Indices B4 and B5 are reserved (no register defined). `[DS §34.9 p.387]`
   - [7:0] scratch register bit[7:0] (also serving the CC–CF reserved and D0–D7 SOC-scratch read-back slots of the overview map)
 ```
 
-`[DS §34.9 p.383–392]`
+`[DS §34.9 p.383–392](#sources)`
 
 ### 3.8 Mainline cross-check
 

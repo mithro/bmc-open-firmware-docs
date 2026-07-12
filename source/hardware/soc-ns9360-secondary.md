@@ -24,7 +24,7 @@ open-source register-level cross-reference is the vendor FS-Forth / Digi U-Boot
 tree (in-repo), which carries an OHCI header and a USB base-address header for
 this exact SoC [digi-uboot ns9750_usb_ohci.h][digi-uboot ns9360_usb.h], plus the
 BBus master-reset and USB-config bits that gate these blocks
-[digi-uboot ns9750_bbus.h]. Mainline's only "touch" of these blocks is indirect:
+[digi-uboot ns9750_bbus.h](#sources). Mainline's only "touch" of these blocks is indirect:
 the BBus Master Reset register (0x9060_0000, documented under
 {doc}`soc-ns9360-io`) holds their reset bits, and the system-control module's
 clock registers (documented under {doc}`soc-ns9360`) hold their clock-select /
@@ -34,19 +34,19 @@ clock-enable fields.
 
 ## LCD Controller
 
-**Base address: 0xA080_0000** — chapter 12 [HWRef p.543]. An AHB-master colour
+**Base address: 0xA080_0000** — chapter 12 [HWRef p.543](#sources). An AHB-master colour
 LCD controller for TFT (up to 18-bit / 64K colour) and STN (mono or colour,
 single or dual panel) panels up to 1024×768, with a 256-entry palette RAM at
 0xA080_0200–0xA080_03FC. All configuration registers are 32-bit, single-access
-(no bursting) [HWRef p.543].
+(no bursting) [HWRef p.543](#sources).
 
 **Unused on the iPDU.** The block is still listed because the endian-switch /
 early-boot code executes from the LCD palette RAM as scratch memory (the palette
 is ordinary RAM until the controller is enabled) [HWRef p.543][PLAN-INCREMENTAL-PORT.md].
 Its clock-enable (`LCDC`) and panel-clock-select fields live in the
-system-control module [HWRef p.144, Table 48].
+system-control module [HWRef p.144, Table 48](#sources).
 
-```{list-table} LCD controller register map (offset from 0xA080_0000) [HWRef p.543, Table 385]
+```{list-table} LCD controller register map (offset from 0xA080_0000)
 :header-rows: 1
 :widths: 18 26 56
 
@@ -97,7 +97,7 @@ system-control module [HWRef p.144, Table 48].
   - 256 × 16-bit colour palette (128 words, 2 entries/word)
 ```
 
-### LCDTiming0 (0x000) — horizontal timing [HWRef p.543-545, Table 386]
+### LCDTiming0 (0x000) — horizontal timing [HWRef p.543-545, Table 386](#sources)
 
 ```{list-table} LCDTiming0 bitfields
 :header-rows: 1
@@ -135,7 +135,7 @@ system-control module [HWRef p.144, Table 48].
   - Reserved
 ```
 
-### LCDTiming1 (0x004) — vertical timing [HWRef p.546-547, Table 388]
+### LCDTiming1 (0x004) — vertical timing [HWRef p.546-547, Table 388](#sources)
 
 ```{list-table} LCDTiming1 bitfields
 :header-rows: 1
@@ -168,7 +168,7 @@ system-control module [HWRef p.144, Table 48].
   - Lines-per-panel (program lines − 1); 1–1024 lines
 ```
 
-### LCDTiming2 (0x008) — clock / signal polarity [HWRef p.547-550, Table 389]
+### LCDTiming2 (0x008) — clock / signal polarity [HWRef p.547-550, Table 389](#sources)
 
 ```{list-table} LCDTiming2 bitfields
 :header-rows: 1
@@ -236,7 +236,7 @@ system-control module [HWRef p.144, Table 48].
   - Panel clock divisor: CLCP = CLCDCLK/(PCD+2)
 ```
 
-### LCDTiming3 (0x00C) — line-end control [HWRef p.551, Table 390]
+### LCDTiming3 (0x00C) — line-end control [HWRef p.551, Table 390](#sources)
 
 ```{list-table} LCDTiming3 bitfields
 :header-rows: 1
@@ -269,15 +269,15 @@ system-control module [HWRef p.144, Table 48].
   - Line-end signal delay from last CLCP rising edge (CLCDCLK periods − 1)
 ```
 
-### LCDUPBASE (0x010) / LCDLPBASE (0x014) — DMA frame base [HWRef p.552-553, Tables 391-392]
+### LCDUPBASE (0x010) / LCDLPBASE (0x014) — DMA frame base [HWRef p.552-553, Tables 391-392](#sources)
 
 Both hold a word-aligned frame-buffer base address in D31:02 (R/W, reset
 0x00000000); D01:00 are reserved / read as 0. LCDUPBASE serves TFT, single-panel
 STN and the upper panel of dual-panel STN; LCDLPBASE serves the lower panel of
 dual-panel STN. They are copied to LCDUPCURR/LCDLPCURR at each vertical sync,
-setting `LNBU` in LCDStatus [HWRef p.552-553].
+setting `LNBU` in LCDStatus [HWRef p.552-553](#sources).
 
-### LCDINTRENABLE (0x018) — interrupt enable [HWRef p.553, Table 393]
+### LCDINTRENABLE (0x018) — interrupt enable [HWRef p.553, Table 393](#sources)
 
 ```{list-table} LCDINTRENABLE bitfields
 :header-rows: 1
@@ -315,7 +315,7 @@ setting `LNBU` in LCDStatus [HWRef p.552-553].
   - Always write 0
 ```
 
-### LCDControl (0x01C) — mode / enable [HWRef p.554-556, Table 394]
+### LCDControl (0x01C) — mode / enable [HWRef p.554-556, Table 394](#sources)
 
 ```{list-table} LCDControl bitfields
 :header-rows: 1
@@ -398,7 +398,7 @@ setting `LNBU` in LCDStatus [HWRef p.552-553].
   - LCD controller enable (enables CLLP/CLCP/CLFP/CLAC/CLLE)
 ```
 
-### LCDStatus (0x020) — raw interrupt status [HWRef p.557, Table 395]
+### LCDStatus (0x020) — raw interrupt status [HWRef p.557, Table 395](#sources)
 
 Read returns the three raw interrupt sources; write-1-to-clear (R/C).
 
@@ -438,47 +438,47 @@ Read returns the three raw interrupt sources; write-1-to-clear (R/C).
   - Reserved
 ```
 
-### LCDInterrupt (0x024) — masked interrupt status [HWRef p.557-558, Table 396]
+### LCDInterrupt (0x024) — masked interrupt status [HWRef p.557-558, Table 396](#sources)
 
 Bit-by-bit logical AND of LCDStatus and LCDINTRENABLE (all read-only): D04
 `MBERRORINTR`, D03 `VCOMPINTR`, D02 `LNBUINTR`; all others reserved
-[HWRef p.558].
+[HWRef p.558](#sources).
 
-### LCDUPCURR (0x028) / LCDLPCURR (0x02C) — current DMA address [HWRef p.558-559, Tables 397-398]
+### LCDUPCURR (0x028) / LCDLPCURR (0x02C) — current DMA address [HWRef p.558-559, Tables 397-398](#sources)
 
 Each is a full 32-bit read-only field (D31:00, reset undefined) giving an
 approximate/coarse value of the upper/lower panel DMA address; usable only for
-coarse timing [HWRef p.558-559].
+coarse timing [HWRef p.558-559](#sources).
 
-### LCDPalette (0x200–0x3FC) — colour palette [HWRef p.559-560, Table 399]
+### LCDPalette (0x200–0x3FC) — colour palette [HWRef p.559-560, Table 399](#sources)
 
 128 words, two 16-bit palette entries per word (order depends on BEBO). Each
 entry: `Int` (D31/D15, intensity LSB for 6:6:6 TFT), `B[4:0]`, `G[4:0]`,
 `R[4:0]`. STN colour uses only the four MSBs of each component; mono uses only
-R[4:0] [HWRef p.559-560]. This RAM is used as boot scratch before the controller
-is enabled [HWRef p.543].
+R[4:0] [HWRef p.559-560](#sources). This RAM is used as boot scratch before the controller
+is enabled [HWRef p.543](#sources).
 
 **Interrupts.** The block drives one system interrupt from three maskable
 sources: `MBERRORINTR` (master bus error, cleared via MBERROR), `VCOMPINTR`
 (vertical compare, cleared via VCOMP) and `LNBUINTR` / next-base-update (cleared
-via LNBU) [HWRef p.561-562].
+via LNBU) [HWRef p.561-562](#sources).
 
 ---
 
 ## IEEE 1284 Parallel Port
 
-**Base address: 0x9040_0000** — chapter 15 [HWRef p.635]. An IEEE-1284
+**Base address: 0x9040_0000** — chapter 15 [HWRef p.635](#sources). An IEEE-1284
 *peripheral*-side parallel port supporting compatibility (SPP), nibble, byte and
 ECP modes (no EPP), driven either by direct CPU FIFO access or by BBus DMA. All
 configuration registers are 32-bit single-access; the "CSR" sub-block at
 0x0100–0x0178 is functionally 8-bit but is read/written as 32-bit words
-[HWRef p.635-637].
+[HWRef p.635-637](#sources).
 
 **Unused on the iPDU.** Its reset bit (`1284`, bit 6 of the BBus Master Reset)
 and its endian bit (`ENDIAN_CFG` bit 6) gate the block
-[digi-uboot ns9750_bbus.h].
+[digi-uboot ns9750_bbus.h](#sources).
 
-```{list-table} IEEE 1284 register map (offset from 0x9040_0000) [HWRef p.635-637, Table 425]
+```{list-table} IEEE 1284 register map (offset from 0x9040_0000) [HWRef p.635-637, Table 425](#sources)
 :header-rows: 1
 :widths: 16 30 54
 
@@ -577,7 +577,7 @@ and its endian bit (`ENDIAN_CFG` bit 6) gate the block
   - Core Phase register
 ```
 
-### GenConfig (0x0000) — general configuration [HWRef p.637-638, Table 426]
+### GenConfig (0x0000) — general configuration [HWRef p.637-638, Table 426](#sources)
 
 ```{list-table} GenConfig bitfields
 :header-rows: 1
@@ -650,7 +650,7 @@ and its endian bit (`ENDIAN_CFG` bit 6) gate the block
   - Reverse mode: 0 = CPU, 1 = DMA
 ```
 
-### InterruptStatusandControl (0x0004) — interrupt masks + status [HWRef p.639-641, Table 427]
+### InterruptStatusandControl (0x0004) — interrupt masks + status [HWRef p.639-641, Table 427](#sources)
 
 Mask bits (D26:D17) are R/W; status bits (D10:D01) are R/C (write 1 to clear,
 after clearing the underlying condition).
@@ -771,7 +771,7 @@ after clearing the underlying condition).
   - Reserved
 ```
 
-### FIFO Status (0x0008) — FIFO levels [HWRef p.642-643, Table 428]
+### FIFO Status (0x0008) — FIFO levels [HWRef p.642-643, Table 428](#sources)
 
 All read-only; ignore in DMA mode.
 
@@ -851,26 +851,26 @@ All read-only; ignore in DMA mode.
   - Reverse FIFO ready (per RvReadyThreshold)
 ```
 
-### FIFO data registers (0x000C / 0x0010 / 0x001C / 0x0020) [HWRef p.644-646, Tables 429-431]
+### FIFO data registers (0x000C / 0x0010 / 0x001C / 0x0020) [HWRef p.644-646, Tables 429-431](#sources)
 
 `FwdCmdFifoReadReg` (0x000C, R) and `FwDatFifoReadReg` (0x0010, R) each read up
 to four bytes (D31:00) from the forward command / forward data FIFO in CPU mode;
 software reads FIFO Status first to learn how many bytes are valid.
 `RvFifoWriteReg` (0x001C, W) and `RvFifoWriteReg — Last` (0x0020, W) write one to
 four bytes into the reverse FIFO; a final short (1–3 byte) entry is committed via
-the "— Last" register [HWRef p.644-646].
+the "— Last" register [HWRef p.644-646](#sources).
 
-### Forward Command / Data DMA Control (0x0024 / 0x0028) [HWRef p.647-648, Tables 432-433]
+### Forward Command / Data DMA Control (0x0024 / 0x0028) [HWRef p.647-648, Tables 432-433](#sources)
 
 Identical layout for both registers: D31:16 = `Fw{Cmd,Dat}MaxBufSize` (R/W, reset
 0x0000) maximum DMA buffer size in bytes; D15:00 = `Fw{Cmd,Dat}ByteGapTimer`
 (R/W, reset 0x0000) 16-bit byte-gap timeout in BBus clock cycles (reaching the
 buffer size raises the max-buffer interrupt; the byte-gap timer flushes a partial
-dword and closes the buffer) [HWRef p.647-648].
+dword and closes the buffer) [HWRef p.647-648](#sources).
 
 ### CSR block — port pin / status registers (0x0100–0x0178)
 
-```{list-table} pd — Printer Data Pins (0x0100) [HWRef p.649, Table 434]
+```{list-table} pd — Printer Data Pins (0x0100) [HWRef p.649, Table 434](#sources)
 :header-rows: 1
 :widths: 12 12 10 10 56
 
@@ -893,9 +893,9 @@ dword and closes the buffer) [HWRef p.647-648].
 
 `psr` (host, 0x0104) and `pin` (peripheral, 0x010C) both expose the 1284 handshake
 lines directly; bit meanings depend on the active mode (compatibility / nibble /
-byte / ECP) [HWRef p.650-651, Tables 435, 437].
+byte / ECP) [HWRef p.650-651, Tables 435, 437](#sources).
 
-```{list-table} psr — Port Status, host (0x0104); pin — Port Status, peripheral (0x010C) [HWRef p.650-651]
+```{list-table} psr — Port Status, host (0x0104); pin — Port Status, peripheral (0x010C) [HWRef p.650-651](#sources)
 :header-rows: 1
 :widths: 12 18 12 10 48
 
@@ -932,9 +932,9 @@ byte / ECP) [HWRef p.650-651, Tables 435, 437].
 ```
 
 Note the `pin` register additionally exposes BUSY (D07), N_ACK (D06), PERR (D05),
-SEL (D04), N_FLT (D03) as a five-bit peripheral-status field [HWRef p.651, Table 437].
+SEL (D04), N_FLT (D03) as a five-bit peripheral-status field [HWRef p.651, Table 437](#sources).
 
-```{list-table} pcr — Port Control (0x0108) [HWRef p.651, Table 436]
+```{list-table} pcr — Port Control (0x0108) [HWRef p.651, Table 436](#sources)
 :header-rows: 1
 :widths: 12 12 10 10 56
 
@@ -980,7 +980,7 @@ SEL (D04), N_FLT (D03) as a five-bit peripheral-status field [HWRef p.651, Table
   - Reserved
 ```
 
-```{list-table} fea — Feature Control A (0x0114) [HWRef p.652, Table 438]
+```{list-table} fea — Feature Control A (0x0114) [HWRef p.652, Table 438](#sources)
 :header-rows: 1
 :widths: 12 12 10 10 56
 
@@ -1001,7 +1001,7 @@ SEL (D04), N_FLT (D03) as a five-bit peripheral-status field [HWRef p.651, Table
   - Printer port enable: 0 = outputs high-Z, 1 = normal operation
 ```
 
-```{list-table} fei — Interrupt Enable (0x011C) [HWRef p.653-654, Table 439]
+```{list-table} fei — Interrupt Enable (0x011C) [HWRef p.653-654, Table 439](#sources)
 :header-rows: 1
 :widths: 12 16 10 10 52
 
@@ -1042,7 +1042,7 @@ SEL (D04), N_FLT (D03) as a five-bit peripheral-status field [HWRef p.651, Table
   - Transfer-start interrupt enable (falling nSTROBE, compatibility mode)
 ```
 
-```{list-table} fem — Master Enable (0x0120) [HWRef p.655, Table 440]
+```{list-table} fem — Master Enable (0x0120) [HWRef p.655, Table 440](#sources)
 :header-rows: 1
 :widths: 12 14 10 10 54
 
@@ -1088,7 +1088,7 @@ SEL (D04), N_FLT (D03) as a five-bit peripheral-status field [HWRef p.651, Table
   - Reserved
 ```
 
-```{list-table} exr — Extensibility byte (0x0124) and ecr — Extended Control (0x0128) [HWRef p.655-656, Tables 441-442]
+```{list-table} exr — Extensibility byte (0x0124) and ecr — Extended Control (0x0128) [HWRef p.655-656, Tables 441-442](#sources)
 :header-rows: 1
 :widths: 12 16 10 10 52
 
@@ -1109,7 +1109,7 @@ SEL (D04), N_FLT (D03) as a five-bit peripheral-status field [HWRef p.651, Table
   - Enable reverse data transfers (other ecr bits reserved)
 ```
 
-```{list-table} sti — Interrupt Status (0x012C, cleared on read) [HWRef p.657, Table 443]
+```{list-table} sti — Interrupt Status (0x012C, cleared on read) [HWRef p.657, Table 443](#sources)
 :header-rows: 1
 :widths: 12 16 10 10 52
 
@@ -1154,9 +1154,9 @@ SEL (D04), N_FLT (D03) as a five-bit peripheral-status field [HWRef p.651, Table
 carry eight R/W bits each (D07:00) selecting edge/level detection on the four
 handshake pins (`n_autofd`, `n_init`, `n_selectin`, `n_strobe`) — D07:04 are the
 edge-detect enables/edges (in `pit`, must be 1 = rising edge) and D03:00 the
-level-detect enables/polarity (0 = low, 1 = high) [HWRef p.658-659, Tables 444-445].
+level-detect enables/polarity (0 = low, 1 = high) [HWRef p.658-659, Tables 444-445](#sources).
 
-```{list-table} grn — Granularity Count (0x0168), eca — Forward Address (0x0174), pha — Core Phase (0x0178) [HWRef p.660-662, Tables 446-448]
+```{list-table} grn — Granularity Count (0x0168), eca — Forward Address (0x0174), pha — Core Phase (0x0178) [HWRef p.660-662, Tables 446-448](#sources)
 :header-rows: 1
 :widths: 12 12 10 10 56
 
@@ -1186,12 +1186,12 @@ level-detect enables/polarity (0 = low, 1 = high) [HWRef p.658-659, Tables 444-4
 
 ## USB Host (OHCI)
 
-**Base address: 0x9080_0000** — chapter 16 [HWRef p.663, p.667]. A USB 2.0
+**Base address: 0x9080_0000** — chapter 16 [HWRef p.663, p.667](#sources). A USB 2.0
 full-/low-speed host built from a standard OpenHCI (OHCI 1.0) controller plus a
 NS9360-specific "USB Host Front End" (UHFE) wrapper that bridges OHCI to the
 BBus. The address space splits in two [HWRef p.667, Table 449]:
 
-```{list-table} USB host address map (base 0x9080_0000) [HWRef p.667, Table 449]
+```{list-table} USB host address map (base 0x9080_0000) [HWRef p.667, Table 449](#sources)
 :header-rows: 1
 :widths: 34 66
 
@@ -1205,10 +1205,10 @@ BBus. The address space splits in two [HWRef p.667, Table 449]:
 
 **Unused in the stock firmware.** Sideband signals are USB_PWR = gpio[17] and
 USB_OVR = gpio[16]; the host reset bit is `USBHST` (bit 11 of the BBus Master
-Reset) [HWRef p.663-664]. The OHCI base 0x9080_1000 and HcRhPortStatus at +0x54
-are confirmed by the vendor U-Boot header [digi-uboot ns9360_usb.h].
+Reset) [HWRef p.663-664](#sources). The OHCI base 0x9080_1000 and HcRhPortStatus at +0x54
+are confirmed by the vendor U-Boot header [digi-uboot ns9360_usb.h](#sources).
 
-### UHFE wrapper registers (0x0000, 0x000C, 0x0010) [HWRef p.667-670, Tables 451-453]
+### UHFE wrapper registers (0x0000, 0x000C, 0x0010) [HWRef p.667-670, Tables 451-453](#sources)
 
 ```{list-table} UHFE registers (offset from 0x9080_0000)
 :header-rows: 1
@@ -1241,10 +1241,10 @@ are confirmed by the vendor U-Boot header [digi-uboot ns9360_usb.h].
 These are the standard **OpenHCI 1.0** operational registers. The NS9360 HW
 Reference reproduces the OHCI specification and enumerates each register with
 full bitfields (Tables 455–476); the vendor U-Boot OHCI driver confirms the same
-control/command bit masks [digi-uboot ns9750_usb_ohci.h]. The full standard set,
-as listed by the datasheet [HWRef p.671-672, Table 454], is:
+control/command bit masks [digi-uboot ns9750_usb_ohci.h](#sources). The full standard set,
+as listed by the datasheet [HWRef p.671-672, Table 454](#sources), is:
 
-```{list-table} OHCI register map (offset from 0x9080_1000) [HWRef p.671-672, Table 454]
+```{list-table} OHCI register map (offset from 0x9080_1000) [HWRef p.671-672, Table 454](#sources)
 :header-rows: 1
 :widths: 16 28 56
 
@@ -1323,10 +1323,10 @@ The pointer registers `HcHCCA`, `HcPeriodCurrentED`, `HcControlHeadED`,
 `HcControlCurrentED`, `HcBulkHeadED`, `HcBulkCurrentED` and `HcDoneHead` each
 hold a physical address in their upper bits (D31:08 for HcHCCA — 256-byte
 aligned; D31:04 for the ED/done pointers — 16-byte aligned) with the low bits
-"must be 0" [HWRef p.686-692, Tables 461-467]. The control/status registers have
+"must be 0" [HWRef p.686-692, Tables 461-467](#sources). The control/status registers have
 these bitfields:
 
-```{list-table} HcControl (0x1004) [HWRef p.674-677, Table 456]
+```{list-table} HcControl (0x1004) [HWRef p.674-677, Table 456](#sources)
 :header-rows: 1
 :widths: 12 10 10 10 58
 
@@ -1387,7 +1387,7 @@ these bitfields:
   - ControlBulkServiceRatio: 0=1:1, 1=2:1, 2=3:1, 3=4:1
 ```
 
-```{list-table} HcCommandStatus (0x1008, write-to-set) [HWRef p.678-680, Table 457]
+```{list-table} HcCommandStatus (0x1008, write-to-set) [HWRef p.678-680, Table 457](#sources)
 :header-rows: 1
 :widths: 12 10 10 10 58
 
@@ -1498,7 +1498,7 @@ share one event-bit layout [HWRef p.680-685, Tables 458-460]:
   - SchedulingOverrun
 ```
 
-```{list-table} HcFmInterval (0x1034) [HWRef p.693-694, Table 468]
+```{list-table} HcFmInterval (0x1034) [HWRef p.693-694, Table 468](#sources)
 :header-rows: 1
 :widths: 12 12 10 10 56
 
@@ -1530,13 +1530,13 @@ share one event-bit layout [HWRef p.680-685, Tables 458-460]:
 ```
 
 `HcFmRemaining` (0x1038): D31 `FRT` (FrameRemainingToggle), D13:00 `FR`
-(down-counter of bit time remaining) [HWRef p.694, Table 469]. `HcFmNumber`
-(0x103C): D15:00 `FN` frame-number counter [HWRef p.695, Table 470].
+(down-counter of bit time remaining) [HWRef p.694, Table 469](#sources). `HcFmNumber`
+(0x103C): D15:00 `FN` frame-number counter [HWRef p.695, Table 470](#sources).
 `HcPeriodicStart` (0x1040): D13:00 `PS` (R/W) earliest periodic-list start
-[HWRef p.696, Table 471]. `HcLSThreshold` (0x1044): D11:00 `LST` (R/W, reset
-0x0628) low-speed threshold [HWRef p.697, Table 472].
+[HWRef p.696, Table 471](#sources). `HcLSThreshold` (0x1044): D11:00 `LST` (R/W, reset
+0x0628) low-speed threshold [HWRef p.697, Table 472](#sources).
 
-```{list-table} HcRhDescriptorA (0x1048) [HWRef p.699-700, Table 473]
+```{list-table} HcRhDescriptorA (0x1048) [HWRef p.699-700, Table 473](#sources)
 :header-rows: 1
 :widths: 12 10 10 10 58
 
@@ -1589,9 +1589,9 @@ share one event-bit layout [HWRef p.680-685, Tables 458-460]:
 
 `HcRhDescriptorB` (0x104C): D31:16 `PPCM` PortPowerControlMask (bit *n* = port
 *n*, bit 0 reserved), D15:00 `DR` DeviceRemovable (bit *n* = port *n*, bit 0
-reserved) [HWRef p.701, Table 474]. ("IS" = implementation-specific reset value.)
+reserved) [HWRef p.701, Table 474](#sources). ("IS" = implementation-specific reset value.)
 
-```{list-table} HcRhStatus (0x1050) [HWRef p.702-704, Table 475]
+```{list-table} HcRhStatus (0x1050) [HWRef p.702-704, Table 475](#sources)
 :header-rows: 1
 :widths: 12 10 10 10 58
 
@@ -1642,7 +1642,7 @@ reserved) [HWRef p.701, Table 474]. ("IS" = implementation-specific reset value.
   - LocalPowerStatus (read 0) / ClearGlobalPower (write)
 ```
 
-```{list-table} HcRhPortStatus[1] (0x1054) [HWRef p.705-710, Table 476]
+```{list-table} HcRhPortStatus[1] (0x1054) [HWRef p.705-710, Table 476](#sources)
 :header-rows: 1
 :widths: 12 10 10 10 58
 
@@ -1732,11 +1732,11 @@ reserved) [HWRef p.701, Table 474]. ("IS" = implementation-specific reset value.
 
 ## USB Device
 
-**Base address: 0x9090_0000** — chapter 17 [HWRef p.723]. A USB 2.0 device
+**Base address: 0x9090_0000** — chapter 17 [HWRef p.723](#sources). A USB 2.0 device
 controller with 11 physical endpoints (bidirectional control endpoint 0 plus up
 to 10 unidirectional), a 12-FIFO front end (UDFE) and a 13-channel BBus DMA
 controller (one channel per endpoint FIFO). All configuration registers are
-32-bit single-access [HWRef p.723-724].
+32-bit single-access [HWRef p.723-724](#sources).
 
 **Unused in the stock firmware.** Its reset bit is `USBDEV` (bit 12 of the BBus
 Master Reset) and its host/device role is selected by the BBus USB configuration
@@ -1744,7 +1744,7 @@ register (0x9060_0070) [HWRef p.723][digi-uboot ns9750_bbus.h]. (Note: the older
 2-port NS9750 variant used a single combined `USB` reset bit; the NS9360 splits
 host and device — see the BBus Master Reset table under {doc}`soc-ns9360-io`.)
 
-```{list-table} USB device address map (base 0x9090_0000) [HWRef p.723, Table 479]
+```{list-table} USB device address map (base 0x9090_0000) [HWRef p.723, Table 479](#sources)
 :header-rows: 1
 :widths: 34 66
 
@@ -1760,9 +1760,9 @@ host and device — see the BBus Master Reset table under {doc}`soc-ns9360-io`.)
   - USB device DMA (BBus DMA controller 2; see the DMA chapter)
 ```
 
-### UDFE global registers (0x0000–0x0014) [HWRef p.724-731, Tables 480-485]
+### UDFE global registers (0x0000–0x0014) [HWRef p.724-731, Tables 480-485](#sources)
 
-```{list-table} UDFE Control/Status Register 0 (0x0000) [HWRef p.725, Table 481]
+```{list-table} UDFE Control/Status Register 0 (0x0000) [HWRef p.725, Table 481](#sources)
 :header-rows: 1
 :widths: 12 12 10 10 56
 
@@ -1808,7 +1808,7 @@ host and device — see the BBus Master Reset table under {doc}`soc-ns9360-io`.)
   - Read-only
 ```
 
-```{list-table} UDFE Control/Status Register 1 (0x0004) [HWRef p.726-727, Table 482]
+```{list-table} UDFE Control/Status Register 1 (0x0004) [HWRef p.726-727, Table 482](#sources)
 :header-rows: 1
 :widths: 12 12 10 10 56
 
@@ -1869,7 +1869,7 @@ host and device — see the BBus Master Reset table under {doc}`soc-ns9360-io`.)
   - Current configuration value (diagnostic)
 ```
 
-```{list-table} UDFE Interrupt Enable (0x000C) [HWRef p.727-728, Table 483]
+```{list-table} UDFE Interrupt Enable (0x000C) [HWRef p.727-728, Table 483](#sources)
 :header-rows: 1
 :widths: 12 14 10 10 54
 
@@ -1945,7 +1945,7 @@ host and device — see the BBus Master Reset table under {doc}`soc-ns9360-io`.)
   - Reserved
 ```
 
-```{list-table} UDFE Interrupt Status (0x0010, write-1-to-clear) [HWRef p.729-730, Table 484]
+```{list-table} UDFE Interrupt Status (0x0010, write-1-to-clear) [HWRef p.729-730, Table 484](#sources)
 :header-rows: 1
 :widths: 12 14 10 10 54
 
@@ -2021,7 +2021,7 @@ host and device — see the BBus Master Reset table under {doc}`soc-ns9360-io`.)
   - Read 0
 ```
 
-```{list-table} UDFE Device Controller Programming Control/Status (0x0014) [HWRef p.731, Table 485]
+```{list-table} UDFE Device Controller Programming Control/Status (0x0014) [HWRef p.731, Table 485](#sources)
 :header-rows: 1
 :widths: 12 12 10 10 56
 
@@ -2052,14 +2052,14 @@ host and device — see the BBus Master Reset table under {doc}`soc-ns9360-io`.)
   - CSR dynamic-programming enable (set at power-up, then leave)
 ```
 
-### USB device controller block (0x2000–0x2030) [HWRef p.732-734, Tables 486-487]
+### USB device controller block (0x2000–0x2030) [HWRef p.732-734, Tables 486-487](#sources)
 
 `Device Descriptor / Setup Command register` (0x2000) is a legacy register that
-must be written to 0x0000_0100 [HWRef p.733]. The 12 **Physical Endpoint
+must be written to 0x0000_0100 [HWRef p.733](#sources). The 12 **Physical Endpoint
 Descriptor** registers (0x2004, 0x2008, … 0x2030 — one per endpoint descriptor
 #0–#11) all share this layout:
 
-```{list-table} Physical Endpoint Descriptor #0–#11 (0x2004–0x2030) [HWRef p.734, Table 487]
+```{list-table} Physical Endpoint Descriptor #0–#11 (0x2004–0x2030) [HWRef p.734, Table 487](#sources)
 :header-rows: 1
 :widths: 12 12 10 10 56
 
@@ -2110,13 +2110,13 @@ Descriptor** registers (0x2004, 0x2008, … 0x2030 — one per endpoint descript
   - Endpoint number (0–10)
 ```
 
-### UDFE endpoint-FIFO control block (0x3000–0x3158) [HWRef p.735-752, Tables 488-500]
+### UDFE endpoint-FIFO control block (0x3000–0x3158) [HWRef p.735-752, Tables 488-500](#sources)
 
 The 12 endpoint FIFOs have a fixed FIFO ↔ DMA-channel ↔ endpoint mapping: FIFO/
 channel 1 = EP0 (CTRL-Out), FIFO 2 = EP0 (CTRL-In), FIFO 3 = EP1, … FIFO 12 =
-EP10 [HWRef p.736-737, Table 489]. Register map:
+EP10 [HWRef p.736-737, Table 489](#sources). Register map:
 
-```{list-table} UDFE endpoint-FIFO control register map (offset from 0x9090_0000) [HWRef p.735-736, Table 488]
+```{list-table} UDFE endpoint-FIFO control register map (offset from 0x9090_0000) [HWRef p.735-736, Table 488](#sources)
 :header-rows: 1
 :widths: 20 34 46
 
@@ -2140,7 +2140,7 @@ EP10 [HWRef p.736-737, Table 489]. Register map:
 Each **FIFO Interrupt Status** register packs three status bits per endpoint —
 `ACKn` / `NAKn` / `ERRORn`, where *n* is the FIFO number — into byte-aligned
 fields; the meanings (per direction) are defined once in Table 490
-[HWRef p.738, Table 490]. The bit positions are [HWRef p.738-745, Tables 491-494]:
+[HWRef p.738, Table 490](#sources). The bit positions are [HWRef p.738-745, Tables 491-494]:
 
 ```{list-table} FIFO Interrupt Status bit layout (Enable registers mirror these positions)
 :header-rows: 1
@@ -2178,9 +2178,9 @@ Within each 3-bit group the high bit is `ACKn`, the middle `NAKn`, the low
 (no data ready), ERROR = no ACK / STALL sent; for OUT endpoints ACK = ACK sent,
 NAK = NAK sent (FIFO full), ERROR = receive error / STALL sent [HWRef p.738,
 Table 490]. The FIFO Interrupt Enable registers (0x3004/3014/3024/3034) carry an
-enable bit at each of these positions [HWRef p.742-748, Tables 495-498].
+enable bit at each of these positions [HWRef p.742-748, Tables 495-498](#sources).
 
-```{list-table} FIFO Packet Control #1–#12 (0x3080–0x30AC) [HWRef p.749, Table 499]
+```{list-table} FIFO Packet Control #1–#12 (0x3080–0x30AC) [HWRef p.749, Table 499](#sources)
 :header-rows: 1
 :widths: 12 12 10 10 56
 
@@ -2211,7 +2211,7 @@ enable bit at each of these positions [HWRef p.742-748, Tables 495-498].
   - Error-free IN packets sent with the current DMA descriptor (N/A for FIFO 1)
 ```
 
-```{list-table} FIFO Status and Control #1–#12 (0x3100–0x3158) [HWRef p.750-752, Table 500]
+```{list-table} FIFO Status and Control #1–#12 (0x3100–0x3158) [HWRef p.750-752, Table 500](#sources)
 :header-rows: 1
 :widths: 12 14 10 10 54
 
@@ -2290,7 +2290,7 @@ enable bit at each of these positions [HWRef p.742-748, Tables 495-498].
 The endpoint FIFO *data* is moved by the USB device BBus DMA controller at
 0x9091_0000–0x9091_FFFF (BBus DMA controller 2); its per-channel buffer-descriptor
 / control / status registers are documented in the BBus DMA chapter and under
-{doc}`soc-ns9360-io` [HWRef p.723, Table 479].
+{doc}`soc-ns9360-io` [HWRef p.723, Table 479](#sources).
 
 ---
 
@@ -2298,7 +2298,7 @@ The endpoint FIFO *data* is moved by the USB device BBus DMA controller at
 
 Primary datasheet (in-repo, the authority for the register map):
 
-- **NS9360 Hardware Reference**, Digi 90000675 rev J — `[HWRef p.N]`, where `N`
+- **NS9360 Hardware Reference**, Digi 90000675 rev J — `[HWRef p.N](#sources)`, where `N`
   is the printed document page (identical to the PDF page). In-repo at
   `hpe-ipdu-firmware/datasheets/NS9360_HW_Reference_90000675_J.pdf`; online at
   [ftp1.digi.com/90000675_J.pdf][hwref-url]. Chapters used: ch 12 LCD
@@ -2307,29 +2307,29 @@ Primary datasheet (in-repo, the authority for the register map):
 
 In-repo analysis / port planning (board specifics):
 
-- `[PLAN-INCREMENTAL-PORT.md]` — `hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md`
+- `[PLAN-INCREMENTAL-PORT.md](#sources)` — `hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md`
   (LCD palette RAM used as endian-switch scratch; register quick reference).
 
 Open-source cross-reference (register names, bases, bitfields):
 
-- `[mach-ns9xxx regs-bbu.h]`, `[mach-ns9xxx regs-sys-ns9360.h]` — mainline Linux
+- `[mach-ns9xxx regs-bbu.h](#sources)`, `[mach-ns9xxx regs-sys-ns9360.h](#sources)` — mainline Linux
   `arch/arm/mach-ns9xxx` (tag v2.6.39). Verified to contain **no** LCD / IEEE 1284
   / USB register definitions; only GPIO (`regs-bbu.h`) and system-control
   (`regs-sys-ns9360.h`) registers. Raw source, e.g.
   [regs-bbu.h][machbbu-url].
-- `[digi-uboot ns9360_usb.h]` — FS-Forth / Digi U-Boot for the CC9P9360
+- `[digi-uboot ns9360_usb.h](#sources)` — FS-Forth / Digi U-Boot for the CC9P9360
   (in-repo at
   `hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9360_usb.h`):
   confirms OHCI base `0x9080_1000` and `HcRhPortStatus` at `+0x54`.
-- `[digi-uboot ns9750_usb_ohci.h]` — same tree,
+- `[digi-uboot ns9750_usb_ohci.h](#sources)` — same tree,
   `include/ns9750_usb_ohci.h`: standard OHCI `HcControl` / `HcCommandStatus`
   bit masks (`OHCI_CTRL_CBSR/PLE/IE/CLE/BLE/HCFS/IR/RWC/RWE`, `OHCI_HCR/CLF/BLF/OCR`),
   matching the datasheet bitfields above.
-- `[digi-uboot ns9750_bbus.h]` — same tree, `include/ns9750_bbus.h`: BBus Master
+- `[digi-uboot ns9750_bbus.h](#sources)` — same tree, `include/ns9750_bbus.h`: BBus Master
   Reset bits (`…RESET_1284`=0x40, `…RESET_USB`) and USB configuration bits
   (`USB_CFG_CFG_HOST/DEVICE/DIS`) that gate these blocks; note the 2-port NS9750
   uses one combined USB reset bit whereas the NS9360 splits host/device.
-- `[digi-uboot]` — the FS-Forth / Digi CC9P9360 U-Boot tree as a whole (in-repo,
+- `[digi-uboot](#sources)` — the FS-Forth / Digi CC9P9360 U-Boot tree as a whole (in-repo,
   path above), used to confirm the block base addresses.
 
 [hwref-url]: https://ftp1.digi.com/support/documentation/90000675_J.pdf
