@@ -125,24 +125,6 @@ Source: [RPI4-OPENOCD-JTAG-WIRING.md:64-79](#sources) [HEADER-PINOUTS.md:17-24](
 
 Standard ARM 20-pin JTAG. Pin 1 = square pad (top-left); odd column = signal,
 even column = GND (except pins 1–2). [HEADER-PINOUTS.md:37-66](#sources)
-```
-        AST_JTAG1  -  20-pin ARM JTAG (2x10, 0.1")
-        component side - pin 1 = square pad (top-left)
-
-          +---------+
- VTref  1 | @     o |  2  Vsupply (NC)
- nTRST  3 | o     o |  4  GND
-   TDI  5 | o     o |  6  GND
-   TMS  7 | o     o |  8  GND
-   TCK  9 | o     o | 10  GND
-  RTCK 11 | o     o | 12  GND
-   TDO 13 | o     o | 14  GND
- nSRST 15 | o     o | 16  GND
- DBGRQ 17 | o     o | 18  GND
-  (NC) 19 | o     o | 20  GND
-          +---------+
-        (@ = pin 1 / square pad)
-```
 
 ```{list-table} AST_JTAG1 → Raspberry Pi 4B wiring (direct 3.3 V)
 :header-rows: 1
@@ -244,11 +226,6 @@ A 1×4 header just above the AST2050; ends fixed by Raptor's photo as **+3.3 V �
 GND**, the two middle pins TX/RX (confirm by probing — BMC TXD idles high and
 bursts at boot). **3.3 V TTL** (baud: see the note above). [HEADER-PINOUTS.md:98-126](#sources)
 
-```
-      AST_UART1 - 4-pin 3.3V ARM UART (1x4), pin1 = square pad
-        +3.3V     TX/RX     RX/TX      GND
-        pin1      pin2      pin3       pin4
-```
 
 ```{list-table} AST_UART1 → RPi4 (leave +3.3 V unconnected; cross TX↔RX)
 :header-rows: 1
@@ -286,12 +263,11 @@ role as a BMC-SPI-flash recovery path is **unconfirmed** — treat it as a flash
 (SPI) target only if continuity to the AST2050 boot flash (an SOIC-8 near the SoC)
 is proven. If it is SPI, drive it from the Pi's hardware SPI0 with Raptor's
 `ast2050-flashrom` fork. [RPI4-OPENOCD-JTAG-WIRING.md:242-268](#sources)
-```
-        BMC_FW1  -  2-row header (ASMB4-iKVM slot)
-        +-----------------------------+
-        |  o  o  o  o  o  o  o  o ...  |   signals = PROPRIETARY (ASMB4)
-        |  @  o  o  o  o  o  o  o ...  |   @ = pin 1 (lower-left)
-        +-----------------------------+
+```{figure} /_static/diagrams/kgpe-d16-bmc-fw1.svg
+:alt: BMC_FW1 generic 2-row header footprint (ASMB4-iKVM slot); pin 1 lower-left; proprietary pinout.
+:width: 90%
+
+**BMC_FW1** — the ASMB4/5 management-module / SPI-flash slot (proprietary pinout; treat as a template and probe before wiring).
 ```
 
 ### 2.4 AMD HDT (NB_JTAG_HEADER) — CPU debug, 20-pin HDT+ (1.27 mm) ⚠️
@@ -300,21 +276,6 @@ The host/CPU debug port: **AMD HDT** (Hardware Debug Tool), a proprietary JTAG
 dialect for the Opteron 6100/6200/6300 (Family 10h/15h). It is **not** OpenOCD-
 or RPi-drivable (fine 1.27 mm pitch, proprietary probe/software required — ASSET
 InterTech / AMD HDT kit). [JTAG-HEADERS.md:62-95,236-239](#sources)
-```
-        AMD HDT+ (20-pin, 2x10, 1.27 mm) - pin 1 top-left
- ┌─────────────────────────┐
- │  1 VDDIO    TCK     2  │
- │  3 GND      TMS     4  │
- │  5 GND      TDI     6  │
- │  7 GND      TDO     8  │
- │  9 TRST_L   PWROK  10  │
- │ 11 DBRDY3   RESET  12  │
- │ 13 DBRDY2   DBRDY0 14  │
- │ 15 DBRDY1   DBREQ  16  │
- │ 17 GND      TEST19 18  │
- │ 19 VDDIO    TEST18 20  │
- └─────────────────────────┘
-```
 
 ```{list-table} AMD HDT+ 20-pin pinout
 :header-rows: 1

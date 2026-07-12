@@ -89,20 +89,11 @@ NS9360 MII/MAC. `[ANALYSIS.md](#sources)`
   - Cascade / redundancy pairing
 ```
 
-```text
-                     Ethernet RJ-45 (mgmt)
-                            |
-                    [ICS1893 PHY U10](#sources)  <-- 25 MHz xtal Y2
-                            | MII + MDIO/MDC
-                       [ NS9360 U1 ]  <-- 29.4912 MHz xtal Y1
-             SPI /       |      |      \  UART        \ UART
-             DMA         |   I2C(J27)   \              \
-        [MAXQ3180 U15](#sources)   |             [MAX3243EI](#sources)      [MAX3243EI](#sources)
-         8 MHz Y4        |               |                |
-      V/I/P sense        |          [TMP89FM42 U45](#sources)     daisy-chain
-      (CT PT1)       ext-bar bus     3.6864 MHz Y6      (conn 7)
-                     J2/29 J3/30      front bezel
-                     J4/31            7-seg/LED/buzzer
+```{figure} /_static/diagrams/ipdu-board-block.svg
+:alt: HPE iPDU board signal chain: Ethernet magnetics and ICS1893 PHY to the NS9360 SoC, with the MAXQ3180 energy meter, TMP89 display/bezel MCU and daisy-chained extension bars.
+:width: 90%
+
+The HPE iPDU board signal chain around the NS9360.
 ```
 
 ### Header / connector inventory

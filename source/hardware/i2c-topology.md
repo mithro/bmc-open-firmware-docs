@@ -4,35 +4,11 @@ The AST2050 BMC manages every board peripheral over **7 I2C buses**. This map is
 the reverse-engineered ground truth that the reconstructed device tree, the
 `c410x-bmc` QEMU machine, and the OpenBMC entity-manager configuration all mirror.
 
-```text
-AST2050 BMC
-│
-├── Bus 0xF0 ─── 16x INA219 current/power monitors (addr 0x40-0x4F)
-│                 └─ One per PCIe slot, measures GPU power draw
-│
-├── Bus 0xF1 ─┬─ PCA9544A 4-ch mux (addr 0x70)
-│             │   ├── Ch 0 → ADT7462 #1 (addr 0x58)  ─ fans 1-4, voltages, temps
-│             │   └── Ch 1 → ADT7462 #2 (addr 0x5C)  ─ fans 5-8, voltages, temps
-│             │
-│             └─ PCA9555 #5 (addr 0x20)  ─ PSU management, fan status LEDs
-│
-├── Bus 0xF2 ─── AT24C256 EEPROM (addr 0x50)  ─ FRU data (serial, part number)
-│
-├── Bus 0xF3 ─── PEX8696 + PEX8647 PCIe switches (SMBus management)
-│
-├── Bus 0xF4 ─┬─ PCA9548 #1 8-ch mux (addr 0x70)
-│             │   └── Ch 0-7 → TMP75 slots 1-8 (addr 0x5C each)
-│             │
-│             └─ PCA9548 #2 8-ch mux (addr 0x71)
-│                 └── Ch 0-7 → TMP75 slots 9-16 (addr 0x5C each)
-│
-├── Bus 0xF5 ─── PMBus to 4x hot-swap PSUs
-│
-└── Bus 0xF6 ─┬─ PCA9555 #1 (addr 0x20)  ─ Card presence detect (16 slots)
-              ├─ PCA9555 #2 (addr 0x21)  ─ Per-slot power-good feedback
-              ├─ PCA9555 #3 (addr 0x22)  ─ Attention buttons + slot power control
-              ├─ PCA9555 #4 (addr 0x23)  ─ MRL (Manual Retention Latch) sensors
-              └─ LM75 (addr 0x4F)        ─ Front board ambient temperature
+```{figure} /_static/diagrams/c410x-i2c-topology.svg
+:alt: The C410X I2C topology — the AST2050 I2C engine fanning out to seven buses through PCA9544A/PCA9548A muxes to the sensor, GPIO-expander and PEX-switch devices.
+:width: 90%
+
+The C410X seven-bus I2C topology (see {doc}`../systems/dell-c410x` for the full device inventory and interrupt routing).
 ```
 
 ## Device count summary

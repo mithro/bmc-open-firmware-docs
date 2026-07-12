@@ -46,25 +46,6 @@ GPIO. Device multiplicities are shown per branch.
 
 Text tree:
 
-```text
-AST2050 BMC (I2C engine)
-├─ 0xF0 ── 16× INA219 (0x40–0x4F)               per-slot power
-├─ 0xF1 ─┬ PCA9544A mux (0x70)
-│        │   ├─ ch → ADT7462 #1  (THERM → GPIOB0)
-│        │   └─ ch → ADT7462 #2  (THERM → GPIOB1)
-│        └ PCA9555 #5 (0x20)   PSU/fan-LED GPIO (INT → GPIOA5)
-├─ 0xF2 ── AT24C256 EEPROM (0x50)               FRU data
-├─ 0xF3 ── PEX8696 ×4 (0x18/0x19/0x1A/0x1B)     PCIe switch mgmt (no mux)
-│          PEX8647 ×2 (0x68/0x6A)
-├─ 0xF4 ─┬ PCA9548A #1 (0x70)  ch0–7 → slot 1–8 temp
-│        └ PCA9548A #2 (0x71)  ch0–7 → slot 9–16 temp
-├─ 0xF5 ── PMBus → PSU 1–4                       (ALERT# → GPIOB2)
-└─ 0xF6 ─┬ PCA9555 #1 (0x20)  slot presence     (INT → GPIOA4)
-         ├─ PCA9555 #2 (0x21)  slot power-good   (INT → GPIOB5)
-         ├─ PCA9555 #3 (0x22)  attn btn + pwr    (INT → GPIOB4)
-         ├─ PCA9555 #4 (0x23)  MRL sensors       (INT → GPIOB5)
-         └─ front-board temp sensor (0x4F)
-```
 
 `i2cdetect` across all seven buses reproducing this exact map is the natural
 acceptance test for a faithful QEMU model [io-tables](#sources).
