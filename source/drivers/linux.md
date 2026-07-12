@@ -21,6 +21,61 @@ Until the G3 dtsi lands, the boards boot on `aspeed_g4_defconfig` + a clock patc
 enough). The clean G3 series is the upstreamable form.
 ```
 
+### Hardware-verified G3 fixes
+
+Booting a modern kernel (6.6.x) on a real AST2050 surfaced two G3-specific bugs,
+both fixed and confirmed on silicon. The fixes are maintained as a patch series
+in the program repo (`asus-kgpe-d16-firmware/kernel/patches/`, applied on top of
+a Linux 6.6.70 base):
+
+```{list-table}
+:header-rows: 1
+:widths: 40 60
+
+* - Patch
+  - What it fixes
+* - `0001-clk-aspeed-add-ast2050-support`
+  - the G3 H-PLL / derived-clock support the SoC exposes
+* - `0002-ftgmac100-ast2050-macclk`
+  - leaves `MACCLK` at the U-Boot default on the G3 (the G3 U-Boot path never
+    programs it); harmless on QEMU
+* - `0003-irqchip-add-aspeed-ast2050-vic-g3`
+  - the compact G3 VIC driver (below) — the fix that unblocked the whole
+    modern-kernel bring-up
+```
+
+#### `irq-aspeed-g3-vic.c` — the G3 interrupt controller
+
+The single most important G3 fix. Mainline `irq-aspeed-vic.c` targets the
+AST2400+ interleaved VIC at `0x1E6C0080`; the AST2050's VIC is a compact block at
+`0x1E6C0000` ({ref}`SoC detail <g3-vic>`). On the G3 the stock driver enables no
+interrupts at all, so the timer clockevent never fires, hrtimers hang, and the
+first `usleep_range()` in `ftgmac100_open()` hangs the boot. The new driver
+(compatible `aspeed,ast2050-vic`, bound from the board DTS) programs
+sense/event/dual-edge per the datasheet source table and ACKs edge sources via
+`VIC38`. **Verified on real hardware:** the FTTMR010 clockevent fires (~1 kHz),
+`eth0` links up on real interrupts, and IP-config completes to an NFS-root mount.
+
+```{admonition} Debugging lesson
+:class: tip
+
+The P2A ("VGA") AHB window is *blind* to the `0x1E6C0000` VIC block (reads return
+zero, writes are dropped) while DRAM/SCU/timer read back fine — so every
+host-side observation of the VIC was a phantom zero. The only reliable observer
+of the interrupt controller is the ARM core itself (kernel `pr_warn` plus an
+interrupt-count `late_initcall`, read back out of `__log_buf`).
+```
+
+#### ftgmac100 RX and the `FAST_MODE` bit
+
+With interrupts working, the MAC still received nothing (`rx=0`) while transmit
+worked. Root cause: the G3 MAC software reset clears `MACCR` bit 19
+(`FAST_MODE`), leaving a 100 Mbit link mis-configured as 10 Mbit so no frames are
+accepted. The fix re-derives the speed from `cur_speed` in `start_hw` and restores
+`FAST_MODE`. This was reproduced first in the QEMU MAC model, then confirmed on
+silicon — after which OpenBMC-over-NFS with a live Redfish endpoint came up on the
+real board (see {doc}`../firmware/openbmc`).
+
 ## Peripheral drivers (all mainline)
 
 Every C410X peripheral binds to an existing mainline driver — no out-of-tree

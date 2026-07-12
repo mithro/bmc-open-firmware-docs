@@ -4,6 +4,16 @@ The AST2050 exposes an ARM926EJ-S EmbeddedICE-RT debug port (raw JTAG,
 IDCODE `0x07926f0f`, 4-bit IR). A Raspberry Pi 4 wired to the board's debug
 headers provides JTAG debug, a serial console, and SPI flash programming.
 
+```{admonition} Status — JTAG run-control is hardware-verified
+:class: important
+
+Full JTAG run-control works on a real AST2050 over RPi4 bit-bang (`linuxgpiod`):
+IDCODE `0x07926f0f`, RTCK echo 64/64, halt/resume, and AHB memory access over
+JTAG (`SCU7C` reads `0x00000202`, matching the P2A path independently). DDR2 can
+even be initialised over JTAG. JTAG is a second, independent access path to the
+BMC alongside P2A — see {doc}`bring-up`.
+```
+
 ## Connections (KGPE-D16)
 
 ```{list-table}
@@ -17,11 +27,21 @@ headers provides JTAG debug, a serial console, and SPI flash programming.
   - `AST_JTAG1` (20-pin ARM)
   - TCK/TMS/TDI/TDO/nTRST/nSRST; 3.3 V only
 * - Console
-  - `AST_UART1` (4-pin)
-  - 3.3V / TX / RX / GND, 115200 8N1
+  - BMC UART (4-pin), 3.3 V / TX / RX / GND
+  - Wired to the SoC **UART2** (`0x1E784000`). On the KGPE-D16 BMC this line runs
+    at **1200 baud** — an easy-to-miss detail that made the console look dead at
+    115200.
 * - SPI flash
   - `BMC_FW1`
   - in-system SPI programming of the boot flash
+```
+
+```{admonition} Console baud
+:class: warning
+
+The KGPE-D16 BMC console is UART2 at **1200 baud**, not the 115200 typical of
+later Aspeed parts. Set the line speed (`stty -F <dev> 1200`) before attaching,
+or the console reads as garbage/silence.
 ```
 
 ```{admonition} Electrical safety
