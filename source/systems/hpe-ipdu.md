@@ -44,6 +44,15 @@ display MCU, Ethernet PHY) is planned — see {doc}`../emulation/qemu`.
 
 ## Board topology and headers
 
+```{figure} /_static/diagrams/ipdu-j1-jtag.svg
+:alt: HPE iPDU (Digi NS9360) J1 20-pin ARM JTAG header, standard Multi-ICE pinout, marked CANDIDATE (pin-to-signal map needs board tracing). NS9360 TAP IDCODE 0x09105031, bist_en_n strap.
+:width: 80%
+
+**J1** — the iPDU's 20-pin ARM JTAG header (standard Multi-ICE layout). Marked
+*candidate* until the pin→signal map is confirmed by board tracing; the NS9360
+TAP IDCODE is `0x09105031`.
+```
+
 
 The Core Unit controller board is a single-SoC design: the NS9360 is the only
 general-purpose processor. The MAXQ3180 (metering) and TMP89FM42 (display) are

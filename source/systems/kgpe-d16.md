@@ -45,6 +45,30 @@ emulation proofs use the Dell C410X image (also AST2050) on the same machine.
 
 ## Debug / JTAG / UART / BMC headers
 
+```{figure} /_static/diagrams/kgpe-d16-ast-jtag1.svg
+:alt: AST_JTAG1 BMC 20-pin ARM JTAG header pinout — odd pins carry the JTAG/reset signals with their RPi4 BCM GPIO / physical-pin / direction wiring; even pins are GND; pin 1 marked. Verified IDCODE 0x07926f0f.
+:width: 80%
+
+**AST_JTAG1** — the BMC 20-pin ARM JTAG header, with the exact RPi4 bit-bang
+wiring on each signal pin (verified TAP IDCODE `0x07926f0f`).
+```
+
+```{figure} /_static/diagrams/kgpe-d16-ast-uart1.svg
+:alt: AST_UART1 BMC console 4-pin header — 3.3V (do not wire), BMC TXD, BMC RXD, GND, with crossover-to-RPi labels and the 1200-baud console note.
+:width: 60%
+
+**AST_UART1** — the BMC console header (crossover TX/RX to the adapter; the
+console runs at 1200 baud on this board).
+```
+
+```{figure} /_static/diagrams/kgpe-d16-amd-hdt.svg
+:alt: AMD HDT (NB_JTAG_HEADER) 20-pin host-CPU debug header pinout, 1.27mm, with all 20 signals; needs a proprietary AMD/ASSET probe, not OpenOCD.
+:width: 80%
+
+**AMD HDT** (`NB_JTAG_HEADER`) — the host-CPU debug header. Unlike the BMC JTAG,
+this needs a proprietary AMD/ASSET probe, not OpenOCD.
+```
+
 
 The KGPE-D16 has several **unpopulated** debug footprints, not documented in the
 ASUS user manual, confirmed by Raptor Engineering. [JTAG-HEADERS.md:1-19] Two are

@@ -1527,4 +1527,3 @@ as the PEX8696 reset — alongside 80 off-chip PCA9555 expander lines
   debounce 0x40,0x44 / timers 0x50,0x54,0x58 / ext data 0x20`, 8 banks; matches §23.3.
 - **spi-aspeed-smc.c** (torvalds/linux) — targets the AST2400+ FMC/SPI, whose
   layout differs from the legacy AST2050 SMC; noted as a weak cross-reference for §11.
-```

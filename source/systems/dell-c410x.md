@@ -4,6 +4,15 @@ A 16-slot PCIe GPU expansion chassis with **no host CPU** — it is managed enti
 
 ## Full 7-bus I2C topology
 
+```{figure} /_static/diagrams/c410x-i2c-topology.svg
+:alt: The C410X I2C topology — the AST2050 I2C engine fanning out to seven buses (0xF0-0xF6), through PCA9544A/PCA9548A muxes to the INA219, TMP75, ADT7462, PCA9555, PEX8696/8647 and EEPROM/PSU devices, with interrupt routes to BMC GPIO.
+:width: 100%
+
+The C410X seven-bus I2C topology: the AST2050 I2C engine → muxes → the sensor,
+GPIO-expander and PEX-switch devices, with interrupt lines routed back to BMC
+GPIO. Device multiplicities are shown per branch.
+```
+
 
 ```{list-table} AST2050 I2C bus map [io-tables], [gpio-map], [PEX-I2C]
 :header-rows: 1
@@ -66,7 +75,9 @@ acceptance test for a faithful QEMU model [io-tables].
 
 
 The reverse-engineered end-to-end power-on flow, from front-panel button to
-steady-green, mixing AST2050 on-chip GPIO, PCA9555 #5 outputs, and PEX8696 I2C
+steady-green, mixing AST2050 on-chip GPIO, PCA9555 #5 outputs, and PEX8696 I2C.
+
+```{list-table} C410X 12-step power-on
 :header-rows: 1
 :widths: 8 40 52
 
@@ -124,6 +135,9 @@ actual order (`0x11 → 0x33 → 0x77 → 0xFF`) [gpio-map], [PEX-I2C].
 
 
 The AST2050 uses 38 on-chip GPIO lines; the ones that drive this control fabric
+are:
+
+```{list-table} Control-fabric AST2050 GPIO pins
 :header-rows: 1
 :widths: 14 12 48 26
 

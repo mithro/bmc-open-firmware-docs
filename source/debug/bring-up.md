@@ -15,6 +15,15 @@ the silicon.
 
 ## Path 1 — P2A (PCIe-to-AHB), no debug hardware
 
+```{figure} /_static/diagrams/ast2050-p2a-boot.svg
+:alt: Ten-step P2A cold-boot flow — host drives the P2A window, enables the bridge, inits DDR2 over AHB, siphons the payload to 0x40000000, remaps DRAM to 0x0, freezes the ARM via SCU70, issues a watchdog HRST_N reset, re-applies the remap, and re-enables the ARM to run. DDR2 and the SCU survive the reset; the AHBC remap is cleared and re-applied.
+:width: 100%
+
+The P2A cold-boot sequence. Steps 6–8 highlight the reset behaviour: DDR2 and the
+SCU survive the watchdog `HRST_N`, while the AHBC boot-remap is cleared and must
+be re-applied before the ARM is released.
+```
+
 The AST2050's VGA/PCIe endpoint exposes a **P2A bridge** onto the BMC's internal
 AHB bus. From the x86 host (booted into a rescue Linux) the
 [`culvert`](https://github.com/mithro/culvert) tool — ported to recognise the G3

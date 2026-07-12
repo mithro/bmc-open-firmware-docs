@@ -1142,4 +1142,3 @@ silicon check is dead/unused (the subsequent `set_MPLL` writes literal
     <https://codebrowser.dev/linux/linux/drivers/clk/clk-aspeed.c.html>
   - Aspeed SCU device-tree binding (context):
     <https://www.kernel.org/doc/Documentation/devicetree/bindings/mfd/aspeed-scu.txt>
-```

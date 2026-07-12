@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 760" role="img" aria-labelledby="m-title m-desc">
+  <title id="m-title">AST2050 ARM physical address map</title>
+  <desc id="m-desc">Vertical address-ordered map of the Aspeed AST2050 ARM physical address space from 0x00000000 to 0xFFFFFFFF: static memory / boot alias at 0, SPI NOR boot flash at 0x14000000, SMC registers at 0x16000000, the on-chip peripheral region 0x1E600000 to 0x1E7FFFFF (expanded at right with AHBC, MAC0/1, USB, VIC at 0x1E6C0000, SDRAM controller, SCU, Video, GPIO, RTC, timers, UART1/2, WDT, LPC), and DDR2 DRAM at 0x40000000.</desc>
+  <style>
+    text{font-family:ui-monospace,'DejaVu Sans Mono',monospace;fill:var(--ink);}
+    svg{
+      --ink:#1a1a1a;--muted:#555;--box:#f4f4f4;--panel:#ececec;
+      --blue:#2d6cdf;--green:#1a8a5a;--gold:#b8860b;--purple:#7d3cc0;--red:#c0392b;
+    }
+    @media (prefers-color-scheme: dark){
+      svg{
+        --ink:#e6e6e6;--muted:#a8a8a8;--box:#2a2a2a;--panel:#232323;
+        --blue:#5b9bff;--green:#3cc98a;--gold:#e0b050;--purple:#b98cf0;--red:#e74c3c;
+      }
+    }
+    .t{font-size:19px;font-weight:700;}
+    .st{font-size:12px;fill:var(--muted);}
+    .h{font-size:13px;font-weight:700;}
+    .l{font-size:12px;}
+    .m{font-size:12px;fill:var(--muted);}
+    .addr{font-size:12px;fill:var(--muted);}
+    .star{fill:var(--red);font-size:13px;font-weight:700;}
+    .box{fill:var(--box);stroke-width:1.8;}
+    .blue{stroke:var(--blue);}.green{stroke:var(--green);}.gold{stroke:var(--gold);}
+    .purple{stroke:var(--purple);}.neu{stroke:var(--ink);}
+    .panel{fill:var(--panel);stroke:var(--muted);stroke-width:1.2;}
+    .dash{fill:none;stroke:var(--muted);stroke-width:1.3;stroke-dasharray:5 4;}
+    .sw{stroke-width:1.8;fill:var(--box);}
+  </style>
+
+  <text class="t" x="24" y="34">AST2050 (G3) &#8212; ARM physical address map</text>
+  <text class="st" x="24" y="54">0x00000000 &#8211; 0xFFFFFFFF &#183; on-chip peripheral region expanded at right &#183; rows ordered by address, not to scale</text>
+
+  <!-- expanded peripheral panel backdrop -->
+  <rect class="panel" x="616" y="96" width="428" height="586" rx="8"/>
+  <text class="h" x="624" y="88">On-chip peripherals &#8212; 0x1E600000 &#8211; 0x1E7FFFFF</text>
+
+  <!-- zoom guide lines from main-bar peripheral row to panel -->
+  <line class="dash" x1="470" y1="329" x2="616" y2="96"/>
+  <line class="dash" x1="470" y1="479" x2="616" y2="682"/>
+
+  <!-- MAIN BAR -->
+  <!-- Static Memory -->
+  <text class="addr" x="140" y="118" text-anchor="end">0x00000000</text>
+  <rect class="box gold" x="150" y="110" width="320" height="90" rx="7"/>
+  <text class="h" x="166" y="146">Static Memory (32M)</text>
+  <text class="m" x="166" y="166">boot: flash CE2 alias</text>
+  <text class="m" x="166" y="184">&#8594; SDRAM after AHBC8C[0]=1 remap</text>
+
+  <!-- Flash -->
+  <text class="addr" x="140" y="213" text-anchor="end">0x14000000</text>
+  <rect class="box gold" x="150" y="205" width="320" height="66" rx="7"/>
+  <text class="h" x="166" y="233">SPI NOR boot flash (FMC)</text>
+  <text class="m" x="166" y="253">96M window &#183; U-Boot at flash base</text>
+
+  <!-- SMC regs -->
+  <text class="addr" x="140" y="308" text-anchor="end">0x16000000</text>
+  <rect class="box purple" x="150" y="280" width="320" height="44" rx="7"/>
+  <text class="h" x="166" y="299">SMC registers (32M)</text>
+  <text class="m" x="166" y="317">static-memory controller</text>
+
+  <!-- Peripherals band -->
+  <text class="addr" x="140" y="357" text-anchor="end">0x1E600000</text>
+  <rect class="box neu" x="150" y="329" width="320" height="150" rx="7"/>
+  <text class="h" x="310" y="398" text-anchor="middle">On-chip peripherals</text>
+  <text class="m" x="310" y="418" text-anchor="middle">0x1E6xxxxx / 0x1E7xxxxx</text>
+  <text class="m" x="310" y="436" text-anchor="middle">SCU, SDRAMC, VIC, MAC,</text>
+  <text class="m" x="310" y="454" text-anchor="middle">GPIO, UART, timers, LPC &#8230;</text>
+
+  <!-- DRAM -->
+  <text class="addr" x="140" y="492" text-anchor="end">0x40000000</text>
+  <rect class="box gold" x="150" y="484" width="320" height="130" rx="7"/>
+  <text class="h" x="166" y="520">DRAM &#8212; DDR2 (256M window)</text>
+  <text class="m" x="166" y="540">64 MiB populated (HW-verified)</text>
+  <text class="m" x="166" y="558">payload target for P2A boot</text>
+  <text class="m" x="166" y="584">top of DRAM = VGA framebuffer</text>
+  <text class="m" x="166" y="602">carve-out (SCU70[3:2])</text>
+
+  <text class="addr" x="140" y="640" text-anchor="end">0xFFFFFFFF</text>
+  <line class="dash" x1="150" y1="632" x2="470" y2="632"/>
+
+  <!-- EXPANDED PANEL ROWS -->
+  <g>
+    <!-- row template: addr @632, name @760 ; pitch 33 from y=110 baseline -->
+    <text class="addr" x="632" y="128">0x1E600000</text><rect class="sw purple" x="736" y="116" width="12" height="14"/><text class="l" x="756" y="128">AHBC &#8212; AHB remap + unlock key</text>
+    <text class="addr" x="632" y="161">0x1E660000</text><rect class="sw purple" x="736" y="149" width="12" height="14"/><text class="l" x="756" y="161">MAC0 &#8212; ftgmac100 10/100</text>
+    <text class="addr" x="632" y="194">0x1E680000</text><rect class="sw purple" x="736" y="182" width="12" height="14"/><text class="l" x="756" y="194">MAC1 &#8212; ftgmac100 10/100</text>
+    <text class="addr" x="632" y="227">0x1E6A0000</text><rect class="sw purple" x="736" y="215" width="12" height="14"/><text class="l" x="756" y="227">USB2.0 &#8212; virtual hub</text>
+    <text class="addr" x="632" y="260">0x1E6C0000</text><rect class="sw blue" x="736" y="248" width="12" height="14"/><text class="l" x="756" y="260">VIC &#8212; interrupt ctrl (compact G3) <tspan class="star">&#9733;</tspan></text>
+    <text class="addr" x="632" y="293">0x1E6E0000</text><rect class="sw gold" x="736" y="281" width="12" height="14"/><text class="l" x="756" y="293">SDRAMC &#8212; MMC &#183; key FC600309</text>
+    <text class="addr" x="632" y="326">0x1E6E2000</text><rect class="sw gold" x="736" y="314" width="12" height="14"/><text class="l" x="756" y="326">SCU &#8212; clock/strap &#183; key 1688A8A8</text>
+    <text class="m"    x="756" y="342">SCU7C = 0x00000202 (silicon rev)</text>
+    <text class="addr" x="632" y="375">0x1E700000</text><rect class="sw purple" x="736" y="363" width="12" height="14"/><text class="l" x="756" y="375">Video Engine &#8212; JPEG/VQ capture</text>
+    <text class="addr" x="632" y="408">0x1E720000</text><rect class="sw purple" x="736" y="396" width="12" height="14"/><text class="l" x="756" y="408">A2P &#8212; AHB-to-PCI bridge</text>
+    <text class="addr" x="632" y="441">0x1E780000</text><rect class="sw green" x="736" y="429" width="12" height="14"/><text class="l" x="756" y="441">GPIO &#8212; banks A&#8211;H (64 pins)</text>
+    <text class="addr" x="632" y="474">0x1E781000</text><rect class="sw green" x="736" y="462" width="12" height="14"/><text class="l" x="756" y="474">RTC</text>
+    <text class="addr" x="632" y="507">0x1E782000</text><rect class="sw green" x="736" y="495" width="12" height="14"/><text class="l" x="756" y="507">Timers 1/2/3 &#8212; FTTMR010</text>
+    <text class="addr" x="632" y="540">0x1E783000</text><rect class="sw green" x="736" y="528" width="12" height="14"/><text class="l" x="756" y="540">UART1 &#8212; 16550</text>
+    <text class="addr" x="632" y="573">0x1E784000</text><rect class="sw green" x="736" y="561" width="12" height="14"/><text class="l" x="756" y="573">UART2 &#8212; BMC console <tspan class="star">&#9733;</tspan></text>
+    <text class="addr" x="632" y="606">0x1E785000</text><rect class="sw green" x="736" y="594" width="12" height="14"/><text class="l" x="756" y="606">WDT &#8212; watchdog timer</text>
+    <text class="addr" x="632" y="639">0x1E787000</text><rect class="sw green" x="736" y="627" width="12" height="14"/><text class="l" x="756" y="639">VUART / PUART (0x1E788000)</text>
+    <text class="addr" x="632" y="672">0x1E789000</text><rect class="sw purple" x="736" y="660" width="12" height="14"/><text class="l" x="756" y="672">LPC &#8212; iLPC-to-AHB bridge</text>
+  </g>
+
+  <!-- Legend -->
+  <line class="dash" x1="24" y1="702" x2="470" y2="702"/>
+  <rect class="sw gold"   x="24"  y="716" width="18" height="14" rx="3"/><text class="l" x="48"  y="728">memory</text>
+  <rect class="sw green"  x="130" y="716" width="18" height="14" rx="3"/><text class="l" x="154" y="728">CPU periph</text>
+  <rect class="sw purple" x="266" y="716" width="18" height="14" rx="3"/><text class="l" x="290" y="728">I/O + bridge</text>
+  <rect class="sw blue"   x="410" y="716" width="18" height="14" rx="3"/><text class="l" x="434" y="728">interrupt</text>
+  <text class="l" x="24" y="750"><tspan class="star">&#9733;</tspan> = hardware-verified, boot-critical G3 block</text>
+</svg>

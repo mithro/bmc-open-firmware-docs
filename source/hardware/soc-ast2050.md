@@ -19,6 +19,14 @@ mainline drivers, and the hardware-verified reverse-engineering.
 
 ## Memory map
 
+```{figure} /_static/diagrams/ast2050-memory-map.svg
+:alt: AST2050 ARM physical address map showing flash at 0x14000000, the 0x1E6xxxxx peripheral band, and DRAM at 0x40000000, with the on-chip peripheral blocks in address order.
+:width: 100%
+
+The AST2050 ARM physical address map. ★ marks the boot-critical G3 blocks (the
+VIC at `0x1E6C0000` and the UART2 console).
+```
+
 ```{list-table}
 :header-rows: 1
 :widths: 26 22 52

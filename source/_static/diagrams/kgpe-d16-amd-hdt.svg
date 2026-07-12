@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 678" role="img" aria-labelledby="ttl desc" preserveAspectRatio="xMidYMid meet">
+  <title id="ttl">AMD HDT - host-CPU debug (KGPE-D16)</title>
+  <desc id="desc">AMD HDT (Hardware Debug Tool) 20-pin host-CPU debug header for the ASUS KGPE-D16. Proprietary JTAG dialect; requires an AMD/ASSET probe, not OpenOCD. Pin 1 (VDDIO) is a square pad, marked red. Odd pins left, even pins right.</desc>
+
+  <style>
+    text { font-family: ui-monospace,'DejaVu Sans Mono',monospace; fill: #1a1a1a; }
+    .title { font-size: 20px; font-weight: 700; }
+    .sub   { font-size: 13px; }
+    .muted { font-size: 12px; fill: #555555; }
+    .leg   { font-size: 12px; }
+    .sig   { font-size: 13px; font-weight: 600; }
+    .pinnum{ font-size: 12px; font-weight: 700; }
+    .board { fill: #f4f4f4; stroke: #1a1a1a; stroke-width: 2; }
+    .notch { fill: #d8d8d8; stroke: #1a1a1a; stroke-width: 1.5; }
+    .pad   { fill: #f4f4f4; stroke: #1a1a1a; stroke-width: 2.5; }
+    .pin1sq{ fill: #f4d7d2; stroke: #c0392b; stroke-width: 2.8; }
+    .banner{ fill: #faf0d7; stroke: #b8860b; stroke-width: 1.5; }
+    .a-jtag{ stroke: #2d6cdf; } .a-ctrl{ stroke: #b8860b; }
+    .a-pwr { stroke: #1a8a5a; } .a-test{ stroke: #7d3cc0; }
+    .a-gnd { stroke: #8a8a8a; }
+    .t-pin1{ fill: #c0392b; } .t-jtag{ fill: #2d6cdf; } .t-ctrl{ fill: #b8860b; }
+    .t-pwr { fill: #1a8a5a; } .t-test{ fill: #7d3cc0; } .t-gnd{ fill: #666666; }
+    @media (prefers-color-scheme: dark) {
+      text { fill: #e6e6e6; }
+      .muted { fill: #b3b3b3; }
+      .board { fill: #2a2a2a; stroke: #e6e6e6; }
+      .notch { fill: #3a3a3a; stroke: #e6e6e6; }
+      .pad   { fill: #2a2a2a; stroke: #e6e6e6; }
+      .pin1sq{ fill: #5a2a26; stroke: #e74c3c; }
+      .banner{ fill: #3a3320; stroke: #e0b050; }
+      .a-jtag{ stroke: #5b9bff; } .a-ctrl{ stroke: #e0b050; }
+      .a-pwr { stroke: #3cc98a; } .a-test{ stroke: #b98cf0; }
+      .a-gnd { stroke: #9a9a9a; }
+      .t-pin1{ fill: #e74c3c; } .t-jtag{ fill: #5b9bff; } .t-ctrl{ fill: #e0b050; }
+      .t-pwr { fill: #3cc98a; } .t-test{ fill: #b98cf0; } .t-gnd{ fill: #b0b0b0; }
+    }
+  </style>
+
+<text x="24" y="34" class="title">AMD HDT - host-CPU debug (KGPE-D16)</text>
+<text x="24" y="57" class="sub muted">NB_JTAG_HEADER · Opteron 6100/6200/6300 · 20-pin HDT+ (2x10, 1.27 mm)</text>
+<rect x="24" y="68" width="652" height="26" rx="6" class="banner"/>
+<text x="34" y="85" class="leg t-ctrl">Proprietary AMD HDT - needs an AMD/ASSET InterTech probe; NOT OpenOCD / RPi-drivable.</text>
+<rect x="272" y="108" width="110" height="336" rx="10" class="board"/>
+<path d="M 313.0 108 L 341.0 108 L 327.0 119 Z" class="notch"/>
+<rect x="277" y="121" width="22" height="22" rx="3" class="pin1sq"/><text x="288" y="132" class="pinnum" text-anchor="middle" dominant-baseline="central">1</text>
+<text x="250" y="136" class="sig" text-anchor="end">VDDIO</text>
+<circle cx="366" cy="132" r="10" class="pad a-jtag"/><text x="366" y="132" class="pinnum" text-anchor="middle" dominant-baseline="central">2</text>
+<text x="392" y="136" class="sig" text-anchor="start">TCK</text>
+<circle cx="288" cy="164" r="10" class="pad a-gnd"/><text x="288" y="164" class="pinnum" text-anchor="middle" dominant-baseline="central">3</text>
+<text x="250" y="168" class="sig" text-anchor="end">GND</text>
+<circle cx="366" cy="164" r="10" class="pad a-jtag"/><text x="366" y="164" class="pinnum" text-anchor="middle" dominant-baseline="central">4</text>
+<text x="392" y="168" class="sig" text-anchor="start">TMS</text>
+<circle cx="288" cy="196" r="10" class="pad a-gnd"/><text x="288" y="196" class="pinnum" text-anchor="middle" dominant-baseline="central">5</text>
+<text x="250" y="200" class="sig" text-anchor="end">GND</text>
+<circle cx="366" cy="196" r="10" class="pad a-jtag"/><text x="366" y="196" class="pinnum" text-anchor="middle" dominant-baseline="central">6</text>
+<text x="392" y="200" class="sig" text-anchor="start">TDI</text>
+<circle cx="288" cy="228" r="10" class="pad a-gnd"/><text x="288" y="228" class="pinnum" text-anchor="middle" dominant-baseline="central">7</text>
+<text x="250" y="232" class="sig" text-anchor="end">GND</text>
+<circle cx="366" cy="228" r="10" class="pad a-jtag"/><text x="366" y="228" class="pinnum" text-anchor="middle" dominant-baseline="central">8</text>
+<text x="392" y="232" class="sig" text-anchor="start">TDO</text>
+<circle cx="288" cy="260" r="10" class="pad a-jtag"/><text x="288" y="260" class="pinnum" text-anchor="middle" dominant-baseline="central">9</text>
+<text x="250" y="264" class="sig" text-anchor="end">TRST_L</text>
+<circle cx="366" cy="260" r="10" class="pad a-pwr"/><text x="366" y="260" class="pinnum" text-anchor="middle" dominant-baseline="central">10</text>
+<text x="392" y="264" class="sig" text-anchor="start">PWROK_BUF</text>
+<circle cx="288" cy="292" r="10" class="pad a-ctrl"/><text x="288" y="292" class="pinnum" text-anchor="middle" dominant-baseline="central">11</text>
+<text x="250" y="296" class="sig" text-anchor="end">DBRDY3</text>
+<circle cx="366" cy="292" r="10" class="pad a-ctrl"/><text x="366" y="292" class="pinnum" text-anchor="middle" dominant-baseline="central">12</text>
+<text x="392" y="296" class="sig" text-anchor="start">RESET_L</text>
+<circle cx="288" cy="324" r="10" class="pad a-ctrl"/><text x="288" y="324" class="pinnum" text-anchor="middle" dominant-baseline="central">13</text>
+<text x="250" y="328" class="sig" text-anchor="end">DBRDY2</text>
+<circle cx="366" cy="324" r="10" class="pad a-ctrl"/><text x="366" y="324" class="pinnum" text-anchor="middle" dominant-baseline="central">14</text>
+<text x="392" y="328" class="sig" text-anchor="start">DBRDY0</text>
+<circle cx="288" cy="356" r="10" class="pad a-ctrl"/><text x="288" y="356" class="pinnum" text-anchor="middle" dominant-baseline="central">15</text>
+<text x="250" y="360" class="sig" text-anchor="end">DBRDY1</text>
+<circle cx="366" cy="356" r="10" class="pad a-ctrl"/><text x="366" y="356" class="pinnum" text-anchor="middle" dominant-baseline="central">16</text>
+<text x="392" y="360" class="sig" text-anchor="start">DBREQ_L</text>
+<circle cx="288" cy="388" r="10" class="pad a-gnd"/><text x="288" y="388" class="pinnum" text-anchor="middle" dominant-baseline="central">17</text>
+<text x="250" y="392" class="sig" text-anchor="end">GND</text>
+<circle cx="366" cy="388" r="10" class="pad a-test"/><text x="366" y="388" class="pinnum" text-anchor="middle" dominant-baseline="central">18</text>
+<text x="392" y="392" class="sig" text-anchor="start">TEST19</text>
+<circle cx="288" cy="420" r="10" class="pad a-pwr"/><text x="288" y="420" class="pinnum" text-anchor="middle" dominant-baseline="central">19</text>
+<text x="250" y="424" class="sig" text-anchor="end">VDDIO</text>
+<circle cx="366" cy="420" r="10" class="pad a-test"/><text x="366" y="420" class="pinnum" text-anchor="middle" dominant-baseline="central">20</text>
+<text x="392" y="424" class="sig" text-anchor="start">TEST18</text>
+<rect x="22" y="470" width="16" height="16" rx="2" class="pin1sq"/>
+<text x="48" y="482" class="leg">Pin 1 - VDDIO, I/O reference (square pad)</text>
+<circle cx="30" cy="502" r="8" class="pad a-jtag"/>
+<text x="48" y="506" class="leg">JTAG - TCK/TMS/TDI/TDO/TRST_L</text>
+<circle cx="30" cy="526" r="8" class="pad a-ctrl"/>
+<text x="48" y="530" class="leg">Debug control - RESET_L, DBREQ_L, DBRDY0-3</text>
+<circle cx="30" cy="550" r="8" class="pad a-pwr"/>
+<text x="48" y="554" class="leg">Power - VDDIO, PWROK_BUF</text>
+<circle cx="30" cy="574" r="8" class="pad a-test"/>
+<text x="48" y="578" class="leg">Reserved / test - TEST18, TEST19</text>
+<circle cx="30" cy="598" r="8" class="pad a-gnd"/>
+<text x="48" y="602" class="leg">GND</text>
+<text x="24" y="638" class="muted">Fine 1.27 mm pitch. Pin numbering: odd pins left, even pins right.</text>
+<text x="24" y="656" class="muted">Likely on-board scan chain: CPU1 → CPU2 → SR5690 → SP5100 (order unconfirmed).</text>
+</svg>
