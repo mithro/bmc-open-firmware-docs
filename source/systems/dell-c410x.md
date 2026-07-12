@@ -217,6 +217,55 @@ attention button [gpio-map].
 
 ---
 
+## C410X sensor inventory at a glance
+
+
+```{list-table} Sensor devices on the C410X BMC I2C buses
+:header-rows: 1
+:widths: 18 8 18 16 40
+
+* - Device
+  - Count
+  - I2C bus (firmware / DT)
+  - Address(es)
+  - Role
+* - INA219
+  - 16
+  - `0xF0` / `&i2c0` (base `0x1E78A040`)
+  - `0x40`–`0x4F` (A1/A0 straps)
+  - Per-PCIe-slot 12 V current/power monitor. [IS_fl.bin.md:165-195] [dts:402-411]
+* - ADT7462
+  - 2
+  - `0xF1` / `&i2c1` (base `0x1E78A080`)
+  - `0x58`, `0x5C` behind PCA9544A mux `0x70`
+  - Board temperature zones + 8-fan tach/PWM control. [IS_fl.bin.md:81-95,141-163] [dts:596-663]
+* - TMP75 (per-slot)
+  - 16
+  - `0xF4` / `&i2c4` (base `0x1E78A140`)
+  - `0x5C`, behind 2× PCA9548 mux (`0x70`, `0x71`)
+  - Per-PCIe-slot temperature. Firmware tables call these "TMP100"; DT uses `ti,tmp75`. [IS_fl.bin.md:102-129] [dts:733-851]
+* - LM75 (front board)
+  - 1
+  - `0xF6` / `&i2c6`
+  - `0x4F` (8-bit `0x9E`)
+  - Front-board ambient temperature. [IS_fl.bin.md:131-139] [dts:1104-1119]
+```
+
+```{admonition} TMP100 vs TMP75 vs LM75 — chip-identity caveat
+:class: warning
+
+The C410X firmware IO tables and symbol table name the per-slot sensor driver
+`G_sOEMTMP100_I2CTEMP_IOSAPI` and read them at **7-bit `0x5C`**.
+[ANALYSIS.md:499] [IS_fl.bin.md:106-107] The standard LM75/TMP75 address range is
+`0x48`–`0x4F`; `0x5C` is outside it, so the physical part is a TMP75/LM75-*class*
+device with non-standard strapping (or a TMP100/TMP1075 variant). The
+reconstructed device tree models them with the register-compatible `ti,tmp75`
+binding because all these chips share the same LM75 register layout (pointer +
+temperature/config/T_LOW/T_HIGH). [dts:739-743,769] The front-board sensor at
+`0x4F` is bound `national,lm75`. [dts:1115-1116] This document covers the TMP75
+and LM75 register sets; the per-slot part is functionally one of them.
+```
+
 ## Sources
 
 - **`dell-c410x-firmware/ANALYSIS.md`**, the decoded **`io-tables/`**,
