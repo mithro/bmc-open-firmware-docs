@@ -1245,11 +1245,12 @@ Primary (in-repo, read-only reverse-engineering + datasheet):
 
 Secondary (web, corroboration for JEDEC DDR2 procedure):
 
-- JEDEC JESD79-2B DDR2 SDRAM standard — mode-register set, EMRS/OCD, and the
-  power-up order (BA[1:0] = 00/01/10/11 → MRS/EMRS1/EMRS2/EMRS3):
-  <https://cs.baylor.edu/~maurer/CSI5338/JESD79-2B.pdf>
-- JEDEC DDR2 standard landing page:
+- JEDEC JESD79-2 DDR2 SDRAM standard — mode-register set, EMRS/OCD, and the
+  power-up order (BA[1:0] = 00/01/10/11 → MRS/EMRS1/EMRS2/EMRS3); the
+  authoritative standard (JEDEC registration required):
   <https://www.jedec.org/standards-documents/docs/jesd-79-2e>
+- DDR2 SDRAM overview — an accessible summary of the JESD79-2 device operation
+  and power-up sequence: <https://en.wikipedia.org/wiki/DDR2_SDRAM>
 - DDR2 power-up timing (≥200 µs stable clock/NOP before CKE high; PRECHARGE ALL;
   ≥2 AUTO REFRESH), e.g. Samsung DDR2 device-operation guide and the Microchip
   "DDR2-SDRAM Initialization" reference:

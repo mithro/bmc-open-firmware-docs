@@ -62,12 +62,18 @@ html_theme_options = {
 # -- Link checking -----------------------------------------------------------
 # `make linkcheck` / the CI link-check job uses these.
 linkcheck_ignore = [
-    # Private repository; not reachable from public CI.
+    # The program source repo (public). Skipped because most links carry `#Lnn`
+    # line anchors that GitHub renders in JS (so linkcheck cannot verify them),
+    # and the sheer number of blob links otherwise trips GitHub rate limiting.
     r"https://github\.com/mithro/ai-shenanigans-for-bmcs.*",
     # Google Docs internal references.
     r"https://docs\.google\.com/.*",
     # Valid pages that anti-bot / rate-limit the CI link checker (HTTP 403).
     r"https://developer\.arm\.com/.*",
+    # Valid datasheet mirrors on personal / regional hosts that intermittently
+    # fail DNS/TLS from CI runners (kept as references; not CI-reliable).
+    r"https?://(www\.)?belchip\.by/.*",
+    r"https?://realtek\.info/.*",
 ]
 linkcheck_timeout = 15
 linkcheck_retries = 2
