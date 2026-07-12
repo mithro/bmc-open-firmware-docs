@@ -97,7 +97,7 @@ config register, lowest-numbered pin in the least-significant nibble [HWRef p.46
 inversion** [HWRef p.473](#sources). This matches [mach-ns9xxx regs-bbu.h](#sources) (`BBU_GCONFx_DIR`
 = nibble bit 3, `_INV` = bit 2, `_FUNC` = bits 1:0) and [u-boot ns9750_bbus.h](#sources)
 (`GPIO_CFG_OUTPUT`=0x08, `GPIO_CFG_FUNC_GPIO`=0x03). Because eight pins share one
-register, a driver must read-modify-write [PLAN-INCREMENTAL-PORT.md](#sources).
+register, a driver must read-modify-write [PLAN-INCREMENTAL-PORT.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md).
 
 ```{list-table} GPIO config register coverage [HWRef p.466-472](#sources)
 :header-rows: 1
@@ -234,7 +234,7 @@ must clear these bits (write 0) before touching a peripheral's registers
 
 gpio[44] is the endian strap: AHBM, USBHST, and DMA reset to its value; the serial
 ports reset little-endian [HWRef p.486](#sources). This is the third register the BE→LE boot
-stub clears (bits 0x1201) [PLAN-INCREMENTAL-PORT.md](#sources). `USB Configuration` (0x070):
+stub clears (bits 0x1201) [PLAN-INCREMENTAL-PORT.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md). `USB Configuration` (0x070):
 bit 5 `EXT_PHY`, bit 4 `INT_PHY` (host/device), bit 2 `SPEED`; write only while the
 USB module is in reset [HWRef p.485-486](#sources). `BBus Timeout` (0x050): bit 31 `EN`,
 bits 15:0 `COUNT` (max BBus cycle length, keep ≥ 255) [HWRef p.482](#sources). `BBus DMA
@@ -400,7 +400,7 @@ a Buffer Descriptor Pointer (+0x00), a Control register (+0x10, fields CE/CA/MOD
 fly-by/BTE burst/BDR refetch/RST/STATE/INDEX), and a Status/Interrupt-Enable
 register (+0x14, NCIP/ECIP/NRIP/CAIP/PCIP pending + enables) [HWRef p.453-460](#sources). The
 firmware's heaviest users are the serial channels feeding the display link and the
-metering SPI [ANALYSIS.md](#sources).
+metering SPI [ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md).
 
 ## LCD, IEEE 1284, USB host & USB device (secondary blocks)
 
@@ -452,7 +452,7 @@ must set for this board are [ANALYSIS.md][HWRef p.50-63]:
 The I2C pins default to GPIO and the I2C module is held in reset until its pins are
 configured to function 0 [HWRef p.50, p.63](#sources). Full firmware-observed GPIO config
 values (e.g. GPIO Config #1 = 0x33333333, all of Serial B as GPIO inputs) are in
-[ANALYSIS.md](#sources).
+[ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md).
 
 ## Open-source cross-reference
 
@@ -516,10 +516,10 @@ Primary datasheets (in-repo, the authority for the register map):
 
 In-repo analysis and port planning (board specifics, firmware evidence):
 
-- `[ANALYSIS.md](#sources)` — `hpe-ipdu-firmware/ANALYSIS.md` (board inventory, NS9360 I/O
+- `[ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md)` — `hpe-ipdu-firmware/ANALYSIS.md` (board inventory, NS9360 I/O
   map, firmware register usage).
-- `[REFERENCE-MATERIAL.md](#sources)` — `hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md`.
-- `[PLAN-INCREMENTAL-PORT.md](#sources)` — `hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md`
+- `[REFERENCE-MATERIAL.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md)` — `hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md`.
+- `[PLAN-INCREMENTAL-PORT.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md)` — `hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md`
   (register quick reference and clock/baud derivation).
 
 Independent open-source cross-reference (register names, bases, bitfields):
@@ -530,7 +530,7 @@ Independent open-source cross-reference (register names, bases, bitfields):
   `gpio-ns9360.c`. Raw source, e.g.
   <https://raw.githubusercontent.com/torvalds/linux/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-sys-ns9360.h>.
 - `[u-boot ns9750](#sources)` — U-Boot at tag v2012.10: `include/ns9750_sys.h`,
-  `ns9750_mem.h`, `ns9750_bbus.h`, `ns9750_ser.h`, `include/configs/ns9750dev.h`,
+  [`ns9750_mem.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_mem.h), [`ns9750_bbus.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_bbus.h), [`ns9750_ser.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_ser.h), `include/configs/ns9750dev.h`,
   `drivers/serial/ns9750_serial.c`. Raw source, e.g.
   <https://raw.githubusercontent.com/u-boot/u-boot/v2012.10/include/ns9750_sys.h>.
 - `[u-boot ns9750_eth.h](#sources)` — the Ethernet register header is not in mainline

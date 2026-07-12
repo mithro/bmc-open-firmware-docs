@@ -3,7 +3,7 @@
 The **Digi (NetSilicon) NS9360** is a single-chip 0.13 µm CMOS network-attached
 processor from the NET+ARM family, built around an **ARM926EJ-S** (ARMv5TEJ)
 core. It powers the HPE Intelligent Modular PDU (AF531A), whose stock firmware
-is Digi **NET+OS** (a ThreadX-based RTOS), not Linux [ANALYSIS.md](#sources). This page is
+is Digi **NET+OS** (a ThreadX-based RTOS), not Linux [ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md). This page is
 a register-by-register reference for every on-chip block a Linux, U-Boot, or
 Zephyr port must drive.
 
@@ -207,7 +207,7 @@ So the fixed ratio is **cpu : ahb : bbus = 4 : 2 : 1**. With the board's
 
 Linux computes the same tree: $\text{systemclock} = \text{CRYSTAL} \times (ND+1) \gg FS$ (the raw VCO
 output) and $\text{cpuclock} = \text{systemclock} / 2$, with $\text{CRYSTAL} = 29491200$
-[mach-ns9xxx processor-ns9360.c](#sources). U-Boot's `ns9750dev.h` states the full tree
+[mach-ns9xxx processor-ns9360.c](#sources). U-Boot's [`ns9750dev.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/configs/ns9750dev.h) states the full tree
 explicitly as CPU = system/2, AHB = system/4, BBus = system/8 [u-boot ns9750dev.h](#sources).
 
 ```{admonition} "System clock" naming caveat
@@ -233,7 +233,7 @@ strap sampled at power-up [HWRef p.32-35]:
 
 - **`reset_done` = 1 (default): boot from flash/ROM** on the system memory bus
   (8-, 16-, or 32-bit static memory). The board boots from NOR flash on CS0
-  [ANALYSIS.md](#sources).
+  [ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md).
 - **`reset_done` = 0: boot from SDRAM via a serial SPI-EEPROM.** An on-chip boot
   engine drives Serial channel B in SPI-master mode, reads a 128-130 byte
   configuration header (memory-controller + SDRAM mode settings) from EEPROM
@@ -300,7 +300,7 @@ PID), and PA (AMBA/physical) [HWRef p.71-72](#sources). CP15 and MMU page-table 
 are the generic ARM926EJ-S definitions and are not repeated here; the SoC-specific
 programming lives in the blocks below. One SoC hook: CP15 control-register bit 7
 (CPU endianness) is one of the four bits the boot stub clears when switching
-big→little endian [PLAN-INCREMENTAL-PORT.md](#sources).
+big→little endian [PLAN-INCREMENTAL-PORT.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md).
 
 ## System Control Module (SCM)
 
@@ -972,7 +972,7 @@ the inverse encoding of the pin. Both are as printed; the board straps gpio[44] 
 (big-endian boot) and software later selects little-endian
 [HWRef p.154, p.181][REFERENCE-MATERIAL.md]. Endianness lives in four places that
 the BE→LE stub clears together: memory-controller Config bit 0, this ENDM bit,
-BBus Endian Config, and CP15 R1 bit 7 [PLAN-INCREMENTAL-PORT.md](#sources).
+BBus Endian Config, and CP15 R1 bit 7 [PLAN-INCREMENTAL-PORT.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md).
 ```
 
 ### System memory chip-select base/mask registers
@@ -1035,7 +1035,7 @@ the size and bit 0 is the enable (minimum region 4 KB) [HWRef p.183-191](#source
 These match [mach-ns9xxx regs-sys-ns9360.h](#sources) (`SYS_SMCSDMB/DMM`=0x1d0/0x1d4,
 `SYS_SMCSSMB/SMM`=0x1f0/0x1f4) and [u-boot ns9750_sys.h](#sources)
 (`CS_DYN_BASE/MASK`, `CS_STATIC_BASE/MASK`). U-Boot's `dram_init` reads
-`CS_DYN_MASK(0)` to size SDRAM [PLAN-INCREMENTAL-PORT.md](#sources).
+`CS_DYN_MASK(0)` to size SDRAM [PLAN-INCREMENTAL-PORT.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md).
 
 ### External interrupt control and RTC clock
 
@@ -1060,10 +1060,10 @@ Primary datasheets (in-repo, the authority for the register map):
 
 In-repo analysis and port planning (board specifics, firmware evidence):
 
-- `[ANALYSIS.md](#sources)` — `hpe-ipdu-firmware/ANALYSIS.md` (board inventory, NS9360 I/O
+- `[ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md)` — `hpe-ipdu-firmware/ANALYSIS.md` (board inventory, NS9360 I/O
   map, firmware register usage).
-- `[REFERENCE-MATERIAL.md](#sources)` — `hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md`.
-- `[PLAN-INCREMENTAL-PORT.md](#sources)` — `hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md`
+- `[REFERENCE-MATERIAL.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md)` — `hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md`.
+- `[PLAN-INCREMENTAL-PORT.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md)` — `hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md`
   (register quick reference and clock/baud derivation).
 
 Independent open-source cross-reference (register names, bases, bitfields):
@@ -1074,7 +1074,7 @@ Independent open-source cross-reference (register names, bases, bitfields):
   `gpio-ns9360.c`. Raw source, e.g.
   <https://raw.githubusercontent.com/torvalds/linux/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-sys-ns9360.h>.
 - `[u-boot ns9750](#sources)` — U-Boot at tag v2012.10: `include/ns9750_sys.h`,
-  `ns9750_mem.h`, `ns9750_bbus.h`, `ns9750_ser.h`, `include/configs/ns9750dev.h`,
+  [`ns9750_mem.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_mem.h), [`ns9750_bbus.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_bbus.h), [`ns9750_ser.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_ser.h), `include/configs/ns9750dev.h`,
   `drivers/serial/ns9750_serial.c`. Raw source, e.g.
   <https://raw.githubusercontent.com/u-boot/u-boot/v2012.10/include/ns9750_sys.h>.
 - `[u-boot ns9750_eth.h](#sources)` — the Ethernet register header is not in mainline

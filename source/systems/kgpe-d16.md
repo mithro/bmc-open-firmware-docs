@@ -71,7 +71,7 @@ this needs a proprietary AMD/ASSET probe, not OpenOCD.
 
 
 The KGPE-D16 has several **unpopulated** debug footprints, not documented in the
-ASUS user manual, confirmed by Raptor Engineering. [JTAG-HEADERS.md:1-19](#sources) Two are
+ASUS user manual, confirmed by Raptor Engineering. [JTAG-HEADERS.md:1-19](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-HEADERS.md#L1-L19) Two are
 BMC-side (`AST_JTAG1`, `AST_UART1`), the rest are host/CPU-side.
 
 ```{admonition} Confidence + pin-1 safety
@@ -81,8 +81,8 @@ A wrong pin-1 assumption on a live board back-feeds the AST2050. **✅ VERIFIED*
 from a cited source; **🔶 STANDARD** = a documented standard the header follows
 (confirm pin 1 by eye); **⚠️ TEMPLATE** = shape only, probe your board. Both
 `AST_*` headers are **unpopulated footprints** above the AST2050 — you solder
-headers in. [HEADER-PINOUTS.md:8-29](#sources) Both BMC-side sides are **3.3 V**; the RPi4
-is **not** 5 V tolerant. [RPI4-OPENOCD-JTAG-WIRING.md:41-44](#sources)
+headers in. [HEADER-PINOUTS.md:8-29](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/HEADER-PINOUTS.md#L8-L29) Both BMC-side sides are **3.3 V**; the RPi4
+is **not** 5 V tolerant. [RPI4-OPENOCD-JTAG-WIRING.md:41-44](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RPI4-OPENOCD-JTAG-WIRING.md#L41-L44)
 ```
 
 ```{list-table} KGPE-D16 debug/BMC headers at a glance
@@ -119,12 +119,12 @@ is **not** 5 V tolerant. [RPI4-OPENOCD-JTAG-WIRING.md:41-44](#sources)
   - ⚠️ probe first
 ```
 
-Source: [RPI4-OPENOCD-JTAG-WIRING.md:64-79](#sources) [HEADER-PINOUTS.md:17-24](#sources).
+Source: [RPI4-OPENOCD-JTAG-WIRING.md:64-79](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RPI4-OPENOCD-JTAG-WIRING.md#L64-L79) [HEADER-PINOUTS.md:17-24](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/HEADER-PINOUTS.md#L17-L24).
 
 ### 2.1 AST_JTAG1 — BMC JTAG (20-pin ARM, 2×10, 2.54 mm) ✅
 
 Standard ARM 20-pin JTAG. Pin 1 = square pad (top-left); odd column = signal,
-even column = GND (except pins 1–2). [HEADER-PINOUTS.md:37-66](#sources)
+even column = GND (except pins 1–2). [HEADER-PINOUTS.md:37-66](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/HEADER-PINOUTS.md#L37-L66)
 
 ```{list-table} AST_JTAG1 → Raspberry Pi 4B wiring (direct 3.3 V)
 :header-rows: 1
@@ -182,24 +182,24 @@ even column = GND (except pins 1–2). [HEADER-PINOUTS.md:37-66](#sources)
   - common (≥1, wire first)
 ```
 
-Sources: [HEADER-PINOUTS.md:43-66](#sources) [RPI4-OPENOCD-JTAG-WIRING.md:110-136](#sources).
+Sources: [HEADER-PINOUTS.md:43-66](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/HEADER-PINOUTS.md#L43-L66) [RPI4-OPENOCD-JTAG-WIRING.md:110-136](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RPI4-OPENOCD-JTAG-WIRING.md#L110-L136).
 
 ```{admonition} Verified JTAG facts (real hardware)
 :class: note
 
 - **TAP IDCODE `0x07926f0f`** — the ARM926EJ-S generic TAP (Raptor-confirmed on
   this exact AST2050). EmbeddedICE version **6**; **2** hardware breakpoint/
-  watchpoint units. [JTAG-USAGE-GUIDE.md:128-137,437-439](#sources)
+  watchpoint units. [JTAG-USAGE-GUIDE.md:128-137,437-439](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-USAGE-GUIDE.md#L128-L137)
 - Debug arch is **EmbeddedICE-RT over raw JTAG**, *not* CoreSight/SWD — use a
   raw-JTAG adapter (Pi bit-bang / FTDI / J-Link); SWD-only probes (ST-Link,
-  CMSIS-DAP, Black Magic) will not work. [RPI4-OPENOCD-JTAG-WIRING.md:52-58](#sources)
+  CMSIS-DAP, Black Magic) will not work. [RPI4-OPENOCD-JTAG-WIRING.md:52-58](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RPI4-OPENOCD-JTAG-WIRING.md#L52-L58)
 - Reset topology is `trst_and_srst combined`: SRST also resets the EmbeddedICE
   logic **inside the silicon**, so a clean reset-vector halt is impossible;
-  `reset halt` catches the core just past the vector. [JTAG-USAGE-GUIDE.md:217-233](#sources)
+  `reset halt` catches the core just past the vector. [JTAG-USAGE-GUIDE.md:217-233](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-USAGE-GUIDE.md#L217-L233)
 - Cross-check anchor: `SCU7C` (`0x1E6E207C`) reads **`0x00000202`** over JTAG,
-  matching the value read over host P2A/culvert. [JTAG-USAGE-GUIDE.md:250-256](#sources)
+  matching the value read over host P2A/culvert. [JTAG-USAGE-GUIDE.md:250-256](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-USAGE-GUIDE.md#L250-L256)
 - Raptor drove it with an **Olimex ARM-USB-TINY + OpenOCD** ("sufficient to bring
-  up U-Boot"). [RPI4-OPENOCD-JTAG-WIRING.md:73-78](#sources)
+  up U-Boot"). [RPI4-OPENOCD-JTAG-WIRING.md:73-78](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RPI4-OPENOCD-JTAG-WIRING.md#L73-L78)
 ```
 
 ### 2.2 AST_UART1 — BMC console (4-pin, 3.3 V) ✅
@@ -224,7 +224,7 @@ either way — treat both numbers as candidates and probe before relying on one.
 
 A 1×4 header just above the AST2050; ends fixed by Raptor's photo as **+3.3 V …
 GND**, the two middle pins TX/RX (confirm by probing — BMC TXD idles high and
-bursts at boot). **3.3 V TTL** (baud: see the note above). [HEADER-PINOUTS.md:98-126](#sources)
+bursts at boot). **3.3 V TTL** (baud: see the note above). [HEADER-PINOUTS.md:98-126](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/HEADER-PINOUTS.md#L98-L126)
 
 
 ```{list-table} AST_UART1 → RPi4 (leave +3.3 V unconnected; cross TX↔RX)
@@ -248,21 +248,21 @@ bursts at boot). **3.3 V TTL** (baud: see the note above). [HEADER-PINOUTS.md:98
   - GND, phys 6
 ```
 
-Sources: [HEADER-PINOUTS.md:105-126](#sources) [RPI4-OPENOCD-JTAG-WIRING.md:211-238](#sources). This
+Sources: [HEADER-PINOUTS.md:105-126](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/HEADER-PINOUTS.md#L105-L126) [RPI4-OPENOCD-JTAG-WIRING.md:211-238](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RPI4-OPENOCD-JTAG-WIRING.md#L211-L238). This
 header is the SoC's **UART2** (NS16550 at `0x1E784000` = Linux `ttyS1`), per the
 note above — not the SoC UART1 at `0x1E783000`.
-[RPI4-OPENOCD-JTAG-WIRING.md:236-238](#sources) Press **Delete** within ~3 s of U-Boot start
+[RPI4-OPENOCD-JTAG-WIRING.md:236-238](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RPI4-OPENOCD-JTAG-WIRING.md#L236-L238) Press **Delete** within ~3 s of U-Boot start
 to reach the bootloader.
 
 ### 2.3 BMC_FW1 — ASMB4/5 module / firmware slot 🔶
 
 The ASUS manual (§2.7.2) shows only its location and **pin 1 at lower-left**, with
 the note that it supports an **ASUS Server Management Board 4 (ASMB4)** iKVM
-module; no per-pin signals are published. [HEADER-PINOUTS.md:73-94](#sources) Its rumored
+module; no per-pin signals are published. [HEADER-PINOUTS.md:73-94](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/HEADER-PINOUTS.md#L73-L94) Its rumored
 role as a BMC-SPI-flash recovery path is **unconfirmed** — treat it as a flashrom
 (SPI) target only if continuity to the AST2050 boot flash (an SOIC-8 near the SoC)
 is proven. If it is SPI, drive it from the Pi's hardware SPI0 with Raptor's
-`ast2050-flashrom` fork. [RPI4-OPENOCD-JTAG-WIRING.md:242-268](#sources)
+`ast2050-flashrom` fork. [RPI4-OPENOCD-JTAG-WIRING.md:242-268](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RPI4-OPENOCD-JTAG-WIRING.md#L242-L268)
 ```{figure} /_static/diagrams/kgpe-d16-bmc-fw1.svg
 :alt: BMC_FW1 generic 2-row header footprint (ASMB4-iKVM slot); pin 1 lower-left; proprietary pinout.
 :width: 90%
@@ -275,7 +275,7 @@ is proven. If it is SPI, drive it from the Pi's hardware SPI0 with Raptor's
 The host/CPU debug port: **AMD HDT** (Hardware Debug Tool), a proprietary JTAG
 dialect for the Opteron 6100/6200/6300 (Family 10h/15h). It is **not** OpenOCD-
 or RPi-drivable (fine 1.27 mm pitch, proprietary probe/software required — ASSET
-InterTech / AMD HDT kit). [JTAG-HEADERS.md:62-95,236-239](#sources)
+InterTech / AMD HDT kit). [JTAG-HEADERS.md:62-95,236-239](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-HEADERS.md#L62-L95)
 
 ```{list-table} AMD HDT+ 20-pin pinout
 :header-rows: 1
@@ -335,12 +335,12 @@ InterTech / AMD HDT kit). [JTAG-HEADERS.md:62-95,236-239](#sources)
   - Reserved/test (may float)
 ```
 
-Source: [JTAG-HEADERS.md:96-140](#sources). A 26-pin (25-signal + key) 2.54 mm HDT variant
-exists for older boards. [JTAG-HEADERS.md:142-171](#sources) The likely on-board JTAG scan
+Source: [JTAG-HEADERS.md:96-140](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-HEADERS.md#L96-L140). A 26-pin (25-signal + key) 2.54 mm HDT variant
+exists for older boards. [JTAG-HEADERS.md:142-171](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-HEADERS.md#L142-L171) The likely on-board JTAG scan
 chain is `CPU1 → CPU2 → SR5690 → SP5100` (order unconfirmed).
-[JTAG-HEADERS.md:358-376](#sources) **NB_DEBUG_HEADER** and **TEST_CON1/2** are unconfirmed
+[JTAG-HEADERS.md:358-376](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-HEADERS.md#L358-L376) **NB_DEBUG_HEADER** and **TEST_CON1/2** are unconfirmed
 (possible 2nd HDT / POST / LPC / factory ICT) — identify before driving.
-[HEADER-PINOUTS.md:130-159](#sources)
+[HEADER-PINOUTS.md:130-159](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/HEADER-PINOUTS.md#L130-L159)
 
 ---
 
@@ -352,7 +352,7 @@ chain is `CPU1 → CPU2 → SR5690 → SP5100` (order unconfirmed).
 Raptor's AST2050 U-Boot conditionally initialises **GPIO bank A bit 4** to
 prevent spurious operation of the host during BMC boot. The change reads the
 GPIO **direction** register before driving, only setting the data + direction
-bits if not already set: [RAPTOR_ENGINEERING_AST2050_ANALYSIS.md:812-832](#sources)
+bits if not already set: [RAPTOR_ENGINEERING_AST2050_ANALYSIS.md:812-832](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md#L812-L832)
 
 ```c
 /* board/aspeed/ast2050/ast2050.c (Raptor commit 323b3ac) */
@@ -363,15 +363,15 @@ if (!((*((volatile ulong*)(AST_GPIO_BASE + 0x04))) & 0x00000010)) {
 ```
 
 - `AST_GPIO_BASE + 0x00` = GPIO data register; `+ 0x04` = GPIO direction
-  register; bit 4 (`0x10`) = **GPIOA4**. [RAPTOR_ENGINEERING_AST2050_ANALYSIS.md:823-828](#sources)
+  register; bit 4 (`0x10`) = **GPIOA4**. [RAPTOR_ENGINEERING_AST2050_ANALYSIS.md:823-828](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md#L823-L828)
 - Making the write **conditional** (test direction first) avoids clobbering a
   host-driven line — "conditional GPIO initialization prevents conflicts".
-  [RAPTOR_ENGINEERING_AST2050_ANALYSIS.md:832](#sources)
+  [RAPTOR_ENGINEERING_AST2050_ANALYSIS.md:832](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md#L832)
 
 The AST2050 GPIO controller, serial GPIO (SGPIO), and PWM/fan blocks are all
 present in the Raptor port (`dev-gpio.c`, `dev-sgpio.c`, `dev-pwm-fan.c`), so an
 open-firmware port has full GPIO/PWM primitives to build power/reset/fan control
-from. [RAPTOR_ENGINEERING_AST2050_ANALYSIS.md:235-246,670-676](#sources)
+from. [RAPTOR_ENGINEERING_AST2050_ANALYSIS.md:235-246,670-676](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md#L235-L246)
 
 ### 3.2 Board power sequencing and observation
 
@@ -382,10 +382,10 @@ from. [RAPTOR_ENGINEERING_AST2050_ANALYSIS.md:235-246,670-676](#sources)
   soft power button in the current rig; power is switched at an **AC smart plug**
   (query / ON / OFF / TOGGLE over HTTP). Governed by the BIOS *Restore on AC
   Power Loss* setting; warm cycles (reboot / Ctrl-Alt-Del) avoid the DRAM
-  re-train delay. [HARDWARE-ACCESS.md:194-227](#sources)
+  re-train delay. [HARDWARE-ACCESS.md:194-227](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/HARDWARE-ACCESS.md#L194-L227)
 - POST order on the host serial console: `BMC is booting, please wait …` →
   (~100–130 s) `BMC failed …` (the AST2050 stock firmware is dead; host BIOS
-  continues) → memory/PCI init → boot prompt → PXE. [HARDWARE-ACCESS.md:216-222](#sources)
+  continues) → memory/PCI init → boot prompt → PXE. [HARDWARE-ACCESS.md:216-222](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/HARDWARE-ACCESS.md#L216-L222)
 - The host reaches the BMC over PCI as **ASPEED Graphics `[1a03:2000]` at
   `01:01.0`** (driver `ast`, 8 MB BAR0) — that BAR is the **P2A (PCIe→AHB)**
   doorway. IPMI KCS is declared (I/O `0xCA2`) but the BMC does **not** answer
@@ -399,9 +399,9 @@ state is visible in the SCU: `SCU7C = 0x00000202` (silicon rev),
 `SCU04 = 0x000FFE5C` (the datasheet reset value of the reset-control register; a
 live board reads a different value), `SCU14 = 0x00003EFF` (the **frequency-counter
 measurement** register — the hardware straps are in `SCU70`, not `SCU14`).
-[JTAG-USAGE-GUIDE.md:250-256,442-444](#sources) The DDR2 native window is `0x40000000`
+[JTAG-USAGE-GUIDE.md:250-256,442-444](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-USAGE-GUIDE.md#L250-L256) The DDR2 native window is `0x40000000`
 (64 MB); the SPI boot flash is at `0x14000000` (SMC controller `0x16000000`).
-[JTAG-USAGE-GUIDE.md:444](#sources) [datasheets/README.md:36-38](#sources)
+[JTAG-USAGE-GUIDE.md:444](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-USAGE-GUIDE.md#L444) [datasheets/README.md:36-38](#sources)
 
 ```{admonition} Crash-safety rule (AHB)
 :class: warning
@@ -409,7 +409,7 @@ measurement** register — the hardware straps are in `SCU70`, not `SCU14`).
 Never write `0x0` or the SMC flash window `0x14000000` while the DRAM→`0x0` remap
 is **not** set — it stalls the AST2050 AHB and can hang the host's PCIe. Work in
 the native DRAM window (`0x40000000`) and SoC register space.
-[JTAG-USAGE-GUIDE.md:318-322](#sources)
+[JTAG-USAGE-GUIDE.md:318-322](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-USAGE-GUIDE.md#L318-L322)
 ```
 
 ### 3.3 BMC Ethernet PHY
@@ -440,15 +440,15 @@ work. [datasheets/README.md:46-55,106-107](#sources) [hardware-inventory/README.
 * - Interface
   - Relevance
 * - SMBus controller
-  - Hosts the **W83795G at 0x2F** (`i2c-piix4`, I/O base `0x0B00`) plus DIMM SPD `0x50-0x57`; driven by an embedded 8051 core. [datasheets/README.md:52-53](#sources) [hardware-inventory/README.md:42](#sources) [JTAG-HEADERS.md:402-408](#sources)
+  - Hosts the **W83795G at 0x2F** (`i2c-piix4`, I/O base `0x0B00`) plus DIMM SPD `0x50-0x57`; driven by an embedded 8051 core. [datasheets/README.md:52-53](#sources) [hardware-inventory/README.md:42](#sources) [JTAG-HEADERS.md:402-408](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-HEADERS.md#L402-L408)
 * - LPC bus
-  - Connects the **W83667HG-A Super I/O** (host serial/COM, hwmon backup) and TPM; the LPC/Port-80 path is a candidate for the unidentified `NB_DEBUG_HEADER`. [datasheets/README.md:53](#sources) [HEADER-PINOUTS.md:141-144](#sources)
+  - Connects the **W83667HG-A Super I/O** (host serial/COM, hwmon backup) and TPM; the LPC/Port-80 path is a candidate for the unidentified `NB_DEBUG_HEADER`. [datasheets/README.md:53](#sources) [HEADER-PINOUTS.md:141-144](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/HEADER-PINOUTS.md#L141-L144)
 * - Power / reset
   - SB700-family power sequencing, ACPI/power-management, and platform reset live here; the ASF remote power path (W83795G §1.8) drives platform power via the NIC side-band, parallel to any BMC path.
 * - SATA / USB / GPIO
-  - 6× SATA II, USB OHCI/EHCI, GPIO — host peripherals. [JTAG-HEADERS.md:410-417](#sources) [hardware-inventory/README.md:17-19](#sources)
+  - 6× SATA II, USB OHCI/EHCI, GPIO — host peripherals. [JTAG-HEADERS.md:410-417](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-HEADERS.md#L410-L417) [hardware-inventory/README.md:17-19](#sources)
 * - Embedded 8051
-  - The SP5100 (like the SR5690) contains an embedded microcontroller that "requires a firmware upload from the main platform firmware or via JTAG" to start; it may be reachable on the HDT scan chain. [JTAG-HEADERS.md:402-417](#sources)
+  - The SP5100 (like the SR5690) contains an embedded microcontroller that "requires a firmware upload from the main platform firmware or via JTAG" to start; it may be reachable on the HDT scan chain. [JTAG-HEADERS.md:402-417](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-HEADERS.md#L402-L417)
 ```
 
 The SP5100's registers are documented in the in-repo **AMD SP5100 Register
@@ -463,8 +463,8 @@ the AST2050's own GPIO/WDT reset primitives (§3).
 
 ## Sources
 
-- **`asus-kgpe-d16-firmware/`** — `HEADER-PINOUTS.md`, `JTAG-HEADERS.md`,
-  `JTAG-USAGE-GUIDE.md`, `RPI4-OPENOCD-JTAG-WIRING.md` (header pinouts +
+- **`asus-kgpe-d16-firmware/`** — [`HEADER-PINOUTS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/HEADER-PINOUTS.md), [`JTAG-HEADERS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-HEADERS.md),
+  [`JTAG-USAGE-GUIDE.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-USAGE-GUIDE.md), [`RPI4-OPENOCD-JTAG-WIRING.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RPI4-OPENOCD-JTAG-WIRING.md) (header pinouts +
   RPi4 wiring), and the AST2050 bring-up docs (GPIO/power, verified
   IDCODE `0x07926f0f`, `SCU7C=0x202`).
 - **AMD SP5100 Register Reference Guide** (44413) — the southbridge.

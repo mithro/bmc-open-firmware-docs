@@ -24,7 +24,7 @@ The four bases and their 4 KiB regions come from the ARM address map (§9): RTC
 The AST2050 is **not** supported by mainline Linux; the earliest supported part
 is the AST2400 (G4). The G4 drivers named below are used only to corroborate
 register semantics and are flagged where the G3 block diverges from them.
-[aspeed-driver-quick-reference.md:4,107,114](#sources)
+[aspeed-driver-quick-reference.md:4,107,114](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-driver-quick-reference.md#L4)
 
 ```{admonition} Conventions
 :class: note
@@ -376,7 +376,7 @@ The register offsets (`0x00` CTRL, `0x04` CLK, `0x08`/`0x0C` duty, `0x10`–`0x1
 Type M/N, `0x20` tach source, `0x2C` result, `0x30`/`0x34` interrupt,
 `0x38`/`0x3C` limits) and this RPM relationship match the mainline G4 driver
 `drivers/hwmon/aspeed-pwm-tacho.c` (compatible `aspeed,ast2400-pwm-tacho`),
-which is register-compatible with this G3 block. [aspeed-mainline-drivers-analysis.md:99,105](#sources)
+which is register-compatible with this G3 block. [aspeed-mainline-drivers-analysis.md:99,105](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-mainline-drivers-analysis.md#L99)
 
 ### PTCR30 / PTCR34 — Interrupt Control / Status (offsets 0x30 / 0x34)
 
@@ -548,7 +548,7 @@ The AST2050 RTC register map (control at `0x0C`, restart at `0x10`, reset at
 `0x14`, no year counter) **differs from** the mainline G4 driver
 `drivers/rtc/rtc-aspeed.c` (compatible `aspeed,ast2400-rtc`), which targets a
 redesigned RTC block (year register + control at a different offset). The
-mainline driver cannot bind to this block unmodified. [aspeed-mainline-drivers-analysis.md:150](#sources) [aspeed-driver-quick-reference.md:83](#sources)
+mainline driver cannot bind to this block unmodified. [aspeed-mainline-drivers-analysis.md:150](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-mainline-drivers-analysis.md#L150) [aspeed-driver-quick-reference.md:83](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-driver-quick-reference.md#L83)
 
 ---
 
@@ -849,7 +849,7 @@ clear** status bits (the OR of which is VIC #15). [DS p.360-361](#sources)
 
 The mainline PECI host driver is `drivers/peci/controller/peci-aspeed.c`
 (compatibles `aspeed,ast2400-peci` / `ast2500-peci` / `ast2600-peci`); it does
-not list an AST2050 compatible. [aspeed-mainline-drivers-analysis.md:38](#sources)
+not list an AST2050 compatible. [aspeed-mainline-drivers-analysis.md:38](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-mainline-drivers-analysis.md#L38)
 
 ---
 
@@ -1180,7 +1180,7 @@ The pass-through UART exposes **only the ARM-only extended registers**
   (compat `aspeed,ast2400-vuart`) uses the same extended-register offsets
   (GCRA `0x20`, GCRB `0x24`, address `0x28`/`0x2C`); the standard 8250 core
   covers the `0x00`–`0x1C` block. There is no AST2050 compatible string.
-  [aspeed-mainline-drivers-analysis.md:135](#sources) [aspeed-driver-quick-reference.md:96](#sources)
+  [aspeed-mainline-drivers-analysis.md:135](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-mainline-drivers-analysis.md#L135) [aspeed-driver-quick-reference.md:96](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-driver-quick-reference.md#L96)
 ```
 
 ## Sources
@@ -1202,8 +1202,8 @@ The pass-through UART exposes **only the ARM-only extended registers**
   - Revision history & A1/A2 errata list (front matter) — PWM register removal
     (v0.92), VUART/PUART reset-on-reboot erratum, LHCR0 control note (v1.03).
 - **In-repo Raptor Engineering AST2050 port** (`asus-kgpe-d16-firmware/`):
-  - `ast2050.h` — 24 MHz UART reference clock, NS16550 base addresses.
-  - `hwreg.h` — SCU / timer / UART / interrupt-controller register offsets
+  - [`ast2050.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h) — 24 MHz UART reference clock, NS16550 base addresses.
+  - [`hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h) — SCU / timer / UART / interrupt-controller register offsets
     (the PWM/RTC/PECI/VUART blocks are *not* defined here; datasheet-only).
 - **In-repo mainline-driver analysis** (`dell-c410x-firmware/`), cited as
   `[aspeed-mainline-drivers-analysis.md:…](#sources)` / `[aspeed-driver-quick-reference.md:…](#sources)`:

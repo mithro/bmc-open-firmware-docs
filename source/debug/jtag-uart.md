@@ -65,4 +65,4 @@ sudo openocd -f rpi4-jtag.cfg -f ast2050.cfg -c "init; scan_chain; shutdown"
 ```
 
 These configs and the wiring detail are maintained in the program's
-`RPI4-OPENOCD-JTAG-WIRING.md` / `openocd/` reference and drive the HIL backend.
+[`RPI4-OPENOCD-JTAG-WIRING.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RPI4-OPENOCD-JTAG-WIRING.md) / `openocd/` reference and drive the HIL backend.

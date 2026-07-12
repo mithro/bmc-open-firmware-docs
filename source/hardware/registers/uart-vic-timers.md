@@ -9,7 +9,7 @@ The PCI/VGA/USB endpoint and the AHB debug bridges are on
 Citations use these short forms: `[DS §N p.P](#sources)` = the *AST2050/AST1100 A3
 Datasheet V1.05* (25 May 2010), chapter N / printed page P; repository filenames
 (e.g. `[g3-vic patch](#sources)`, `[TIMER-RCA](#sources)`, `[P2A-BOOT](#sources)`, `[CULVERT-G3](#sources)`,
-`[hwreg.h](#sources)`, `[ast2050.h](#sources)`) = hardware-verified reverse-engineering in the
+`[hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)`, `[ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h)`) = hardware-verified reverse-engineering in the
 program repo; named URLs = external cross-references (see **Sources**). Every
 load-bearing value is backed by at least two of these.
 
@@ -21,7 +21,7 @@ the AST2400 / "G4"). Several G3 blocks sit at **different offsets** from their
 G4+ equivalents, and drivers that assume the G4 layout silently write to
 nonexistent registers. The one that bit this project hardest: the **VIC** is a
 compact 32-source map at `0x1E6C0000` (§16), whereas the AST2400+ "new" VIC lives
-at `0x1E6C0080` with an interleaved layout that mainline `irq-aspeed-vic.c`
+at `0x1E6C0080` with an interleaved layout that mainline [`irq-aspeed-vic.c`](https://github.com/torvalds/linux/blob/master/drivers/irqchip/irq-aspeed-vic.c)
 drives — its writes miss the G3 entirely, so no interrupt is ever enabled and the
 timer clockevent is dead. `[TIMER-RCA](#sources)`, `[g3-vic patch](#sources)`
 ```
@@ -120,7 +120,7 @@ Key gates: `SCU0C[15]` UARTCLK, `SCU0C[5]` VGA DCLK, `SCU0C[4]` PCI-slave BCLK,
 The AST2050 integrates **two** 16550-compatible UARTs, each with a 16×8
 transmit/receive FIFO and a programmable baud generator, plus the LPC-side
 Virtual UART / Pass-through UART (`0x1E787000` / `0x1E788000`, §29 — not detailed
-here). `[DS §26 p.279](#sources)`, `[ast2050.h](#sources)`
+here). `[DS §26 p.279](#sources)`, `[ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h)`
 
 ```{list-table} UART instances
 :header-rows: 1
@@ -138,7 +138,7 @@ here). `[DS §26 p.279](#sources)`, `[ast2050.h](#sources)`
   - `0x1E784000`
   - Flow-control pins shared with GPIO. **This is the KGPE-D16 BMC console.**
     Raptor's U-Boot `.Done` debug output goes here (`CONFIG_CONS_INDEX 2`).
-    `[ast2050.h](#sources)`, `[P2A-BOOT](#sources)`
+    `[ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h)`, `[P2A-BOOT](#sources)`
 ```
 
 The two units share one register layout; the register address is
@@ -454,7 +454,7 @@ $$
 * - 115200
   - 13 (`0x000D`)
   - `0x00` / `0x0D`
-  - Raptor U-Boot default `CONFIG_BAUDRATE` `[ast2050.h](#sources)`, `[P2A-BOOT](#sources)`
+  - Raptor U-Boot default `CONFIG_BAUDRATE` `[ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h)`, `[P2A-BOOT](#sources)`
 ```
 
 ```{admonition} Two things that make the console look dead
@@ -463,7 +463,7 @@ $$
 1. **Baud (unresolved)** — the Raptor firmware configures UART2 at **115200**
    (`console=ttyS1,115200`; 38400 for DRAM-init), but the rig bring-up observed
    the console at **1200** (divisor 1250). Both are documented; probe before
-   relying on one. `[P2A-BOOT](#sources)`, `[ast2050.h](#sources)` (see {doc}`../../systems/kgpe-d16` §2.2)
+   relying on one. `[P2A-BOOT](#sources)`, `[ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h)` (see {doc}`../../systems/kgpe-d16` §2.2)
 2. **Clock gate** — the UART clock is gated by `SCU0C[15]` **Stop UARTCLK**
    (`0`=running, `1`=stopped; default running). It must be running (and
    `SCU2C[12]=0` for the plain 24 MHz reference) for either UART to clock out.
@@ -507,7 +507,7 @@ for edge/level and polarity. `[DS §16.1 p.179](#sources)`
 :class: important
 
 `Base of VIC = 0x1E6C0000`; physical = base + offset. `[DS §16.1 p.179](#sources)`,
-`[hwreg.h](#sources)` (`AST_IC_BASE`). This is a **single 32-bit word per register**
+`[hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)` (`AST_IC_BASE`). This is a **single 32-bit word per register**
 (non-interleaved), unlike the AST2400+ "new" VIC (interleaved high/low at
 `0x1E6C0080`). Using the G4 driver/offsets on the G3 enables **no** interrupts —
 the timer clockevent never fires, `hrtimers` hang, and boot stalls at
@@ -592,8 +592,8 @@ The compact map corresponds one-to-one to the classic **ARM PrimeCell PL190**
 VIC base registers (VICIRQStatus/VICFIQStatus/VICRawIntr/VICIntSelect/
 VICIntEnable/VICIntEnClear/VICSoftInt/VICSoftIntClear/VICProtection), *plus*
 Aspeed's programmable **SENSE/DUAL/EVENT** and the **EDGE_CLR** at `0x38`.
-Raptor's U-Boot `platform.S` already drives this base — it polls Timer3 status at
-`0x1E6C0008` and clears it via `0x1E6C0038`. `[TIMER-RCA](#sources)`, `[hwreg.h](#sources)`,
+Raptor's U-Boot [`platform.S`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S) already drives this base — it polls Timer3 status at
+`0x1E6C0008` and clears it via `0x1E6C0038`. `[TIMER-RCA](#sources)`, `[hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)`,
 [ARM PL190 TRM][pl190]
 
 ### Interrupt source table (Table 36)
@@ -796,8 +796,8 @@ selectable: APB `PCLK` or an external 1 MHz. `[DS §25.1-25.2 p.275](#sources)`,
 :class: note
 
 `Base of Timer = 0x1E782000`; physical = base + offset. `[DS §25.3 p.275](#sources)`,
-`[hwreg.h](#sources)` (`AST_TIMER_BASE`). Raptor's U-Boot uses Timer1 here with the 1 MHz
-external clock (`CONFIG_SYS_HZ = 1e6`). `[ast2050.h](#sources)`
+`[hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)` (`AST_TIMER_BASE`). Raptor's U-Boot uses Timer1 here with the 1 MHz
+external clock (`CONFIG_SYS_HZ = 1e6`). `[ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h)`
 ```
 
 ### Timer register map
@@ -948,13 +948,13 @@ delivery is fixed. `[TIMER-RCA](#sources)`
   used here: §9 ARM Address Space (p.97-98), §10 Interrupt Source Table / Table 36
   (p.99), §16 Interrupt Controller / VIC (p.179-182), §18 SCU (p.204-220), §25
   Timer Controller (p.275-278), §26 UART 16550 (p.279-286).
-- **`0003-irqchip-add-aspeed-ast2050-vic-g3.patch`** — hardware-verified G3 VIC
+- **[`0003-irqchip-add-aspeed-ast2050-vic-g3.patch`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/kernel/patches/0003-irqchip-add-aspeed-ast2050-vic-g3.patch)** — hardware-verified G3 VIC
   driver: the compact register map, the SENSE/EVENT/DUAL config values and their
   Table-36 derivation, edge-ack via VIC38.
-- **`TIMER-CLOCKEVENT-ROOT-CAUSE.md`** — hardware-verified VIC/timer analysis and
+- **[`TIMER-CLOCKEVENT-ROOT-CAUSE.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/TIMER-CLOCKEVENT-ROOT-CAUSE.md)** — hardware-verified VIC/timer analysis and
   the P2A-blind-to-VIC finding.
-- **`P2A-DRAM-BOOT-SEQUENCE.md`** — UART2 console at 1200 baud; `SCU70[1:0]`.
-- **`hwreg.h`, `ast2050.h`** — Raptor Engineering reverse-engineered register
+- **[`P2A-DRAM-BOOT-SEQUENCE.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/P2A-DRAM-BOOT-SEQUENCE.md)** — UART2 console at 1200 baud; `SCU70[1:0]`.
+- **[`hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h), [`ast2050.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h)** — Raptor Engineering reverse-engineered register
   bases (VIC `0x1E6C0000`, Timer `0x1E782000`, UART1/2).
 - [ARM PrimeCell PL190 VIC TRM (DDI0181)][pl190] and the [ARM VIC DT binding][vicdt]
   — confirm the PL190 base-register layout the G3 compact map follows.

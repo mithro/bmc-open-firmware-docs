@@ -4,7 +4,7 @@ The TMP89FM42LUG is a Toshiba **TLCS-870/C1** single-chip 8-bit CMOS
 microcontroller. On the iPDU it is the front-panel "Display Module" controller
 (7-segment display, LEDs, buzzer) and talks to the NS9360 over a UART (through a
 MAX3243EI RS-232 shifter). Its 3.6864 MHz crystal (Y6) is a UART baud-rate
-crystal that divides evenly to 115200/57600/…/9600 baud. `[ANALYSIS.md](#sources)`
+crystal that divides evenly to 115200/57600/…/9600 baud. `[ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md)`
 
 ## Device overview `[TMP89 DS p.1-2](#sources)`
 
@@ -72,10 +72,10 @@ The relevant serial pins on the TMP89 (from the pin assignment)
 ```
 
 The NS9360 side of this link is one of its UART/SIO serial ports through a
-MAX3243EI; `ANALYSIS.md` identifies the display path as NS9360 **Serial Port B**
+MAX3243EI; [`ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md) identifies the display path as NS9360 **Serial Port B**
 (primary comms, DMA channel 7). On-chip debug (OCD) shares P20/P21 with UART0,
 which is consistent with the J10 "PIC JTAG" sub-MCU programming header.
-`[ANALYSIS.md](#sources)` `[HEADERS-J1-J6.md](#sources)`
+`[ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md)` `[HEADERS-J1-J6.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/HEADERS-J1-J6.md)`
 
 ## UART0 register set `[TMP89 DS p.222-224](#sources)`
 
@@ -193,7 +193,7 @@ The firmware's display link is implemented in a source module `Dialog.c`, over a
 port defined by `APP_DIALOG_PORT`; the protocol handshake string is `HpBlSeR09`
 ("HP Bezel Serial, rev 09"). The link runs at a configurable baud rate ("error
 when change baud rate in Dialog.c"). Capabilities the MCU exposes to the NS9360:
-`[ANALYSIS.md](#sources)`
+`[ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md)`
 
 - 7-segment display (`7seg` CLI test), error LED, per-outlet blue UID LEDs,
   buzzer with "LED Beep Codes".
@@ -209,5 +209,5 @@ when change baud rate in Dialog.c"). Capabilities the MCU exposes to the NS9360:
 
 - **TMP89FM42LUG datasheet** (Toshiba TLCS-870/C1) — device overview + the
   UART0 register set.
-- **`hpe-ipdu-firmware/ANALYSIS.md`** + `HEADERS-J1-J6.md` — the sub-MCU role
+- **`hpe-ipdu-firmware/ANALYSIS.md`** + [`HEADERS-J1-J6.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/HEADERS-J1-J6.md) — the sub-MCU role
   (display/bezel controller) and the reverse-engineered "Dialog" protocol.

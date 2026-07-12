@@ -228,22 +228,22 @@ attention button [gpio-map](#sources).
   - 16
   - `0xF0` / `&i2c0` (base `0x1E78A040`)
   - `0x40`–`0x4F` (A1/A0 straps)
-  - Per-PCIe-slot 12 V current/power monitor. [IS_fl.bin.md:165-195](#sources) [dts:402-411]
+  - Per-PCIe-slot 12 V current/power monitor. [IS_fl.bin.md:165-195](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/IS_fl.bin.md#L165-L195) [dts:402-411]
 * - ADT7462
   - 2
   - `0xF1` / `&i2c1` (base `0x1E78A080`)
   - `0x58`, `0x5C` behind PCA9544A mux `0x70`
-  - Board temperature zones + 8-fan tach/PWM control. [IS_fl.bin.md:81-95,141-163](#sources) [dts:596-663]
+  - Board temperature zones + 8-fan tach/PWM control. [IS_fl.bin.md:81-95,141-163](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/IS_fl.bin.md#L81-L95) [dts:596-663]
 * - TMP75 (per-slot)
   - 16
   - `0xF4` / `&i2c4` (base `0x1E78A140`)
   - `0x5C`, behind 2× PCA9548 mux (`0x70`, `0x71`)
-  - Per-PCIe-slot temperature. Firmware tables call these "TMP100"; DT uses `ti,tmp75`. [IS_fl.bin.md:102-129](#sources) [dts:733-851]
+  - Per-PCIe-slot temperature. Firmware tables call these "TMP100"; DT uses `ti,tmp75`. [IS_fl.bin.md:102-129](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/IS_fl.bin.md#L102-L129) [dts:733-851]
 * - LM75 (front board)
   - 1
   - `0xF6` / `&i2c6`
   - `0x4F` (8-bit `0x9E`)
-  - Front-board ambient temperature. [IS_fl.bin.md:131-139](#sources) [dts:1104-1119]
+  - Front-board ambient temperature. [IS_fl.bin.md:131-139](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/IS_fl.bin.md#L131-L139) [dts:1104-1119]
 ```
 
 ```{admonition} TMP100 vs TMP75 vs LM75 — chip-identity caveat
@@ -251,7 +251,7 @@ attention button [gpio-map](#sources).
 
 The C410X firmware IO tables and symbol table name the per-slot sensor driver
 `G_sOEMTMP100_I2CTEMP_IOSAPI` and read them at **7-bit `0x5C`**.
-[ANALYSIS.md:499](#sources) [IS_fl.bin.md:106-107](#sources) The standard LM75/TMP75 address range is
+[ANALYSIS.md:499](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/ANALYSIS.md#L499) [IS_fl.bin.md:106-107](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/IS_fl.bin.md#L106-L107) The standard LM75/TMP75 address range is
 `0x48`–`0x4F`; `0x5C` is outside it, so the physical part is a TMP75/LM75-*class*
 device with non-standard strapping (or a TMP100/TMP1075 variant). The
 reconstructed device tree models them with the register-compatible `ti,tmp75`

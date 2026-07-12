@@ -24,7 +24,7 @@ and G4 (documented below).
   them.
 - The SCU input reference is **always a 24 MHz crystal** on the AST2050
   (there is no 25/48 MHz crystal option as on the AST2400). [DS §8.1 p.84](#sources)
-  [pin R22 CLKIN, DS p.47](#sources) [RAPTOR-PORTING-GUIDE.md:40,232](#sources)
+  [pin R22 CLKIN, DS p.47](#sources) [RAPTOR-PORTING-GUIDE.md:40,232](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md#L40)
 ```
 
 ## System Control Unit (SCU)
@@ -35,7 +35,7 @@ resets, hardware-strap readback, silicon-revision ID, pin muxing, and the
 ARM↔host scratch registers. Because writing these registers can badly disturb
 SoC operation, the whole block is write-protected by the SCU00 protection key:
 software must write `0x1688A8A8` to unlock, program, then write any other value
-to re-lock. [DS §18.1 p.204](#sources) [DS §9 p.97](#sources) [hwreg.h:77](#sources)
+to re-lock. [DS §18.1 p.204](#sources) [DS §9 p.97](#sources) [hwreg.h:77](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h#L77)
 
 ```{list-table} SCU register map (base 0x1E6E2000)
 :header-rows: 1
@@ -49,12 +49,12 @@ to re-lock. [DS §18.1 p.204](#sources) [DS §9 p.97](#sources) [hwreg.h:77](#so
   - SCU00 Protection Key
   - 0x00000000
   - RW
-  - Write `0x1688A8A8` to unlock; any other value locks. Reads back `1` when unlocked, `0` when locked. [DS p.204](#sources) [hwreg.h:79](#sources)
+  - Write `0x1688A8A8` to unlock; any other value locks. Reads back `1` when unlocked, `0` when locked. [DS p.204](#sources) [hwreg.h:79](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h#L79)
 * - 0x04
   - SCU04 System Reset Control
   - 0x000FFE5C
   - RW
-  - Per-module asynchronous reset bits (SDRAM, AHB bridges, I2C, HAC, LPC, video, MAC1/2, PWM, PECI, USB2.0, MDMA, MIC, PCI host). Default holds most modules in reset. [DS p.205](#sources) [hwreg.h:80](#sources)
+  - Per-module asynchronous reset bits (SDRAM, AHB bridges, I2C, HAC, LPC, video, MAC1/2, PWM, PECI, USB2.0, MDMA, MIC, PCI host). Default holds most modules in reset. [DS p.205](#sources) [hwreg.h:80](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h#L80)
 * - 0x08
   - SCU08 Clock Selection
   - 0xE3F00070
@@ -84,22 +84,22 @@ to re-lock. [DS §18.1 p.204](#sources) [DS §9 p.97](#sources) [hwreg.h:77](#so
   - SCU1C 32.768 KHz Error Correction
   - 0x0000001B
   - RW
-  - Fine-tunes the RTC 32.768 KHz source: $\text{RTCclk} = \dfrac{12\,\text{MHz} \times 128}{46848 + \text{corr}}$. [DS p.211](#sources) [hwreg.h:86](#sources)
+  - Fine-tunes the RTC 32.768 KHz source: $\text{RTCclk} = \dfrac{12\,\text{MHz} \times 128}{46848 + \text{corr}}$. [DS p.211](#sources) [hwreg.h:86](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h#L86)
 * - 0x20
   - SCU20 M-PLL Parameter
   - 0x00004291
   - RW
-  - Memory-clock PLL. Numerator/denominator/output-divider/post-divider, bypass, power-down. Default ≈133 MHz. [DS p.211](#sources) [hwreg.h:87](#sources)
+  - Memory-clock PLL. Numerator/denominator/output-divider/post-divider, bypass, power-down. Default ≈133 MHz. [DS p.211](#sources) [hwreg.h:87](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h#L87)
 * - 0x24
   - SCU24 H-PLL Parameter
   - 0x00004291
   - RW
-  - CPU/AHB PLL. Same field layout as M-PLL, plus strap-vs-register select (bit 18). Default from straps (100/133/166/200 MHz). [DS p.212](#sources) [hwreg.h:88](#sources)
+  - CPU/AHB PLL. Same field layout as M-PLL, plus strap-vs-register select (bit 18). Default from straps (100/133/166/200 MHz). [DS p.212](#sources) [hwreg.h:88](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h#L88)
 * - 0x28
   - SCU28 Frequency Counter Comparison Range
   - 0x00000000
   - RW
-  - Upper limit [29:16] and lower limit [13:0] for the SCU10 pass/fail compare. [DS p.213](#sources) [hwreg.h:89](#sources)
+  - Upper limit [29:16] and lower limit [13:0] for the SCU10 pass/fail compare. [DS p.213](#sources) [hwreg.h:89](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h#L89)
 * - 0x2C
   - SCU2C Misc. Control
   - 0x00000000
@@ -129,17 +129,17 @@ to re-lock. [DS §18.1 p.204](#sources) [DS §9 p.97](#sources) [hwreg.h:77](#so
   - SCU40 SOC Scratch #1 (VGA handshake, bits 31:0)
   - 0x00000000
   - RW
-  - ARM→host scratch. Bits used by firmware: Linux-boot key [31:24]=0x5A, DRAM-init-select [7], DRAM-init-ready [6], MAC PHY mode [15:12]. [DS p.215](#sources) [hwreg.h:91](#sources)
+  - ARM→host scratch. Bits used by firmware: Linux-boot key [31:24]=0x5A, DRAM-init-select [7], DRAM-init-ready [6], MAC PHY mode [15:12]. [DS p.215](#sources) [hwreg.h:91](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h#L91)
 * - 0x44
   - SCU44 SOC Scratch #2 (scratch bits 63:32)
   - 0x00000000
   - RW
-  - ARM→host scratch, upper 32 bits; firmware stores "last service IRQ number". [DS p.216](#sources) [hwreg.h:92](#sources)
+  - ARM→host scratch, upper 32 bits; firmware stores "last service IRQ number". [DS p.216](#sources) [hwreg.h:92](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h#L92)
 * - 0x48
   - (reserved on G3)
   - —
   - —
-  - Not defined in the A3 datasheet. On the AST2400 this offset is the MAC clock-delay register (`AST_SCU_MAC_CLK`); treat as reserved on the AST2050. [DS §18.1 p.204](#sources) [RAPTOR_ENGINEERING_AST2050_ANALYSIS.md:320](#sources)
+  - Not defined in the A3 datasheet. On the AST2400 this offset is the MAC clock-delay register (`AST_SCU_MAC_CLK`); treat as reserved on the AST2050. [DS §18.1 p.204](#sources) [RAPTOR_ENGINEERING_AST2050_ANALYSIS.md:320](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md#L320)
 * - 0x4C
   - (reserved on G3)
   - —
@@ -169,7 +169,7 @@ to re-lock. [DS §18.1 p.204](#sources) [DS §9 p.97](#sources) [hwreg.h:77](#so
   - SCU7C Silicon Revision ID
   - 0x00000202
   - RO
-  - Chip-bonding option [9:8] + silicon revision ID [7:0]. AST2050/AST1100-A2 and -A3 both read `0x00000202`. [DS p.220](#sources) [hwreg.h:94](#sources)
+  - Chip-bonding option [9:8] + silicon revision ID [7:0]. AST2050/AST1100-A2 and -A3 both read `0x00000202`. [DS p.220](#sources) [hwreg.h:94](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h#L94)
 ```
 
 ```{admonition} Offsets 0x48 and 0x4C
@@ -204,7 +204,7 @@ status value, not the key. The initial state is **locked**. [DS p.204](#sources)
 The Raptor DDR init exercises exactly this: it writes `0x1688a8a8`, then reads
 back and compares against `0x01` to confirm the unlock succeeded before touching
 any clock/DRAM register, and finally writes `0x00000000` to re-lock.
-[platform.S:240-247](#sources) [platform.S:334-336](#sources) [platform.S:590-592](#sources)
+[platform.S:240-247](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L240-L247) [platform.S:334-336](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L334-L336) [platform.S:590-592](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L590-L592)
 
 ### SCU08 — Clock Selection (offset 0x08)
 
@@ -348,7 +348,7 @@ are reserved 0. [DS p.209](#sources)
 ### SCU10 / SCU14 — Frequency counter (offsets 0x10, 0x14)
 
 A ring-oscillator / PLL frequency measurement facility used for self-test and to
-calibrate clocks against the 24 MHz reference. [DS p.210-211](#sources) [hwreg.h:83-84](#sources)
+calibrate clocks against the 24 MHz reference. [DS p.210-211](#sources) [hwreg.h:83-84](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h#L83-L84)
 
 ```{list-table} SCU10 fields
 :header-rows: 1
@@ -437,13 +437,13 @@ init reads to pick a baud divisor. [DS p.213](#sources)
 ```{admonition} Source discrepancy: SCU2C vs SCU28 in the Raptor headers
 :class: warning
 
-`hwreg.h` defines `SCU_FREQ_CNTR_CTRL_RANGE_REG` as base `+0x28`, but
-`platform.S` uses that symbol with an inline comment of `0x1e6e202c` and then
+[`hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h) defines `SCU_FREQ_CNTR_CTRL_RANGE_REG` as base `+0x28`, but
+[`platform.S`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S) uses that symbol with an inline comment of `0x1e6e202c` and then
 tests **bit 12** of the read value to select the UART baud divisor — i.e. it is
 functionally reading **SCU2C[12]** (the div13 enable), not SCU28. The label and
 the actual intent disagree by one register slot. Treat the datasheet as
 authoritative: SCU28 is the frequency-counter comparison range, SCU2C is Misc.
-Control (which is where the div13 bit lives). [hwreg.h:89](#sources) [platform.S:166-176](#sources) [DS p.213](#sources)
+Control (which is where the div13 bit lives). [hwreg.h:89](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h#L89) [platform.S:166-176](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L166-L176) [DS p.213](#sources)
 ```
 
 ### SCU7C — Silicon Revision ID (offset 0x7C)
@@ -495,7 +495,7 @@ The A3 silicon in the lab reads **`0x00000202`**, which matches the datasheet
 (A2 and A3 share the value) and has been independently confirmed on hardware via
 both the P2A and JTAG AHB backdoors (SCU7C = 0x202). The DDR init shifts SCU7C
 right by 8 and compares the low byte against `0x02` to detect AST2050/AST1100.
-[DS p.220](#sources) [platform.S:150-154](#sources)
+[DS p.220](#sources) [platform.S:150-154](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L150-L154)
 
 ## Clock tree (PLLs and derived clocks)
 
@@ -504,7 +504,7 @@ The clock tree is rooted at the external **24 MHz crystal** on the CLKIN pin
 **M-PLL** (memory) and the video PLLs (**V-PLL1/dclk_pll**, plus D2/D1-PLL) —
 while the low-rate housekeeping clocks (1 MHz, 12 MHz, 32 KHz, PECI, PWM, tach)
 are simple integer divisions of the 24 MHz reference. USB2.0 has its own PHY PLL.
-[DS §8.1 p.84, §8.5 p.88](#sources) [RAPTOR-PORTING-GUIDE.md:222-227](#sources)
+[DS §8.1 p.84, §8.5 p.88](#sources) [RAPTOR-PORTING-GUIDE.md:222-227](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md#L222-L227)
 
 ```{figure} /_static/diagrams/ast2050-clock-tree.svg
 :alt: AST2050 clock tree: the 24 MHz CLKIN crystal feeding the H-PLL (CPU/AHB), M-PLL (DDR), V-PLL (video) and the fixed 24 MHz path, through the integer dividers to the CPU/AHB/APB/MAC/UART/RTC clock domains.
@@ -643,8 +643,8 @@ The Raptor DDR init programs the M-PLL twice: first `SCU20 = 0x00004c81`
 (commented "numerator=0b001111, output divider=1, post divider=÷2") during the
 DRAM bring-up, and finally writes the AST2000-backward-compatible shadow
 `MCR120 = 0x00004c41`. The H-PLL is *not* reprogrammed by this code — it is left
-at its strap-selected value. [platform.S:158-159](#sources) [platform.S:338-340](#sources)
-[platform.S:546-548](#sources)
+at its strap-selected value. [platform.S:158-159](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L158-L159) [platform.S:338-340](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L338-L340)
+[platform.S:546-548](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L546-L548)
 
 ### CPU:AHB and APB derivation
 
@@ -662,8 +662,8 @@ The illustrative `ast2050.dtsi` in the repo analysis lists
 **AST2400** default H-PLL rate; on the AST2050 the strap options are
 100/133/166/200 MHz and CPUCLK maxes at 200 MHz. The 384 MHz figure is a copied
 G4 placeholder, not the real G3 value — use the strap-selected rate (typically
-200 MHz) when building a real G3 device tree. [RAPTOR_ENGINEERING_AST2050_ANALYSIS.md:1421-1433](#sources)
-[DS §SCU24 p.212](#sources) [RAPTOR-PORTING-GUIDE.md:38](#sources)
+200 MHz) when building a real G3 device tree. [RAPTOR_ENGINEERING_AST2050_ANALYSIS.md:1421-1433](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md#L1421-L1433)
+[DS §SCU24 p.212](#sources) [RAPTOR-PORTING-GUIDE.md:38](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md#L38)
 ```
 
 ## Hardware straps (SCU70)
@@ -682,7 +682,7 @@ The AST2050 places the **H-PLL frequency strap at [11:9]** and the **CPU:AHB
 ratio at [13:12]**. The AST2400 uses **[9:8]** and **[11:10]** respectively. A
 G4 clock driver will mis-decode a G3 strap word. This is the single most
 important porting hazard in this block. [DS §SCU70 p.217-218](#sources)
-[RAPTOR-PORTING-GUIDE.md:41-42,229-232](#sources) [codebrowser clk-aspeed.c](#sources)
+[RAPTOR-PORTING-GUIDE.md:41-42,229-232](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md#L41-L42) [codebrowser clk-aspeed.c](#sources)
 ```
 
 ```{list-table} SCU70 hardware-trapping fields
@@ -768,7 +768,7 @@ important porting hazard in this block. [DS §SCU70 p.217-218](#sources)
 
 The DDR init reads SCU70[3:2] (VGA memory-size strap) and folds it into the
 SDRAM configuration register `MCR04`, confirming the strap encoding is live on
-this silicon. [platform.S:363-377](#sources)
+this silicon. [platform.S:363-377](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L363-L377)
 
 ## Reset control and reset domains
 
@@ -951,7 +951,7 @@ things: a **system reset** (into the `HRST_N` domain), a **CPU interrupt**, and 
 **external `WDTRST` pulse** (A1+ silicon only). The counter reloads from `WDT04`
 and is kicked by writing the magic `0x4755` to `WDT08`. It is clocked by either
 PCLK or the 1 MHz reference (selected by `WDT0C[4]`). [DS §27 p.287-289](#sources)
-[hwreg.h:164-169](#sources) [DS §8.2 p.85](#sources)
+[hwreg.h:164-169](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h#L164-L169) [DS §8.2 p.85](#sources)
 
 ```{list-table} WDT register map (base 0x1E785000)
 :header-rows: 1
@@ -965,22 +965,22 @@ PCLK or the 1 MHz reference (selected by `WDT0C[4]`). [DS §27 p.287-289](#sourc
   - WDT00 Counter Status
   - 0x03EF1480
   - RO
-  - Current counter value; resets to `0x03EF1480` on `HRST_N`; loaded from WDT04 on restart. Counts down while WDT0C[0]=1. [DS p.287](#sources) [hwreg.h:166](#sources)
+  - Current counter value; resets to `0x03EF1480` on `HRST_N`; loaded from WDT04 on restart. Counts down while WDT0C[0]=1. [DS p.287](#sources) [hwreg.h:166](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h#L166)
 * - 0x04
   - WDT04 Counter Reload Value
   - 0x03EF1480
   - RW
-  - Value loaded into WDT00 on reset/restart; sets the timeout period. [DS p.288](#sources) [hwreg.h:167](#sources)
+  - Value loaded into WDT00 on reset/restart; sets the timeout period. [DS p.288](#sources) [hwreg.h:167](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h#L167)
 * - 0x08
   - WDT08 Counter Restart
   - 0x00000000
   - WO
-  - Write `0x4755` (bits[15:0]) to reload WDT00 and (re)start counting — the "kick". [DS p.288](#sources) [hwreg.h:168](#sources)
+  - Write `0x4755` (bits[15:0]) to reload WDT00 and (re)start counting — the "kick". [DS p.288](#sources) [hwreg.h:168](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h#L168)
 * - 0x0C
   - WDT0C Control
   - 0x00000000
   - RW
-  - Enable, reset-on-timeout, interrupt-on-timeout, external-signal-on-timeout, clock select. [DS p.288](#sources) [hwreg.h:169](#sources)
+  - Enable, reset-on-timeout, interrupt-on-timeout, external-signal-on-timeout, clock select. [DS p.288](#sources) [hwreg.h:169](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h#L169)
 * - 0x10
   - WDT10 Timeout Status
   - 0x00000000
@@ -1044,7 +1044,7 @@ For AST2000 software compatibility, a few SCU-equivalent registers are shadowed
 inside the **memory controller** block (base `0x1E6E0000`). The Raptor DDR init
 writes the MPLL shadow at the end of bring-up. These are *not* in the SCU block
 but belong to this subsystem's programming model. [DS §17 p.200-201](#sources)
-[hwreg.h:70-71](#sources)
+[hwreg.h:70-71](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h#L70-L71)
 
 ```{list-table} MMC-resident SCU-compatible shadow registers (base 0x1E6E0000)
 :header-rows: 1
@@ -1058,12 +1058,12 @@ but belong to this subsystem's programming model. [DS §17 p.200-201](#sources)
   - MCR100 AST2000-compat SCU password
   - 0x000000A8
   - RO
-  - Fixed `0x000000A8`. [DS p.201](#sources) [hwreg.h:70](#sources)
+  - Fixed `0x000000A8`. [DS p.201](#sources) [hwreg.h:70](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h#L70)
 * - 0x120
   - MCR120 AST2000-compat SCU M-PLL parameter
   - 0x00000000
   - RW
-  - Post-divider [15:14], numerator [13:5], denumerator [4:0]. DDR init writes `0x00004c41`. [DS p.201](#sources) [platform.S:546-548](#sources)
+  - Post-divider [15:14], numerator [13:5], denumerator [4:0]. DDR init writes `0x00004c41`. [DS p.201](#sources) [platform.S:546-548](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L546-L548)
 * - 0x170
   - MCR170 AST2000-compat SCU hardware-strap value
   - 0x00000000
@@ -1073,39 +1073,39 @@ but belong to this subsystem's programming model. [DS §17 p.200-201](#sources)
 
 ## SoC power-on / init sequence (SCU/clock/reset touchpoints)
 
-The Raptor `lowlevel_init` (`platform.S`) is the reference low-level bring-up. The
+The Raptor `lowlevel_init` ([`platform.S`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S)) is the reference low-level bring-up. The
 SCU/clock/reset-relevant steps, in order, are:
 
-1. **Unlock SCU** — write `0x1688A8A8` to `SCU00`. [platform.S:132-134,240-242](#sources)
-2. **Claim DRAM init** — set `SCU40[7]` (SOC-firmware-initialises-DRAM). [platform.S:136-139](#sources)
+1. **Unlock SCU** — write `0x1688A8A8` to `SCU00`. [platform.S:132-134,240-242](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L132-L134)
+2. **Claim DRAM init** — set `SCU40[7]` (SOC-firmware-initialises-DRAM). [platform.S:136-139](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L136-L139)
 3. **Skip if already done** — read `SCU40[6]`; if the DRAM-init-ready flag is
-   already set, jump straight to the lock/return path. [platform.S:141-147](#sources)
+   already set, jump straight to the lock/return path. [platform.S:141-147](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L141-L147)
 4. **Detect silicon** — read `SCU7C`, shift right 8, compare low byte against
-   `0x02` to confirm AST2050/AST1100 before touching the PLL. [platform.S:150-154](#sources)
+   `0x02` to confirm AST2050/AST1100 before touching the PLL. [platform.S:150-154](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L150-L154)
 5. **Program M-PLL (first pass)** — `SCU20 = 0x00004c81` (commented "200 MHz").
-   [platform.S:156-159](#sources)
+   [platform.S:156-159](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L156-L159)
 6. **Pick UART baud** — read the misc/div13 control (SCU2C[12]) to choose the
-   baud divisor, then bring up UART2 for debug output. [platform.S:162-225](#sources)
+   baud divisor, then bring up UART2 for debug output. [platform.S:162-225](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L162-L225)
 7. **Verify unlock** — re-write `SCU00 = 0x1688A8A8` and read back, requiring
-   `0x01`; abort with "SCU LOCKED" if not. [platform.S:240-247](#sources)
+   `0x01`; abort with "SCU LOCKED" if not. [platform.S:240-247](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L240-L247)
 8. **Set boot key** — `SCU40 = 0x5A000080` (Linux-boot key `0x5A` in [31:24] +
-   DRAM-init-by-firmware bit[7]). [platform.S:283-285](#sources)
+   DRAM-init-by-firmware bit[7]). [platform.S:283-285](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L283-L285)
 9. **Unlock SDRAM** — write `0xFC600309` to the SDRAM protection key (`MCR00`),
-   verify. [platform.S:287-295](#sources)
+   verify. [platform.S:287-295](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L287-L295)
 10. **Program M-PLL (second pass)** — `SCU20 = 0x000041f0` (numerator 0b001111,
-    OD=1, post-÷2), then the full DDR2 timing/DLL init. [platform.S:338-340,354-544](#sources)
+    OD=1, post-÷2), then the full DDR2 timing/DLL init. [platform.S:338-340,354-544](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L338-L340)
 11. **Read VGA-size strap** — `SCU70[3:2]` folded into `MCR04` SDRAM config.
-    [platform.S:363-377](#sources)
-12. **Write MPLL shadow** — `MCR120 = 0x00004c41` (AST2000-compat). [platform.S:546-548](#sources)
-13. **Signal done** — set `SCU40[6]` (DRAM-init-ready). [platform.S:559-564](#sources)
+    [platform.S:363-377](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L363-L377)
+12. **Write MPLL shadow** — `MCR120 = 0x00004c41` (AST2000-compat). [platform.S:546-548](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L546-L548)
+13. **Signal done** — set `SCU40[6]` (DRAM-init-ready). [platform.S:559-564](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L559-L564)
 14. **Re-lock** — write `0` to `SCU00` and to the SDRAM key, then return.
-    [platform.S:588-603](#sources)
+    [platform.S:588-603](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L588-L603)
 
 Note the H-PLL (`SCU24`) is never reprogrammed here: the ARM core runs at its
 strap-selected H-PLL rate (SCU70[11:9]); only the memory PLL is set up by this
-sequence. The `0x033103F1` value loaded into `r2` at [platform.S:149](#sources) before the
+sequence. The `0x033103F1` value loaded into `r2` at [platform.S:149](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L149) before the
 silicon check is dead/unused (the subsequent `set_MPLL` writes literal
-`0x00004c81` instead). [platform.S:149-159](#sources)
+`0x00004c81` instead). [platform.S:149-159](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L149-L159)
 
 ## Sources
 
@@ -1123,13 +1123,13 @@ silicon check is dead/unused (the subsequent `set_MPLL` writes literal
   - Pin descriptions: SRST# (R20), EXTRST# (C9/GPIOB7), WDTRST (D9/GPIOB6),
     CLKIN (R22) (p.42-47).
 - **In-repo Raptor Engineering AST2050 port** (`asus-kgpe-d16-firmware/`):
-  - `hwreg.h` — SCU/WDT/MMC register offset definitions.
-  - `ast2050.h` — board config (24 MHz UART clock, DDR sizing).
-  - `platform.S` — `lowlevel_init` DDR/PLL/SCU bring-up assembly (line refs
+  - [`hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h) — SCU/WDT/MMC register offset definitions.
+  - [`ast2050.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h) — board config (24 MHz UART clock, DDR sizing).
+  - [`platform.S`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S) — `lowlevel_init` DDR/PLL/SCU bring-up assembly (line refs
     cited inline).
-  - `RAPTOR_ENGINEERING_AST2050_ANALYSIS.md` — SCU/clock/WDT driver analysis,
+  - [`RAPTOR_ENGINEERING_AST2050_ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md) — SCU/clock/WDT driver analysis,
     example dtsi.
-  - `RAPTOR-PORTING-GUIDE.md` — G3-vs-G4 strap bit differences, clock tree,
+  - [`RAPTOR-PORTING-GUIDE.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md) — G3-vs-G4 strap bit differences, clock tree,
     reset/WDT porting notes.
 - **Web cross-references:**
   - Mainline Linux `drivers/clk/clk-aspeed.c` (AST2400/G4) — H-PLL formula

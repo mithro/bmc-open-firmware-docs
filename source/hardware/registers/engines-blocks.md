@@ -8,9 +8,9 @@ requires a complete map.
 
 All content is derived from the in-repo ASPEED AST2050/AST1100 A3 datasheet
 V1.05 [DS](#sources), cross-checked against Raptor Engineering's U-Boot headers
-[ast2050.h](#sources) / [hwreg.h](#sources). Citations are inline as `[DS §N p.P](#sources)` (datasheet
-chapter / printed page, which equals the PDF page number), `[ast2050.h](#sources)`,
-`[hwreg.h](#sources)`; full link definitions are collected in the Sources section at the
+[ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h) / [hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h). Citations are inline as `[DS §N p.P](#sources)` (datasheet
+chapter / printed page, which equals the PDF page number), `[ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h)`,
+`[hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)`; full link definitions are collected in the Sources section at the
 end.
 
 Conventions used in the register tables below:
@@ -65,10 +65,10 @@ a dedicated interrupt line in the ch. 10 Interrupt Source Table
 
 None of these six blocks is defined in the Raptor U-Boot register headers: the
 SDRAM, SCU, timer, VIC, WDT, UART, MAC, GPIO and AHB controllers appear in
-[hwreg.h](#sources) but the DMA / crypto / MIC sections are left as empty stub comments
-[hwreg.h](#sources). The only firmware-side evidence that these engines exist and were
+[hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h) but the DMA / crypto / MIC sections are left as empty stub comments
+[hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h). The only firmware-side evidence that these engines exist and were
 exercised is the (disabled) SLT self-test command set in the KGPE-D16 U-Boot
-config, which lists `CFG_CMD_HACTEST` and `CFG_CMD_MICTEST` [ast2050.h](#sources).
+config, which lists `CFG_CMD_HACTEST` and `CFG_CMD_MICTEST` [ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h).
 
 ---
 
@@ -77,7 +77,7 @@ config, which lists `CFG_CMD_HACTEST` and `CFG_CMD_MICTEST` [ast2050.h](#sources
 **Used on target boards?** No. Neither the KGPE-D16 open-firmware stack
 (OpenBMC / u-bmc) nor the C410X path programs HACE; the block is present on the
 SoC but idle. The only reference in the KGPE-D16 firmware is the disabled SLT
-`CFG_CMD_HACTEST` self-test [ast2050.h](#sources). No mainline Linux driver targets the
+`CFG_CMD_HACTEST` self-test [ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h). No mainline Linux driver targets the
 G3 HACE — the mainline `drivers/crypto/aspeed/` (aspeed-hace) driver supports
 only the later AST2500/AST2600 HACE, which has a different, scatter-gather
 register interface.
@@ -397,7 +397,7 @@ The context buffer pointed to by HACE08 has an algorithm-specific layout
 **Used on target boards?** No. MIC is a background DRAM-scrubbing / checksum
 engine; neither board's open firmware enables it (both rely on the standard DDR2
 controller init). It is present on the SoC and appears only in the disabled
-KGPE-D16 SLT `CFG_CMD_MICTEST` self-test [ast2050.h](#sources). No mainline driver
+KGPE-D16 SLT `CFG_CMD_MICTEST` self-test [ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h). No mainline driver
 exists for it.
 
 MICE (Memory Integrity Check Engine) connects directly to the AHB bus and reads
@@ -1567,12 +1567,12 @@ Each cursor pixel is a 16-bit word in the frame-buffer shape area
 
 ## Cross-reference: firmware headers & mainline drivers
 
-- **[hwreg.h](#sources) / [ast2050.h](#sources)** (Raptor Engineering AST2050 U-Boot): none of these
+- **[hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h) / [ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h)** (Raptor Engineering AST2050 U-Boot): none of these
   six blocks is defined. The DMA, SSP, I2C and RTC register sections in
-  [hwreg.h](#sources) are empty stub comments; only SDRAM, SCU, timer, VIC, WDT, UART, MAC,
-  GPIO and AHB controllers are populated [hwreg.h](#sources). The KGPE-D16 U-Boot config
+  [hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h) are empty stub comments; only SDRAM, SCU, timer, VIC, WDT, UART, MAC,
+  GPIO and AHB controllers are populated [hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h). The KGPE-D16 U-Boot config
   references HACE and MIC only through the disabled SLT self-test macros
-  `CFG_CMD_HACTEST` / `CFG_CMD_MICTEST` [ast2050.h](#sources).
+  `CFG_CMD_HACTEST` / `CFG_CMD_MICTEST` [ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h).
 - **Mainline Linux:** the AST2050 (G3) predates mainline ASPEED support
   (earliest is the AST2400 / G4), so no mainline driver targets these G3 block
   instances. The related later-generation drivers — `drivers/crypto/aspeed`
@@ -1605,9 +1605,9 @@ Each cursor pixel is a 16-bit word in the frame-buffer shape area
   Bridge (p.256); §22 MDMA Engine (p.257–261); §35 2D Graphics Engine
   (p.393–399); §36 P-Bus-to-AHB Bridge (p.400); §37 Graphics Hardware Cursor
   (p.401–403). Doc page = PDF page (offset 0).
-- [ast2050.h](#sources) Raptor Engineering AST2050 U-Boot board config, in-repo at
+- [ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h) Raptor Engineering AST2050 U-Boot board config, in-repo at
   `asus-kgpe-d16-firmware/ast2050.h`.
-- [hwreg.h](#sources) Raptor Engineering AST2100/AST2050 SoC register locations, in-repo at
+- [hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h) Raptor Engineering AST2100/AST2050 SoC register locations, in-repo at
   `asus-kgpe-d16-firmware/hwreg.h`.
 - [aspeed-crypto](#sources) Mainline Linux ASPEED HACE driver (AST2500/AST2600):
   <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/crypto/aspeed>

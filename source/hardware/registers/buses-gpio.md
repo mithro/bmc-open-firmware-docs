@@ -19,9 +19,9 @@ citations use these tags (full list under [Sources](#sources)):
 
 - **[DS §N p.M](#sources)** — *ASPEED AST2050/AST1100 A3 Datasheet, V1.05* (2010-05-25),
   the primary datasheet. Page numbers are the printed page numbers.
-- **[hwreg.h](#sources)**, **[ast2050.h](#sources)** — Raptor Engineering AST2050 U-Boot headers
+- **[hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)**, **[ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h)** — Raptor Engineering AST2050 U-Boot headers
   vendored in the repo.
-- **[i2c-aspeed.c](#sources)**, **[gpio-aspeed.c](#sources)** — mainline Linux drivers (register
+- **[i2c-aspeed.c](https://github.com/torvalds/linux/blob/master/drivers/i2c/busses/i2c-aspeed.c)**, **[gpio-aspeed.c](https://github.com/torvalds/linux/blob/master/drivers/gpio/gpio-aspeed.c)** — mainline Linux drivers (register
   offsets are identical to the AST2050 datasheet).
 - **[RAPTOR-ANALYSIS](#sources)**, **[drivers-analysis](#sources)**, **[gpio-pin-mapping](#sources)**,
   **[culvert](#sources)** — reverse-engineering notes in the repo.
@@ -33,7 +33,7 @@ registers are 32-bit and accessed on the APB bus (little-endian).
 ## SoC address map (relevant bases)
 
 From the ARM Address Space Mapping table [DS §9 p.97](#sources), cross-checked against the
-Raptor U-Boot headers [hwreg.h](#sources), [ast2050.h]:
+Raptor U-Boot headers [hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h), [ast2050.h]:
 
 ```{list-table}
 :header-rows: 1
@@ -54,23 +54,23 @@ Raptor U-Boot headers [hwreg.h](#sources), [ast2050.h]:
   - 96 MiB; CE0/CE1/CE2 flash **data/execute** windows. Architectural CE0 base
     `0x10000000` [DS §11.1 p.100](#sources). The Raptor/ASUS boot SPI flash is accessed
     at `0x14000000` (`PHYS_FLASH_1`) with an alias base `0x10000000`
-    (`PHYS_FLASH_2_BASE`) [ast2050.h](#sources)
+    (`PHYS_FLASH_2_BASE`) [ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h)
 * - **Static Memory Controller (SMC) registers**
   - `0x16000000`–`0x17FFFFFF`
-  - Control window; `AST_SMC_BASE` [hwreg.h](#sources), "Base address of SMC = 0x1600_0000"
+  - Control window; `AST_SMC_BASE` [hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h), "Base address of SMC = 0x1600_0000"
     [DS §11.1 p.100](#sources)
 * - AHB Bus Controller (AHBC)
   - `0x1E600000`
-  - Holds the address-remap register `AHB_ADDR_REMAP_REG` (`+0x8C`) [hwreg.h](#sources)
+  - Holds the address-remap register `AHB_ADDR_REMAP_REG` (`+0x8C`) [hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)
 * - Interrupt controller (VIC)
   - `0x1E6C0000`
-  - Compact G3 layout [hwreg.h](#sources)
+  - Compact G3 layout [hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)
 * - SDRAM controller / SCU
   - `0x1E6E0000` / `0x1E6E2000`
-  - lock-key protected [hwreg.h](#sources)
+  - lock-key protected [hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)
 * - **GPIO controller**
   - `0x1E780000`
-  - `AST_GPIO_BASE` [hwreg.h](#sources); [DS §9 p.97](#sources), [DS §23.3 p.262](#sources)
+  - `AST_GPIO_BASE` [hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h); [DS §9 p.97](#sources), [DS §23.3 p.262](#sources)
 * - **LPC controller**
   - `0x1E789000`
   - [DS §9 p.97](#sources), [DS §30.3 p.311](#sources)
@@ -172,7 +172,7 @@ Global registers occupy `0x000`–`0x03F`; each device occupies a 64-byte
 
 ### Per-device register map (offsets within each `0x40` window)
 
-Confirmed identical to mainline [i2c-aspeed.c](#sources) offsets (`FUN_CTRL 0x00`,
+Confirmed identical to mainline [i2c-aspeed.c](https://github.com/torvalds/linux/blob/master/drivers/i2c/busses/i2c-aspeed.c) offsets (`FUN_CTRL 0x00`,
 `AC_TIMING_REG1 0x04`, `AC_TIMING_REG2 0x08`, `INTR_CTRL 0x0c`, `INTR_STS 0x10`,
 `CMD 0x14`, `DEV_ADDR 0x18`, `BYTE_BUF 0x20`).
 
@@ -365,7 +365,7 @@ recovery.
 `Freq(SCL) = Freq(CoreClock) / (tBaseCyc × (tCKLow + tCKHigh))`, with
 `tBaseCyc ∈ {1,2,4,…,32768}` and `tCKLow, tCKHigh ∈ {1..8}` [DS §31.3 p.329](#sources).
 A full divisor→(Base clock, tCKHigh, tCKLow) lookup is tabulated at [DS §31.3.1
-p.333]. Corroborated by [i2c-aspeed.c](#sources)'s `aspeed_i2c_24xx_get_clk_reg_val`.
+p.333]. Corroborated by [i2c-aspeed.c](https://github.com/torvalds/linux/blob/master/drivers/i2c/busses/i2c-aspeed.c)'s `aspeed_i2c_24xx_get_clk_reg_val`.
 
 #### I2CD08 — Clock & AC Timing Control #2 (`+0x08`) [DS §31.4.3 p.338](#sources)
 
@@ -421,7 +421,7 @@ Done status (bit 2) to allow the next byte reception [DS §31.4.3 p.340](#source
 
 The command half (RW) fires transfers; the status half (R) exposes line/bus
 state and the transfer state machine. Command bit positions match mainline
-[i2c-aspeed.c](#sources) (`M_START_CMD BIT(0)`, `M_TX_CMD BIT(1)`, `M_RX_CMD BIT(3)`,
+[i2c-aspeed.c](https://github.com/torvalds/linux/blob/master/drivers/i2c/busses/i2c-aspeed.c) (`M_START_CMD BIT(0)`, `M_TX_CMD BIT(1)`, `M_RX_CMD BIT(3)`,
 `M_S_RX_CMD_LAST BIT(4)`, `M_STOP_CMD BIT(5)`).
 
 ```{list-table}
@@ -567,7 +567,7 @@ active at the same time [DS §31.4.3 p.342](#sources).
   `I2CD04`, `I2CD08`, `I2CD10=0xFFFFFFFF`, `I2CD0C` enables [DS §31.5.1 p.344](#sources).
 - Board usage: on the Dell C410X, I2C engine 3 (bus `0xF3`) drives the PEX PCIe
   switches; expander/sensor buses `0xF0`–`0xF6` hang off the other engines
-  [gpio-pin-mapping](#sources). Corroborated by mainline [i2c-aspeed.c](#sources)
+  [gpio-pin-mapping](#sources). Corroborated by mainline [i2c-aspeed.c](https://github.com/torvalds/linux/blob/master/drivers/i2c/busses/i2c-aspeed.c)
   (`aspeed,ast2400-i2c-bus`), whose register map matches the above.
 
 ---
@@ -576,7 +576,7 @@ active at the same time [DS §31.4.3 p.342](#sources).
 
 The AST2050 uses the **legacy Static Memory Controller (SMC)** — *not* the newer
 FMC/SPI controllers of the AST2400+. Register (control) window base
-`0x16000000` [DS §11.1 p.100](#sources), [hwreg.h](#sources); flash **data/execute** windows live in
+`0x16000000` [DS §11.1 p.100](#sources), [hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h); flash **data/execute** windows live in
 the `0x10000000`–`0x15FFFFFF` static-memory region [DS §9 p.97](#sources).
 
 The SMC implements **8 × 32-bit registers** and can drive up to three chip
@@ -594,8 +594,8 @@ part [DS §11.1 p.100](#sources).
 - Only one CE can be the CPU-boot chip select (mapped to `0x00000000`); default
   types are CE0=NOR, CE1=NAND, CE2=SPI [DS §11.1 p.100](#sources).
 - The Raptor/ASUS single-SPI board maps its boot flash at `0x14000000`
-  (`PHYS_FLASH_1`) with alias `0x10000000` (`PHYS_FLASH_2_BASE`) [ast2050.h](#sources).
-- The SMC **register** window (this block) is at `0x16000000` [hwreg.h](#sources).
+  (`PHYS_FLASH_1`) with alias `0x10000000` (`PHYS_FLASH_2_BASE`) [ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h).
+- The SMC **register** window (this block) is at `0x16000000` [hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h).
 ```
 
 ### Register map (base `0x16000000`) [DS §11.3 p.105-112](#sources)
@@ -832,11 +832,11 @@ row-address cycles, 2 user-mode CE# active, 1 random-read, 0 boot/user mode)
 ```{admonition} Mainline cross-reference caveat
 :class: warning
 
-Mainline's `spi-aspeed-smc.c` targets the **AST2400+ FMC/SPI** controllers
+Mainline's [`spi-aspeed-smc.c`](https://github.com/torvalds/linux/blob/master/drivers/spi/spi-aspeed-smc.c) targets the **AST2400+ FMC/SPI** controllers
 (`aspeed,ast2400-fmc`/`-spi` …) whose register layout differs from the legacy
 AST2050 SMC documented here; the older `drivers/mtd/maps/ast-nor.c` was removed
 upstream [drivers-analysis](#sources). So for this block the datasheet is the sole primary;
-the repo headers [hwreg.h](#sources), [ast2050.h](#sources) and RE notes corroborate the base
+the repo headers [hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h), [ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h) and RE notes corroborate the base
 addresses and SPI-only usage.
 ```
 
@@ -1160,15 +1160,15 @@ C410X has no host CPU so nothing drives the LPC bridge [RAPTOR-ANALYSIS](#source
 The LPC **Host** side (`LHCR0`–`LHCRB`) lets the BMC master the LPC bus to
 reprogram the host's SPI/FWH BIOS: `LHCR4` supplies command/header, `LHCR5` the
 address, `LHCR6` write data, `LHCR7` latches read data, and writing `LHCR1[0]
-LHFIRE` issues one bus cycle [DS §30.3 p.323-326](#sources). Mainline `aspeed-lpc-ctrl.c` /
-`aspeed-lpc-snoop.c` cover the equivalent G4 blocks (`aspeed,ast2400-lpc-*`)
+LHFIRE` issues one bus cycle [DS §30.3 p.323-326](#sources). Mainline [`aspeed-lpc-ctrl.c`](https://github.com/torvalds/linux/blob/master/drivers/soc/aspeed/aspeed-lpc-ctrl.c) /
+[`aspeed-lpc-snoop.c`](https://github.com/torvalds/linux/blob/master/drivers/soc/aspeed/aspeed-lpc-snoop.c) cover the equivalent G4 blocks (`aspeed,ast2400-lpc-*`)
 [drivers-analysis](#sources).
 
 ---
 
 ## GPIO controller
 
-Base `0x1E780000` [DS §23.3 p.262](#sources), [hwreg.h](#sources). Up to **64 GPIO pins in 8 port
+Base `0x1E780000` [DS §23.3 p.262](#sources), [hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h). Up to **64 GPIO pins in 8 port
 groups GPIOA…GPIOH** (8 pins each) [DS §23.1 p.262](#sources). The register file is split
 into a base bank covering **GPIOA–GPIOD** (`0x00`–`0x1C`) and an *extended* bank
 covering **GPIOE–GPIOH** (`0x20`–`0x3C`), then shared debounce settings/timers
@@ -1178,7 +1178,7 @@ covering **GPIOE–GPIOH** (`0x20`–`0x3C`), then shared debounce settings/time
 :class: note
 
 Later Aspeed SoCs (AST2400+) extend the same register pattern to more port
-letters (I…P and beyond), and mainline `gpio-aspeed.c` / the reconstructed
+letters (I…P and beyond), and mainline [`gpio-aspeed.c`](https://github.com/torvalds/linux/blob/master/drivers/gpio/gpio-aspeed.c) / the reconstructed
 KGPE-D16 DTS describe those extra banks. **The AST2050 register file only defines
 GPIOA–GPIOH** [DS §23.3 p.262-269](#sources); higher banks are not present. Only the pins
 enumerated in the pin-summary below are actually bonded out.
@@ -1188,7 +1188,7 @@ Each pin supports: input/output; interrupt enable; interrupt sensitivity
 (level-high/low, rising/falling edge, or dual-edge); WDT-reset tolerance; and
 0/1 µs/1 ms/5 ms/10 ms debounce [DS §23.1 p.262](#sources), [DS §23.2 p.263](#sources).
 Register offsets and bank byte-lane layout are identical to mainline
-[gpio-aspeed.c](#sources) (`data 0x00, dir 0x04, irq 0x08/0x0c/0x10/0x14/0x18, tolerance
+[gpio-aspeed.c](https://github.com/torvalds/linux/blob/master/drivers/gpio/gpio-aspeed.c) (`data 0x00, dir 0x04, irq 0x08/0x0c/0x10/0x14/0x18, tolerance
 0x1c, debounce sel 0x40/0x44, debounce timers 0x50/0x54/0x58, extended data
 0x20`; 8 banks).
 
@@ -1501,14 +1501,14 @@ as the PEX8696 reset — alongside 80 off-chip PCA9555 expander lines
 
 **In-repo reverse-engineering sources**
 
-- **[hwreg.h](#sources)** `asus-kgpe-d16-firmware/hwreg.h` — Raptor AST2100/AST2050 SoC
+- **[hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)** `asus-kgpe-d16-firmware/hwreg.h` — Raptor AST2100/AST2050 SoC
   register base addresses (SMC `0x16000000`, GPIO `0x1E780000`, SCU/SDRAM/AHBC).
-- **[ast2050.h](#sources)** `asus-kgpe-d16-firmware/ast2050.h` — Raptor U-Boot board config
+- **[ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h)** `asus-kgpe-d16-firmware/ast2050.h` — Raptor U-Boot board config
   (flash windows `0x14000000`/`0x10000000`, single-SPI boot, `CONFIG_HARD_I2C`).
 - **[RAPTOR-ANALYSIS](#sources)** `asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md`
   — I2C engine base `0x1E78A000`, 14-bus SDK templating, AHB backdoor confirmation.
 - **[culvert](#sources)** `asus-kgpe-d16-firmware/CULVERT-UART-JTAG-DEBUG.md` and
-  `CULVERT-G3-HARDWARE-RESULTS.md` — iLPC2AHB / LPC2AHB posture via
+  [`CULVERT-G3-HARDWARE-RESULTS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/CULVERT-G3-HARDWARE-RESULTS.md) — iLPC2AHB / LPC2AHB posture via
   `HICR5[8] ENL2H` + `HICR7 ADRBASE` / `HICR8 ADRMASK`; confirmed disabled on hardware.
 - **[drivers-analysis](#sources)** `dell-c410x-firmware/aspeed-mainline-drivers-analysis.md`
   — mainline driver ↔ AST2050 mapping (i2c-aspeed, gpio-aspeed, spi-aspeed-smc,
@@ -1518,11 +1518,11 @@ as the PEX8696 reset — alongside 80 off-chip PCA9555 expander lines
 
 **Secondary (mainline Linux, register cross-check)**
 
-- **[i2c-aspeed.c](#sources)** `drivers/i2c/busses/i2c-aspeed.c` (torvalds/linux) — register
+- **[i2c-aspeed.c](https://github.com/torvalds/linux/blob/master/drivers/i2c/busses/i2c-aspeed.c)** `drivers/i2c/busses/i2c-aspeed.c` (torvalds/linux) — register
   offsets `0x00/04/08/0c/10/14/18/20` and command bits (START=BIT0, TX=BIT1,
   RX=BIT3, RX_CMD_LAST=BIT4, STOP=BIT5) match §31.4.3; compatibles
   `aspeed,ast2400/2500/2600-i2c-bus`.
-- **[gpio-aspeed.c](#sources)** `drivers/gpio/gpio-aspeed.c` (torvalds/linux) — bank layout
+- **[gpio-aspeed.c](https://github.com/torvalds/linux/blob/master/drivers/gpio/gpio-aspeed.c)** `drivers/gpio/gpio-aspeed.c` (torvalds/linux) — bank layout
   `data 0x00 / dir 0x04 / irq 0x08,0x0c,0x10,0x14,0x18 / tolerance 0x1c /
   debounce 0x40,0x44 / timers 0x50,0x54,0x58 / ext data 0x20`, 8 banks; matches §23.3.
 - **spi-aspeed-smc.c** (torvalds/linux) — targets the AST2400+ FMC/SPI, whose

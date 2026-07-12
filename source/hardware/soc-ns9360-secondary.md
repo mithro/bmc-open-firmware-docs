@@ -2307,7 +2307,7 @@ Primary datasheet (in-repo, the authority for the register map):
 
 In-repo analysis / port planning (board specifics):
 
-- `[PLAN-INCREMENTAL-PORT.md](#sources)` — `hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md`
+- `[PLAN-INCREMENTAL-PORT.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md)` — `hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md`
   (LCD palette RAM used as endian-switch scratch; register quick reference).
 
 Open-source cross-reference (register names, bases, bitfields):

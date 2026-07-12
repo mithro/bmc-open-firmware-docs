@@ -5,7 +5,7 @@ SDRAM / DDR2 memory controller, plus the complete cold-boot DDR2 bring-up
 procedure. It is written for people re-implementing the boot code (U-Boot,
 OpenBMC, a QEMU model) and cross-checks every value against the ASPEED
 AST2050/AST1100 A3 datasheet, the hardware-verified Raptor Engineering U-Boot
-`platform.S`, and the JEDEC JESD79-2 DDR2 standard.
+[`platform.S`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S), and the JEDEC JESD79-2 DDR2 standard.
 
 The controller is register-compatible with the AST2400/AST2100 SDRAM controller;
 the AST2050 (SoC generation 0, part of the AST2000/AST2050/AST2100 "G3" family)
@@ -14,13 +14,13 @@ Where a value is board-specific to the ASUS KGPE-D16 (the reverse-engineering
 oracle), it is marked as such. See [§9](#9-ast2050-specific-vs-shared-with-ast2400).
 
 - **Controller base address:** `0x1E6E0000` (registers are named `MCRnn` by
-  their offset, e.g. `MCR04` = `0x1E6E0004`) [DS §17.3 p.184](#sources) [hwreg.h:37-71](#sources).
+  their offset, e.g. `MCR04` = `0x1E6E0004`) [DS §17.3 p.184](#sources) [hwreg.h:37-71](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h#L37-L71).
 - **Register unlock key (MCR00):** write `0xFC600309` to `0x1E6E0000` to unlock
   `MCR04`..`MCR7C`; write anything else (e.g. `0x00000000`) to re-lock.
   Reads back `0x00000001` when unlocked, `0x00000000` when locked
-  [DS §17.3 p.184 MCR00](#sources) [platform.S:287-289](#sources).
+  [DS §17.3 p.184 MCR00](#sources) [platform.S:287-289](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L287-L289).
 - **A companion SCU unlock** (`0x1E6E2000` = `0x1688A8A8`) is required because
-  init also programs the M-PLL and scratch registers [DS §18 p.205](#sources) [platform.S:132-134](#sources).
+  init also programs the M-PLL and scratch registers [DS §18 p.205](#sources) [platform.S:132-134](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L132-L134).
 
 ---
 
@@ -47,10 +47,10 @@ oracle), it is marked as such. See [§9](#9-ast2050-specific-vs-shared-with-ast2
   - [DS §17.5 p.202](#sources)
 * - Memory clock (MCLK)
   - ~200 MHz from M-PLL → DDR2-400 (400 MT/s)
-  - [DS §18.2 p.212 SCU20](#sources) [platform.S:338-340](#sources)
+  - [DS §18.2 p.212 SCU20](#sources) [platform.S:338-340](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L338-L340)
 * - Total DRAM (KGPE-D16, HW-verified)
   - 64 MiB (`MCR04[3:2]=01`)
-  - [DS §17.3 p.185 MCR04 bit3:2](#sources) [platform.S:373-375](#sources)
+  - [DS §17.3 p.185 MCR04 bit3:2](#sources) [platform.S:373-375](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L373-L375)
 * - Max addressable space
   - 256 MB (28-bit internal address)
   - [DS §17.4.1 p.201](#sources)
@@ -267,27 +267,27 @@ in the A3 datasheet register table are flagged in the Notes column
   - —
   - —
   - —
-  - **Not documented in A3 datasheet.** Written `0` by init [platform.S:427-429](#sources)
+  - **Not documented in A3 datasheet.** Written `0` by init [platform.S:427-429](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L427-L429)
 * - `0x50`
   - MCR50
   - —
   - —
-  - **Not in A3 datasheet register table.** Named "ECC Control/Status" in Raptor `hwreg.h`; written `0`
+  - **Not in A3 datasheet register table.** Named "ECC Control/Status" in Raptor [`hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h); written `0`
 * - `0x54`
   - MCR54
   - —
   - —
-  - Not in A3 datasheet. Named "ECC Segment Enable" in `hwreg.h`; written `0`
+  - Not in A3 datasheet. Named "ECC Segment Enable" in [`hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h); written `0`
 * - `0x58`
   - MCR58
   - —
   - —
-  - Not in A3 datasheet. Named "ECC Scrub Request Mask" in `hwreg.h`; written `0`
+  - Not in A3 datasheet. Named "ECC Scrub Request Mask" in [`hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h); written `0`
 * - `0x5C`
   - MCR5C
   - —
   - —
-  - Not in A3 datasheet. Named "ECC First Error Address" in `hwreg.h`; written `0`
+  - Not in A3 datasheet. Named "ECC First Error Address" in [`hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h); written `0`
 * - `0x60`
   - MCR60
   - `0`
@@ -348,7 +348,7 @@ in the A3 datasheet register table are flagged in the Notes column
 ### 2.1 SCU registers touched by DDR2 init
 
 DDR2 bring-up also programs a handful of System Control Unit registers (base
-`0x1E6E2000`) [DS §18.2 p.205-220](#sources) [hwreg.h:77-94](#sources).
+`0x1E6E2000`) [DS §18.2 p.205-220](#sources) [hwreg.h:77-94](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h#L77-L94).
 
 ```{list-table} SCU registers used during DDR2 init
 :header-rows: 1
@@ -425,7 +425,7 @@ device**, or the controller malfunctions [DS §17.3 p.185](#sources).
 
 ### 3.1 The two build-time values decoded
 
-`platform.S` selects one of two constants by compile flag, then ORs in the VGA
+[`platform.S`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S) selects one of two constants by compile flag, then ORs in the VGA
 aperture bits read from `SCU70[3:2]` [platform.S:363-377]:
 
 ```{list-table} MCR04 constants — datasheet-accurate decode
@@ -455,13 +455,13 @@ aperture bits read from `SCU70[3:2]` [platform.S:363-377]:
 Both values additionally have `[10]=1` (auto-precharge enabled) and `[5:4]=00`
 before the SCU70 OR. On the ASUS KGPE-D16 the DRAM is **hardware-verified at
 64 MiB**, so the operative constant is `0x00000585`: a **4-bank, 64 MiB**,
-16-bit-bus, 10-column DDR2 device with BL4 [DS §17.3 p.185](#sources) [platform.S:373-375](#sources).
+16-bit-bus, 10-column DDR2 device with BL4 [DS §17.3 p.185](#sources) [platform.S:373-375](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L373-L375).
 The `0x00000D89` alternative programs a 128 MiB, 8-bank geometry.
 
-> **Naming caveat / open item.** `platform.S` gates these with
-> `#ifdef CONFIG_1G_DDRII` / `#ifdef CONFIG_512M_DDRII` [platform.S:370-375](#sources),
+> **Naming caveat / open item.** [`platform.S`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S) gates these with
+> `#ifdef CONFIG_1G_DDRII` / `#ifdef CONFIG_512M_DDRII` [platform.S:370-375](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L370-L375),
 > but the ASUS board config header defines `CONFIG_DDRII1G_200` and sets
-> `PHYS_SDRAM_1_SIZE = 0x04000000` (64 MiB) [ast2050.h:49,107](#sources). The two macro
+> `PHYS_SDRAM_1_SIZE = 0x04000000` (64 MiB) [ast2050.h:49,107](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h#L49). The two macro
 > spellings do not match, so which constant a given tree compiles depends on how
 > `CONFIG_*_DDRII` gets defined in the board Makefile — not captured here. The
 > 64 MiB decode of `0x585` is what matches the measured hardware.
@@ -470,7 +470,7 @@ The `0x00000D89` alternative programs a 128 MiB, 8-bank geometry.
 
 `SCU70[3:2]` (two board strap resistors) is masked, shifted left by 2, and ORed
 into `MCR04[5:4]` so the VGA aperture size in `MCR04` always tracks the strap
-[platform.S:363-377](#sources) [DS §17.3 p.185 MCR04](#sources). The graphics segment sits at the top
+[platform.S:363-377](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L363-L377) [DS §17.3 p.185 MCR04](#sources). The graphics segment sits at the top
 of DRAM [DS §17.4.2 p.202]:
 
 - `MCR04[5:4]=0`, 8 MB → base `0xF80_0000`
@@ -493,7 +493,7 @@ Figure 66].
 `MCR04[5:4]`); `0` leaves it unchanged. It stops the host CPU from clobbering VGA
 memory [DS §17.3 p.185-186](#sources).
 
-The init value `0x0011030F` sets bits `{0,1,2,3, 8,9, 16, 20}` [platform.S:379-381](#sources),
+The init value `0x0011030F` sets bits `{0,1,2,3, 8,9, 16, 20}` [platform.S:379-381](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L379-L381),
 i.e. it protects **REQ0–REQ3** (the four VGA read streams), **REQ8/REQ9** (PCI
 write/read), **REQ16** (2D command-queue read) and **REQ20** (2D engine data) —
 exactly the graphics/PCI/2D masters, cross-referenced against the REQ table in
@@ -711,7 +711,7 @@ the JEDEC DDR2-400 envelope [DS §17.3 p.187-189](#sources).
 
 Raptor programs `MCR20`, `MCR24` (and `MCR10=MCR14`, `MCR18=MCR1C`) to identical
 values, so the low-speed clock path is never actually used on this board
-[platform.S:383-405](#sources) — see [§9](#9-ast2050-specific-vs-shared-with-ast2400).
+[platform.S:383-405](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L383-L405) — see [§9](#9-ast2050-specific-vs-shared-with-ast2400).
 
 ### 4.6 MCR38 / MCR3C / MCR40–MCR48 — arbitration
 
@@ -730,7 +730,7 @@ values, so the low-speed clock path is never actually used on this board
 
 ### 4.7 MCR60 — IO buffer mode
 
-`MCR60 = 0x032AA02A` [platform.S:447-449](#sources) configures the DDR2 pad electricals
+`MCR60 = 0x032AA02A` [platform.S:447-449](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L447-L449) configures the DDR2 pad electricals
 [DS §17.3 p.196-197]:
 
 ```{list-table} MCR60 IO Buffer Mode — decode of 0x032AA02A
@@ -860,12 +860,12 @@ Two writes happen, and the difference between them is the crux of DLL training:
   - DLL3 [18]/[21]
   - SADJ [15:8]/[7:0]
   - Meaning
-* - **Early `0x00050000`** [platform.S:358-360](#sources)
+* - **Early `0x00050000`** [platform.S:358-360](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L358-L360)
   - pwr=1 / reset=0
   - pwr=1 / reset=0
   - 0 / 0
   - DLLs powered up but **held in reset**
-* - **Final `0x002D3000`** [platform.S:451-453](#sources)
+* - **Final `0x002D3000`** [platform.S:451-453](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L451-L453)
   - pwr=1 / **normal=1**
   - pwr=1 / **normal=1**
   - `0x30` / `0x00`
@@ -882,7 +882,7 @@ and CKE assertion, then released once clocks and mode registers are stable.
 > **Why the final DLL block matters.** Omitting the final `MCR64 = 0x002D3000`
 > write leaves the DLLs in reset (or at the wrong output phase), so DQS/CK are
 > not phase-aligned to the data window. On real hardware this produced marginal
-> captures measured at **~0.29 % data errors** [DDR2-INIT-REVERSE-ENGINEERING.md](#sources).
+> captures measured at **~0.29 % data errors** [DDR2-INIT-REVERSE-ENGINEERING.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/DDR2-INIT-REVERSE-ENGINEERING.md).
 > The datasheet fields make the mechanism concrete: bits `[21]`/`[19]` move the
 > DLLs from *Reset* to *Normal operation* and `[15:8]` sets the CK/CKn output
 > phase [DS §17.3 p.197-198](#sources). (This supersedes the earlier RE guess that read
@@ -892,14 +892,14 @@ and CKE assertion, then released once clocks and mode registers are stable.
 
 ### 5.2 MCR68 — DLL Control #2
 
-`MCR68 = 0x02020202` [platform.S:455-457](#sources). Only `[15:0]` are defined: `[7:0]` =
+`MCR68 = 0x02020202` [platform.S:455-457](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L455-L457). Only `[15:0]` are defined: `[7:0]` =
 DLL1 input-phase SADJ for DQS0, `[15:8]` = DLL1 input-phase SADJ for DQS1 — both
 `0x02`. `[31:16]` are reserved; the upper `0x0202` written to them is harmless
 [DS §17.3 p.198](#sources).
 
 ### 5.3 MCR6C — DLL Control #3 (master adjust)
 
-`MCR6C = 0x00909090` [platform.S:354-356](#sources). `[7:0]` = DLL1 master-adjust **MADJ**
+`MCR6C = 0x00909090` [platform.S:354-356](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L354-L356). `[7:0]` = DLL1 master-adjust **MADJ**
 = `0x90` (144), `[23:16]` = DLL3 MADJ = `0x90` (144); `[15:8]` and `[31:24]` are
 reserved [DS §17.3 p.198](#sources). Per the datasheet DLL note, the minimum MADJ is 40 and
 the operating-frequency relation is $\text{MIN\_FREQ} = 67 \cdot 120 / \text{MADJ}$,
@@ -998,7 +998,7 @@ The DDR2 device's own mode registers are programmed indirectly:
 
 `0x732` is issued first (with DLL reset); after refresh is enabled the same
 settings are re-issued as `0x632` with the DLL-reset bit cleared for normal
-operation [platform.S:486-488,514-516](#sources) [DS §17.3 p.191](#sources).
+operation [platform.S:486-488,514-516](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L486-L488) [DS §17.3 p.191](#sources).
 
 ### 6.3 EMRS1 value (MCR30[12:0]) — DDR2 decode
 
@@ -1036,102 +1036,102 @@ operation [platform.S:486-488,514-516](#sources) [DS §17.3 p.191](#sources).
 ```
 
 - `0x040` — DLL enabled, 150 Ω ODT, AL=0, OCD in normal/exit state
-  [platform.S:490-492,530-532](#sources).
+  [platform.S:490-492,530-532](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L490-L492).
 - `0x3C0` — same but `[9:7]=111` = **OCD calibration default**
-  [platform.S:522-524](#sources).
+  [platform.S:522-524](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L522-L524).
 
 EMRS2 and EMRS3 are both programmed as **0** (via the `[28:16]` halves of `MCR2C`
 / `MCR30`, which are left zero): default DDR2-400 operation, no high-temperature
-self-refresh or partial-array self-refresh [platform.S:486-492](#sources) [DS §17.3 p.190-191](#sources).
+self-refresh or partial-array self-refresh [platform.S:486-492](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L486-L492) [DS §17.3 p.190-191](#sources).
 
 ---
 
 ## 7. Complete cold-init procedure
 
-The full ordered sequence, mapped line-for-line to `platform.S`
+The full ordered sequence, mapped line-for-line to [`platform.S`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S)
 (`lowlevel_init`, run from SPI flash before any stack/DRAM exists). Cross-checked
 against JEDEC JESD79-2 DDR2 power-up [JESD79-2B](#sources).
 
-1. **Save return address** in `r4` (no stack yet) [platform.S:116](#sources).
+1. **Save return address** in `r4` (no stack yet) [platform.S:116](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L116).
 2. **Start Timer4** as an init-duration counter (`0x1E782044` = `0xFFFFFFFF`,
-   `TIMER_CONTROL[13:12]=0b11`) [platform.S:118-128](#sources).
-3. **Unlock SCU** — write `0x1688A8A8` to `SCU00` [platform.S:132-134](#sources).
-4. **Mark "init in progress"** — `SCU40 |= 0x80` (bit 7) [platform.S:136-139](#sources).
+   `TIMER_CONTROL[13:12]=0b11`) [platform.S:118-128](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L118-L128).
+3. **Unlock SCU** — write `0x1688A8A8` to `SCU00` [platform.S:132-134](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L132-L134).
+4. **Mark "init in progress"** — `SCU40 |= 0x80` (bit 7) [platform.S:136-139](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L136-L139).
 5. **Warm-boot guard** — read `SCU40`, isolate **bit 6**; if set (DRAM already
    initialised), branch straight to `reg_lock` and skip the whole sequence
-   [platform.S:142-147](#sources). This prevents a watchdog/soft reset from re-running the
+   [platform.S:142-147](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L142-L147). This prevents a watchdog/soft reset from re-running the
    destructive DLL-reset + PRECHARGE-ALL and wiping still-valid DRAM.
 6. **Coarse M-PLL** — `SCU20 = 0x00004C81` to start the memory PLL near 200 MHz
-   (superseded in step 12) [platform.S:149-159](#sources). A silicon-revision read of
+   (superseded in step 12) [platform.S:149-159](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L149-L159). A silicon-revision read of
    `SCU7C` precedes it; the `beq set_MPLL` target is the next instruction, so the
-   branch is effectively unconditional [platform.S:150-154](#sources).
+   branch is effectively unconditional [platform.S:150-154](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L150-L154).
 7. **UART2 debug console** — configure `0x1E784000` (8N1) and print
-   `"\r\nDRAM Init-DDR\r\n"` [platform.S:162-226](#sources). Baud is 38400 on this board
-   (`CONFIG_DRAM_UART_38400`) [ast2050.h:187](#sources).
-8. **~100 µs settle** delay loop [platform.S:229-234](#sources).
+   `"\r\nDRAM Init-DDR\r\n"` [platform.S:162-226](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L162-L226). Baud is 38400 on this board
+   (`CONFIG_DRAM_UART_38400`) [ast2050.h:187](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h#L187).
+8. **~100 µs settle** delay loop [platform.S:229-234](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L229-L234).
 9. **Re-unlock + verify SCU** — write `0x1688A8A8`, read back `0x01`; on failure
-   print `"SCU LOCKED"` and abort [platform.S:240-248](#sources).
+   print `"SCU LOCKED"` and abort [platform.S:240-248](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L240-L248).
 10. **Scratch = `0x5A000080`** — Linux-boot key `0x5A` in `[31:24]` + init-in-
-    progress bit 7 [platform.S:283-285](#sources) [DS §18.2 p.215 SCU40](#sources).
+    progress bit 7 [platform.S:283-285](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L283-L285) [DS §18.2 p.215 SCU40](#sources).
 11. **Unlock + verify SDRAM controller** — `MCR00 = 0xFC600309`, read back
-    `0x01`; on failure print `"SDRAM LOCKED"` and abort [platform.S:287-295](#sources).
+    `0x01`; on failure print `"SDRAM LOCKED"` and abort [platform.S:287-295](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L287-L295).
 12. **Final M-PLL** — `SCU20 = 0x000041F0` (numerator 15, denumerator 0, output
     divider 1, post-divider ÷2 → $24\,\text{MHz} \cdot 17/1 \div 2 \approx 204\,\text{MHz} \approx \text{DDR2-400}$), then a
-    **~400 µs PLL-lock** delay [platform.S:334-348](#sources) [DS §18.2 p.212 SCU20](#sources).
+    **~400 µs PLL-lock** delay [platform.S:334-348](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L334-L348) [DS §18.2 p.212 SCU20](#sources).
 13. **Re-unlock SDRAM** (`MCR00 = 0xFC600309`) in case the PLL change bounced the
-    lock [platform.S:350-352](#sources).
+    lock [platform.S:350-352](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L350-L352).
 14. **DLL pre-config** — `MCR6C = 0x00909090` (MADJ) and `MCR64 = 0x00050000`
-    (DLLs powered, held in reset) [platform.S:354-360](#sources). See [§5](#5-dll-training).
+    (DLLs powered, held in reset) [platform.S:354-360](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L354-L360). See [§5](#5-dll-training).
 15. **MCR04 geometry** — OR `SCU70[3:2]` (VGA strap) into the geometry constant
     and write `MCR04` (`0x585` = 64 MiB/4-bank on this board)
-    [platform.S:363-377](#sources). See [§3](#3-mcr04--configuration-register-geometry).
-16. **Graphics protection** — `MCR08 = 0x0011030F` [platform.S:379-381](#sources).
+    [platform.S:363-377](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L363-L377). See [§3](#3-mcr04--configuration-register-geometry).
+16. **Graphics protection** — `MCR08 = 0x0011030F` [platform.S:379-381](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L379-L381).
 17. **AC timing + delay** — `MCR10=MCR14=0x22201725`, `MCR18=MCR1C=0x1E29011A`,
-    `MCR20=MCR24=0x00C82222` [platform.S:383-405](#sources). See [§4](#4-ac-timing-refresh-arbitration-and-protection-registers).
+    `MCR20=MCR24=0x00C82222` [platform.S:383-405](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L383-L405). See [§4](#4-ac-timing-refresh-arbitration-and-protection-registers).
 18. **Arbitration** — `MCR38=0xFFFFFF82`, `MCR3C=0`, `MCR40=MCR44=MCR48=0`, and
-    the undocumented `0x4C=0` [platform.S:407-429](#sources).
+    the undocumented `0x4C=0` [platform.S:407-429](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L407-L429).
 19. **ECC / reserved block** — `MCR50=MCR54=MCR58=MCR5C=0` (named ECC in
-    `hwreg.h`; disabled) [platform.S:431-445](#sources).
+    [`hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h); disabled) [platform.S:431-445](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L431-L445).
 20. **IO buffers** — `MCR60 = 0x032AA02A` (16-bit SSTL18, 150 Ω data ODT)
-    [platform.S:447-449](#sources). See [§4.7](#47-mcr60--io-buffer-mode).
+    [platform.S:447-449](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L447-L449). See [§4.7](#47-mcr60--io-buffer-mode).
 21. **DLL final** — `MCR64 = 0x002D3000` (release DLL1+DLL3 from reset, set
     CK/CKn output phase) and `MCR68 = 0x02020202` (DQS input SADJ)
-    [platform.S:451-457](#sources). This is the block whose omission caused ~0.29 % errors.
-22. **BIST off** — `MCR70=MCR74=MCR78=MCR7C=0` [platform.S:459-473](#sources).
+    [platform.S:451-457](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L451-L457). This is the block whose omission caused ~0.29 % errors.
+22. **BIST off** — `MCR70=MCR74=MCR78=MCR7C=0` [platform.S:459-473](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L459-L473).
 23. **Assert CKE** — `MCR34 = 0x00000001` (bit 0 = SDRAM CKE Enable), then a
     **~400 µs** delay — the JEDEC "CKE high, then wait ≥400 ns after a ≥200 µs
-    stable-clock/NOP period" requirement [platform.S:475-484](#sources) [DS §17.3 p.194](#sources)
+    stable-clock/NOP period" requirement [platform.S:475-484](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L475-L484) [DS §17.3 p.194](#sources)
     [JESD79-2B](#sources). The controller auto-issues PRECHARGE ALL and the AUTO REFRESH
     cycles as part of the mode-set state machine.
 24. **Load MRS/EMRS1 seeds** — `MCR2C = 0x00000732` (MRS=0x732, EMRS2=0),
-    `MCR30 = 0x00000040` (EMRS1=0x040, EMRS3=0) [platform.S:486-492](#sources).
+    `MCR30 = 0x00000040` (EMRS1=0x040, EMRS3=0) [platform.S:486-492](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L486-L492).
 25. **Fire EMRS2** — `MCR28 = 0x05` (JEDEC step: program EMRS2 = 0)
-    [platform.S:494-496](#sources).
-26. **Fire EMRS3** — `MCR28 = 0x07` (EMRS3 = 0) [platform.S:498-500](#sources).
+    [platform.S:494-496](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L494-L496).
+26. **Fire EMRS3** — `MCR28 = 0x07` (EMRS3 = 0) [platform.S:498-500](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L498-L500).
 27. **Fire EMRS1** — `MCR28 = 0x03` (EMRS1 = 0x040: **enable DLL**, 150 Ω ODT)
-    [platform.S:502-504](#sources).
+    [platform.S:502-504](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L502-L504).
 28. **Fire MRS with DLL reset** — `MCR28 = 0x01` (MRS = 0x732: BL4, CL3, WR4,
     **DLL reset**); controller also runs PRECHARGE ALL + AUTO REFRESH here
-    [platform.S:506-508](#sources).
+    [platform.S:506-508](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L506-L508).
 29. **Enable refresh (init rate)** — `MCR0C = 0x00005A08` (8 refresh cycles/
-    period) [platform.S:510-512](#sources).
+    period) [platform.S:510-512](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L510-L512).
 30. **Fire MRS without DLL reset** — `MCR2C = 0x00000632`, `MCR28 = 0x01`
-    (MRS = 0x632, DLL-reset cleared → normal operation) [platform.S:514-520](#sources).
+    (MRS = 0x632, DLL-reset cleared → normal operation) [platform.S:514-520](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L514-L520).
 31. **OCD calibration default** — `MCR30 = 0x000003C0`, `MCR28 = 0x03`
-    (EMRS1 = 0x3C0, `[9:7]=111`) [platform.S:522-528](#sources).
+    (EMRS1 = 0x3C0, `[9:7]=111`) [platform.S:522-528](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L522-L528).
 32. **OCD calibration exit** — `MCR30 = 0x00000040`, `MCR28 = 0x03`
-    (EMRS1 = 0x040, `[9:7]=000`, back to 150 Ω ODT) [platform.S:530-536](#sources).
+    (EMRS1 = 0x040, `[9:7]=000`, back to 150 Ω ODT) [platform.S:530-536](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L530-L536).
 33. **Steady-state refresh** — `MCR0C = 0x00005A21` (1 refresh/period, low-
-    priority refresh enabled) [platform.S:538-540](#sources).
+    priority refresh enabled) [platform.S:538-540](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L538-L540).
 34. **Power control** — `MCR34 = 0x00007C03`: CKE enabled, auto power-down on,
     SDRAM ODT + internal ODT auto-ON/OFF for reads and writes, CKE-delay 1T
-    [platform.S:542-544](#sources) [DS §17.3 p.193-194](#sources).
-35. **Back-compat M-PLL mirror** — `MCR120 = 0x00004C41` [platform.S:546-548](#sources).
+    [platform.S:542-544](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L542-L544) [DS §17.3 p.193-194](#sources).
+35. **Back-compat M-PLL mirror** — `MCR120 = 0x00004C41` [platform.S:546-548](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L546-L548).
 36. **Mark init complete** — `SCU40 |= 0x40` (bit 6) so future warm boots take
-    the step-5 skip path [platform.S:559-564](#sources).
-37. **Print `"...Done\r\n"`** [platform.S:567-585](#sources).
-38. **Re-lock** — `SCU00 = 0`, `MCR00 = 0` [platform.S:588-596](#sources).
-39. **Return** — restore `lr` from `r4` [platform.S:600-603](#sources).
+    the step-5 skip path [platform.S:559-564](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L559-L564).
+37. **Print `"...Done\r\n"`** [platform.S:567-585](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L567-L585).
+38. **Re-lock** — `SCU00 = 0`, `MCR00 = 0` [platform.S:588-596](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L588-L596).
+39. **Return** — restore `lr` from `r4` [platform.S:600-603](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L600-L603).
 
 **Total cold-boot UART2 output:** `\r\nDRAM Init-DDR\r\n...Done\r\n`.
 
@@ -1205,7 +1205,7 @@ for a faithful model [DS §17.6-17.7 p.203]:
   that mainline Linux and modern U-Boot reuse the **AST2400 (G4)** SDRAM
   controller model; there is no upstream G3 SDRAM binding. The device tree used
   for this hardware is derived from `aspeed-g4.dtsi` for the same reason
-  [CLAUDE.md](#sources). The chief AST2050 realities to preserve in a model: **16-bit
+  [CLAUDE.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/CLAUDE.md). The chief AST2050 realities to preserve in a model: **16-bit
   external DDR2 bus**, **64 MiB** on the KGPE-D16, ~200 MHz MCLK, and the M-PLL
   formula in [DS §18.2 p.212](#sources).
 
@@ -1239,7 +1239,7 @@ Secondary (web, corroboration for JEDEC DDR2 procedure):
   ≥2 AUTO REFRESH), e.g. Samsung DDR2 device-operation guide and the Microchip
   "DDR2-SDRAM Initialization" reference:
   <https://onlinedocs.microchip.com/oxy/GUID-4D282FC5-82FC-4934-8BAD-D4A5D8422E6C-en-US-7/GUID-D24491A8-4CCA-4A45-88A4-E324434824DD.html>
-- Raptor Engineering AST2050 U-Boot upstream (origin of `platform.S`):
+- Raptor Engineering AST2050 U-Boot upstream (origin of [`platform.S`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S)):
   <https://github.com/raptor-engineering/ast2050-uboot>
 - QEMU Aspeed SoC memory-map / SDMC model reference:
   <https://www.qemu.org/docs/master/system/arm/aspeed.html>

@@ -42,8 +42,8 @@ presence lines, and the 12-step power-on sequence — are written **once** and r
 against both backends. This is how QEMU and silicon are proven to behave
 identically ({doc}`../debug/index`).
 
-The existing bespoke harnesses (`run-qemu.py`, `ssh-test.py`, the NS9360
-`qemu_smoke_test.py`) are refactored onto this module so existing boot/SSH jobs
+The existing bespoke harnesses ([`run-qemu.py`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/qemu-firmware/scripts/run-qemu.py), [`ssh-test.py`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/qemu-firmware/scripts/ssh-test.py), the NS9360
+[`qemu_smoke_test.py`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/test/qemu_smoke_test.py)) are refactored onto this module so existing boot/SSH jobs
 pass through it unchanged.
 
 ## Image verification (deliverable h)

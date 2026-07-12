@@ -260,7 +260,7 @@ a 4M×16 (64 Mb, 4-bank, 12-row, 8-col) device on a 16-bit bus = AM 0, bits 11:9
 `DynamicRasCas0-3` (0x104 + n*0x20): bits 9:8 `CAS` (01/10/11 = 1/2/3 clocks),
 bits 1:0 `RAS` (01/10/11 = 1/2/3 clocks); must match the SDRAM mode register
 [HWRef p.308](#sources). For the board's IS42S32800D at the operating AHB clock the
-port draft uses CAS = 2, RAS = 3 [PLAN-INCREMENTAL-PORT.md](#sources).
+port draft uses CAS = 2, RAS = 3 [PLAN-INCREMENTAL-PORT.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md).
 
 ### Static (flash / SRAM) controller
 
@@ -632,7 +632,7 @@ field bits match [u-boot ns9750_eth.h](#sources) (`MAC1_SRST`=0x8000, `MAC1_RXEN
 An MII read: write `MADR` (PHY + register), set `MCMD.READ` (0→1), poll
 `MIND.BUSY`/`MIND.NVALID`, read `MRDD`. MDC must be ≤ 2.5 MHz — set `CLKS` to
 divide the AHB clock accordingly (e.g. ÷40) [HWRef p.363-366](#sources). The board's PHY is
-at MDIO address 1 [REFERENCE-MATERIAL.md](#sources).
+at MDIO address 1 [REFERENCE-MATERIAL.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md).
 
 ### Station address, filtering, descriptors
 
@@ -983,7 +983,7 @@ SPI-EEPROM boot engine uses channel B in SPI mode 0 at CPU-clock/128
 (master and slave are mutually exclusive), two open-drain lines SDA/SCL, 7- and
 10-bit addressing, multi-master arbitration, and standard (100 kHz) / fast
 (400 kHz) timing [HWRef p.507-509](#sources). The board wires SDA/SCL to gpio[35]/gpio[34]
-[ANALYSIS.md](#sources). The firmware uses this bus actively [ANALYSIS.md](#sources).
+[ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md). The firmware uses this bus actively [ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md).
 
 ```{list-table} I2C registers (offset from 0x9050_0000) [HWRef p.512](#sources)
 :header-rows: 1
@@ -1099,7 +1099,7 @@ $\text{clk} = \text{cpu\_clk}/4$) [HWRef p.517-518](#sources). Interrupt codes r
 **Base address: 0x9070_0000** [HWRef p.491](#sources). Tracks time-of-day to 10 ms with a
 full calendar (year 1900-2999), an alarm, and rollover-event interrupts
 [HWRef p.489-490](#sources). Time and calendar values are BCD. The board adds a coin-cell
-backup [ANALYSIS.md](#sources).
+backup [ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md).
 
 ```{list-table} RTC registers (offset from 0x9070_0000) [HWRef p.491](#sources)
 :header-rows: 1
@@ -1165,10 +1165,10 @@ Primary datasheets (in-repo, the authority for the register map):
 
 In-repo analysis and port planning (board specifics, firmware evidence):
 
-- `[ANALYSIS.md](#sources)` — `hpe-ipdu-firmware/ANALYSIS.md` (board inventory, NS9360 I/O
+- `[ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md)` — `hpe-ipdu-firmware/ANALYSIS.md` (board inventory, NS9360 I/O
   map, firmware register usage).
-- `[REFERENCE-MATERIAL.md](#sources)` — `hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md`.
-- `[PLAN-INCREMENTAL-PORT.md](#sources)` — `hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md`
+- `[REFERENCE-MATERIAL.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md)` — `hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md`.
+- `[PLAN-INCREMENTAL-PORT.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md)` — `hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md`
   (register quick reference and clock/baud derivation).
 
 Independent open-source cross-reference (register names, bases, bitfields):
@@ -1179,7 +1179,7 @@ Independent open-source cross-reference (register names, bases, bitfields):
   `gpio-ns9360.c`. Raw source, e.g.
   <https://raw.githubusercontent.com/torvalds/linux/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-sys-ns9360.h>.
 - `[u-boot ns9750](#sources)` — U-Boot at tag v2012.10: `include/ns9750_sys.h`,
-  `ns9750_mem.h`, `ns9750_bbus.h`, `ns9750_ser.h`, `include/configs/ns9750dev.h`,
+  [`ns9750_mem.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_mem.h), [`ns9750_bbus.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_bbus.h), [`ns9750_ser.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_ser.h), `include/configs/ns9750dev.h`,
   `drivers/serial/ns9750_serial.c`. Raw source, e.g.
   <https://raw.githubusercontent.com/u-boot/u-boot/v2012.10/include/ns9750_sys.h>.
 - `[u-boot ns9750_eth.h](#sources)` — the Ethernet register header is not in mainline

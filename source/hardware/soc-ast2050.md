@@ -78,7 +78,7 @@ mis-detects the part.
 
 - **Interrupt controller (VIC) — the big one.** The G3 VIC is a *compact*,
   non-interleaved block at `0x1E6C0000` (32 sources, one 32-bit word per
-  register), whereas the AST2400+ "new" VIC that mainline `irq-aspeed-vic.c`
+  register), whereas the AST2400+ "new" VIC that mainline [`irq-aspeed-vic.c`](https://github.com/torvalds/linux/blob/master/drivers/irqchip/irq-aspeed-vic.c)
   drives lives at `0x1E6C0080` with an interleaved high/low layout. The stock
   driver's register writes therefore miss the G3 entirely — no interrupt is ever
   enabled, the timer clockevent is dead, and boot hangs at the first
@@ -176,7 +176,7 @@ drivers, then (4) the two board `.dts` files include the G3 dtsi. See
 ```{admonition} Register detail source
 :class: note
 
-Full register-bit detail lives in the program's `ast2050.h` / `hwreg.h`
+Full register-bit detail lives in the program's [`ast2050.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h) / [`hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)
 (U-Boot-style config + hardware register headers) and the Aspeed AST2050
 datasheet. This page captures the SoC-level map a model/driver needs; per-block
 bit tables are added as each block is modelled.

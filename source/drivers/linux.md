@@ -10,7 +10,7 @@ clean series in `mithro/linux`:
 2. **`aspeed-g3.dtsi`** — a new SoC include describing the AST2050 peripheral
    layout, mirroring `aspeed-g4.dtsi` with the G3 base addresses.
 3. **`aspeed,ast2050-*` compatibles** on the affected drivers so they bind on G3.
-4. **Board DTS** — `aspeed-bmc-asus-kgpe-d16.dts` and `aspeed-bmc-dell-c410x.dts`
+4. **Board DTS** — [`aspeed-bmc-asus-kgpe-d16.dts`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/qemu-firmware/dts/aspeed-bmc-asus-kgpe-d16.dts) and [`aspeed-bmc-dell-c410x.dts`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-bmc-dell-c410x.dts)
    include the G3 dtsi.
 
 ```{admonition} Interim vs. target
@@ -46,7 +46,7 @@ a Linux 6.6.70 base):
 
 #### `irq-aspeed-g3-vic.c` — the G3 interrupt controller
 
-The single most important G3 fix. Mainline `irq-aspeed-vic.c` targets the
+The single most important G3 fix. Mainline [`irq-aspeed-vic.c`](https://github.com/torvalds/linux/blob/master/drivers/irqchip/irq-aspeed-vic.c) targets the
 AST2400+ interleaved VIC at `0x1E6C0080`; the AST2050's VIC is a compact block at
 `0x1E6C0000` ({ref}`SoC detail <g3-vic>`). On the G3 the stock driver enables no
 interrupts at all, so the timer clockevent never fires, hrtimers hang, and the

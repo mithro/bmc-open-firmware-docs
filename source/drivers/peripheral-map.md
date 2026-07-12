@@ -30,12 +30,12 @@ but not yet complete.
   - QEMU model
 * - {doc}`SCU / clock <../hardware/registers/scu-clock-reset>`
   - [`clk-aspeed`](https://github.com/torvalds/linux/blob/master/drivers/clk/aspeed/clk-aspeed.c) (+ ast2050 patch)
-  - board `platform.S`
+  - board [`platform.S`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S)
   - port needed
   - `aspeed-scu` (part)
 * - Reset control
   - `reset-aspeed` (auxiliary of clk)
-  - `platform.S`
+  - [`platform.S`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S)
   - port needed
   - within SCU model
 * - Watchdog
@@ -45,7 +45,7 @@ but not yet complete.
   - `aspeed-wdt`
 * - {doc}`DDR2 / SDRAM <../hardware/registers/ddr2-sdram>`
   - — (warm-booted; no runtime driver)
-  - **`platform.S` init** (primary)
+  - **[`platform.S`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S) init** (primary)
   - U-Boot-equivalent SPL needed
   - `aspeed-sdmc`
 * - {doc}`MAC (ftgmac100) <../hardware/registers/network-mac-phy>`
@@ -85,12 +85,12 @@ but not yet complete.
   - `aspeed-gpio` (planned)
 * - {doc}`Interrupt controller (VIC) <../hardware/registers/uart-vic-timers>`
   - **`irq-aspeed-g3-vic`** (program driver)
-  - `platform.S` polls
+  - [`platform.S`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S) polls
   - Zephyr `intc`, port needed
   - `aspeed-vic` (G3)
 * - {doc}`Timers (FTTMR010) <../hardware/registers/uart-vic-timers>`
   - [`timer-fttmr010`](https://github.com/torvalds/linux/blob/master/drivers/clocksource/timer-fttmr010.c)
-  - `platform.S`
+  - [`platform.S`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S)
   - Zephyr `timer`, port needed
   - `fttmr010`
 * - {doc}`UART <../hardware/registers/uart-vic-timers>`

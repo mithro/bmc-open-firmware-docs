@@ -10,7 +10,7 @@ VIC and timers are on {doc}`uart-vic-timers`.
 Citations use these short forms: `[DS §N p.P](#sources)` = the *AST2050/AST1100 A3
 Datasheet V1.05* (25 May 2010), chapter N / printed page P; repository filenames
 (e.g. `[g3-vic patch](#sources)`, `[TIMER-RCA](#sources)`, `[P2A-BOOT](#sources)`, `[CULVERT-G3](#sources)`,
-`[hwreg.h](#sources)`, `[ast2050.h](#sources)`) = hardware-verified reverse-engineering in the
+`[hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)`, `[ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h)`) = hardware-verified reverse-engineering in the
 program repo; named URLs = external cross-references (see **Sources**). Every
 load-bearing value is backed by at least two of these.
 
@@ -349,7 +349,7 @@ dead-firmware board. [CVE-2019-6260 / Pantsdown][pantsdown]
 
 ### AHB Bus Controller — unlock key + boot-area remap
 
-`Base of AHBC = 0x1E600000`; 4 registers. `[DS §12.3 p.114](#sources)`, `[hwreg.h](#sources)`
+`Base of AHBC = 0x1E600000`; 4 registers. `[DS §12.3 p.114](#sources)`, `[hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)`
 
 ```{list-table} AHB Bus Controller registers
 :header-rows: 1
@@ -373,7 +373,7 @@ dead-firmware board. [CVE-2019-6260 / Pantsdown][pantsdown]
 ```
 
 The DRAM-at-`0x0` boot trick unlocks `AHBC00 = 0xAEED1A03` then sets
-`AHBC8C[0] = 1`. `[P2A-BOOT](#sources)`, `[hwreg.h](#sources)`
+`AHBC8C[0] = 1`. `[P2A-BOOT](#sources)`, `[hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)`
 
 ```{admonition} The boot-area remap resets on HRST_N
 :class: warning
@@ -544,13 +544,13 @@ strap). `[DS §18 p.205](#sources)`, `[P2A-BOOT](#sources)`
   (p.154-157), §18 SCU (p.204-220), §20 Video Engine (p.232-235), §30 LPC
   Controller / iLPC-to-AHB (p.311-326), §33 PCI Slave Controller (p.363-368), §34
   VGA Display Controller (p.369-372), §36 P-Bus to AHB Bridge (p.400).
-- **`P2A-DRAM-BOOT-SEQUENCE.md`** — AHB unlock/remap, the reset tree,
+- **[`P2A-DRAM-BOOT-SEQUENCE.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/P2A-DRAM-BOOT-SEQUENCE.md)** — AHB unlock/remap, the reset tree,
   `SCU70[1:0]` freeze-across-reset.
-- **`CULVERT-G3-HARDWARE-RESULTS.md`** — verified culvert P2A/iLPC posture
+- **[`CULVERT-G3-HARDWARE-RESULTS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/CULVERT-G3-HARDWARE-RESULTS.md)** — verified culvert P2A/iLPC posture
   (`HICR5[8] ENL2H`, the PCIS14 P2A window), SoC identity `SCU7C=0x202`.
-- **`TIMER-CLOCKEVENT-ROOT-CAUSE.md`** — the VGA carve-out reservation and the
+- **[`TIMER-CLOCKEVENT-ROOT-CAUSE.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/TIMER-CLOCKEVENT-ROOT-CAUSE.md)** — the VGA carve-out reservation and the
   P2A-blind-to-VIC finding.
-- **`hwreg.h`, `ast2050.h`** — Raptor Engineering reverse-engineered register
+- **[`hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h), [`ast2050.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h)** — Raptor Engineering reverse-engineered register
   bases (AHBC key/remap).
 - [CVE-2019-6260 "Pantsdown" write-up][pantsdown] and the [NVD entry][nvd] — the
   iLPC2AHB / PCIe-P2A / X-DMA AHB back-door model these G3 bridges belong to.
