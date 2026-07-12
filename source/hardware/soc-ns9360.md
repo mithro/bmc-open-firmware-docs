@@ -1084,4 +1084,5 @@ Independent open-source cross-reference (register names, bases, bitfields):
 
 soc-ns9360-memory-serial
 soc-ns9360-io
+soc-ns9360-secondary
 ```
