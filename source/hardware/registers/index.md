@@ -51,4 +51,6 @@ exactly the behaviours the {doc}`../../emulation/testbench` qtest benches assert
 :maxdepth: 1
 :caption: SoC blocks
 
+uart-vic-timers
+pcie-vga-usb-bridges
 ```
