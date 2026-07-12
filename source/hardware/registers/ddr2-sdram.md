@@ -902,8 +902,8 @@ DLL1 input-phase SADJ for DQS0, `[15:8]` = DLL1 input-phase SADJ for DQS1 — bo
 `MCR6C = 0x00909090` [platform.S:354-356](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L354-L356). `[7:0]` = DLL1 master-adjust **MADJ**
 = `0x90` (144), `[23:16]` = DLL3 MADJ = `0x90` (144); `[15:8]` and `[31:24]` are
 reserved [DS §17.3 p.198](#sources). Per the datasheet DLL note, the minimum MADJ is 40 and
-the operating-frequency relation is $\text{MIN\_FREQ} = 67 \cdot 120 / \text{MADJ}$,
-$\text{MAX\_FREQ} = 347 \cdot 120 / \text{MADJ}$, with output delay $\frac{\text{SADJ}+24}{\text{MADJ}} \cdot T_\text{ref} + 0.1\,\text{ns}$
+the operating-frequency relation is $F_\text{min} = 67 \cdot 120 / \text{MADJ}$,
+$F_\text{max} = 347 \cdot 120 / \text{MADJ}$, with output delay $\frac{\text{SADJ}+24}{\text{MADJ}} \cdot T_\text{ref} + 0.1\,\text{ns}$
 [DS §17.3 p.199](#sources). MADJ=144 sets the DLL's operating band around the ~200 MHz MCLK.
 This is written **before** the main register block so the DLL master loop is
 running when `MCR64`'s phase settings take effect.

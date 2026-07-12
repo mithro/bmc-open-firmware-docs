@@ -949,7 +949,7 @@ Example N values for x1_sys_osc/2 at 16× oversampling: 115200 baud → N = 7,
 ```{admonition} Baud divisor convention
 :class: note
 
-Digi's U-Boot serial driver computes $N = \dfrac{\text{CONFIG\_SYS\_CLK\_FREQ}/8}{\text{baud} \times 16} - 1$,
+Digi's U-Boot serial driver computes $N = \dfrac{\text{CONFIG_SYS_CLK_FREQ}/8}{\text{baud} \times 16} - 1$,
 i.e. BBus clock = system(PLL)/8, using `CLKMUX = BCLK`
 [u-boot ns9750_serial.c](#sources). With the correct PLL/system clock (≈354 MHz), that
 BBus clock is ≈44.2 MHz, so 115200 8N1 (16×) gives N = 23. The clean
@@ -1088,8 +1088,8 @@ Master commands (CMD field): 0x00 `M_NOP`, 0x04 `M_READ`, 0x05 `M_WRITE`,
 enable, default 1), bits 10:1 `SDA` (default 0x7F), bit 0 `SAM` [HWRef p.516](#sources).
 `Configuration` (0x0C): bit 15 `IRQD` (mask CPU interrupt — keep 0), bit 14 `TMDE`
 (0 = standard, 1 = fast), bit 13 `VSCD` (keep 0), bits 12:9 `SFW` (spike-filter
-width), bits 8:0 `CLREF` (clk_ref[9:1], must be > 3; $\text{bus clock} = \dfrac{\text{clk}}{(\text{CLREF} \times 2) + 4 + \text{scl\_delay}}$,
-$\text{clk} = \text{cpu\_clk}/4$) [HWRef p.517-518](#sources). Interrupt codes reported in
+width), bits 8:0 `CLREF` (clk_ref[9:1], must be > 3; $\text{bus clock} = \dfrac{\text{clk}}{(\text{CLREF} \times 2) + 4 + \text{scl_delay}}$,
+$\text{clk} = \text{cpu_clk}/4$) [HWRef p.517-518](#sources). Interrupt codes reported in
 `IRQCD` include `M_ARBIT_LOST` (1), `M_NO_ACK` (2), `M_TX_DATA` (3), `M_RX_DATA`
 (4), `M_CMD_ACK` (5), and slave codes 8-F [HWRef p.518-519](#sources).
 
