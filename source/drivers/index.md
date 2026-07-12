@@ -7,6 +7,7 @@ staying cleanly upstreamable.
 ```{toctree}
 :maxdepth: 1
 
+peripheral-map
 linux
 uboot
 zephyr
