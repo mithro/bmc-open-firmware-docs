@@ -18,7 +18,7 @@ port.
 * - Boot flash
   - SPI NOR at `0x14000000`
 * - Console
-  - UART2 (`0x1E784000`); **1200 8N1** on this board (see {doc}`../hardware/registers/uart-vic-timers`)
+  - SoC **UART2** (`0x1E784000`) = Linux `ttyS1`; firmware **115200 8N1** (the rig bring-up observed 1200 — see the console note in §2.2)
 * - Debug
   - `AST_JTAG1` (BMC JTAG) + AMD HDT (host CPU); see {doc}`../debug/jtag-uart`
 ```
@@ -54,11 +54,11 @@ wiring on each signal pin (verified TAP IDCODE `0x07926f0f`).
 ```
 
 ```{figure} /_static/diagrams/kgpe-d16-ast-uart1.svg
-:alt: AST_UART1 BMC console 4-pin header — 3.3V (do not wire), BMC TXD, BMC RXD, GND, with crossover-to-RPi labels and the 1200-baud console note.
+:alt: AST_UART1 BMC console 4-pin header — 3.3V (do not wire), BMC TXD, BMC RXD, GND, with crossover-to-RPi labels.
 :width: 60%
 
-**AST_UART1** — the BMC console header (crossover TX/RX to the adapter; the
-console runs at 1200 baud on this board).
+**AST_UART1** — the BMC console header (SoC UART2 / `ttyS1`; crossover TX/RX to
+the adapter). See §2.2 for the 115200-vs-1200 baud discrepancy.
 ```
 
 ```{figure} /_static/diagrams/kgpe-d16-amd-hdt.svg
@@ -124,8 +124,7 @@ Source: [RPI4-OPENOCD-JTAG-WIRING.md:64-79] [HEADER-PINOUTS.md:17-24].
 ### 2.1 AST_JTAG1 — BMC JTAG (20-pin ARM, 2×10, 2.54 mm) ✅
 
 Standard ARM 20-pin JTAG. Pin 1 = square pad (top-left); odd column = signal,
-even column = GND (except pins 1–2). [HEADER-PINOUTS.md:37-66] "diagram: TODO".
-
+even column = GND (except pins 1–2). [HEADER-PINOUTS.md:37-66]
 ```
         AST_JTAG1  -  20-pin ARM JTAG (2x10, 0.1")
         component side - pin 1 = square pad (top-left)
@@ -223,10 +222,27 @@ Sources: [HEADER-PINOUTS.md:43-66] [RPI4-OPENOCD-JTAG-WIRING.md:110-136].
 
 ### 2.2 AST_UART1 — BMC console (4-pin, 3.3 V) ✅
 
+```{admonition} Which SoC UART, and at what baud — a partial discrepancy
+:class: important
+
+**Instance (resolved):** the header silk-labelled `AST_UART1` connects to the
+SoC's **UART2** (`0x1E784000`) — Linux **`ttyS1`**, which is exactly what the
+Raptor firmware's `console=ttyS1` selects. The `AST_UART1` name is a board label,
+**not** the SoC UART1 instance (SoC UART1 at `0x1E783000` is a separate, unrouted
+port — {doc}`../hardware/registers/uart-vic-timers` records it as reading 0 edges
+when driven).
+
+**Baud (unresolved):** the Raptor firmware configures **115200**
+(`CONFIG_BAUDRATE`, `console=ttyS1,115200`; 38400 for the DRAM-init debug path).
+The rig bring-up over P2A, however, observed the live console at **1200** baud.
+That discrepancy is not fully explained (a UART-clock/divisor difference on the
+bring-up path is the leading theory) and is documented rather than asserted
+either way — treat both numbers as candidates and probe before relying on one.
+```
+
 A 1×4 header just above the AST2050; ends fixed by Raptor's photo as **+3.3 V …
 GND**, the two middle pins TX/RX (confirm by probing — BMC TXD idles high and
-bursts at boot). **3.3 V TTL, 115200 8N1.** [HEADER-PINOUTS.md:98-126] "diagram:
-TODO".
+bursts at boot). **3.3 V TTL** (baud: see the note above). [HEADER-PINOUTS.md:98-126]
 
 ```
       AST_UART1 - 4-pin 3.3V ARM UART (1x4), pin1 = square pad
@@ -256,7 +272,8 @@ TODO".
 ```
 
 Sources: [HEADER-PINOUTS.md:105-126] [RPI4-OPENOCD-JTAG-WIRING.md:211-238]. This
-is the AST2050 **UART1** (NS16550 at `0x1E783000`; UART2 is `0x1E784000`).
+header is the SoC's **UART2** (NS16550 at `0x1E784000` = Linux `ttyS1`), per the
+note above — not the SoC UART1 at `0x1E783000`.
 [RPI4-OPENOCD-JTAG-WIRING.md:236-238] Press **Delete** within ~3 s of U-Boot start
 to reach the bootloader.
 
@@ -268,8 +285,7 @@ module; no per-pin signals are published. [HEADER-PINOUTS.md:73-94] Its rumored
 role as a BMC-SPI-flash recovery path is **unconfirmed** — treat it as a flashrom
 (SPI) target only if continuity to the AST2050 boot flash (an SOIC-8 near the SoC)
 is proven. If it is SPI, drive it from the Pi's hardware SPI0 with Raptor's
-`ast2050-flashrom` fork. [RPI4-OPENOCD-JTAG-WIRING.md:242-268] "diagram: TODO".
-
+`ast2050-flashrom` fork. [RPI4-OPENOCD-JTAG-WIRING.md:242-268]
 ```
         BMC_FW1  -  2-row header (ASMB4-iKVM slot)
         +-----------------------------+
@@ -283,8 +299,7 @@ is proven. If it is SPI, drive it from the Pi's hardware SPI0 with Raptor's
 The host/CPU debug port: **AMD HDT** (Hardware Debug Tool), a proprietary JTAG
 dialect for the Opteron 6100/6200/6300 (Family 10h/15h). It is **not** OpenOCD-
 or RPi-drivable (fine 1.27 mm pitch, proprietary probe/software required — ASSET
-InterTech / AMD HDT kit). [JTAG-HEADERS.md:62-95,236-239] "diagram: TODO".
-
+InterTech / AMD HDT kit). [JTAG-HEADERS.md:62-95,236-239]
 ```
         AMD HDT+ (20-pin, 2x10, 1.27 mm) - pin 1 top-left
  ┌─────────────────────────┐
@@ -420,7 +435,9 @@ from. [RAPTOR_ENGINEERING_AST2050_ANALYSIS.md:235-246,670-676]
 hardware): (1) **JTAG** run-control via `AST_JTAG1` (§2.1); (2) **P2A/culvert**
 over the PCI BAR; (3) the **BMC UART** via `AST_UART1` (§2.2). SoC power/clock
 state is visible in the SCU: `SCU7C = 0x00000202` (silicon rev),
-`SCU04 = 0x000FFE5C`, `SCU14 = 0x00003EFF` (hardware strap/config).
+`SCU04 = 0x000FFE5C` (the datasheet reset value of the reset-control register; a
+live board reads a different value), `SCU14 = 0x00003EFF` (the **frequency-counter
+measurement** register — the hardware straps are in `SCU70`, not `SCU14`).
 [JTAG-USAGE-GUIDE.md:250-256,442-444] The DDR2 native window is `0x40000000`
 (64 MB); the SPI boot flash is at `0x14000000` (SMC controller `0x16000000`).
 [JTAG-USAGE-GUIDE.md:444] [datasheets/README.md:36-38]

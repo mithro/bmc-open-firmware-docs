@@ -447,7 +447,8 @@ $$\text{Baud} = \frac{24\,\text{MHz}}{16 \times \text{divisor}}$$
 * - **1200**
   - **1250** (`0x04E2`)
   - `0x04` / `0xE2`
-  - **KGPE-D16 BMC console (UART2)** — verified byte-perfect on hardware `[P2A-BOOT]`
+  - **KGPE-D16 BMC console (UART2)** as observed on the rig `[P2A-BOOT]` — but the
+    firmware config is 115200 (see the baud-discrepancy note below)
 * - 115200
   - 13 (`0x000D`)
   - `0x00` / `0x0D`
@@ -457,8 +458,10 @@ $$\text{Baud} = \frac{24\,\text{MHz}}{16 \times \text{divisor}}$$
 ```{admonition} Two things that make the console look dead
 :class: warning
 
-1. **Baud** — the KGPE-D16 BMC console runs at **1200 baud** (divisor 1250), not
-   the 115200 typical of later Aspeed parts. `[P2A-BOOT]`
+1. **Baud (unresolved)** — the Raptor firmware configures UART2 at **115200**
+   (`console=ttyS1,115200`; 38400 for DRAM-init), but the rig bring-up observed
+   the console at **1200** (divisor 1250). Both are documented; probe before
+   relying on one. `[P2A-BOOT]`, `[ast2050.h]` (see {doc}`../../systems/kgpe-d16` §2.2)
 2. **Clock gate** — the UART clock is gated by `SCU0C[15]` **Stop UARTCLK**
    (`0`=running, `1`=stopped; default running). It must be running (and
    `SCU2C[12]=0` for the plain 24 MHz reference) for either UART to clock out.

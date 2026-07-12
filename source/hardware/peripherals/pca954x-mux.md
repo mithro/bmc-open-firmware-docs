@@ -87,7 +87,7 @@ ch3, `0x00` = none (POR default) [PCA9544A DS p.14].
 * - PCA9544A ×1
   - `0xF1`
   - `0x70`
-  - Two ADT7462 fan/temp controllers (share an address) on separate channels; the two `THERM`/`INT` outputs go to AST2050 GPIOB0 / GPIOB1. Firmware channel selectors appear as bytes `0xB0` / `0xB8` in the IO tables.
+  - Two ADT7462 fan/temp controllers behind the mux (chip #1 7-bit `0x58`, chip #2 `0x5C`); their `THERM`/`INT` outputs go to AST2050 GPIOB0 / GPIOB1. The bytes `0xB0` / `0xB8` in the IO tables are the ADT7462 **8-bit device addresses** (`0x58<<1` / `0x5C<<1`), *not* PCA9544A channel-select values (those are `0x04`–`0x07`); the exact channel each chip sits on is not pinned down in the RE notes.
 * - PCA9548A #1
   - `0xF4`
   - `0x70`

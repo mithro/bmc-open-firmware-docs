@@ -28,20 +28,21 @@ BMC alongside P2A — see {doc}`bring-up`.
   - TCK/TMS/TDI/TDO/nTRST/nSRST; 3.3 V only
 * - Console
   - BMC UART (4-pin), 3.3 V / TX / RX / GND
-  - Wired to the SoC **UART2** (`0x1E784000`). On the KGPE-D16 BMC this line runs
-    at **1200 baud** — an easy-to-miss detail that made the console look dead at
-    115200.
+  - Wired to the SoC **UART2** (`0x1E784000` = Linux `ttyS1`). Baud is a
+    documented discrepancy — see the note below.
 * - SPI flash
   - `BMC_FW1`
   - in-system SPI programming of the boot flash
 ```
 
-```{admonition} Console baud
+```{admonition} Console baud — a known discrepancy
 :class: warning
 
-The KGPE-D16 BMC console is UART2 at **1200 baud**, not the 115200 typical of
-later Aspeed parts. Set the line speed (`stty -F <dev> 1200`) before attaching,
-or the console reads as garbage/silence.
+The KGPE-D16 BMC console is SoC UART2 (`ttyS1`). Its baud is **not settled**: the
+Raptor firmware configures **115200** (`console=ttyS1,115200`; 38400 for the
+DRAM-init debug path), but the rig bring-up over P2A observed the console at
+**1200**. If the console reads as garbage, try both rates
+(`stty -F <dev> 115200` / `1200`). Full detail: {doc}`../systems/kgpe-d16` §2.2.
 ```
 
 ```{admonition} Electrical safety

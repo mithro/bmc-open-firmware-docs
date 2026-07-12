@@ -60,8 +60,9 @@ VIC at `0x1E6C0000` and the UART2 console).
   - 10/100 Ethernet
 * - UART (console)
   - `0x1E783000` / `0x1E784000`
-  - 16550-compatible. The KGPE-D16 BMC console is **UART2** (`0x1E784000`); on
-    that board it runs at **1200 baud**, not 115200 (see {doc}`../debug/jtag-uart`)
+  - 16550-compatible. The KGPE-D16 BMC console is **UART2** (`0x1E784000` =
+    Linux `ttyS1`). Baud is a documented discrepancy — firmware 115200 vs a
+    rig-observed 1200 (see {doc}`../systems/kgpe-d16` §2.2)
 ```
 
 ```{admonition} SCU / SDRAM unlock keys

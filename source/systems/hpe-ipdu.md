@@ -59,7 +59,7 @@ general-purpose processor. The MAXQ3180 (metering) and TMP89FM42 (display) are
 satellite devices on dedicated serial links, and the Ethernet PHY hangs off the
 NS9360 MII/MAC. `[ANALYSIS.md]`
 
-```{list-table} Signal-chain overview (SVG block diagram: TODO)
+```{list-table} Signal-chain overview
 :header-rows: 1
 :widths: 22 20 30 28
 

@@ -1,7 +1,7 @@
 # AST2050 register reference
 
-Register-by-register documentation of every block in the Aspeed AST2050 (G3)
-SoC, written to be sufficient to implement **both** a QEMU device model and a
+Register-by-register documentation of the Aspeed AST2050 (G3) SoC blocks,
+written to be sufficient to implement **both** a QEMU device model and a
 Linux/Zephyr/U-Boot driver. Every documented register — including reserved and
 currently-unused ones — carries its offset, reset value, access type, and a
 description traceable to at least one primary source.
@@ -9,6 +9,26 @@ description traceable to at least one primary source.
 Two boards in this program share this SoC (the ASUS KGPE-D16 and the Dell
 C410X), so this SoC-level reference is shared; each board page then documents
 only its own wiring, straps, and off-chip peripherals.
+
+```{admonition} Coverage status — which blocks are fully transcribed
+:class: note
+
+The blocks a firmware port must drive are fully register-mapped in the pages
+below: SCU / clock / reset / watchdog, DDR2/SDRAM (+ cold-init), MAC / MDIO /
+PHY, the I2C/SMBus, SPI/SMC and LPC buses, GPIO, the interrupt controller (VIC),
+the timers, the UARTs, the PCI-slave/VGA endpoint, USB, and the P2A / iLPC AHB
+bridges.
+
+A set of AST2050 on-chip blocks that are **unused on both boards** are, at time
+of writing, referenced (via their SCU reset/clock bits and VIC interrupt lines)
+but **not yet transcribed register-by-register**: the PWM & fan-tachometer
+controller (§28), the RTC (§24), PECI (§32), the virtual/pass-through UARTs
+(§29), the HACE crypto engine (§19), the MIC (§13), the MDMA engine (§22), the
+outbound AHB→PCI (A2P) bridge (§21), the 2D graphics accelerator (§35), and the
+hardware cursor (§37); the USB endpoint, Video-Engine and VGA-CRTC register files
+are given at overview level. These are listed explicitly so they are visibly
+*pending*, not silently omitted — full transcription is tracked as follow-up work.
+```
 
 ## How to read these tables
 
