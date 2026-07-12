@@ -10,24 +10,25 @@ Two boards in this program share this SoC (the ASUS KGPE-D16 and the Dell
 C410X), so this SoC-level reference is shared; each board page then documents
 only its own wiring, straps, and off-chip peripherals.
 
-```{admonition} Coverage status — which blocks are fully transcribed
+```{admonition} Coverage status — every on-chip block is register-mapped
 :class: note
 
-The blocks a firmware port must drive are fully register-mapped in the pages
-below: SCU / clock / reset / watchdog, DDR2/SDRAM (+ cold-init), MAC / MDIO /
-PHY, the I2C/SMBus, SPI/SMC and LPC buses, GPIO, the interrupt controller (VIC),
-the timers, the UARTs, the PCI-slave/VGA endpoint, USB, and the P2A / iLPC AHB
-bridges.
+**Every** AST2050 on-chip register block is transcribed register-by-register
+across the pages below. That includes the blocks a firmware port drives (SCU /
+clock / reset / watchdog, DDR2/SDRAM + cold-init, MAC / MDIO / PHY, the
+I2C·SMBus·SPI-SMC·LPC buses, GPIO, the VIC, timers, UARTs, the PCI-slave/VGA
+endpoint, and the P2A / iLPC AHB bridges) **and** the blocks that are unused on
+both boards but documented anyway: the PWM & fan-tachometer controller (§28),
+the RTC (§24), PECI (§32), the virtual / pass-through UARTs (§29), the HACE
+crypto engine (§19), the MIC (§13), the MDMA engine (§22), the outbound AHB→PCI
+(A2P) bridge (§21), the 2D graphics accelerator (§35), the hardware cursor (§37),
+and the full USB-endpoint / Video-Engine / VGA + extended-CRT register files.
 
-A set of AST2050 on-chip blocks that are **unused on both boards** are, at time
-of writing, referenced (via their SCU reset/clock bits and VIC interrupt lines)
-but **not yet transcribed register-by-register**: the PWM & fan-tachometer
-controller (§28), the RTC (§24), PECI (§32), the virtual/pass-through UARTs
-(§29), the HACE crypto engine (§19), the MIC (§13), the MDMA engine (§22), the
-outbound AHB→PCI (A2P) bridge (§21), the 2D graphics accelerator (§35), and the
-hardware cursor (§37); the USB endpoint, Video-Engine and VGA-CRTC register files
-are given at overview level. These are listed explicitly so they are visibly
-*pending*, not silently omitted — full transcription is tracked as follow-up work.
+The only items given below register level are ones the datasheet itself does not
+define at that level: the eight USB SETUP data buffers (raw 8-byte packet scratch
+areas with no bit structure), two reserved Video-Engine registers, and the A2P
+bridge (specified as address windows plus an enable strap, with no per-register
+bitfields). Each is called out where it occurs — nothing is silently omitted.
 ```
 
 ## How to read these tables
@@ -77,6 +78,7 @@ network-mac-phy
 buses-gpio
 uart-vic-timers
 pcie-vga-usb-bridges
+display-usb
 control-blocks
 engines-blocks
 ```
