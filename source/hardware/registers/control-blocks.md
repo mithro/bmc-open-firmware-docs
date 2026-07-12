@@ -1,13 +1,15 @@
-# AST2050 PWM/fan-tach, RTC, PECI & virtual UARTs
+# AST2050 PWM/fan-tach, RTC, PECI, ADC & virtual UARTs
 
-This is a register-by-register reference for four on-chip control blocks of the
+This is a register-by-register reference for the on-chip control blocks of the
 Aspeed **AST2050 / AST1100 (A3, "G3")**:
 
 1. the **PWM & Fan Tachometer Controller** (base `0x1E786000`),
 2. the **Real-Time Clock (RTC)** (base `0x1E781000`),
-3. the **PECI Controller** (base `0x1E78B000`), and
+3. the **PECI Controller** (base `0x1E78B000`),
 4. the **Virtual UART (VUART)** (base `0x1E787000`) and **Pass-through UART
-   (PUART)** (base `0x1E788000`).
+   (PUART)** (base `0x1E788000`), and
+5. the **Analog-to-Digital Converter (ADC)** (base `0x1E6E9000`) — 16-channel
+   voltage monitoring.
 
 Every register in each block's 4 KiB APB window is documented — including the
 offsets that are reserved / unimplemented — with bit-field tables for the
@@ -1182,6 +1184,58 @@ The pass-through UART exposes **only the ARM-only extended registers**
   covers the `0x00`–`0x1C` block. There is no AST2050 compatible string.
   [aspeed-mainline-drivers-analysis.md:135](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-mainline-drivers-analysis.md#L135) [aspeed-driver-quick-reference.md:96](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-driver-quick-reference.md#L96)
 ```
+
+## 5. Analog-to-Digital Converter (ADC) — base `0x1E6E9000`
+
+The AST2050 also has a **16-channel, 10-bit successive-approximation ADC** at
+base `0x1E6E9000` (VIC source **#22**), used for on-board **voltage monitoring**.
+The A3 datasheet carries no dedicated ADC chapter, so — like the UHCI host — this
+block is documented from the two software sources that drive the *same* IP: the
+mainline Linux [`aspeed_adc`](https://github.com/torvalds/linux/blob/master/drivers/iio/adc/aspeed_adc.c)
+IIO driver (register-compatible `aspeed,ast2400-adc`, from which the program adds
+an `aspeed,ast2050-adc` match) and Raptor Engineering's hardware-verified 2.6.28
+port ([RAPTOR-PORTING-GUIDE.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md#L543)
+"Change 16: ADC", `plat-aspeed/dev-adc.c` + `regs-adc.h`).
+
+```{list-table} ADC register map (offset from 0x1E6E9000)
+:header-rows: 1
+:widths: 16 28 56
+
+* - Offset
+  - Register
+  - Meaning
+* - `0x00`
+  - Engine Control
+  - enable, power-down, reference-voltage select, operating mode (normal /
+    compensating-sensing) and the channel-scan trigger
+* - `0x04`
+  - Interrupt Control
+  - per-channel bounds/threshold interrupt enables and status (write-1-to-clear)
+* - `0x08`
+  - VGA-Detect Control
+  - external-monitor sense sharing the analog front end
+* - `0x0C`
+  - Clock Control
+  - ADC sampling-clock divider from PCLK
+* - `0x10`–`0x6C`
+  - Channel Data + Bounds
+  - per the AST2400-compatible layout: the 16 channel results (two 10-bit
+    channels packed per 32-bit word, `0x10`–`0x2C`) followed by the per-channel
+    upper/lower comparison bounds and hysteresis for the threshold interrupts
+* - `0xC4`
+  - Compensation / Trim
+  - calibration (offset-compensation) value applied to raw conversions
+```
+
+The control-register offsets (`0x00`/`0x04`/`0x08`/`0x0C`/`0xC4`) are taken
+verbatim from the mainline driver's register defines; the channel-data and bounds
+offsets follow the standard AST2400 ADC layout the `aspeed,ast2400-adc` binding
+describes. Software: the [`aspeed_adc`](https://github.com/torvalds/linux/blob/master/drivers/iio/adc/aspeed_adc.c)
+driver exposes each channel through the [Linux IIO subsystem](https://docs.kernel.org/iio/index.html);
+the device-tree binding is
+[`aspeed,ast2400-adc.yaml`](https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/iio/adc/aspeed,ast2400-adc.yaml).
+The ADC is unused on both program boards but present in silicon, so a faithful
+QEMU model and the `aspeed,ast2050-adc` compatible are still required.
 
 ## See also
 

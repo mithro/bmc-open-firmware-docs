@@ -19,10 +19,11 @@ clock / reset / watchdog, DDR2/SDRAM + cold-init, MAC / MDIO / PHY, the
 I2C·SMBus·SPI-SMC·LPC buses, GPIO, the VIC, timers, UARTs, the PCI-slave/VGA
 endpoint, and the P2A / iLPC AHB bridges) **and** the blocks that are unused on
 both boards but documented anyway: the PWM & fan-tachometer controller (§28),
-the RTC (§24), PECI (§32), the virtual / pass-through UARTs (§29), the HACE
-crypto engine (§19), the MIC (§13), the MDMA engine (§22), the outbound AHB→PCI
-(A2P) bridge (§21), the 2D graphics accelerator (§35), the hardware cursor (§37),
-and the full USB-endpoint / Video-Engine / VGA + extended-CRT register files.
+the RTC (§24), PECI (§32), the virtual / pass-through UARTs (§29), the ADC
+(voltage monitoring, base `0x1E6E9000`), the HACE crypto engine (§19), the MIC
+(§13), the MDMA engine (§22), the outbound AHB→PCI (A2P) bridge (§21), the 2D
+graphics accelerator (§35), the hardware cursor (§37), and the full USB-endpoint
+/ USB 1.1 UHCI host / Video-Engine / VGA + extended-CRT register files.
 
 The only items given below register level are ones the datasheet itself does not
 define at that level, or that are standard (non-Aspeed) interfaces: the eight USB
