@@ -44,7 +44,8 @@ every component, and to bring up every layer of the software stack:
 - {doc}`drivers/index` — Linux, U-Boot, and Zephyr driver notes and the
   upstream patch-series/rebase workflow.
 - {doc}`firmware/index` — the OpenBMC (Linux) and WallaBMC (Zephyr) firmware
-  tracks: Redfish, power, sensors, fans, PCIe control, SoL, and footprint work.
+  tracks — Redfish, power, sensors, fans, PCIe control, SoL, footprint work —
+  and the U-Boot bootloader they boot through.
 - {doc}`debug/index` — JTAG/UART/SPI bring-up and the hardware-in-the-loop rig.
 
 ## Start here
