@@ -42,7 +42,11 @@ frame buffer. [DS §33.1 p.363](#sources), [DS §34.1 p.369](#sources)
 * - `0x04`
   - **PCIS04** Command/Status
   - `0x0210_0000`
-  - Cmd bit1 mem-space-enable, bit0 IO-space-enable, bit10 INT-disable; status: caps-list=1, DEVSEL=medium
+  - Command/status:
+    - bit1 mem-space-enable
+    - bit0 IO-space-enable
+    - bit10 INT-disable
+    - status: caps-list=1, DEVSEL=medium
 * - `0x08`
   - **PCIS08** Class/Revision
   - `0x0X00_0010`
@@ -86,7 +90,9 @@ frame buffer. [DS §33.1 p.363](#sources), [DS §34.1 p.369](#sources)
 * - `0x44`
   - **PCIS44** PM Control/Status
   - `0x0000_0000`
-  - `[1:0]` power state D0–D3 (also gates HSYNC/VSYNC/DAC); bit8 PME-enable, bit15 PME-status
+  - - `[1:0]` power state D0–D3 (also gates HSYNC/VSYNC/DAC)
+    - bit8 PME-enable
+    - bit15 PME-status
 ```
 
 ```{admonition} PCIS14 second 64 KB = the P2A window
@@ -128,7 +134,8 @@ its legacy I/O addresses (also memory-mapped for advanced OSes). [DS §34 p.369]
   - feature control bits `[3]`, `[1:0]`
 * - `0x3C2`(R)
   - **VGAIR0** Input Status 0
-  - bit7 vertical-retrace interrupt flag; bit4 DAC comparator readback
+  - - bit7 vertical-retrace interrupt flag
+    - bit4 DAC comparator readback
 * - `0x3BA/3DA`(R)
   - **VGAIR1** Input Status 1
   - diagnostic `[5:4]`, vertical-retrace (3), display-enable inversion (0)
@@ -213,7 +220,13 @@ up to 1920×1200×32bpp@60. Register highlights: [DS §20 p.232-235](#sources)
   - Unlock with `0x1A03_8AA8`; reads `1` unlocked / `0` locked; reset by POR/WDT/SCU-SW-reset
 * - `0x004`
   - **VR004** Sequence Control
-  - bit4 enable/trigger compression, bit5 auto multi-frame, bit3 capture multi-frame, bit7 mode-change watchdog, `[11:10]` YUV444/YUV420, bit18 compress-idle, bit16 capture-idle status
+  - - bit4 enable/trigger compression
+    - bit5 auto multi-frame
+    - bit3 capture multi-frame
+    - bit7 mode-change watchdog
+    - `[11:10]` YUV444/YUV420
+    - bit18 compress-idle
+    - bit16 capture-idle status
 ```
 
 The Video Engine clock (ECLK) is gated by `SCU0C[0]`; its reset is `SCU04[6]`.
@@ -363,13 +376,22 @@ dead-firmware board. [CVE-2019-6260 / Pantsdown][pantsdown]
   - Write **`0xAEED1A03`** → regs `0x80–0x8C` become programmable; write anything else locks them. Read `1`=unlocked, `0`=locked
 * - `0x80`
   - **AHBC80** Priority Control
-  - Two-level round-robin master priority; bit1=P-Bus-to-AHB bridge, bit2=CPU-instr, bit3=CPU-data, bit4=PCI host, bit5=LPC master
+  - Two-level round-robin master priority:
+    - bit1=P-Bus-to-AHB bridge
+    - bit2=CPU-instr
+    - bit3=CPU-data
+    - bit4=PCI host
+    - bit5=LPC master
 * - `0x88`
   - **AHBC88** Interrupt Control
-  - bit24 int-status (W0-to-clear), bit16 int-enable, `[21:20]` decode response (00=OK, 01=ERROR)
+  - - bit24 int-status (W0-to-clear)
+    - bit16 int-enable
+    - `[21:20]` decode response (00=OK, 01=ERROR)
 * - `0x8C`
   - **AHBC8C** Address Remapping
-  - **bit0 Boot-area remap**: `0`=`0x0000_0000–0x0FFF_FFFF` → Static Memory (flash), `1`=→ SDRAM. bit4 PCI-remap-0 (`0x6000_0000–0x7FFF_FFFF`→PCI host), bit5 PCI-remap-1 (`0x8000_0000–0xFFFF_FFFF`→PCI host)
+  - - **bit0 Boot-area remap**: `0`=`0x0000_0000–0x0FFF_FFFF` → Static Memory (flash), `1`=→ SDRAM
+    - bit4 PCI-remap-0 (`0x6000_0000–0x7FFF_FFFF`→PCI host)
+    - bit5 PCI-remap-1 (`0x8000_0000–0xFFFF_FFFF`→PCI host)
 ```
 
 The DRAM-at-`0x0` boot trick unlocks `AHBC00 = 0xAEED1A03` then sets
@@ -437,10 +459,14 @@ Host-Interface-Control registers. [DS §30 p.319-321](#sources)
   - Function
 * - `0x80`
   - **HICR5**
-  - bit8 **ENL2H** = Enable LPC-to-AHB bridge; `[31:24]` **HWMBASE** = LPC-to-AHB address-decode base `[31:24]`; bit10 ENFWH, bit9 ENINT_PME
+  - - bit8 **ENL2H** = Enable LPC-to-AHB bridge
+    - `[31:24]` **HWMBASE** = LPC-to-AHB address-decode base `[31:24]`
+    - bit10 ENFWH
+    - bit9 ENINT_PME
 * - `0x84`
   - **HICR6**
-  - `[27:24]` **HWNCARE** = address-decode range (don't-care) control `[27:24]`; `[2:0]` PME / snoop interrupt status (W1C)
+  - - `[27:24]` **HWNCARE** = address-decode range (don't-care) control `[27:24]`
+    - `[2:0]` PME / snoop interrupt status (W1C)
 * - `0x88`
   - **HICR7**
   - `[31:16]` **ADRBASE** = remapping address base `[31:16]` of the LPC-to-AHB bridge
@@ -482,22 +508,56 @@ strap). [DS §18 p.205](#sources), [P2A-BOOT](#sources)
   - Write `0x1688A8A8` to unlock SCU regs; reads `0x1` unlocked / `0x0` locked
 * - `SCU04`
   - System Reset Control (init `0x000FFE5C`)
-  - Per-block async resets: bit19 PCI-host, bit14 USB2.0, bit12/11 MAC2/MAC1, bit8 **PCI-slave+VGA**, bit6 Video, bit5 LPC, bit4 HACE, bit2 I2C, bit1 AHB-bridges, bit0 SDRAM
+  - Per-block async resets:
+    - bit19 PCI-host
+    - bit14 USB2.0
+    - bit12/11 MAC2/MAC1
+    - bit8 **PCI-slave+VGA**
+    - bit6 Video
+    - bit5 LPC
+    - bit4 HACE
+    - bit2 I2C
+    - bit1 AHB-bridges
+    - bit0 SDRAM
 * - `SCU0C`
   - Clock Stop (init `0x000C3E8B`)
-  - bit15 UARTCLK, bit14 USB2.0, bit8 LPC LCLK, bit7 USB1.1 UCLK, bit5 VGA DCLK, bit4 PCI-slave BCLK, bit2 SDRAM MCLK, bit1 2D GCLK, bit0 Video ECLK (`1`=stopped)
+  - Clock-stop gates (`1`=stopped):
+    - bit15 UARTCLK
+    - bit14 USB2.0
+    - bit8 LPC LCLK
+    - bit7 USB1.1 UCLK
+    - bit5 VGA DCLK
+    - bit4 PCI-slave BCLK
+    - bit2 SDRAM MCLK
+    - bit1 2D GCLK
+    - bit0 Video ECLK
 * - `SCU2C`
   - Misc Control
-  - bit8 disable P2A bridge, bit6 disable VGA CRT, bit3 disable video DAC, bit15/14 UART1↔2 link/mux, bit12 UART ÷13 reference
+  - - bit8 disable P2A bridge
+    - bit6 disable VGA CRT
+    - bit3 disable video DAC
+    - bit15/14 UART1↔2 link/mux
+    - bit12 UART ÷13 reference
 * - `SCU30/34/38`
   - PCI config override
   - Device/Vendor, Subsystem, Class/Revision (init `0x20001A03`/`0x20001A03`/`0x03000000`)
 * - `SCU3C`
   - System-reset status/control (init `0x1`)
-  - bit3 enable external SOC reset (GPIOB7/EXTRST#), bit2 external-reset flag, **bit1 watchdog-reset flag**, bit0 power-on-reset flag (all a post-reset witness)
+  - Reset status/control (the flags are a post-reset witness):
+    - bit3 enable external SOC reset (GPIOB7/EXTRST#)
+    - bit2 external-reset flag
+    - **bit1 watchdog-reset flag**
+    - bit0 power-on-reset flag
 * - `SCU70`
   - Hardware Trapping (init `0`)
-  - **`[1:0]` ARM boot select** (`10`=boot SPI flash, `11`=disable ARM), **bit16 boot-full-speed**, `[13:12]` CPU:AHB ratio, `[11:9]` H-PLL default (100/133/166/200 MHz), `[8:6]` MAC mode, bit5 VGA-BIOS ROM, **`[3:2]` VGA memory size**, bit20 disable ARM-to-M-bus
+  - - **`[1:0]` ARM boot select** (`10`=boot SPI flash, `11`=disable ARM)
+    - **bit16 boot-full-speed**
+    - `[13:12]` CPU:AHB ratio
+    - `[11:9]` H-PLL default (100/133/166/200 MHz)
+    - `[8:6]` MAC mode
+    - bit5 VGA-BIOS ROM
+    - **`[3:2]` VGA memory size**
+    - bit20 disable ARM-to-M-bus
 * - `SCU7C`
   - Silicon Revision (R)
   - `0x00000202` = AST2050/AST1100-A2/A3

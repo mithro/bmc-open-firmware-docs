@@ -1743,10 +1743,14 @@ auto-trigger, stream-buffer (1,0 = N/A). [DS §20.3 p.235](#sources)
   - Reserved (must be 0)
 * - 15:11
   - RW
-  - DCT luminance quant-table select: bit[15] chooses luminance(0)/chrominance(1) table set; bit[14:11] = table #0–#11
+  - DCT luminance quant-table select:
+    - bit[15] chooses luminance(0)/chrominance(1) table set
+    - bit[14:11] = table #0–#11
 * - 10:6
   - RW
-  - DCT chrominance quant-table select: bit[10] chooses set; bit[9:6] = table #0–#11
+  - DCT chrominance quant-table select:
+    - bit[10] chooses set
+    - bit[9:6] = table #0–#11
 * - 5
   - RW
   - Enable RC4 encryption of the compressed stream

@@ -275,7 +275,9 @@ the divergence is footnoted.
   - PWRTC
   - `0x0`
   - RW
-  - Power Control (bit 18 `SW_PDNPHY` software power-down PHY; bit 15 `PWRSAV`). **Datasheet-only — see note.**
+  - Power Control (**datasheet-only — see note**):
+    - bit 18 `SW_PDNPHY` software power-down PHY
+    - bit 15 `PWRSAV`
   - *(header: `WOLCR`)*
 * - `0x74`–`0x8C`
   - *(reserved on AST2050)*
@@ -1298,7 +1300,9 @@ fault), bit 3 `LP_NP_ABLE`, bit 2 `NP_ABLE`, bit 1 `PAGE_RX`, bit 0 `LP_NW_ABLE`
 * - 17
   - LBREMR
   - 15 RPTR / 12 LDPS / 11 AnalogOFF / 9 LB / 8 F_Link_10 / 7 F_Link_100 / **1 FXMODE** / **0 RMIIMODE**
-  - Loopback/bypass/error-mask; **bit 0 `RMIIMODE` (RO) indicates RMII mode is enabled**, bit 1 `FXMODE` indicates fibre mode.
+  - Loopback/bypass/error-mask:
+    - **bit 0 `RMIIMODE` (RO) indicates RMII mode is enabled**
+    - bit 1 `FXMODE` indicates fibre mode
 * - 18
   - REC
   - 15:0

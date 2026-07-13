@@ -611,13 +611,18 @@ field bits match [u-boot ns9750_eth.h](#sources) (`MAC1_SRST`=0x8000, `MAC1_RXEN
   - Fields
 * - MCFG
   - 0x420
-  - bit 15 RMIIM (reset), bits 4:2 CLKS (MDC clock divide of AHB), bit 1 SPRE (suppress preamble)
+  - - bit 15 RMIIM (reset)
+    - bits 4:2 CLKS (MDC clock divide of AHB)
+    - bit 1 SPRE (suppress preamble)
 * - MCMD
   - 0x424
-  - bit 1 SCAN (continuous read), bit 0 READ (single read); 0→1 to start
+  - 0→1 to start:
+    - bit 1 SCAN (continuous read)
+    - bit 0 READ (single read)
 * - MADR
   - 0x428
-  - bits 12:8 DADR (PHY device address), bits 4:0 RADR (PHY register)
+  - - bits 12:8 DADR (PHY device address)
+    - bits 4:0 RADR (PHY register)
 * - MWTD
   - 0x42C
   - bits 15:0 write data (writing triggers an MII write cycle)
@@ -626,7 +631,10 @@ field bits match [u-boot ns9750_eth.h](#sources) (`MAC1_SRST`=0x8000, `MAC1_RXEN
   - bits 15:0 read data (valid after MIND.BUSY clears)
 * - MIND
   - 0x434
-  - bit 3 MIILF (link fail), bit 2 NVALID (read not valid), bit 1 SCAN, bit 0 BUSY
+  - - bit 3 MIILF (link fail)
+    - bit 2 NVALID (read not valid)
+    - bit 1 SCAN
+    - bit 0 BUSY
 ```
 
 An MII read: write `MADR` (PHY + register), set `MCMD.READ` (0→1), poll
