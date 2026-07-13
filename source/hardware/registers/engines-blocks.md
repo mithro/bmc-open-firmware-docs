@@ -8,9 +8,9 @@ requires a complete map.
 
 All content is derived from the in-repo ASPEED AST2050/AST1100 A3 datasheet
 V1.05 [DS](#sources), cross-checked against Raptor Engineering's U-Boot headers
-[ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h) / [hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h). Citations are inline as `[DS §N p.P](#sources)` (datasheet
-chapter / printed page, which equals the PDF page number), `[ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h)`,
-`[hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)`; full link definitions are collected in the Sources section at the
+[ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h) / [hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h). Citations are inline as [DS §N p.P](#sources) (datasheet
+chapter / printed page, which equals the PDF page number), [`ast2050.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h),
+[`hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h); full link definitions are collected in the Sources section at the
 end.
 
 Conventions used in the register tables below:
