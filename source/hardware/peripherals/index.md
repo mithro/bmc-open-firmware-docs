@@ -40,6 +40,18 @@ model code and driver bindings are reused across boards.
   - metering AFE
   - iPDU
   - polyphase energy-metering front-end
+* - {doc}`w83795g`
+  - hwmon
+  - KGPE-D16
+  - Nuvoton voltage/temp/fan monitor + Smart-Fan control
+* - {doc}`ics1893`
+  - Ethernet PHY
+  - iPDU
+  - IDT 10/100 clause-22 MII PHY for the NS9360 MAC
+* - {doc}`tmp89`
+  - sub-MCU
+  - iPDU
+  - Toshiba TLCS-870/C1 display/bezel controller
 ```
 
 ```{toctree}
@@ -52,6 +64,9 @@ pca9555
 pca954x-mux
 pex8696-8647
 maxq3180
+w83795g
+ics1893
+tmp89
 ```
 
 ## Modelling order
@@ -61,3 +76,19 @@ unblocks the most downstream work: **INA219** (×16) and a **PCA954x mux** first
 then ADT7462, TMP75/LM75, PCA9555, and finally the PEX switch (the hardest).
 Each lands as a documentation → model → qtest *triplet*
 (see {doc}`../../emulation/testbench`).
+
+## See also
+
+**Related pages**
+
+- {doc}`/hardware/i2c-topology` — how these I2C devices connect on each board
+- {doc}`/hardware/registers/buses-gpio` — the AST2050 I2C controller most of them sit on
+- {doc}`/drivers/peripheral-map` — which mainline driver covers each peripheral
+- {doc}`/hardware/index` — the hardware overview
+- {doc}`/emulation/index` — the QEMU / testbench modelling programme
+
+**External references**
+
+- [Linux hwmon subsystem](https://docs.kernel.org/hwmon/index.html) — the sysfs interface for the sensor/monitor devices catalogued here
+- [Linux I2C subsystem](https://docs.kernel.org/i2c/index.html) — the bus most of these devices share
+- [Zephyr sensor API](https://docs.zephyrproject.org/latest/hardware/peripherals/sensor/index.html) — the WallaBMC/Zephyr sensor driver model

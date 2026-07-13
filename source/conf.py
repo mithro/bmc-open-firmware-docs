@@ -14,17 +14,25 @@ extensions = [
     "myst_parser",
     "sphinx_design",
     "sphinx_copybutton",
+    "sphinx.ext.mathjax",   # render $...$ / $$...$$ math via MathJax
 ]
 
 # MyST (Markdown) extensions used across the docs.
 myst_enable_extensions = [
     "colon_fence",   # ::: fenced directives
     "deflist",       # definition lists
+    "dollarmath",    # $inline$ and $$block$$ math
+    "amsmath",       # LaTeX amsmath environments (align, cases, …)
     "fieldlist",
-    "linkify",       # bare URLs -> links
     "substitution",
     "tasklist",
 ]
+# NOTE: the MyST `linkify` extension is intentionally NOT enabled. It turns any
+# bare token that looks like a domain into a link, which mis-links the
+# reverse-engineering citation shorthand used throughout these pages
+# (`ANALYSIS.md`, `RAPTOR-PORTING-GUIDE.md:40`, phase labels like `A.PF`, …) into
+# broken `http://…` URLs. Real links use explicit `<url>` autolinks or
+# `[text](url)` / reference-style markup.
 myst_heading_anchors = 3
 
 templates_path = ["_templates"]
@@ -44,6 +52,7 @@ source_suffix = {
 
 html_theme = "furo"
 html_static_path = ["_static"]
+html_css_files = ["custom.css"]
 html_title = "Open BMC & Firmware"
 html_theme_options = {
     "source_repository": "https://github.com/mithro/bmc-open-firmware-docs",
@@ -54,10 +63,19 @@ html_theme_options = {
 # -- Link checking -----------------------------------------------------------
 # `make linkcheck` / the CI link-check job uses these.
 linkcheck_ignore = [
-    # Private repository; not reachable from public CI.
+    # The program source repo (public). Skipped because most links carry `#Lnn`
+    # line anchors that GitHub renders in JS (so linkcheck cannot verify them),
+    # and the sheer number of blob links otherwise trips GitHub rate limiting.
     r"https://github\.com/mithro/ai-shenanigans-for-bmcs.*",
     # Google Docs internal references.
     r"https://docs\.google\.com/.*",
+    # Valid pages that anti-bot / rate-limit the CI link checker (HTTP 403).
+    r"https://developer\.arm\.com/.*",
+    r"https://www\.renesas\.com/.*",
+    # Valid datasheet mirrors on personal / regional hosts that intermittently
+    # fail DNS/TLS from CI runners (kept as references; not CI-reliable).
+    r"https?://(www\.)?belchip\.by/.*",
+    r"https?://realtek\.info/.*",
 ]
 linkcheck_timeout = 15
 linkcheck_retries = 2

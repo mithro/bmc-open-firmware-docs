@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 700" role="img" aria-labelledby="ib-title ib-desc" preserveAspectRatio="xMidYMid meet">
+  <title id="ib-title">HPE iPDU (Digi NS9360) board block diagram</title>
+  <desc id="ib-desc">Board-level signal chain of the HPE Intelligent Modular PDU. The management Ethernet RJ-45 connects through an ICS1893 PHY (U10, 25 MHz crystal Y2) over MII plus MDIO/MDC to the Digi NS9360 SoC (U1, 29.4912 MHz crystal Y1). The NS9360 fans out over four interfaces: an SPI/DMA link to the MAXQ3180 metering front-end (U15, 8 MHz Y4) that reads V/I/P sense from the CT/PT; an I2C bus (J27) to the extension-bar connectors J2/29, J3/30 and J4/31; a UART through a MAX3243EI RS-232 transceiver to the TMP89FM42 display MCU (U45, 3.6864 MHz Y6) driving the front-bezel 7-segment display, LEDs and buzzer; and a second UART through another MAX3243EI to the daisy-chain connector (conn 7) to the next iPDU.</desc>
+  <style>
+    text{font-family:ui-monospace,'DejaVu Sans Mono',monospace;fill:var(--ink);}
+    svg{
+      --ink:#1a1a1a;--muted:#555;--box:#f4f4f4;--panel:#ececec;
+      --blue:#2d6cdf;--green:#1a8a5a;--gold:#b8860b;--purple:#7d3cc0;--red:#c0392b;
+    }
+    @media (prefers-color-scheme: dark){
+      svg{
+        --ink:#e6e6e6;--muted:#a8a8a8;--box:#2a2a2a;--panel:#232323;
+        --blue:#5b9bff;--green:#3cc98a;--gold:#e0b050;--purple:#b98cf0;--red:#e74c3c;
+      }
+    }
+    .t{font-size:19px;font-weight:700;}
+    .st{font-size:12px;fill:var(--muted);}
+    .h{font-size:13px;font-weight:700;}
+    .l{font-size:12px;}
+    .m{font-size:12px;fill:var(--muted);}
+    .clk{font-size:12px;fill:var(--green);}
+    .box{fill:var(--box);stroke-width:1.8;}
+    .blue{stroke:var(--blue);}.green{stroke:var(--green);}.gold{stroke:var(--gold);}
+    .purple{stroke:var(--purple);}.neu{stroke:var(--ink);}
+    .wire{fill:none;stroke:var(--ink);stroke-width:1.5;}
+    .fillink{fill:var(--ink);}
+    .sw{stroke-width:1.8;fill:var(--box);}
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" class="fillink"/>
+    </marker>
+  </defs>
+
+  <text class="t" x="24" y="34">HPE iPDU &#8212; Digi NS9360 board block diagram</text>
+  <text class="st" x="24" y="54">management NIC &#8594; NS9360 hub &#8594; metering / extension-bar / display / daisy-chain domains</text>
+
+  <!-- backbone: Ethernet -> PHY -> NS9360 -->
+  <rect class="box blue" x="390" y="74" width="200" height="44" rx="9"/>
+  <text class="h" x="490" y="101" text-anchor="middle">Ethernet RJ-45 (mgmt)</text>
+  <line class="wire" x1="490" y1="118" x2="490" y2="158"/>
+
+  <rect class="box blue" x="390" y="158" width="200" height="50" rx="9"/>
+  <text class="h" x="490" y="180" text-anchor="middle">ICS1893 PHY U10</text>
+  <text class="m" x="490" y="198" text-anchor="middle">10/100 Ethernet PHY</text>
+  <text class="clk" x="606" y="187">25 MHz xtal (Y2)</text>
+  <line class="wire" x1="490" y1="208" x2="490" y2="262"/>
+  <text class="m" x="500" y="240">MII + MDIO/MDC</text>
+
+  <rect class="box neu" x="340" y="262" width="300" height="68" rx="10"/>
+  <text class="h" x="490" y="292" text-anchor="middle">NS9360 U1</text>
+  <text class="m" x="490" y="312" text-anchor="middle">ARM926EJ-S SoC &#183; NET+OS</text>
+  <text class="clk" x="650" y="300">29.4912 MHz xtal (Y1)</text>
+
+  <!-- fan-out bus -->
+  <line class="wire" x1="490" y1="330" x2="490" y2="360"/>
+  <line class="wire" x1="130" y1="360" x2="855" y2="360"/>
+
+  <!-- branch verticals with interface labels -->
+  <line class="wire" x1="130" y1="360" x2="130" y2="373"/>
+  <text class="m" x="130" y="385" text-anchor="middle">SPI / DMA</text>
+  <line class="wire" x1="130" y1="389" x2="130" y2="398" marker-end="url(#ar)"/>
+
+  <line class="wire" x1="380" y1="360" x2="380" y2="373"/>
+  <text class="m" x="380" y="385" text-anchor="middle">I2C (J27)</text>
+  <line class="wire" x1="380" y1="389" x2="380" y2="398" marker-end="url(#ar)"/>
+
+  <line class="wire" x1="635" y1="360" x2="635" y2="373"/>
+  <text class="m" x="635" y="385" text-anchor="middle">UART</text>
+  <line class="wire" x1="635" y1="389" x2="635" y2="398" marker-end="url(#ar)"/>
+
+  <line class="wire" x1="855" y1="360" x2="855" y2="373"/>
+  <text class="m" x="855" y="385" text-anchor="middle">UART</text>
+  <line class="wire" x1="855" y1="389" x2="855" y2="398" marker-end="url(#ar)"/>
+
+  <!-- level A -->
+  <rect class="box gold" x="45" y="398" width="170" height="52" rx="9"/>
+  <text class="h" x="130" y="422" text-anchor="middle">MAXQ3180 U15</text>
+  <text class="m" x="130" y="440" text-anchor="middle">metering AFE &#183; 8 MHz Y4</text>
+
+  <rect class="box green" x="295" y="398" width="170" height="52" rx="9"/>
+  <text class="h" x="380" y="422" text-anchor="middle">ext-bar bus</text>
+  <text class="m" x="380" y="440" text-anchor="middle">I2C &#183; J27</text>
+
+  <rect class="box neu" x="550" y="398" width="170" height="52" rx="9"/>
+  <text class="h" x="635" y="422" text-anchor="middle">MAX3243EI</text>
+  <text class="m" x="635" y="440" text-anchor="middle">RS-232 xcvr</text>
+
+  <rect class="box neu" x="770" y="398" width="170" height="52" rx="9"/>
+  <text class="h" x="855" y="422" text-anchor="middle">MAX3243EI</text>
+  <text class="m" x="855" y="440" text-anchor="middle">RS-232 xcvr</text>
+
+  <!-- A -> B wires -->
+  <line class="wire" x1="130" y1="450" x2="130" y2="500" marker-end="url(#ar)"/>
+  <line class="wire" x1="380" y1="450" x2="380" y2="500" marker-end="url(#ar)"/>
+  <line class="wire" x1="635" y1="450" x2="635" y2="500" marker-end="url(#ar)"/>
+  <line class="wire" x1="855" y1="450" x2="855" y2="500" marker-end="url(#ar)"/>
+
+  <!-- level B -->
+  <rect class="box gold" x="45" y="500" width="170" height="52" rx="9"/>
+  <text class="h" x="130" y="524" text-anchor="middle">V/I/P sense</text>
+  <text class="m" x="130" y="542" text-anchor="middle">CT / PT (PT1)</text>
+
+  <rect class="box green" x="295" y="500" width="170" height="52" rx="9"/>
+  <text class="h" x="380" y="524" text-anchor="middle">extension bars</text>
+  <text class="m" x="380" y="542" text-anchor="middle">J2/29 &#183; J3/30 &#183; J4/31</text>
+
+  <rect class="box purple" x="550" y="500" width="170" height="52" rx="9"/>
+  <text class="h" x="635" y="524" text-anchor="middle">TMP89FM42 U45</text>
+  <text class="m" x="635" y="542" text-anchor="middle">display MCU &#183; 3.6864 MHz Y6</text>
+
+  <rect class="box neu" x="770" y="500" width="170" height="52" rx="9"/>
+  <text class="h" x="855" y="524" text-anchor="middle">daisy-chain</text>
+  <text class="m" x="855" y="542" text-anchor="middle">next iPDU (conn 7)</text>
+
+  <!-- B -> C wire (display) -->
+  <line class="wire" x1="635" y1="552" x2="635" y2="602" marker-end="url(#ar)"/>
+
+  <!-- level C -->
+  <rect class="box purple" x="550" y="602" width="170" height="48" rx="9"/>
+  <text class="h" x="635" y="624" text-anchor="middle">front bezel</text>
+  <text class="m" x="635" y="642" text-anchor="middle">7-seg / LED / buzzer</text>
+
+  <!-- legend -->
+  <line class="wire" x1="24" y1="668" x2="956" y2="668" stroke-width="1"/>
+  <rect class="sw blue"   x="24"  y="676" width="18" height="14" rx="3"/><text class="l" x="48"  y="688">network (NIC / PHY)</text>
+  <rect class="sw neu"    x="216" y="676" width="18" height="14" rx="3"/><text class="l" x="240" y="688">SoC / RS-232</text>
+  <rect class="sw gold"   x="376" y="676" width="18" height="14" rx="3"/><text class="l" x="400" y="688">metering</text>
+  <rect class="sw green"  x="500" y="676" width="18" height="14" rx="3"/><text class="l" x="524" y="688">I2C / ext-bars</text>
+  <rect class="sw purple" x="660" y="676" width="18" height="14" rx="3"/><text class="l" x="684" y="688">display</text>
+  <text class="clk" x="800" y="688">green text = crystal</text>
+</svg>

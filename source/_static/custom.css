@@ -1,0 +1,22 @@
+/* Diagram SVGs are embedded as <img>, so the `@media (prefers-color-scheme)`
+   rules inside each SVG follow the *operating system* colour scheme, not furo's
+   in-page light/dark toggle. When the page theme and the OS theme disagree
+   (e.g. a light-OS browser using the site's dark switch) an SVG whose text is
+   dark-on-transparent becomes illegible against the dark page.
+
+   Fix: give every diagram SVG its own palette-matched, slightly padded
+   background — keyed off the same prefers-color-scheme the SVG itself uses — so
+   the figure is self-contained and its title/legend text stays readable on any
+   page background. Worst case it renders as a light "card" on a dark page (or
+   vice-versa), which is legible; in the common OS==page case it is seamless. */
+article img[src$=".svg"] {
+  padding: 0.6rem;
+  border-radius: 6px;
+  background-color: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  article img[src$=".svg"] {
+    background-color: #131416;
+  }
+}

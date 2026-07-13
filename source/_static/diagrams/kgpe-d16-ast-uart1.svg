@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 690 336" role="img" aria-labelledby="ttl desc" preserveAspectRatio="xMidYMid meet">
+  <title id="ttl">AST_UART1 - BMC console (KGPE-D16)</title>
+  <desc id="desc">AST_UART1 4-pin BMC serial-console header on the ASUS KGPE-D16 Aspeed AST2050. Cross TX to RX at the Raspberry Pi; leave +3.3 V unconnected. Pin 1 (+3.3 V rail) is a square pad, marked red.</desc>
+
+  <style>
+    text { font-family: ui-monospace,'DejaVu Sans Mono',monospace; fill: #1a1a1a; }
+    .title { font-size: 20px; font-weight: 700; }
+    .sub   { font-size: 13px; }
+    .muted { font-size: 12px; fill: #555555; }
+    .leg   { font-size: 12px; }
+    .sig   { font-size: 13px; font-weight: 600; }
+    .pinnum{ font-size: 12px; font-weight: 700; }
+    .board { fill: #f4f4f4; stroke: #1a1a1a; stroke-width: 2; }
+    .notch { fill: #d8d8d8; stroke: #1a1a1a; stroke-width: 1.5; }
+    .pad   { fill: #f4f4f4; stroke: #1a1a1a; stroke-width: 2.5; }
+    .pin1sq{ fill: #f4d7d2; stroke: #c0392b; stroke-width: 2.8; }
+    .banner{ fill: #faf0d7; stroke: #b8860b; stroke-width: 1.5; }
+    .a-jtag{ stroke: #2d6cdf; } .a-ctrl{ stroke: #b8860b; }
+    .a-pwr { stroke: #1a8a5a; } .a-test{ stroke: #7d3cc0; }
+    .a-gnd { stroke: #8a8a8a; }
+    .t-pin1{ fill: #c0392b; } .t-jtag{ fill: #2d6cdf; } .t-ctrl{ fill: #b8860b; }
+    .t-pwr { fill: #1a8a5a; } .t-test{ fill: #7d3cc0; } .t-gnd{ fill: #666666; }
+    @media (prefers-color-scheme: dark) {
+      text { fill: #e6e6e6; }
+      .muted { fill: #b3b3b3; }
+      .board { fill: #2a2a2a; stroke: #e6e6e6; }
+      .notch { fill: #3a3a3a; stroke: #e6e6e6; }
+      .pad   { fill: #2a2a2a; stroke: #e6e6e6; }
+      .pin1sq{ fill: #5a2a26; stroke: #e74c3c; }
+      .banner{ fill: #3a3320; stroke: #e0b050; }
+      .a-jtag{ stroke: #5b9bff; } .a-ctrl{ stroke: #e0b050; }
+      .a-pwr { stroke: #3cc98a; } .a-test{ stroke: #b98cf0; }
+      .a-gnd { stroke: #9a9a9a; }
+      .t-pin1{ fill: #e74c3c; } .t-jtag{ fill: #5b9bff; } .t-ctrl{ fill: #e0b050; }
+      .t-pwr { fill: #3cc98a; } .t-test{ fill: #b98cf0; } .t-gnd{ fill: #b0b0b0; }
+    }
+  </style>
+
+<text x="24" y="34" class="title">AST_UART1 - BMC console (KGPE-D16)</text>
+<text x="24" y="57" class="sub muted">AST2050 UART1 @ 0x1E783000 · 1x4, 3.3 V TTL · 115200 8N1</text>
+<rect x="70" y="118" width="550" height="64" rx="10" class="board"/>
+<path d="M 70 150 L 84 140 L 84 160 Z" class="notch"/>
+<rect x="107" y="137" width="26" height="26" rx="3" class="pin1sq"/>
+<text x="120" y="150" class="pinnum" text-anchor="middle" dominant-baseline="central">1</text>
+<text x="120" y="205" class="sig" text-anchor="middle">+3.3 V</text>
+<text x="120" y="224" class="muted" text-anchor="middle">BMC rail</text>
+<text x="120" y="241" class="muted" text-anchor="middle">do NOT wire</text>
+<circle cx="270" cy="150" r="13" class="pad a-jtag"/>
+<text x="270" y="150" class="pinnum" text-anchor="middle" dominant-baseline="central">2</text>
+<text x="270" y="205" class="sig" text-anchor="middle">BMC TXD</text>
+<text x="270" y="224" class="muted" text-anchor="middle">→ Pi RXD</text>
+<text x="270" y="241" class="muted" text-anchor="middle">GPIO15 · phys 10</text>
+<circle cx="420" cy="150" r="13" class="pad a-jtag"/>
+<text x="420" y="150" class="pinnum" text-anchor="middle" dominant-baseline="central">3</text>
+<text x="420" y="205" class="sig" text-anchor="middle">BMC RXD</text>
+<text x="420" y="224" class="muted" text-anchor="middle">← Pi TXD</text>
+<text x="420" y="241" class="muted" text-anchor="middle">GPIO14 · phys 8</text>
+<circle cx="570" cy="150" r="13" class="pad a-gnd"/>
+<text x="570" y="150" class="pinnum" text-anchor="middle" dominant-baseline="central">4</text>
+<text x="570" y="205" class="sig" text-anchor="middle">GND</text>
+<text x="570" y="224" class="muted" text-anchor="middle">Pi GND</text>
+<text x="570" y="241" class="muted" text-anchor="middle">phys 6</text>
+<rect x="90" y="252" width="16" height="16" rx="2" class="pin1sq"/>
+<text x="114" y="264" class="leg">Pin 1 - +3.3 V (do NOT connect)</text>
+<circle cx="350" cy="260" r="8" class="pad a-jtag"/>
+<text x="366" y="264" class="leg">UART data - crossover TX/RX</text>
+<circle cx="573" cy="260" r="8" class="pad a-gnd"/>
+<text x="589" y="264" class="leg">GND</text>
+<text x="24" y="296" class="muted">Cross TX↔RX; leave +3.3 V unconnected; confirm pin 1 (square pad) by eye.</text>
+<text x="24" y="314" class="muted">Note: the board's console is UART2 @ 1200 baud - a different line.</text>
+</svg>

@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 650" role="img" aria-labelledby="ttl desc" preserveAspectRatio="xMidYMid meet">
+  <title id="ttl">AST_JTAG1 - BMC JTAG (KGPE-D16)</title>
+  <desc id="desc">AST_JTAG1 20-pin ARM JTAG header pinout for the ASUS KGPE-D16 Aspeed AST2050 BMC, with the Raspberry Pi 4B GPIO each pin wires to. Odd pins on the left carry signals; even pins on the right are ground. Pin 1 (VTref) is a square pad, marked red.</desc>
+
+  <style>
+    text { font-family: ui-monospace,'DejaVu Sans Mono',monospace; fill: #1a1a1a; }
+    .title { font-size: 20px; font-weight: 700; }
+    .sub   { font-size: 13px; }
+    .muted { font-size: 12px; fill: #555555; }
+    .leg   { font-size: 12px; }
+    .sig   { font-size: 13px; font-weight: 600; }
+    .pinnum{ font-size: 12px; font-weight: 700; }
+    .board { fill: #f4f4f4; stroke: #1a1a1a; stroke-width: 2; }
+    .notch { fill: #d8d8d8; stroke: #1a1a1a; stroke-width: 1.5; }
+    .pad   { fill: #f4f4f4; stroke: #1a1a1a; stroke-width: 2.5; }
+    .pin1sq{ fill: #f4d7d2; stroke: #c0392b; stroke-width: 2.8; }
+    .banner{ fill: #faf0d7; stroke: #b8860b; stroke-width: 1.5; }
+    .a-jtag{ stroke: #2d6cdf; } .a-ctrl{ stroke: #b8860b; }
+    .a-pwr { stroke: #1a8a5a; } .a-test{ stroke: #7d3cc0; }
+    .a-gnd { stroke: #8a8a8a; }
+    .t-pin1{ fill: #c0392b; } .t-jtag{ fill: #2d6cdf; } .t-ctrl{ fill: #b8860b; }
+    .t-pwr { fill: #1a8a5a; } .t-test{ fill: #7d3cc0; } .t-gnd{ fill: #666666; }
+    @media (prefers-color-scheme: dark) {
+      text { fill: #e6e6e6; }
+      .muted { fill: #b3b3b3; }
+      .board { fill: #2a2a2a; stroke: #e6e6e6; }
+      .notch { fill: #3a3a3a; stroke: #e6e6e6; }
+      .pad   { fill: #2a2a2a; stroke: #e6e6e6; }
+      .pin1sq{ fill: #5a2a26; stroke: #e74c3c; }
+      .banner{ fill: #3a3320; stroke: #e0b050; }
+      .a-jtag{ stroke: #5b9bff; } .a-ctrl{ stroke: #e0b050; }
+      .a-pwr { stroke: #3cc98a; } .a-test{ stroke: #b98cf0; }
+      .a-gnd { stroke: #9a9a9a; }
+      .t-pin1{ fill: #e74c3c; } .t-jtag{ fill: #5b9bff; } .t-ctrl{ fill: #e0b050; }
+      .t-pwr { fill: #3cc98a; } .t-test{ fill: #b98cf0; } .t-gnd{ fill: #b0b0b0; }
+    }
+  </style>
+
+<text x="24" y="34" class="title">AST_JTAG1 - BMC JTAG (KGPE-D16)</text>
+<text x="24" y="57" class="sub muted">AST2050 ARM926 JTAG · 20-pin ARM (2x10, 2.54 mm) · 3.3 V only</text>
+<rect x="272" y="86" width="110" height="336" rx="10" class="board"/>
+<path d="M 313.0 86 L 341.0 86 L 327.0 97 Z" class="notch"/>
+<rect x="277" y="99" width="22" height="22" rx="3" class="pin1sq"/><text x="288" y="110" class="pinnum" text-anchor="middle" dominant-baseline="central">1</text>
+<text x="250" y="108" class="sig" text-anchor="end">VTref</text><text x="250" y="124" class="muted" text-anchor="end">meter only · ~3.3 V ref</text>
+<circle cx="366" cy="110" r="10" class="pad a-pwr"/><text x="366" y="110" class="pinnum" text-anchor="middle" dominant-baseline="central">2</text>
+<text x="392" y="108" class="sig" text-anchor="start">Vsupply</text><text x="392" y="124" class="muted" text-anchor="start">(NC)</text>
+<circle cx="288" cy="142" r="10" class="pad a-jtag"/><text x="288" y="142" class="pinnum" text-anchor="middle" dominant-baseline="central">3</text>
+<text x="250" y="140" class="sig" text-anchor="end">nTRST</text><text x="250" y="156" class="muted" text-anchor="end">GPIO17 · phys 11 · Pi→BMC</text>
+<circle cx="366" cy="142" r="10" class="pad a-gnd"/><text x="366" y="142" class="pinnum" text-anchor="middle" dominant-baseline="central">4</text>
+<text x="392" y="146" class="sig" text-anchor="start">GND</text>
+<circle cx="288" cy="174" r="10" class="pad a-jtag"/><text x="288" y="174" class="pinnum" text-anchor="middle" dominant-baseline="central">5</text>
+<text x="250" y="172" class="sig" text-anchor="end">TDI</text><text x="250" y="188" class="muted" text-anchor="end">GPIO23 · phys 16 · Pi→BMC</text>
+<circle cx="366" cy="174" r="10" class="pad a-gnd"/><text x="366" y="174" class="pinnum" text-anchor="middle" dominant-baseline="central">6</text>
+<text x="392" y="178" class="sig" text-anchor="start">GND</text>
+<circle cx="288" cy="206" r="10" class="pad a-jtag"/><text x="288" y="206" class="pinnum" text-anchor="middle" dominant-baseline="central">7</text>
+<text x="250" y="204" class="sig" text-anchor="end">TMS</text><text x="250" y="220" class="muted" text-anchor="end">GPIO24 · phys 18 · Pi→BMC</text>
+<circle cx="366" cy="206" r="10" class="pad a-gnd"/><text x="366" y="206" class="pinnum" text-anchor="middle" dominant-baseline="central">8</text>
+<text x="392" y="210" class="sig" text-anchor="start">GND</text>
+<circle cx="288" cy="238" r="10" class="pad a-jtag"/><text x="288" y="238" class="pinnum" text-anchor="middle" dominant-baseline="central">9</text>
+<text x="250" y="236" class="sig" text-anchor="end">TCK</text><text x="250" y="252" class="muted" text-anchor="end">GPIO25 · phys 22 · Pi→BMC</text>
+<circle cx="366" cy="238" r="10" class="pad a-gnd"/><text x="366" y="238" class="pinnum" text-anchor="middle" dominant-baseline="central">10</text>
+<text x="392" y="242" class="sig" text-anchor="start">GND</text>
+<circle cx="288" cy="270" r="10" class="pad a-jtag"/><text x="288" y="270" class="pinnum" text-anchor="middle" dominant-baseline="central">11</text>
+<text x="250" y="268" class="sig" text-anchor="end">RTCK</text><text x="250" y="284" class="muted" text-anchor="end">GPIO27 · phys 13 · BMC→Pi</text>
+<circle cx="366" cy="270" r="10" class="pad a-gnd"/><text x="366" y="270" class="pinnum" text-anchor="middle" dominant-baseline="central">12</text>
+<text x="392" y="274" class="sig" text-anchor="start">GND</text>
+<circle cx="288" cy="302" r="10" class="pad a-jtag"/><text x="288" y="302" class="pinnum" text-anchor="middle" dominant-baseline="central">13</text>
+<text x="250" y="300" class="sig" text-anchor="end">TDO</text><text x="250" y="316" class="muted" text-anchor="end">GPIO22 · phys 15 · BMC→Pi</text>
+<circle cx="366" cy="302" r="10" class="pad a-gnd"/><text x="366" y="302" class="pinnum" text-anchor="middle" dominant-baseline="central">14</text>
+<text x="392" y="306" class="sig" text-anchor="start">GND</text>
+<circle cx="288" cy="334" r="10" class="pad a-ctrl"/><text x="288" y="334" class="pinnum" text-anchor="middle" dominant-baseline="central">15</text>
+<text x="250" y="332" class="sig" text-anchor="end">nSRST</text><text x="250" y="348" class="muted" text-anchor="end">GPIO18 · phys 12 · Pi→BMC</text>
+<circle cx="366" cy="334" r="10" class="pad a-gnd"/><text x="366" y="334" class="pinnum" text-anchor="middle" dominant-baseline="central">16</text>
+<text x="392" y="338" class="sig" text-anchor="start">GND</text>
+<circle cx="288" cy="366" r="10" class="pad a-ctrl"/><text x="288" y="366" class="pinnum" text-anchor="middle" dominant-baseline="central">17</text>
+<text x="250" y="364" class="sig" text-anchor="end">DBGRQ</text><text x="250" y="380" class="muted" text-anchor="end">(no Pi pin used)</text>
+<circle cx="366" cy="366" r="10" class="pad a-gnd"/><text x="366" y="366" class="pinnum" text-anchor="middle" dominant-baseline="central">18</text>
+<text x="392" y="370" class="sig" text-anchor="start">GND</text>
+<circle cx="288" cy="398" r="10" class="pad a-gnd"/><text x="288" y="398" class="pinnum" text-anchor="middle" dominant-baseline="central">19</text>
+<text x="250" y="396" class="sig" text-anchor="end">NC</text><text x="250" y="412" class="muted" text-anchor="end">not connected</text>
+<circle cx="366" cy="398" r="10" class="pad a-gnd"/><text x="366" y="398" class="pinnum" text-anchor="middle" dominant-baseline="central">20</text>
+<text x="392" y="402" class="sig" text-anchor="start">GND</text>
+<rect x="22" y="448" width="16" height="16" rx="2" class="pin1sq"/>
+<text x="48" y="460" class="leg">Pin 1 - VTref, 3.3 V reference (square pad)</text>
+<circle cx="30" cy="480" r="8" class="pad a-jtag"/>
+<text x="48" y="484" class="leg">JTAG core - TCK/TMS/TDI/TDO/nTRST/RTCK</text>
+<circle cx="30" cy="504" r="8" class="pad a-ctrl"/>
+<text x="48" y="508" class="leg">Reset / debug - nSRST, DBGRQ</text>
+<circle cx="30" cy="528" r="8" class="pad a-pwr"/>
+<text x="48" y="532" class="leg">Power / supply - VTref, Vsupply</text>
+<circle cx="30" cy="552" r="8" class="pad a-gnd"/>
+<text x="48" y="556" class="leg">GND / NC</text>
+<text x="24" y="592" class="muted">Direction: Pi→BMC = Pi drives the line; BMC→Pi = Pi monitors (RTCK, TDO).</text>
+<text x="24" y="610" class="muted">Standard ARM 20-pin (2x10, 2.54 mm). Odd pins left, even pins right; even = GND.</text>
+<text x="24" y="628" class="muted">Verified: TAP IDCODE 0x07926f0f (ARM926EJ-S). Source: Raptor Engineering.</text>
+</svg>

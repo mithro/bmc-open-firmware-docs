@@ -6,6 +6,7 @@ the same test benches against real boards as CI runs against QEMU.
 ```{toctree}
 :maxdepth: 1
 
+bring-up
 jtag-uart
 ```
 

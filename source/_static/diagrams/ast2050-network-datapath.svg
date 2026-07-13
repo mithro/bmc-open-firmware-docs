@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 400" role="img" aria-labelledby="nd-title nd-desc" preserveAspectRatio="xMidYMid meet">
+  <title id="nd-title">AST2050 Ethernet datapath: MAC, MDIO/MII and PHY</title>
+  <desc id="nd-desc">Signal chain of the AST2050 networking subsystem. The on-chip Faraday FTGMAC100 MAC (MAC0 at 0x1E660000, MAC1 at 0x1E680000) moves frames to and from the AHB bus through TX and RX DMA descriptor rings. It reaches the external Realtek RTL8201CP PHY over two channels: a bidirectional MDIO/MDC management bus that reads and writes the PHY's clause-22 registers (link, speed, duplex), and a bidirectional RMII data path (TXD[1:0], RXD[1:0], TX_EN, CRS_DV) clocked by a shared 50 MHz reference. The RTL8201CP, driven by a 25 MHz crystal, connects through isolation magnetics to the RJ-45 10/100BASE-T connector. On the KGPE-D16 BMC only MAC0 is populated, with the RTL8201CP; the MDIO speed read is the path affected by the FAST_MODE fix.</desc>
+  <style>
+    text{font-family:ui-monospace,'DejaVu Sans Mono',monospace;fill:var(--ink);}
+    svg{
+      --ink:#1a1a1a;--muted:#555;--box:#f4f4f4;
+      --blue:#2d6cdf;--green:#1a8a5a;--gold:#b8860b;--red:#c0392b;
+    }
+    @media (prefers-color-scheme: dark){
+      svg{
+        --ink:#e6e6e6;--muted:#a8a8a8;--box:#2a2a2a;
+        --blue:#5b9bff;--green:#3cc98a;--gold:#e0b050;--red:#e74c3c;
+      }
+    }
+    .t{font-size:19px;font-weight:700;}
+    .st{font-size:12px;fill:var(--muted);}
+    .h{font-size:14px;font-weight:700;}
+    .l{font-size:12px;}
+    .m{font-size:11.5px;fill:var(--muted);}
+    .clk{font-size:11.5px;fill:var(--green);}
+    .reg{font-size:11.5px;font-family:ui-monospace,'DejaVu Sans Mono',monospace;}
+    .box{fill:var(--box);stroke-width:1.8;}
+    .blue{stroke:var(--blue);}.gold{stroke:var(--gold);}.neu{stroke:var(--ink);}
+    .wire{fill:none;stroke:var(--ink);stroke-width:1.5;}
+    .mdio{fill:none;stroke:var(--blue);stroke-width:1.6;}
+    .data{fill:none;stroke:var(--gold);stroke-width:1.6;}
+    .fillink{fill:var(--ink);}
+    .sw{stroke-width:1.8;fill:var(--box);}
+  </style>
+  <defs>
+    <marker id="an" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" class="fillink"/>
+    </marker>
+    <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--blue)"/>
+    </marker>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--gold)"/>
+    </marker>
+  </defs>
+
+  <text class="t" x="24" y="32">AST2050 Ethernet datapath &#8212; MAC &#8594; MDIO/MII &#8594; PHY &#8594; RJ-45</text>
+  <text class="st" x="24" y="52">on-chip FTGMAC100 MAC &#183; clause-22 MDIO management &#183; RMII data &#183; external RTL8201CP PHY</text>
+
+  <!-- AHB / DMA -->
+  <rect class="box neu" x="24" y="150" width="120" height="96" rx="9"/>
+  <text class="h" x="84" y="188" text-anchor="middle">AHB bus</text>
+  <text class="m" x="84" y="208" text-anchor="middle">TX + RX</text>
+  <text class="m" x="84" y="224" text-anchor="middle">DMA rings</text>
+  <line class="wire" x1="144" y1="198" x2="182" y2="198" marker-start="url(#an)" marker-end="url(#an)"/>
+
+  <!-- FTGMAC100 MAC -->
+  <rect class="box neu" x="184" y="120" width="216" height="156" rx="10"/>
+  <text class="h" x="292" y="150" text-anchor="middle">FTGMAC100 MAC</text>
+  <text class="m" x="292" y="170" text-anchor="middle">Faraday 10/100 IP &#183; on-chip</text>
+  <text class="reg" x="292" y="200" text-anchor="middle">MAC0 = 0x1E660000</text>
+  <text class="reg" x="292" y="218" text-anchor="middle">MAC1 = 0x1E680000</text>
+  <text class="m" x="292" y="246" text-anchor="middle">MDIO master + MAC/RMII</text>
+  <text class="m" x="292" y="262" text-anchor="middle">FAST_MODE = 100 Mb speed</text>
+
+  <!-- channel: MDIO/MDC management (top) -->
+  <line class="mdio" x1="400" y1="150" x2="500" y2="150" marker-start="url(#ab)" marker-end="url(#ab)"/>
+  <text class="m" x="450" y="140" text-anchor="middle" fill="var(--blue)">MDIO / MDC</text>
+  <text class="m" x="450" y="167" text-anchor="middle">clause-22 regs</text>
+
+  <!-- channel: RMII data (bottom) -->
+  <line class="data" x1="400" y1="238" x2="500" y2="238" marker-start="url(#ag)" marker-end="url(#ag)"/>
+  <text class="m" x="450" y="215" text-anchor="middle" fill="var(--gold)">RMII data</text>
+  <text class="m" x="450" y="256" text-anchor="middle">TXD/RXD/TX_EN</text>
+  <text class="m" x="450" y="272" text-anchor="middle">CRS_DV</text>
+
+  <!-- RTL8201CP PHY -->
+  <rect class="box blue" x="500" y="120" width="196" height="156" rx="10"/>
+  <text class="h" x="598" y="150" text-anchor="middle">RTL8201CP</text>
+  <text class="m" x="598" y="170" text-anchor="middle">RMII 10/100 PHY</text>
+  <text class="m" x="598" y="200" text-anchor="middle">clause-22 MII regs</text>
+  <text class="m" x="598" y="218" text-anchor="middle">link / speed / duplex</text>
+  <text class="clk" x="598" y="248" text-anchor="middle">25 MHz crystal</text>
+  <text class="clk" x="598" y="264" text-anchor="middle">50 MHz RMII REF_CLK</text>
+
+  <!-- PHY -> magnetics -->
+  <line class="wire" x1="696" y1="198" x2="738" y2="198" marker-start="url(#an)" marker-end="url(#an)"/>
+
+  <!-- magnetics -->
+  <rect class="box gold" x="740" y="152" width="84" height="92" rx="9"/>
+  <text class="h" x="782" y="192" text-anchor="middle">Magnetics</text>
+  <text class="m" x="782" y="212" text-anchor="middle">isolation</text>
+  <text class="m" x="782" y="228" text-anchor="middle">transformer</text>
+
+  <!-- magnetics -> RJ45 -->
+  <line class="wire" x1="824" y1="198" x2="850" y2="198" marker-start="url(#an)" marker-end="url(#an)"/>
+
+  <!-- RJ45 -->
+  <rect class="box gold" x="852" y="152" width="64" height="92" rx="9"/>
+  <text class="h" x="884" y="192" text-anchor="middle">RJ-45</text>
+  <text class="m" x="884" y="214" text-anchor="middle">10/100</text>
+  <text class="m" x="884" y="230" text-anchor="middle">BASE-T</text>
+
+  <!-- note -->
+  <text class="m" x="24" y="316">KGPE-D16 BMC: only MAC0 is populated, wired to the RTL8201CP. The MDIO link/speed read is the</text>
+  <text class="m" x="24" y="333">path the FAST_MODE fix corrects (a MAC soft-reset clears bit 19, mis-setting 100 Mb links as 10 Mb).</text>
+
+  <!-- legend -->
+  <line class="wire" x1="24" y1="360" x2="916" y2="360" stroke-width="1"/>
+  <rect class="sw neu"  x="24"  y="368" width="18" height="14" rx="3"/><text class="l" x="48"  y="380">on-chip (MAC / AHB)</text>
+  <rect class="sw blue" x="230" y="368" width="18" height="14" rx="3"/><text class="l" x="254" y="380">PHY</text>
+  <rect class="sw gold" x="320" y="368" width="18" height="14" rx="3"/><text class="l" x="344" y="380">data path / connector</text>
+  <line class="mdio" x1="540" y1="375" x2="566" y2="375"/><text class="l" x="572" y="380">MDIO management</text>
+  <text class="clk" x="740" y="380">green text = clock</text>
+</svg>

@@ -47,13 +47,38 @@ every component, and to bring up every layer of the software stack:
   tracks: Redfish, power, sensors, fans, PCIe control, SoL, and footprint work.
 - {doc}`debug/index` — JTAG/UART/SPI bring-up and the hardware-in-the-loop rig.
 
-```{admonition} Status
-:class: note
+## Start here
 
-This is an actively developed program. Pages marked *(planned)* describe work
-that is scaffolded but not yet complete; each carries an acceptance criterion so
-progress is unambiguous. The authoritative implementation history lives in the
-(private) program repository — see {doc}`about`.
+```{list-table}
+:header-rows: 1
+:widths: 34 66
+
+* - If you are…
+  - Start with
+* - Writing a **QEMU device model**
+  - {doc}`hardware/registers/index` (the AST2050 register maps) → {doc}`emulation/qemu` → {doc}`emulation/testbench`
+* - Writing a **Linux / Zephyr driver**
+  - {doc}`drivers/peripheral-map` (block → driver → daemon) → the relevant {doc}`hardware/registers/index` page → {doc}`drivers/linux`
+* - Building **OpenBMC / WallaBMC firmware**
+  - {doc}`firmware/openbmc` / {doc}`firmware/wallabmc` → {doc}`drivers/peripheral-map`
+* - Doing **bench bring-up** on real silicon
+  - {doc}`debug/bring-up` (P2A + JTAG) → {doc}`debug/jtag-uart` → the board page under {doc}`systems/index`
+```
+
+```{admonition} Status — much of this is now hardware-verified
+:class: important
+
+Key milestones are proven on a real ASUS KGPE-D16 AST2050, not just in emulation:
+JTAG run-control and a P2A cold-boot path onto a firmware-less BMC
+({doc}`debug/bring-up`), a modern Linux kernel booting with the G3 interrupt
+controller and MAC fixes ({doc}`drivers/linux`), and **OpenBMC answering Redfish
+v1.17.0 on the board itself** ({doc}`firmware/openbmc`). The `kgpe-d16-bmc` QEMU
+machine meets all four of its boot criteria ({doc}`emulation/qemu`).
+
+This is still an actively developed program. Pages (or rows) marked *(planned)*
+describe work that is scaffolded but not yet complete; each carries an acceptance
+criterion so progress is unambiguous. The authoritative implementation history
+lives in the (private) program repository — see {doc}`about`.
 ```
 
 ```{toctree}

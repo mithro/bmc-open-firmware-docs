@@ -1,0 +1,184 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 1000" role="img" aria-labelledby="t-title t-desc">
+  <title id="t-title">Dell C410X AST2050 BMC I2C bus topology</title>
+  <desc id="t-desc">Tree from the AST2050 BMC I2C engine across seven buses 0xF0 to 0xF6 to muxes (PCA9544A, PCA9548A) and leaf devices: 16 INA219 power monitors, 16 TMP75 per-slot temperature sensors, 2 ADT7462, 5 PCA9555 GPIO expanders, an AT24C256 EEPROM, an LM75 front sensor, four PEX8696 and two PEX8647 PCIe switches, and PMBus PSUs.</desc>
+  <style>
+    text{font-family:ui-monospace,'DejaVu Sans Mono',monospace;fill:var(--ink);}
+    svg{
+      --ink:#1a1a1a;--muted:#555;--box:#f4f4f4;--panel:#ececec;
+      --blue:#2d6cdf;--green:#1a8a5a;--gold:#b8860b;--purple:#7d3cc0;--red:#c0392b;
+    }
+    @media (prefers-color-scheme: dark){
+      svg{
+        --ink:#e6e6e6;--muted:#a8a8a8;--box:#2a2a2a;--panel:#232323;
+        --blue:#5b9bff;--green:#3cc98a;--gold:#e0b050;--purple:#b98cf0;--red:#e74c3c;
+      }
+    }
+    .t{font-size:19px;font-weight:700;}
+    .st{font-size:12px;fill:var(--muted);}
+    .h{font-size:13px;font-weight:700;}
+    .l{font-size:12px;}
+    .m{font-size:12px;fill:var(--muted);}
+    .cr{fill:var(--red);}
+    .box{fill:var(--box);stroke-width:1.8;}
+    .blue{stroke:var(--blue);}.green{stroke:var(--green);}.gold{stroke:var(--gold);}
+    .purple{stroke:var(--purple);}.neu{stroke:var(--ink);}
+    .wire{fill:none;stroke:var(--ink);stroke-width:1.4;}
+    .fillink{fill:var(--ink);}
+    .sw{stroke-width:1.8;fill:var(--box);}
+  </style>
+  <defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" class="fillink"/>
+    </marker>
+  </defs>
+
+  <text class="t" x="24" y="34">Dell C410X &#8212; AST2050 BMC I2C bus topology</text>
+  <text class="st" x="24" y="54">INA219&#215;16 &#183; TMP75&#215;16 &#183; ADT7462&#215;2 &#183; PCA9555&#215;5 &#183; PCA9548&#215;2 &#183; PCA9544&#215;1 &#183; PEX8696&#215;4 &#183; PEX8647&#215;2 &#183; AT24C256&#215;1 &#183; LM75&#215;1</text>
+
+  <!-- BMC root -->
+  <rect class="box neu" x="24" y="345" width="150" height="210" rx="10"/>
+  <text class="h" x="99" y="432" text-anchor="middle">AST2050 BMC</text>
+  <text class="l" x="99" y="453" text-anchor="middle">I2C engine</text>
+  <text class="m" x="99" y="480" text-anchor="middle">0xF0 &#8211; 0xF6</text>
+
+  <!-- Fan from BMC to bus nodes -->
+  <line class="wire" x1="174" y1="450" x2="232" y2="95"  marker-end="url(#arw)"/>
+  <line class="wire" x1="174" y1="450" x2="232" y2="205" marker-end="url(#arw)"/>
+  <line class="wire" x1="174" y1="450" x2="232" y2="320" marker-end="url(#arw)"/>
+  <line class="wire" x1="174" y1="450" x2="232" y2="424" marker-end="url(#arw)"/>
+  <line class="wire" x1="174" y1="450" x2="232" y2="547" marker-end="url(#arw)"/>
+  <line class="wire" x1="174" y1="450" x2="232" y2="660" marker-end="url(#arw)"/>
+  <line class="wire" x1="174" y1="450" x2="232" y2="798" marker-end="url(#arw)"/>
+
+  <!-- Bus nodes -->
+  <g>
+    <rect class="box neu" x="232" y="74"  width="160" height="42" rx="7"/>
+    <text class="h" x="312" y="92"  text-anchor="middle">0xF0</text>
+    <text class="m" x="312" y="108" text-anchor="middle">per-slot power</text>
+  </g>
+  <g>
+    <rect class="box neu" x="232" y="184" width="160" height="42" rx="7"/>
+    <text class="h" x="312" y="202" text-anchor="middle">0xF1</text>
+    <text class="m" x="312" y="218" text-anchor="middle">fans / PSU GPIO</text>
+  </g>
+  <g>
+    <rect class="box neu" x="232" y="299" width="160" height="42" rx="7"/>
+    <text class="h" x="312" y="317" text-anchor="middle">0xF2</text>
+    <text class="m" x="312" y="333" text-anchor="middle">FRU EEPROM</text>
+  </g>
+  <g>
+    <rect class="box neu" x="232" y="403" width="160" height="42" rx="7"/>
+    <text class="h" x="312" y="421" text-anchor="middle">0xF3</text>
+    <text class="m" x="312" y="437" text-anchor="middle">PCIe sw (no mux)</text>
+  </g>
+  <g>
+    <rect class="box neu" x="232" y="526" width="160" height="42" rx="7"/>
+    <text class="h" x="312" y="544" text-anchor="middle">0xF4</text>
+    <text class="m" x="312" y="560" text-anchor="middle">per-slot temp</text>
+  </g>
+  <g>
+    <rect class="box neu" x="232" y="639" width="160" height="42" rx="7"/>
+    <text class="h" x="312" y="657" text-anchor="middle">0xF5</text>
+    <text class="m" x="312" y="673" text-anchor="middle">PSU PMBus</text>
+  </g>
+  <g>
+    <rect class="box neu" x="232" y="777" width="160" height="42" rx="7"/>
+    <text class="h" x="312" y="795" text-anchor="middle">0xF6</text>
+    <text class="m" x="312" y="811" text-anchor="middle">slot status GPIO</text>
+  </g>
+
+  <!-- F0 -->
+  <line class="wire" x1="392" y1="95" x2="428" y2="95" marker-end="url(#arw)"/>
+  <rect class="box green" x="428" y="74" width="250" height="42" rx="7"/>
+  <text class="h" x="440" y="92">INA219 &#215;16 &#183; 0x40&#8211;0x4F</text>
+  <text class="m" x="440" y="108">12V per-slot I/V monitor</text>
+
+  <!-- F1 -->
+  <line class="wire" x1="392" y1="205" x2="428" y2="181" marker-end="url(#arw)"/>
+  <rect class="box gold" x="428" y="160" width="250" height="42" rx="7"/>
+  <text class="h" x="440" y="178">PCA9544A mux &#183; 0x70</text>
+  <text class="m" x="440" y="194">1-of-4 channel select</text>
+  <line class="wire" x1="678" y1="181" x2="700" y2="171" marker-end="url(#arw)"/>
+  <rect class="box green" x="700" y="150" width="330" height="42" rx="7"/>
+  <text class="h" x="712" y="168">ADT7462 #1 &#183; 0x58</text>
+  <text class="m" x="712" y="184">board temp + 8-fan &#183; <tspan class="cr">THERM&#8594;GPIOB0</tspan></text>
+  <line class="wire" x1="678" y1="181" x2="700" y2="217" marker-end="url(#arw)"/>
+  <rect class="box green" x="700" y="196" width="330" height="42" rx="7"/>
+  <text class="h" x="712" y="214">ADT7462 #2 &#183; 0x5C</text>
+  <text class="m" x="712" y="230">board temp + 8-fan &#183; <tspan class="cr">THERM&#8594;GPIOB1</tspan></text>
+  <line class="wire" x1="392" y1="205" x2="428" y2="253" marker-end="url(#arw)"/>
+  <rect class="box purple" x="428" y="232" width="250" height="42" rx="7"/>
+  <text class="h" x="440" y="250">PCA9555 #5 &#183; 0x20</text>
+  <text class="m" x="440" y="266">PSU/fan-LED &#183; <tspan class="cr">INT&#8594;GPIOA5</tspan></text>
+
+  <!-- F2 -->
+  <line class="wire" x1="392" y1="320" x2="428" y2="320" marker-end="url(#arw)"/>
+  <rect class="box neu" x="428" y="299" width="250" height="42" rx="7"/>
+  <text class="h" x="440" y="317">AT24C256 EEPROM &#183; 0x50</text>
+  <text class="m" x="440" y="333">FRU: serial, part number</text>
+
+  <!-- F3 -->
+  <line class="wire" x1="392" y1="424" x2="428" y2="406" marker-end="url(#arw)"/>
+  <rect class="box blue" x="428" y="386" width="320" height="40" rx="7"/>
+  <text class="h" x="440" y="403">PEX8696 &#215;4 &#183; 0x18/19/1A/1B</text>
+  <text class="m" x="440" y="419">primary 96-lane PCIe switch</text>
+  <line class="wire" x1="392" y1="424" x2="428" y2="452" marker-end="url(#arw)"/>
+  <rect class="box blue" x="428" y="432" width="320" height="40" rx="7"/>
+  <text class="h" x="440" y="449">PEX8647 &#215;2 &#183; 0x68/0x6A</text>
+  <text class="m" x="440" y="465">secondary 48-lane PCIe switch</text>
+
+  <!-- F4 -->
+  <line class="wire" x1="392" y1="547" x2="428" y2="526" marker-end="url(#arw)"/>
+  <rect class="box gold" x="428" y="506" width="250" height="40" rx="7"/>
+  <text class="h" x="440" y="523">PCA9548A #1 &#183; 0x70</text>
+  <text class="m" x="440" y="539">8-ch mux &#183; ch0&#8211;7</text>
+  <line class="wire" x1="678" y1="526" x2="700" y2="526" marker-end="url(#arw)"/>
+  <rect class="box green" x="700" y="506" width="330" height="40" rx="7"/>
+  <text class="h" x="712" y="523">TMP75 &#215;8 &#183; 0x5C</text>
+  <text class="m" x="712" y="539">per-slot temp, slots 1&#8211;8</text>
+  <line class="wire" x1="392" y1="547" x2="428" y2="580" marker-end="url(#arw)"/>
+  <rect class="box gold" x="428" y="560" width="250" height="40" rx="7"/>
+  <text class="h" x="440" y="577">PCA9548A #2 &#183; 0x71</text>
+  <text class="m" x="440" y="593">8-ch mux &#183; ch0&#8211;7</text>
+  <line class="wire" x1="678" y1="580" x2="700" y2="580" marker-end="url(#arw)"/>
+  <rect class="box green" x="700" y="560" width="330" height="40" rx="7"/>
+  <text class="h" x="712" y="577">TMP75 &#215;8 &#183; 0x5C</text>
+  <text class="m" x="712" y="593">per-slot temp, slots 9&#8211;16</text>
+
+  <!-- F5 -->
+  <line class="wire" x1="392" y1="660" x2="428" y2="660" marker-end="url(#arw)"/>
+  <rect class="box neu" x="428" y="639" width="250" height="42" rx="7"/>
+  <text class="h" x="440" y="657">PMBus &#8594; PSU 1&#8211;4</text>
+  <text class="m" x="440" y="673">power/status &#183; <tspan class="cr">ALERT#&#8594;GPIOB2</tspan></text>
+
+  <!-- F6 -->
+  <line class="wire" x1="392" y1="798" x2="428" y2="706" marker-end="url(#arw)"/>
+  <rect class="box purple" x="428" y="686" width="270" height="40" rx="7"/>
+  <text class="h" x="440" y="703">PCA9555 #1 &#183; 0x20</text>
+  <text class="m" x="440" y="719">slot presence &#183; <tspan class="cr">INT&#8594;GPIOA4</tspan></text>
+  <line class="wire" x1="392" y1="798" x2="428" y2="752" marker-end="url(#arw)"/>
+  <rect class="box purple" x="428" y="732" width="270" height="40" rx="7"/>
+  <text class="h" x="440" y="749">PCA9555 #2 &#183; 0x21</text>
+  <text class="m" x="440" y="765">power-good &#183; <tspan class="cr">INT&#8594;GPIOB5</tspan></text>
+  <line class="wire" x1="392" y1="798" x2="428" y2="798" marker-end="url(#arw)"/>
+  <rect class="box purple" x="428" y="778" width="270" height="40" rx="7"/>
+  <text class="h" x="440" y="795">PCA9555 #3 &#183; 0x22</text>
+  <text class="m" x="440" y="811">attn btn + pwr &#183; <tspan class="cr">INT&#8594;GPIOB4</tspan></text>
+  <line class="wire" x1="392" y1="798" x2="428" y2="844" marker-end="url(#arw)"/>
+  <rect class="box purple" x="428" y="824" width="270" height="40" rx="7"/>
+  <text class="h" x="440" y="841">PCA9555 #4 &#183; 0x23</text>
+  <text class="m" x="440" y="857">MRL sensors &#183; <tspan class="cr">INT&#8594;GPIOB5</tspan></text>
+  <line class="wire" x1="392" y1="798" x2="428" y2="890" marker-end="url(#arw)"/>
+  <rect class="box green" x="428" y="870" width="270" height="40" rx="7"/>
+  <text class="h" x="440" y="887">LM75 front-board &#183; 0x4F</text>
+  <text class="m" x="440" y="903">front ambient temp</text>
+
+  <!-- Legend -->
+  <line class="wire" x1="24" y1="928" x2="1036" y2="928"/>
+  <rect class="sw blue"   x="24"  y="946" width="18" height="14" rx="3"/><text class="l" x="48"  y="958">PEX PCIe switch</text>
+  <rect class="sw green"  x="196" y="946" width="18" height="14" rx="3"/><text class="l" x="220" y="958">sensor</text>
+  <rect class="sw gold"   x="300" y="946" width="18" height="14" rx="3"/><text class="l" x="324" y="958">I2C mux</text>
+  <rect class="sw purple" x="410" y="946" width="18" height="14" rx="3"/><text class="l" x="434" y="958">GPIO expander</text>
+  <rect class="sw neu"    x="574" y="946" width="18" height="14" rx="3"/><text class="l" x="598" y="958">EEPROM / PSU</text>
+  <text class="l cr" x="730" y="958">INT&#8594; = interrupt to BMC GPIO</text>
+</svg>
