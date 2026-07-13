@@ -39,7 +39,7 @@
 <text x="24" y="34" class="title">J1 - ARM JTAG (HPE iPDU, candidate)</text>
 <text x="24" y="57" class="sub muted">Digi NS9360 ARM926 JTAG · 20-pin ARM (2x10, 0.1 in) · Multi-ICE pinout</text>
 <rect x="24" y="68" width="652" height="26" rx="6" class="banner"/>
-<text x="34" y="85" class="leg t-ctrl">CANDIDATE - form-factor matches the standard ARM 20-pin; exact pin-&gt;signal map needs board tracing.</text>
+<text x="34" y="85" class="leg t-ctrl">CANDIDATE - matches the standard ARM 20-pin form-factor; pin-&gt;signal map needs tracing.</text>
 <rect x="272" y="108" width="110" height="336" rx="10" class="board"/>
 <path d="M 313.0 108 L 341.0 108 L 327.0 119 Z" class="notch"/>
 <rect x="277" y="121" width="22" height="22" rx="3" class="pin1sq"/><text x="288" y="132" class="pinnum" text-anchor="middle" dominant-baseline="central">1</text>

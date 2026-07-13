@@ -74,7 +74,7 @@
   <line class="wire" x1="855" y1="389" x2="855" y2="398" marker-end="url(#ar)"/>
 
   <!-- level A -->
-  <rect class="box gold" x="45" y="398" width="170" height="52" rx="9"/>
+  <rect class="box gold" x="40" y="398" width="180" height="52" rx="9"/>
   <text class="h" x="130" y="422" text-anchor="middle">MAXQ3180 U15</text>
   <text class="m" x="130" y="440" text-anchor="middle">metering AFE &#183; 8 MHz Y4</text>
 
@@ -82,7 +82,7 @@
   <text class="h" x="380" y="422" text-anchor="middle">ext-bar bus</text>
   <text class="m" x="380" y="440" text-anchor="middle">I2C &#183; J27</text>
 
-  <rect class="box neu" x="550" y="398" width="170" height="52" rx="9"/>
+  <rect class="box neu" x="530" y="398" width="210" height="52" rx="9"/>
   <text class="h" x="635" y="422" text-anchor="middle">MAX3243EI</text>
   <text class="m" x="635" y="440" text-anchor="middle">RS-232 xcvr</text>
 
@@ -97,7 +97,7 @@
   <line class="wire" x1="855" y1="450" x2="855" y2="500" marker-end="url(#ar)"/>
 
   <!-- level B -->
-  <rect class="box gold" x="45" y="500" width="170" height="52" rx="9"/>
+  <rect class="box gold" x="40" y="500" width="180" height="52" rx="9"/>
   <text class="h" x="130" y="524" text-anchor="middle">V/I/P sense</text>
   <text class="m" x="130" y="542" text-anchor="middle">CT / PT (PT1)</text>
 
@@ -105,7 +105,7 @@
   <text class="h" x="380" y="524" text-anchor="middle">extension bars</text>
   <text class="m" x="380" y="542" text-anchor="middle">J2/29 &#183; J3/30 &#183; J4/31</text>
 
-  <rect class="box purple" x="550" y="500" width="170" height="52" rx="9"/>
+  <rect class="box purple" x="530" y="500" width="210" height="52" rx="9"/>
   <text class="h" x="635" y="524" text-anchor="middle">TMP89FM42 U45</text>
   <text class="m" x="635" y="542" text-anchor="middle">display MCU &#183; 3.6864 MHz Y6</text>
 
@@ -117,7 +117,7 @@
   <line class="wire" x1="635" y1="552" x2="635" y2="602" marker-end="url(#ar)"/>
 
   <!-- level C -->
-  <rect class="box purple" x="550" y="602" width="170" height="48" rx="9"/>
+  <rect class="box purple" x="530" y="602" width="210" height="48" rx="9"/>
   <text class="h" x="635" y="624" text-anchor="middle">front bezel</text>
   <text class="m" x="635" y="642" text-anchor="middle">7-seg / LED / buzzer</text>
 

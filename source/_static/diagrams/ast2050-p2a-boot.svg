@@ -41,75 +41,75 @@
   <text class="st" x="24" y="54">no BMC firmware needed &#183; the host loads and launches U-Boot/Linux into DRAM</text>
 
   <!-- connectors between steps -->
-  <line class="wire" x1="340" y1="148" x2="340" y2="164" marker-end="url(#ar)"/>
-  <line class="wire" x1="340" y1="220" x2="340" y2="236" marker-end="url(#ar)"/>
-  <line class="wire" x1="340" y1="292" x2="340" y2="308" marker-end="url(#ar)"/>
-  <line class="wire" x1="340" y1="364" x2="340" y2="380" marker-end="url(#ar)"/>
-  <line class="wire" x1="340" y1="436" x2="340" y2="452" marker-end="url(#ar)"/>
-  <line class="wire" x1="340" y1="508" x2="340" y2="524" marker-end="url(#ar)"/>
-  <line class="wire" x1="340" y1="580" x2="340" y2="596" marker-end="url(#ar)"/>
-  <line class="wire" x1="340" y1="652" x2="340" y2="668" marker-end="url(#ar)"/>
-  <line class="wire" x1="340" y1="724" x2="340" y2="740" marker-end="url(#ar)"/>
+  <line class="wire" x1="312" y1="148" x2="312" y2="164" marker-end="url(#ar)"/>
+  <line class="wire" x1="312" y1="220" x2="312" y2="236" marker-end="url(#ar)"/>
+  <line class="wire" x1="312" y1="292" x2="312" y2="308" marker-end="url(#ar)"/>
+  <line class="wire" x1="312" y1="364" x2="312" y2="380" marker-end="url(#ar)"/>
+  <line class="wire" x1="312" y1="436" x2="312" y2="452" marker-end="url(#ar)"/>
+  <line class="wire" x1="312" y1="508" x2="312" y2="524" marker-end="url(#ar)"/>
+  <line class="wire" x1="312" y1="580" x2="312" y2="596" marker-end="url(#ar)"/>
+  <line class="wire" x1="312" y1="652" x2="312" y2="668" marker-end="url(#ar)"/>
+  <line class="wire" x1="312" y1="724" x2="312" y2="740" marker-end="url(#ar)"/>
 
   <!-- STEP 1 -->
-  <rect class="box blue" x="120" y="92" width="440" height="56" rx="9"/>
-  <circle class="badge blue" cx="150" cy="120" r="15"/><text class="h nblue" x="150" y="125" text-anchor="middle">1</text>
-  <text class="h" x="182" y="115">Host drives the P2A window</text>
-  <text class="m" x="182" y="135">PCIe VGA function &#183; PCIS14 2nd 64 KB (MMIOBASE+0x10000)</text>
+  <rect class="box blue" x="64" y="92" width="496" height="56" rx="9"/>
+  <circle class="badge blue" cx="94" cy="120" r="15"/><text class="h nblue" x="94" y="125" text-anchor="middle">1</text>
+  <text class="h" x="126" y="115">Host drives the P2A window</text>
+  <text class="m" x="126" y="135">PCIe VGA function &#183; PCIS14 2nd 64 KB (MMIOBASE+0x10000)</text>
 
   <!-- STEP 2 -->
-  <rect class="box blue" x="120" y="164" width="440" height="56" rx="9"/>
-  <circle class="badge blue" cx="150" cy="192" r="15"/><text class="h nblue" x="150" y="197" text-anchor="middle">2</text>
-  <text class="h" x="182" y="187">Enable the P2A bridge</text>
-  <text class="m" x="182" y="207">P2A00[0]=1 &#183; P2A04[31:16] = AHB base &#8594; host cycles reach AHB</text>
+  <rect class="box blue" x="64" y="164" width="496" height="56" rx="9"/>
+  <circle class="badge blue" cx="94" cy="192" r="15"/><text class="h nblue" x="94" y="197" text-anchor="middle">2</text>
+  <text class="h" x="126" y="187">Enable the P2A bridge</text>
+  <text class="m" x="126" y="207">P2A00[0]=1 &#183; P2A04[31:16]=AHB base &#8594; host cycles reach AHB</text>
 
   <!-- STEP 3 -->
-  <rect class="box gold" x="120" y="236" width="440" height="56" rx="9"/>
-  <circle class="badge gold" cx="150" cy="264" r="15"/><text class="h ngold" x="150" y="269" text-anchor="middle">3</text>
-  <text class="h" x="182" y="259">DDR2 init over AHB</text>
-  <text class="m" x="182" y="279">SDRAMC 0x1E6E0000 &#183; 4-bank &#183; 64 MiB &#183; DLL training</text>
+  <rect class="box gold" x="64" y="236" width="496" height="56" rx="9"/>
+  <circle class="badge gold" cx="94" cy="264" r="15"/><text class="h ngold" x="94" y="269" text-anchor="middle">3</text>
+  <text class="h" x="126" y="259">DDR2 init over AHB</text>
+  <text class="m" x="126" y="279">SDRAMC 0x1E6E0000 &#183; 4-bank &#183; 64 MiB &#183; DLL training</text>
 
   <!-- STEP 4 -->
-  <rect class="box gold" x="120" y="308" width="440" height="56" rx="9"/>
-  <circle class="badge gold" cx="150" cy="336" r="15"/><text class="h ngold" x="150" y="341" text-anchor="middle">4</text>
-  <text class="h" x="182" y="331">Siphon payload into DRAM</text>
-  <text class="m" x="182" y="351">U-Boot / Linux (+ initrd) &#8594; 0x40000000</text>
+  <rect class="box gold" x="64" y="308" width="496" height="56" rx="9"/>
+  <circle class="badge gold" cx="94" cy="336" r="15"/><text class="h ngold" x="94" y="341" text-anchor="middle">4</text>
+  <text class="h" x="126" y="331">Siphon payload into DRAM</text>
+  <text class="m" x="126" y="351">U-Boot / Linux (+ initrd) &#8594; 0x40000000</text>
 
   <!-- STEP 5 -->
-  <rect class="box green" x="120" y="380" width="440" height="56" rx="9"/>
-  <circle class="badge green" cx="150" cy="408" r="15"/><text class="h ngreen" x="150" y="413" text-anchor="middle">5</text>
-  <text class="h" x="182" y="403">Remap DRAM &#8594; 0x00000000</text>
-  <text class="m" x="182" y="423">AHBC00=0xAEED1A03 (unlock) &#183; AHBC8C[0]=1</text>
+  <rect class="box green" x="64" y="380" width="496" height="56" rx="9"/>
+  <circle class="badge green" cx="94" cy="408" r="15"/><text class="h ngreen" x="94" y="413" text-anchor="middle">5</text>
+  <text class="h" x="126" y="403">Remap DRAM &#8594; 0x00000000</text>
+  <text class="m" x="126" y="423">AHBC00=0xAEED1A03 (unlock) &#183; AHBC8C[0]=1</text>
 
   <!-- STEP 6 -->
-  <rect class="box red" x="120" y="452" width="440" height="56" rx="9"/>
-  <circle class="badge red" cx="150" cy="480" r="15"/><text class="h nred" x="150" y="485" text-anchor="middle">6</text>
-  <text class="h" x="182" y="475">Freeze the ARM across reset</text>
-  <text class="m" x="182" y="495">SCU00=0x1688A8A8 &#183; SCU70[1:0]=11 (disable ARM CPU)</text>
+  <rect class="box red" x="64" y="452" width="496" height="56" rx="9"/>
+  <circle class="badge red" cx="94" cy="480" r="15"/><text class="h nred" x="94" y="485" text-anchor="middle">6</text>
+  <text class="h" x="126" y="475">Freeze the ARM across reset</text>
+  <text class="m" x="126" y="495">SCU00=0x1688A8A8 &#183; SCU70[1:0]=11 (disable ARM CPU)</text>
 
   <!-- STEP 7 -->
-  <rect class="box red" x="120" y="524" width="440" height="56" rx="9"/>
-  <circle class="badge red" cx="150" cy="552" r="15"/><text class="h nred" x="150" y="557" text-anchor="middle">7</text>
-  <text class="h" x="182" y="547">Watchdog reset (HRST_N)</text>
-  <text class="m" x="182" y="567">WDT fires &#183; clears the AHBC reset domain</text>
+  <rect class="box red" x="64" y="524" width="496" height="56" rx="9"/>
+  <circle class="badge red" cx="94" cy="552" r="15"/><text class="h nred" x="94" y="557" text-anchor="middle">7</text>
+  <text class="h" x="126" y="547">Watchdog reset (HRST_N)</text>
+  <text class="m" x="126" y="567">WDT fires &#183; clears the AHBC reset domain</text>
 
   <!-- STEP 8 -->
-  <rect class="box green" x="120" y="596" width="440" height="56" rx="9"/>
-  <circle class="badge green" cx="150" cy="624" r="15"/><text class="h ngreen" x="150" y="629" text-anchor="middle">8</text>
-  <text class="h" x="182" y="619">Re-apply the DRAM remap</text>
-  <text class="m" x="182" y="639">AHBC00 key + AHBC8C[0]=1 (remap was cleared by HRST_N)</text>
+  <rect class="box green" x="64" y="596" width="496" height="56" rx="9"/>
+  <circle class="badge green" cx="94" cy="624" r="15"/><text class="h ngreen" x="94" y="629" text-anchor="middle">8</text>
+  <text class="h" x="126" y="619">Re-apply the DRAM remap</text>
+  <text class="m" x="126" y="639">AHBC00 key + AHBC8C[0]=1 (remap was cleared by HRST_N)</text>
 
   <!-- STEP 9 -->
-  <rect class="box blue" x="120" y="668" width="440" height="56" rx="9"/>
-  <circle class="badge blue" cx="150" cy="696" r="15"/><text class="h nblue" x="150" y="701" text-anchor="middle">9</text>
-  <text class="h" x="182" y="691">Re-enable the ARM</text>
-  <text class="m" x="182" y="711">SCU70[1:0]=10 (boot &#8212; fetch from 0x0)</text>
+  <rect class="box blue" x="64" y="668" width="496" height="56" rx="9"/>
+  <circle class="badge blue" cx="94" cy="696" r="15"/><text class="h nblue" x="94" y="701" text-anchor="middle">9</text>
+  <text class="h" x="126" y="691">Re-enable the ARM</text>
+  <text class="m" x="126" y="711">SCU70[1:0]=10 (boot &#8212; fetch from 0x0)</text>
 
   <!-- STEP 10 -->
-  <rect class="box green" x="120" y="740" width="440" height="56" rx="9"/>
-  <circle class="badge green" cx="150" cy="768" r="15"/><text class="h ngreen" x="150" y="773" text-anchor="middle">10</text>
-  <text class="h" x="182" y="763">ARM runs the siphoned image</text>
-  <text class="m" x="182" y="783">reset vector @0x0 = SDRAM &#8594; U-Boot / Linux</text>
+  <rect class="box green" x="64" y="740" width="496" height="56" rx="9"/>
+  <circle class="badge green" cx="94" cy="768" r="15"/><text class="h ngreen" x="94" y="773" text-anchor="middle">10</text>
+  <text class="h" x="126" y="763">ARM runs the siphoned image</text>
+  <text class="m" x="126" y="783">reset vector @0x0 = SDRAM &#8594; U-Boot / Linux</text>
 
   <!-- survive-reset callout for steps 6-8 -->
   <line class="dash" x1="560" y1="480" x2="592" y2="480"/>
