@@ -3,7 +3,7 @@
 ## AST2050 (G3) support
 
 Mainline Linux supports the AST2400 (G4) and later. AST2050 support is added as a
-clean series in `mithro/linux`:
+clean series in [`mithro/linux`](https://github.com/mithro/linux):
 
 1. **[`clk-aspeed`](https://github.com/torvalds/linux/blob/master/drivers/clk/aspeed/clk-aspeed.c)** — add AST2050 clock support (the H-PLL/derived clocks a G3
    part exposes).

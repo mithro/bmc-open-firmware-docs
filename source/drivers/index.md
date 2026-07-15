@@ -16,7 +16,8 @@ zephyr
 
 ## Upstream patch-series & rebase workflow
 
-All upstream-track work lives in public forks (`mithro/linux`,
+All upstream-track work lives in public forks
+([`mithro/linux`](https://github.com/mithro/linux),
 [`mithro/u-boot`](https://github.com/mithro/u-boot),
 [`mithro/qemu`](https://github.com/mithro/qemu),
 [`mithro/zephyr`](https://github.com/mithro/zephyr)) as **one topic branch per
