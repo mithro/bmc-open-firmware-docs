@@ -13,8 +13,9 @@ Upstream WallaBMC targets Cortex-M / RISC-V microcontrollers — not the ARM926E
 architecture port** ({doc}`../drivers/zephyr`). Bring-up order:
 
 1. Validate WallaBMC on an existing Zephyr-supported QEMU target (reference).
-2. Stand up the ARM926 arch + `soc-ast2050` / `soc-ns9360` in `mithro/zephyr`.
-3. Port WallaBMC's board layer (in a `mithro/wallabmc` fork) to each board.
+2. Stand up the ARM926 arch + `soc-ast2050` / `soc-ns9360` in
+   [`mithro/zephyr`](https://github.com/mithro/zephyr).
+3. Port WallaBMC's board layer (in a [`mithro/wallabmc`](https://github.com/mithro/wallabmc) fork) to each board.
 
 ## Functionality gap to close
 

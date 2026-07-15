@@ -8,9 +8,9 @@ requires a complete map.
 
 All content is derived from the in-repo ASPEED AST2050/AST1100 A3 datasheet
 V1.05 [DS](#sources), cross-checked against Raptor Engineering's U-Boot headers
-[ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h) / [hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h). Citations are inline as `[DS §N p.P](#sources)` (datasheet
-chapter / printed page, which equals the PDF page number), `[ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h)`,
-`[hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)`; full link definitions are collected in the Sources section at the
+[ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h) / [hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h). Citations are inline as [DS §N p.P](#sources) (datasheet
+chapter / printed page, which equals the PDF page number), [`ast2050.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h),
+[`hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h); full link definitions are collected in the Sources section at the
 end.
 
 Conventions used in the register tables below:
@@ -561,7 +561,9 @@ It implements 8 32-bit registers backed by two software-supplied DRAM buffers: a
   - Reserved (0)
 * - 17:16
   - RW
-  - Interrupt mask: bit 17 enables the CPU interrupt on the secondary-page error flag; bit 16 enables it on the first-page error flag (`1` = enable). [DS §13 p.118](#sources)
+  - Interrupt mask (`1` = enable) [DS §13 p.118](#sources):
+    - bit 17 enables the CPU interrupt on the secondary-page error flag
+    - bit 16 enables it on the first-page error flag
 * - 15:0
   - R
   - Current process page number of the engine. [DS §13 p.118](#sources)
@@ -1553,15 +1555,31 @@ bits belong to the Video Engine and are outside this block [DS §37 p.401](#sour
 Each cursor pixel is a 16-bit word in the frame-buffer shape area
 [DS §37 p.403]:
 
-- **Monochrome (AND-XOR-RGB444):** bit[15] AND-mask, bit[14] XOR-mask,
-  bit[13:12] reserved, bit[11:8] R, bit[7:4] G, bit[3:0] B. The AND/XOR pair
-  selects: `0,0` background (cursor R/G/B); `0,1` foreground (cursor R/G/B);
-  `1,0` transparent (graphics R/G/B); `1,1` inverse (NOT graphics R/G/B).
-  [DS §37 p.403](#sources)
-- **Colour (ARGB4444):** bit[15:12] alpha, bit[11:8] R, bit[7:4] G, bit[3:0] B.
+- **Monochrome (AND-XOR-RGB444):** [DS §37 p.403](#sources)
+
+  - bit[15] AND-mask
+  - bit[14] XOR-mask
+  - bit[13:12] reserved
+  - bit[11:8] R
+  - bit[7:4] G
+  - bit[3:0] B
+
+  The AND/XOR pair selects:
+
+  - `0,0` background (cursor R/G/B)
+  - `0,1` foreground (cursor R/G/B)
+  - `1,0` transparent (graphics R/G/B)
+  - `1,1` inverse (NOT graphics R/G/B)
+
+- **Colour (ARGB4444):** [DS §37 p.403](#sources)
+
+  - bit[15:12] alpha
+  - bit[11:8] R
+  - bit[7:4] G
+  - bit[3:0] B
+
   Output = alpha × graphics + (1−alpha) × cursor, normalised to the display
   format. When X/Y-offset is enabled only a partial bitmap is displayed.
-  [DS §37 p.403](#sources)
 
 ---
 

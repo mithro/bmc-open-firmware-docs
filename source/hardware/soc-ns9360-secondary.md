@@ -7,7 +7,7 @@ reference. Each is documented directly from the *NS9360 Hardware Reference*
 (Digi 90000675 rev J): chapter 12 (LCD), chapter 15 (IEEE 1284), chapter 16
 (USB host) and chapter 17 (USB device). The block base addresses are the ones
 listed in the NS9360 memory map and confirmed by the vendor U-Boot headers
-[HWRef p.415-416][digi-uboot].
+[HWRef p.415-416](#sources), [digi-uboot](https://github.com/mithro/ai-shenanigans-for-bmcs/tree/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot).
 
 **None of these four blocks is used on the HPE iPDU board** (Digi NS9360, NET+OS
 firmware). They are documented in full anyway because this reference aims to
@@ -19,12 +19,12 @@ support contains **no** register definitions for any of these four blocks:
 `regs-bbu.h` defines only the GPIO config/control/status registers and
 `regs-sys-ns9360.h` only the system-control (PLL, timer, arbiter, chip-select,
 external-interrupt) registers — neither names LCD, IEEE 1284, USB host or USB
-device [mach-ns9xxx regs-bbu.h][mach-ns9xxx regs-sys-ns9360.h]. The only
+device [mach-ns9xxx regs-bbu.h](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-bbu.h), [mach-ns9xxx regs-sys-ns9360.h](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-sys-ns9360.h). The only
 open-source register-level cross-reference is the vendor FS-Forth / Digi U-Boot
 tree (in-repo), which carries an OHCI header and a USB base-address header for
-this exact SoC [digi-uboot ns9750_usb_ohci.h][digi-uboot ns9360_usb.h], plus the
+this exact SoC [digi-uboot ns9750_usb_ohci.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_usb_ohci.h), [digi-uboot ns9360_usb.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9360_usb.h), plus the
 BBus master-reset and USB-config bits that gate these blocks
-[digi-uboot ns9750_bbus.h](#sources). Mainline's only "touch" of these blocks is indirect:
+[digi-uboot ns9750_bbus.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_bbus.h). Mainline's only "touch" of these blocks is indirect:
 the BBus Master Reset register (0x9060_0000, documented under
 {doc}`soc-ns9360-io`) holds their reset bits, and the system-control module's
 clock registers (documented under {doc}`soc-ns9360`) hold their clock-select /
@@ -42,7 +42,7 @@ single or dual panel) panels up to 1024×768, with a 256-entry palette RAM at
 
 **Unused on the iPDU.** The block is still listed because the endian-switch /
 early-boot code executes from the LCD palette RAM as scratch memory (the palette
-is ordinary RAM until the controller is enabled) [HWRef p.543][PLAN-INCREMENTAL-PORT.md].
+is ordinary RAM until the controller is enabled) [HWRef p.543](#sources), [PLAN-INCREMENTAL-PORT.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md).
 Its clock-enable (`LCDC`) and panel-clock-select fields live in the
 system-control module [HWRef p.144, Table 48](#sources).
 
@@ -476,7 +476,7 @@ configuration registers are 32-bit single-access; the "CSR" sub-block at
 
 **Unused on the iPDU.** Its reset bit (`1284`, bit 6 of the BBus Master Reset)
 and its endian bit (`ENDIAN_CFG` bit 6) gate the block
-[digi-uboot ns9750_bbus.h](#sources).
+[digi-uboot ns9750_bbus.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_bbus.h).
 
 ```{list-table} IEEE 1284 register map (offset from 0x9040_0000) [HWRef p.635-637, Table 425](#sources)
 :header-rows: 1
@@ -1206,7 +1206,7 @@ BBus. The address space splits in two [HWRef p.667, Table 449]:
 **Unused in the stock firmware.** Sideband signals are USB_PWR = gpio[17] and
 USB_OVR = gpio[16]; the host reset bit is `USBHST` (bit 11 of the BBus Master
 Reset) [HWRef p.663-664](#sources). The OHCI base 0x9080_1000 and HcRhPortStatus at +0x54
-are confirmed by the vendor U-Boot header [digi-uboot ns9360_usb.h](#sources).
+are confirmed by the vendor U-Boot header [digi-uboot ns9360_usb.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9360_usb.h).
 
 ### UHFE wrapper registers (0x0000, 0x000C, 0x0010) [HWRef p.667-670, Tables 451-453](#sources)
 
@@ -1241,7 +1241,7 @@ are confirmed by the vendor U-Boot header [digi-uboot ns9360_usb.h](#sources).
 These are the standard **OpenHCI 1.0** operational registers. The NS9360 HW
 Reference reproduces the OHCI specification and enumerates each register with
 full bitfields (Tables 455–476); the vendor U-Boot OHCI driver confirms the same
-control/command bit masks [digi-uboot ns9750_usb_ohci.h](#sources). The full standard set,
+control/command bit masks [digi-uboot ns9750_usb_ohci.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_usb_ohci.h). The full standard set,
 as listed by the datasheet [HWRef p.671-672, Table 454](#sources), is:
 
 ```{list-table} OHCI register map (offset from 0x9080_1000) [HWRef p.671-672, Table 454](#sources)
@@ -1740,7 +1740,7 @@ controller (one channel per endpoint FIFO). All configuration registers are
 
 **Unused in the stock firmware.** Its reset bit is `USBDEV` (bit 12 of the BBus
 Master Reset) and its host/device role is selected by the BBus USB configuration
-register (0x9060_0070) [HWRef p.723][digi-uboot ns9750_bbus.h]. (Note: the older
+register (0x9060_0070) [HWRef p.723](#sources), [digi-uboot ns9750_bbus.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_bbus.h). (Note: the older
 2-port NS9750 variant used a single combined `USB` reset bit; the NS9360 splits
 host and device — see the BBus Master Reset table under {doc}`soc-ns9360-io`.)
 
@@ -2313,7 +2313,7 @@ The endpoint FIFO *data* is moved by the USB device BBus DMA controller at
 
 Primary datasheet (in-repo, the authority for the register map):
 
-- **NS9360 Hardware Reference**, Digi 90000675 rev J — `[HWRef p.N](#sources)`, where `N`
+- **NS9360 Hardware Reference**, Digi 90000675 rev J — [HWRef p.N](#sources), where `N`
   is the printed document page (identical to the PDF page). In-repo at
   `hpe-ipdu-firmware/datasheets/NS9360_HW_Reference_90000675_J.pdf`; online at
   [ftp1.digi.com/90000675_J.pdf][hwref-url]. Chapters used: ch 12 LCD
@@ -2322,29 +2322,29 @@ Primary datasheet (in-repo, the authority for the register map):
 
 In-repo analysis / port planning (board specifics):
 
-- `[PLAN-INCREMENTAL-PORT.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md)` — `hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md`
+- [`PLAN-INCREMENTAL-PORT.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md) — `hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md`
   (LCD palette RAM used as endian-switch scratch; register quick reference).
 
 Open-source cross-reference (register names, bases, bitfields):
 
-- `[mach-ns9xxx regs-bbu.h](#sources)`, `[mach-ns9xxx regs-sys-ns9360.h](#sources)` — mainline Linux
+- [mach-ns9xxx regs-bbu.h](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-bbu.h), [mach-ns9xxx regs-sys-ns9360.h](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-sys-ns9360.h) — mainline Linux
   `arch/arm/mach-ns9xxx` (tag v2.6.39). Verified to contain **no** LCD / IEEE 1284
   / USB register definitions; only GPIO (`regs-bbu.h`) and system-control
   (`regs-sys-ns9360.h`) registers. Raw source, e.g.
   [regs-bbu.h][machbbu-url].
-- `[digi-uboot ns9360_usb.h](#sources)` — FS-Forth / Digi U-Boot for the CC9P9360
+- [digi-uboot ns9360_usb.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9360_usb.h) — FS-Forth / Digi U-Boot for the CC9P9360
   (in-repo at
   `hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9360_usb.h`):
   confirms OHCI base `0x9080_1000` and `HcRhPortStatus` at `+0x54`.
-- `[digi-uboot ns9750_usb_ohci.h](#sources)` — same tree,
+- [digi-uboot ns9750_usb_ohci.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_usb_ohci.h) — same tree,
   `include/ns9750_usb_ohci.h`: standard OHCI `HcControl` / `HcCommandStatus`
   bit masks (`OHCI_CTRL_CBSR/PLE/IE/CLE/BLE/HCFS/IR/RWC/RWE`, `OHCI_HCR/CLF/BLF/OCR`),
   matching the datasheet bitfields above.
-- `[digi-uboot ns9750_bbus.h](#sources)` — same tree, `include/ns9750_bbus.h`: BBus Master
+- [digi-uboot ns9750_bbus.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_bbus.h) — same tree, `include/ns9750_bbus.h`: BBus Master
   Reset bits (`…RESET_1284`=0x40, `…RESET_USB`) and USB configuration bits
   (`USB_CFG_CFG_HOST/DEVICE/DIS`) that gate these blocks; note the 2-port NS9750
   uses one combined USB reset bit whereas the NS9360 splits host/device.
-- `[digi-uboot](#sources)` — the FS-Forth / Digi CC9P9360 U-Boot tree as a whole (in-repo,
+- [digi-uboot](https://github.com/mithro/ai-shenanigans-for-bmcs/tree/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot) — the FS-Forth / Digi CC9P9360 U-Boot tree as a whole (in-repo,
   path above), used to confirm the block base addresses.
 
 [hwref-url]: https://ftp1.digi.com/support/documentation/90000675_J.pdf

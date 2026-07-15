@@ -1,17 +1,21 @@
 # Firmware
 
-Two open BMC firmware tracks, both targeting all three boards:
+Two open BMC firmware tracks, both targeting all three boards, plus the
+bootloader they share:
 
 - **{doc}`openbmc`** — the full-featured, Linux-based stack (OpenBMC): Redfish,
   all sensors and fans, PCIe switch control, power control, SoL, ssh/https.
 - **{doc}`wallabmc`** — the lightweight, Zephyr-based stack (WallaBMC): a smaller
   Redfish/power/console footprint for the most constrained parts.
+- **{doc}`uboot`** — the U-Boot bootloader stage both stacks boot through (and,
+  on the NS9360 iPDU, the first open firmware to run at all).
 
 ```{toctree}
 :maxdepth: 1
 
 openbmc
 wallabmc
+uboot
 ```
 
 ## Feature matrix (target)

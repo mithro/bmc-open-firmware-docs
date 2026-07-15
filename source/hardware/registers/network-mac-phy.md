@@ -15,12 +15,12 @@ they matter for a faithful re-implementation.
 
 Citation keys:
 
-- `[DS §x p.N](#sources)` — *ASPEED AST2050/AST1100 A3 Datasheet V1.05* (2010-05-25), the
+- [DS §x p.N](#sources) — *ASPEED AST2050/AST1100 A3 Datasheet V1.05* (2010-05-25), the
   in-repo PDF (`datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`, titled
   "AST1100 Software Programming Guide").
-- `[ftgmac100.h](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h)` / `[ftgmac100.c](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.c)` — mainline Linux
+- [`ftgmac100.h`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h) / [`ftgmac100.c`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.c) — mainline Linux
   `drivers/net/ethernet/faraday/ftgmac100.{h,c}`.
-- `[RTL8201CP DS §x p.N](#sources)` — *Realtek RTL8201CP Single-Chip/Port 10/100 Fast Ethernet
+- [RTL8201CP DS §x p.N](#sources) — *Realtek RTL8201CP Single-Chip/Port 10/100 Fast Ethernet
   PHYceiver Datasheet*, Track ID JATR-1076-21 Rev. 1.24.
 - Repo file references are given by path under the private analysis repo
   `ai-shenanigans-for-bmcs/`.
@@ -94,7 +94,7 @@ duplex). The Faraday IP is the same block mainline Linux drives as
 ## 2. Full MAC register map (offset 0x00–0xC8)
 
 Reset ("Init") values and access are from the datasheet register definitions
-[DS §14.3 p.125–143](#sources); the offset/name column is cross-checked against `[ftgmac100.h](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h)`
+[DS §14.3 p.125–143](#sources); the offset/name column is cross-checked against [`ftgmac100.h`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h)
 `FTGMAC100_OFFSET_*` (which describes the identical Faraday IP). Where the Faraday
 header and the AST2050 datasheet **disagree**, the datasheet governs for AST2050 and
 the divergence is footnoted.
@@ -275,7 +275,9 @@ the divergence is footnoted.
   - PWRTC
   - `0x0`
   - RW
-  - Power Control (bit 18 `SW_PDNPHY` software power-down PHY; bit 15 `PWRSAV`). **Datasheet-only — see note.**
+  - Power Control (**datasheet-only — see note**):
+    - bit 18 `SW_PDNPHY` software power-down PHY
+    - bit 15 `PWRSAV`
   - *(header: `WOLCR`)*
 * - `0x74`–`0x8C`
   - *(reserved on AST2050)*
@@ -369,13 +371,13 @@ the divergence is footnoted.
   - `OFFSET_RX_COL_LOST`
 :::
 
-Sources for the whole table: [DS §14.3 p.125–143](#sources) and `[ftgmac100.h](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h)`.
+Sources for the whole table: [DS §14.3 p.125–143](#sources) and [`ftgmac100.h`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h).
 
 :::{note}
 **Register-map divergences between the AST2050 datasheet and the Faraday header.**
 
 - **`0x40`** — the AST2050 register list has no `0x40` entry (jumps `0x3C` → `0x44`);
-  `[ftgmac100.h](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h)` names it `REVR`. Treat as undocumented/reserved on AST2050.
+  [`ftgmac100.h`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h) names it `REVR`. Treat as undocumented/reserved on AST2050.
 - **`0x70`** — the AST2050 datasheet defines `0x70` as **PWRTC** (Power Control:
   `SW_PDNPHY` bit 18, `PWRSAV` bit 15) [DS §14.3 p.141](#sources). The Faraday header labels
   `0x70` `WOLCR` (Wake-on-LAN Control) and `0x74`–`0x8C` as the WOL block. The
@@ -488,7 +490,7 @@ same bit position (e.g. IER[10] enables ISR[10]). [DS §14.3 p.125–126](#sourc
 :::
 
 [DS §14.3 p.125–126](#sources). The Faraday driver programs the same enables in `IER`
-(`FTGMAC100_INT_*` in `[ftgmac100.c](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.c)`); bit positions are identical.
+(`FTGMAC100_INT_*` in [`ftgmac100.c`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.c)); bit positions are identical.
 
 ---
 
@@ -627,7 +629,7 @@ buffer size in bits [13:3] (unit 1 byte, 8-byte aligned). [DS §14.3 p.135–136
 
 This is the central control register. Bits below are the AST2050 datasheet
 definitions [DS §14.3 p.137–138](#sources); the last column gives the matching mainline macro
-`[ftgmac100.h](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h)`. **Two positions diverge** (bits 6 and 11) and are footnoted.
+[`ftgmac100.h`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h). **Two positions diverge** (bits 6 and 11) and are footnoted.
 
 :::{list-table} MAC50 MACCR — every bit
 :header-rows: 1
@@ -884,7 +886,7 @@ access goes through **PHYCR (`0x60`)** and **PHYDATA (`0x64`)**. [DS §14.4.6 p.
   - `PHYCR_MDC_CYCTHR(x)` = `x & 0x3f`
 :::
 
-[DS §14.3 p.139](#sources) + `[ftgmac100.h](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h)`.
+[DS §14.3 p.139](#sources) + [`ftgmac100.h`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h).
 
 ### 7.2 PHYDATA — PHY Data Register (`0x64`, reset 0)
 
@@ -909,7 +911,7 @@ access goes through **PHYCR (`0x60`)** and **PHYDATA (`0x64`)**. [DS §14.4.6 p.
   - `PHYDATA_MIIWDATA(x)` = `x & 0xffff`
 :::
 
-[DS §14.3 p.139–140](#sources) + `[ftgmac100.h](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h)`.
+[DS §14.3 p.139–140](#sources) + [`ftgmac100.h`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h).
 
 ### 7.3 Clause-22 frame format
 
@@ -950,7 +952,7 @@ The MDIO bit stream is sampled on the rising edge of MDC [DS §14.4.6 p.150]:
 
 ### 7.4 How the driver issues a read / write
 
-Sequence used by `[ftgmac100.c](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.c)` (`ftgmac100_mdiobus_read`/`_write`), consistent with
+Sequence used by [`ftgmac100.c`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.c) (`ftgmac100_mdiobus_read`/`_write`), consistent with
 the datasheet:
 
 - **Read (register r on PHY p):** write `PHYCR = PHYAD(p) | REGAD(r) | MDC_CYCTHR |
@@ -960,7 +962,7 @@ the datasheet:
   `PHYCR = PHYAD(p) | REGAD(r) | MDC_CYCTHR | MIIWR` (set bit 27). Poll PHYCR until
   `MIIWR` (bit 27) auto-clears.
 
-[DS §14.3 p.139 + §14.4.6 p.150](#sources), `[ftgmac100.c](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.c)`.
+[DS §14.3 p.139 + §14.4.6 p.150](#sources), [`ftgmac100.c`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.c).
 
 :::{note}
 **RMII / PHY-mode caveat observed on the KGPE-D16 rig.** With the DT set to the real
@@ -969,8 +971,8 @@ driver logs `Unsupported PHY mode rmii !` and never calls `adjust_link(up)`, so
 `MACCR` stays 0 and `eth0` gets no carrier. The MAC-clock rate was ruled out as the
 cause (see [`0002-ftgmac100-ast2050-macclk.patch`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch), which leaves MACCLK at the U-Boot
 default and, tested on real HW, does **not** fix RMII TX). Details:
-`asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md`,
-`asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch`.
+[`asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md),
+[`asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch).
 :::
 
 ---
@@ -1298,7 +1300,9 @@ fault), bit 3 `LP_NP_ABLE`, bit 2 `NP_ABLE`, bit 1 `PAGE_RX`, bit 0 `LP_NW_ABLE`
 * - 17
   - LBREMR
   - 15 RPTR / 12 LDPS / 11 AnalogOFF / 9 LB / 8 F_Link_10 / 7 F_Link_100 / **1 FXMODE** / **0 RMIIMODE**
-  - Loopback/bypass/error-mask; **bit 0 `RMIIMODE` (RO) indicates RMII mode is enabled**, bit 1 `FXMODE` indicates fibre mode.
+  - Loopback/bypass/error-mask:
+    - **bit 0 `RMIIMODE` (RO) indicates RMII mode is enabled**
+    - bit 1 `FXMODE` indicates fibre mode
 * - 18
   - REC
   - 15:0
@@ -1328,7 +1332,8 @@ strapping**, not by a writeable register — register 17 bit 0 (`RMIIMODE`) is a
 - The mainline driver treats RMII RCLK as an optional clock ("RCLK is for RMII,
   typically used for NCSI"), skipping it for the AST2400-class MAC; on AST2050 the
   50 MHz refclk path must physically exist for RMII TX/RX to clock.
-  [`ftgmac100.c`, `asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch`](#sources)
+  [`ftgmac100.c`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.c),
+  [`0002-ftgmac100-ast2050-macclk.patch`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch)
 
 RMII/MII AC timing (for board bring-up): TX/RX clock cycle 40 ns (25 MHz MII), data
 output setup 30 ns / hold 2.5 ns, data input setup 5 ns / hold 0 ns. [DS §4.7.2 p.68](#sources)
@@ -1440,7 +1445,7 @@ Project reverse-engineering / on-hardware evidence (private analysis repo
 - `asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md` — U-Boot-vs-Linux MAC/SCU
   register dumps over P2A, the `MACCR=0x80500/0x8050F` worked example, TX-ring probe,
   and the `ndo_open`/MACCR-write-stall root-cause trace.
-- `asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch` — the
+- [`asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch) — the
   AST2050 MACCLK behaviour + the note that MAC-clock rate is not the RMII-TX cause.
 - `asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md` and
   `asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md` — FTGMAC100 driver / PHY support,

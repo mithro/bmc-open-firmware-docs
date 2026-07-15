@@ -80,13 +80,13 @@
   <text class="clk" x="598" y="264" text-anchor="middle">50 MHz RMII REF_CLK</text>
 
   <!-- PHY -> magnetics -->
-  <line class="wire" x1="696" y1="198" x2="738" y2="198" marker-start="url(#an)" marker-end="url(#an)"/>
+  <line class="wire" x1="696" y1="198" x2="730" y2="198" marker-start="url(#an)" marker-end="url(#an)"/>
 
   <!-- magnetics -->
-  <rect class="box gold" x="740" y="152" width="84" height="92" rx="9"/>
-  <text class="h" x="782" y="192" text-anchor="middle">Magnetics</text>
-  <text class="m" x="782" y="212" text-anchor="middle">isolation</text>
-  <text class="m" x="782" y="228" text-anchor="middle">transformer</text>
+  <rect class="box gold" x="732" y="152" width="92" height="92" rx="9"/>
+  <text class="h" x="778" y="192" text-anchor="middle">Magnetics</text>
+  <text class="m" x="778" y="212" text-anchor="middle">isolation</text>
+  <text class="m" x="778" y="228" text-anchor="middle">transformer</text>
 
   <!-- magnetics -> RJ45 -->
   <line class="wire" x1="824" y1="198" x2="850" y2="198" marker-start="url(#an)" marker-end="url(#an)"/>

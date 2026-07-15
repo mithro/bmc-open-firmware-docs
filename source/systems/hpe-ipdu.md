@@ -57,7 +57,7 @@ TAP IDCODE is `0x09105031`.
 The Core Unit controller board is a single-SoC design: the NS9360 is the only
 general-purpose processor. The MAXQ3180 (metering) and TMP89FM42 (display) are
 satellite devices on dedicated serial links, and the Ethernet PHY hangs off the
-NS9360 MII/MAC. `[ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md)`
+NS9360 MII/MAC. [`ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md)
 
 ```{list-table} Signal-chain overview
 :header-rows: 1
@@ -160,15 +160,15 @@ The HPE iPDU board signal chain around the NS9360.
   - NS9360 `bist_en_n` (BGA V5)
 ```
 
-Sources: `[ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md)`, `[HEADERS-J1-J6.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/HEADERS-J1-J6.md)`. Physical form factors are
+Sources: [`ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md), [`HEADERS-J1-J6.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/HEADERS-J1-J6.md). Physical form factors are
 confirmed from board photos; exact J1/J6 pin-to-signal mapping still requires
-board tracing (open item in `[STATUS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/STATUS.md)`).
+board tracing (open item in [`STATUS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/STATUS.md)).
 
 ### J1 — 20-pin ARM JTAG (standard Multi-ICE pinout)
 
 J1's ribbon form factor matches the standard 20-pin ARM JTAG connector used in
 the NS9360 reference design ("JTAG 20 PIN HEADER", `HEADER 10X2.1SP`). If J1
-follows that standard, the pinout is: `[HEADERS-J1-J6.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/HEADERS-J1-J6.md)`
+follows that standard, the pinout is: [`HEADERS-J1-J6.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/HEADERS-J1-J6.md)
 
 ```{list-table} J1 candidate pinout (standard ARM 20-pin JTAG)
 :header-rows: 1
@@ -280,14 +280,14 @@ follows that standard, the pinout is: `[HEADERS-J1-J6.md](https://github.com/mit
 ```
 
 - TAP parameters (confirmed on the NS9360 via Amontec JTAGkey): **IRLen = 4,
-  IDCODE = 0x09105031**, core = `arm926ejs`, little-endian. `[HEADERS-J1-J6.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/HEADERS-J1-J6.md)`
+  IDCODE = 0x09105031**, core = `arm926ejs`, little-endian. [`HEADERS-J1-J6.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/HEADERS-J1-J6.md)
 - ARM debug is gated by `bist_en_n` (V5). Production boards strap it low
   (debug disabled) — OpenOCD then reads "unknown EmbeddedICE version (comms
   ctrl: 0x00000000)". Re-strapping the "BIST EN" test point to a pull-up
-  enables halt-mode debug. `[HEADERS-J1-J6.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/HEADERS-J1-J6.md)`
+  enables halt-mode debug. [`HEADERS-J1-J6.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/HEADERS-J1-J6.md)
 - The ARM926EJ-S uses **EmbeddedICE-RT over raw JTAG** (not CoreSight/SWD), so
   CMSIS-DAP / SWD-only probes cannot debug it; J-Link, FT2232H (TUMPA/JTAGkey),
-  or an RPi `bcm2835gpio` bitbang adapter are required. `[HEADERS-J1-J6.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/HEADERS-J1-J6.md)`
+  or an RPi `bcm2835gpio` bitbang adapter are required. [`HEADERS-J1-J6.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/HEADERS-J1-J6.md)
 
 ---
 

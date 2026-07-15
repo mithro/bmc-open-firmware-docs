@@ -7,10 +7,10 @@ mechanisms** (AHB remap, the **P2A** PCIe-to-AHB bridge, and the **iLPC-to-AHB**
 bridge) that provide out-of-band bring-up on a dead-firmware board. The UARTs,
 VIC and timers are on {doc}`uart-vic-timers`.
 
-Citations use these short forms: `[DS §N p.P](#sources)` = the *AST2050/AST1100 A3
+Citations use these short forms: [DS §N p.P](#sources) = the *AST2050/AST1100 A3
 Datasheet V1.05* (25 May 2010), chapter N / printed page P; repository filenames
-(e.g. `[g3-vic patch](#sources)`, `[TIMER-RCA](#sources)`, `[P2A-BOOT](#sources)`, `[CULVERT-G3](#sources)`,
-`[hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)`, `[ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h)`) = hardware-verified reverse-engineering in the
+(e.g. [g3-vic patch](#sources), [TIMER-RCA](#sources), [P2A-BOOT](#sources), [CULVERT-G3](#sources),
+[`hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h), [`ast2050.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h)) = hardware-verified reverse-engineering in the
 program repo; named URLs = external cross-references (see **Sources**). Every
 load-bearing value is backed by at least two of these.
 
@@ -20,12 +20,12 @@ The AST2050 presents itself to the host over a 32-bit / 33 MHz **PCI slave**
 function (the "PCIe/VGA endpoint" of a board like the C410X is this PCIS block).
 The endpoint fronts three internal engines — the **VGA display controller**, the
 **2D graphics engine**, and the **P2A bridge** — sharing the top of SDRAM as a
-frame buffer. `[DS §33.1 p.363](#sources)`, `[DS §34.1 p.369](#sources)`
+frame buffer. [DS §33.1 p.363](#sources), [DS §34.1 p.369](#sources)
 
 ### PCI-slave configuration space (PCIS)
 
 13 PCI config registers; `Init` values reflect the power-on defaults.
-`[DS §33 p.363-368](#sources)`
+[DS §33 p.363-368](#sources)
 
 ```{list-table} PCI Slave Controller config registers
 :header-rows: 1
@@ -42,7 +42,11 @@ frame buffer. `[DS §33.1 p.363](#sources)`, `[DS §34.1 p.369](#sources)`
 * - `0x04`
   - **PCIS04** Command/Status
   - `0x0210_0000`
-  - Cmd bit1 mem-space-enable, bit0 IO-space-enable, bit10 INT-disable; status: caps-list=1, DEVSEL=medium
+  - Command/status:
+    - bit1 mem-space-enable
+    - bit0 IO-space-enable
+    - bit10 INT-disable
+    - status: caps-list=1, DEVSEL=medium
 * - `0x08`
   - **PCIS08** Class/Revision
   - `0x0X00_0010`
@@ -86,7 +90,9 @@ frame buffer. `[DS §33.1 p.363](#sources)`, `[DS §34.1 p.369](#sources)`
 * - `0x44`
   - **PCIS44** PM Control/Status
   - `0x0000_0000`
-  - `[1:0]` power state D0–D3 (also gates HSYNC/VSYNC/DAC); bit8 PME-enable, bit15 PME-status
+  - - `[1:0]` power state D0–D3 (also gates HSYNC/VSYNC/DAC)
+    - bit8 PME-enable
+    - bit15 PME-status
 ```
 
 ```{admonition} PCIS14 second 64 KB = the P2A window
@@ -95,20 +101,20 @@ frame buffer. `[DS §33.1 p.363](#sources)`, `[DS §34.1 p.369](#sources)`
 BAR1 carves 128 KB of host MMIO into **two 64 KB halves**: the first is the VGA
 MMIO aperture; the **second 64 KB is the P2A (P-Bus-to-AHB) bridge window** —
 `MMIOBASE + 0x10000 … MMIOBASE + 0x1FFFF`. That second half is exactly what
-`culvert p2a vga` drives to reach the BMC's AHB from the host. `[DS §33 p.366](#sources)`,
-`[DS §36.2 p.400](#sources)`, `[CULVERT-G3](#sources)`
+`culvert p2a vga` drives to reach the BMC's AHB from the host. [DS §33 p.366](#sources),
+[DS §36.2 p.400](#sources), [CULVERT-G3](#sources)
 ```
 
 `PCIS04[1]` (memory-space-enable) and `PCIS04[0]` (IO-space-enable) gate whether
 the endpoint answers host cycles at all. `PCIS44[1:0]` maps PCI power states to
 display behaviour: D0=Active (HSYNC/VSYNC/DAC on), D1=Standby, D2=Suspend,
-D3=Off. `[DS §33 p.364, p.368](#sources)`
+D3=Off. [DS §33 p.364, p.368](#sources)
 
 ### VGA display controller
 
 IBM-VGA-compatible CRTC with a 200 MHz triple-DAC, up to 1920×1200@60, VESA DDC,
 and a 64×64 hardware overlay cursor (§37). The standard VGA register file is at
-its legacy I/O addresses (also memory-mapped for advanced OSes). `[DS §34 p.369](#sources)`
+its legacy I/O addresses (also memory-mapped for advanced OSes). [DS §34 p.369](#sources)
 
 ```{list-table} VGA display controller — standard registers (legacy I/O)
 :header-rows: 1
@@ -128,7 +134,8 @@ its legacy I/O addresses (also memory-mapped for advanced OSes). `[DS §34 p.369
   - feature control bits `[3]`, `[1:0]`
 * - `0x3C2`(R)
   - **VGAIR0** Input Status 0
-  - bit7 vertical-retrace interrupt flag; bit4 DAC comparator readback
+  - - bit7 vertical-retrace interrupt flag
+    - bit4 DAC comparator readback
 * - `0x3BA/3DA`(R)
   - **VGAIR1** Input Status 1
   - diagnostic `[5:4]`, vertical-retrace (3), display-enable inversion (0)
@@ -151,7 +158,7 @@ its legacy I/O addresses (also memory-mapped for advanced OSes). `[DS §34 p.369
 
 The **extended CRT registers** (§34.9, p.382+) carry the Aspeed-specific
 frame-buffer base, scan pitch, and mode controls — programmed by the display
-driver on top of DRAM already initialised by the ARM. `[DS §34.1 p.369](#sources)`
+driver on top of DRAM already initialised by the ARM. [DS §34.1 p.369](#sources)
 
 ### Framebuffer / VGA memory carve-out (SCU70[3:2])
 
@@ -173,8 +180,8 @@ VGA shares the **top** of SDRAM. Its size is a hardware trap:
   - 64 MB
 ```
 
-`[DS §18 p.218](#sources)`. The absolute ARM addresses follow the *DRAM size × VGA size*
-map in `[DS §9 p.98](#sources)`. For the KGPE-D16 (64 MB DRAM, `SCU70[3:2]=00` → 8 MB VGA)
+[DS §18 p.218](#sources). The absolute ARM addresses follow the *DRAM size × VGA size*
+map in [DS §9 p.98](#sources). For the KGPE-D16 (64 MB DRAM, `SCU70[3:2]=00` → 8 MB VGA)
 this is **`0x43800000–0x43FFFFFF`**, and the host's x86 display actively writes it
 through the VGA PCI function.
 
@@ -185,7 +192,7 @@ If Linux is allowed to allocate from the 8 MB VGA region, the host's live VGA
 traffic corrupts kernel pages (observed: init SIGILL). Every Aspeed board DT
 reserves it `no-map`; the G3 fix:
 `reserved-memory { vga_memory: framebuffer@43800000 { no-map; reg = <0x43800000 0x800000>; }; }`.
-`[TIMER-RCA](#sources)`
+[TIMER-RCA](#sources)
 ```
 
 VGA-related SCU controls: `SCU0C[5]` gates the VGA display clock (DCLK);
@@ -193,13 +200,13 @@ VGA-related SCU controls: `SCU0C[5]` gates the VGA display clock (DCLK);
 outside trapping; `SCU2C[3]` disables the video DAC; `SCU18` holds the VGA
 cursor / scratch-register change interrupts; `SCU40/44` are the ARM↔host VGA
 handshake scratch (e.g. `SCU40[31:24]=0x5A` "boot to Linux properly").
-`[DS §18 p.209, p.213-214, p.211, p.215-216](#sources)`
+[DS §18 p.209, p.213-214, p.211, p.215-216](#sources)
 
 ### Video (compression) Engine
 
 Separate from the VGA display path: a JPEG/VQ capture-and-compress engine for KVM
 (`Base = 0x1E700000`, §20). It reads the VGA output (or external DVO) via M-Bus,
-up to 1920×1200×32bpp@60. Register highlights: `[DS §20 p.232-235](#sources)`
+up to 1920×1200×32bpp@60. Register highlights: [DS §20 p.232-235](#sources)
 
 ```{list-table} Video Engine — key registers (offsets from 0x1E700000)
 :header-rows: 1
@@ -213,11 +220,17 @@ up to 1920×1200×32bpp@60. Register highlights: `[DS §20 p.232-235](#sources)`
   - Unlock with `0x1A03_8AA8`; reads `1` unlocked / `0` locked; reset by POR/WDT/SCU-SW-reset
 * - `0x004`
   - **VR004** Sequence Control
-  - bit4 enable/trigger compression, bit5 auto multi-frame, bit3 capture multi-frame, bit7 mode-change watchdog, `[11:10]` YUV444/YUV420, bit18 compress-idle, bit16 capture-idle status
+  - - bit4 enable/trigger compression
+    - bit5 auto multi-frame
+    - bit3 capture multi-frame
+    - bit7 mode-change watchdog
+    - `[11:10]` YUV444/YUV420
+    - bit18 compress-idle
+    - bit16 capture-idle status
 ```
 
 The Video Engine clock (ECLK) is gated by `SCU0C[0]`; its reset is `SCU04[6]`.
-`[DS §18 p.210, p.207](#sources)`
+[DS §18 p.210, p.207](#sources)
 
 ---
 
@@ -225,12 +238,12 @@ The Video Engine clock (ECLK) is gated by `SCU0C[0]`; its reset is `SCU04[6]`.
 
 A USB2.0 (480 Mb/s, FS/LS-capable) **virtual hub**: one hub device port + seven
 downstream device controllers, 21 programmable endpoints, an integrated DMA
-engine (bypasses AHB via M-Bus), 32-stage descriptor mode. `[DS §15.1-15.2 p.154](#sources)`
+engine (bypasses AHB via M-Bus), 32-stage descriptor mode. [DS §15.1-15.2 p.154](#sources)
 
 ```{admonition} Base address 0x1E6A0000
 :class: note
 
-`Base of USB Hub = 0x1E6A0000`; physical = base + offset. `[DS §15.3 p.155](#sources)`
+`Base of USB Hub = 0x1E6A0000`; physical = base + offset. [DS §15.3 p.155](#sources)
 ```
 
 ### USB register-space layout
@@ -268,7 +281,7 @@ engine (bypasses AHB via M-Bus), 32-stage descriptor mode. `[DS §15.1-15.2 p.15
   - Programmable Endpoint 0–20 registers
 ```
 
-`[DS §15.3.1 p.155](#sources)`
+[DS §15.3.1 p.155](#sources)
 
 ### HUB00 — Root Function Control & Status (offset 0x00)
 
@@ -323,7 +336,7 @@ engine (bypasses AHB via M-Bus), 32-stage descriptor mode. `[DS §15.1-15.2 p.15
   - `1`=connect
 ```
 
-`[DS §15.3.2 p.156-157](#sources)`
+[DS §15.3.2 p.156-157](#sources)
 
 ```{admonition} USB2.0 bring-up order
 :class: note
@@ -333,7 +346,7 @@ engine (bypasses AHB via M-Bus), 32-stage descriptor mode. `[DS §15.1-15.2 p.15
 3. De-assert the PHY reset: `HUB00[11]=1`.
 4. Start using the controller.
 
-`[DS §18 p.209](#sources)` (SCU0C[14] note), `[DS §15.3.2 p.156](#sources)`. (USB1.1 clock is gated
+[DS §18 p.209](#sources) (SCU0C[14] note), [DS §15.3.2 p.156](#sources). (USB1.1 clock is gated
 separately at `SCU0C[7]`.)
 ```
 
@@ -349,7 +362,7 @@ dead-firmware board. [CVE-2019-6260 / Pantsdown][pantsdown]
 
 ### AHB Bus Controller — unlock key + boot-area remap
 
-`Base of AHBC = 0x1E600000`; 4 registers. `[DS §12.3 p.114](#sources)`, `[hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)`
+`Base of AHBC = 0x1E600000`; 4 registers. [DS §12.3 p.114](#sources), [`hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)
 
 ```{list-table} AHB Bus Controller registers
 :header-rows: 1
@@ -363,17 +376,26 @@ dead-firmware board. [CVE-2019-6260 / Pantsdown][pantsdown]
   - Write **`0xAEED1A03`** → regs `0x80–0x8C` become programmable; write anything else locks them. Read `1`=unlocked, `0`=locked
 * - `0x80`
   - **AHBC80** Priority Control
-  - Two-level round-robin master priority; bit1=P-Bus-to-AHB bridge, bit2=CPU-instr, bit3=CPU-data, bit4=PCI host, bit5=LPC master
+  - Two-level round-robin master priority:
+    - bit1=P-Bus-to-AHB bridge
+    - bit2=CPU-instr
+    - bit3=CPU-data
+    - bit4=PCI host
+    - bit5=LPC master
 * - `0x88`
   - **AHBC88** Interrupt Control
-  - bit24 int-status (W0-to-clear), bit16 int-enable, `[21:20]` decode response (00=OK, 01=ERROR)
+  - - bit24 int-status (W0-to-clear)
+    - bit16 int-enable
+    - `[21:20]` decode response (00=OK, 01=ERROR)
 * - `0x8C`
   - **AHBC8C** Address Remapping
-  - **bit0 Boot-area remap**: `0`=`0x0000_0000–0x0FFF_FFFF` → Static Memory (flash), `1`=→ SDRAM. bit4 PCI-remap-0 (`0x6000_0000–0x7FFF_FFFF`→PCI host), bit5 PCI-remap-1 (`0x8000_0000–0xFFFF_FFFF`→PCI host)
+  - - **bit0 Boot-area remap**: `0`=`0x0000_0000–0x0FFF_FFFF` → Static Memory (flash), `1`=→ SDRAM
+    - bit4 PCI-remap-0 (`0x6000_0000–0x7FFF_FFFF`→PCI host)
+    - bit5 PCI-remap-1 (`0x8000_0000–0xFFFF_FFFF`→PCI host)
 ```
 
 The DRAM-at-`0x0` boot trick unlocks `AHBC00 = 0xAEED1A03` then sets
-`AHBC8C[0] = 1`. `[P2A-BOOT](#sources)`, `[hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)`
+`AHBC8C[0] = 1`. [P2A-BOOT](#sources), [`hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)
 
 ```{admonition} The boot-area remap resets on HRST_N
 :class: warning
@@ -384,14 +406,14 @@ boot re-fetches `0x0` = (dead) flash. The working P2A-only boot instead freezes
 the ARM across the reset with `SCU70[1:0]=11` ("Disable ARM CPU operation", which
 survives `HRST_N` because the SCU is `PWRSTNin`-only), re-sets the remap, then
 re-enables the ARM with `SCU70[1:0]=10`. DDR2 and the SCU survive the reset.
-`[P2A-BOOT](#sources)`, `[DS §18 p.219](#sources)`
+[P2A-BOOT](#sources), [DS §18 p.219](#sources)
 ```
 
 ### P2A — P-Bus (PCIe) to AHB bridge
 
 A **one-way** bridge: host PCI cycles into the second 64 KB of PCIS14 (`MMIOBASE`)
 are converted to AHB accesses. `Base = MMIOBASE` (from PCI config). Two registers.
-`[DS §36 p.400](#sources)`
+[DS §36 p.400](#sources)
 
 ```{list-table} P2A bridge registers
 :header-rows: 1
@@ -409,8 +431,8 @@ are converted to AHB accesses. `Base = MMIOBASE` (from PCI config). Two register
 ```
 
 The two documented uses are **(1)** host-side flash update and **(2)** HW/SW
-debugging. `[DS §36.1 p.400](#sources)`. `SCU2C[8]` **Disable PCI-slave-to-AHB bus bridge**
-is the coarse master gate (`0`=enabled, `1`=disabled). `[DS §18 p.214](#sources)`
+debugging. [DS §36.1 p.400](#sources). `SCU2C[8]` **Disable PCI-slave-to-AHB bus bridge**
+is the coarse master gate (`0`=enabled, `1`=disabled). [DS §18 p.214](#sources)
 
 ```{admonition} P2A behaviour verified on the KGPE-D16
 :class: note
@@ -419,14 +441,14 @@ Over `culvert p2a vga`, P2A reads/writes DRAM (`0x40000000`), the SCU
 (`SCU7C=0x00000202`), and the Timer freely, and can drive UART2 to a live console
 — but it is **blind to the `0x1E6C0000` VIC block** (reads 0, writes dropped) and
 does **not** serve the external SMC flash window (`0x14000000` reads 0 on a
-dead-firmware board). `[TIMER-RCA](#sources)`, `[CULVERT-G3](#sources)`
+dead-firmware board). [TIMER-RCA](#sources), [CULVERT-G3](#sources)
 ```
 
 ### iLPC-to-AHB bridge (LPC → AHB)
 
 The LPC Slave Controller (`Base = 0x1E789000`, §30) contains a second host→AHB
 back door reached over the **LPC bus** rather than PCIe. It is steered by four
-Host-Interface-Control registers. `[DS §30 p.319-321](#sources)`
+Host-Interface-Control registers. [DS §30 p.319-321](#sources)
 
 ```{list-table} iLPC-to-AHB bridge registers (offsets from 0x1E789000)
 :header-rows: 1
@@ -437,10 +459,14 @@ Host-Interface-Control registers. `[DS §30 p.319-321](#sources)`
   - Function
 * - `0x80`
   - **HICR5**
-  - bit8 **ENL2H** = Enable LPC-to-AHB bridge; `[31:24]` **HWMBASE** = LPC-to-AHB address-decode base `[31:24]`; bit10 ENFWH, bit9 ENINT_PME
+  - - bit8 **ENL2H** = Enable LPC-to-AHB bridge
+    - `[31:24]` **HWMBASE** = LPC-to-AHB address-decode base `[31:24]`
+    - bit10 ENFWH
+    - bit9 ENINT_PME
 * - `0x84`
   - **HICR6**
-  - `[27:24]` **HWNCARE** = address-decode range (don't-care) control `[27:24]`; `[2:0]` PME / snoop interrupt status (W1C)
+  - - `[27:24]` **HWNCARE** = address-decode range (don't-care) control `[27:24]`
+    - `[2:0]` PME / snoop interrupt status (W1C)
 * - `0x88`
   - **HICR7**
   - `[31:16]` **ADRBASE** = remapping address base `[31:16]` of the LPC-to-AHB bridge
@@ -455,20 +481,20 @@ Host-Interface-Control registers. `[DS §30 p.319-321](#sources)`
 `HICR5[8] ENL2H` tells you whether the LPC-to-AHB bridge is *live*. On the
 KGPE-D16, `0x1E789080` (HICR5) reads **`0x98000000`** → HWMBASE = `0x98`, **ENL2H
 = 0 → the iLPC bridge is Disabled** (only P2A is usable in-band). culvert's
-`aspeed,ast2050-ilpc-ahb-bridge` ops read exactly this bit. `[CULVERT-G3](#sources)`
+`aspeed,ast2050-ilpc-ahb-bridge` ops read exactly this bit. [CULVERT-G3](#sources)
 ```
 
 Related: `LHCR0[12]` (LPC Host Control 0, `0x1E7890AC`... offset `0xA0`) —
 **Disable vector-interrupt-output-connected-to-host-serial-IRQ** — is the rev-A2
 feature that lets the host consume the VIC's `nIRQ` over the KCS #2 serial IRQ
-when the ARM is disabled (see also `HICR5[19:16]`/`HICR5[13:12]`). `[DS §30 p.322](#sources)`,
-`[DS §7 p.7](#sources)`
+when the ARM is disabled (see also `HICR5[19:16]`/`HICR5[13:12]`). [DS §30 p.322](#sources),
+[DS §7 p.7](#sources)
 
 ### SCU posture: clock gates, straps, reset flags
 
 The bits that decide whether these bridges/blocks are alive and how the SoC boots.
 `Base of SCU = 0x1E6E2000`; unlock with `SCU00 = 0x1688A8A8` (RMW to preserve the
-strap). `[DS §18 p.205](#sources)`, `[P2A-BOOT](#sources)`
+strap). [DS §18 p.205](#sources), [P2A-BOOT](#sources)
 
 ```{list-table} Key SCU control/status bits
 :header-rows: 1
@@ -482,29 +508,63 @@ strap). `[DS §18 p.205](#sources)`, `[P2A-BOOT](#sources)`
   - Write `0x1688A8A8` to unlock SCU regs; reads `0x1` unlocked / `0x0` locked
 * - `SCU04`
   - System Reset Control (init `0x000FFE5C`)
-  - Per-block async resets: bit19 PCI-host, bit14 USB2.0, bit12/11 MAC2/MAC1, bit8 **PCI-slave+VGA**, bit6 Video, bit5 LPC, bit4 HACE, bit2 I2C, bit1 AHB-bridges, bit0 SDRAM
+  - Per-block async resets:
+    - bit19 PCI-host
+    - bit14 USB2.0
+    - bit12/11 MAC2/MAC1
+    - bit8 **PCI-slave+VGA**
+    - bit6 Video
+    - bit5 LPC
+    - bit4 HACE
+    - bit2 I2C
+    - bit1 AHB-bridges
+    - bit0 SDRAM
 * - `SCU0C`
   - Clock Stop (init `0x000C3E8B`)
-  - bit15 UARTCLK, bit14 USB2.0, bit8 LPC LCLK, bit7 USB1.1 UCLK, bit5 VGA DCLK, bit4 PCI-slave BCLK, bit2 SDRAM MCLK, bit1 2D GCLK, bit0 Video ECLK (`1`=stopped)
+  - Clock-stop gates (`1`=stopped):
+    - bit15 UARTCLK
+    - bit14 USB2.0
+    - bit8 LPC LCLK
+    - bit7 USB1.1 UCLK
+    - bit5 VGA DCLK
+    - bit4 PCI-slave BCLK
+    - bit2 SDRAM MCLK
+    - bit1 2D GCLK
+    - bit0 Video ECLK
 * - `SCU2C`
   - Misc Control
-  - bit8 disable P2A bridge, bit6 disable VGA CRT, bit3 disable video DAC, bit15/14 UART1↔2 link/mux, bit12 UART ÷13 reference
+  - - bit8 disable P2A bridge
+    - bit6 disable VGA CRT
+    - bit3 disable video DAC
+    - bit15/14 UART1↔2 link/mux
+    - bit12 UART ÷13 reference
 * - `SCU30/34/38`
   - PCI config override
   - Device/Vendor, Subsystem, Class/Revision (init `0x20001A03`/`0x20001A03`/`0x03000000`)
 * - `SCU3C`
   - System-reset status/control (init `0x1`)
-  - bit3 enable external SOC reset (GPIOB7/EXTRST#), bit2 external-reset flag, **bit1 watchdog-reset flag**, bit0 power-on-reset flag (all a post-reset witness)
+  - Reset status/control (the flags are a post-reset witness):
+    - bit3 enable external SOC reset (GPIOB7/EXTRST#)
+    - bit2 external-reset flag
+    - **bit1 watchdog-reset flag**
+    - bit0 power-on-reset flag
 * - `SCU70`
   - Hardware Trapping (init `0`)
-  - **`[1:0]` ARM boot select** (`10`=boot SPI flash, `11`=disable ARM), **bit16 boot-full-speed**, `[13:12]` CPU:AHB ratio, `[11:9]` H-PLL default (100/133/166/200 MHz), `[8:6]` MAC mode, bit5 VGA-BIOS ROM, **`[3:2]` VGA memory size**, bit20 disable ARM-to-M-bus
+  - - **`[1:0]` ARM boot select** (`10`=boot SPI flash, `11`=disable ARM)
+    - **bit16 boot-full-speed**
+    - `[13:12]` CPU:AHB ratio
+    - `[11:9]` H-PLL default (100/133/166/200 MHz)
+    - `[8:6]` MAC mode
+    - bit5 VGA-BIOS ROM
+    - **`[3:2]` VGA memory size**
+    - bit20 disable ARM-to-M-bus
 * - `SCU7C`
   - Silicon Revision (R)
   - `0x00000202` = AST2050/AST1100-A2/A3
 ```
 
-`[DS §18 p.205-220](#sources)`. `SCU3C[1]` (watchdog-reset flag) is the clean post-reset
-"did the WDT fire?" witness used by the P2A boot sequence. `[P2A-BOOT](#sources)`
+[DS §18 p.205-220](#sources). `SCU3C[1]` (watchdog-reset flag) is the clean post-reset
+"did the WDT fire?" witness used by the P2A boot sequence. [P2A-BOOT](#sources)
 
 ---
 
@@ -529,7 +589,7 @@ strap). `[DS §18 p.205](#sources)`, `[P2A-BOOT](#sources)`
 - **Uncertainty — RTC INT polarity:** Table 36 lists RTC INT#22–26 as "edge
   trigger and both edge"; the driver programs them DUAL (VIC28) with SENSE=0.
   Not independently exercised on hardware (the timer/eth path was), so the
-  both-edge RTC handling is datasheet-derived, not HW-proven. `[g3-vic patch](#sources)`
+  both-edge RTC handling is datasheet-derived, not HW-proven. [g3-vic patch](#sources)
 - **Uncertainty — VIC34:** the datasheet defines VIC30 (reserved) and VIC38 but
   nothing at `0x34`; treated here as undefined/reserved. No register is documented
   there.

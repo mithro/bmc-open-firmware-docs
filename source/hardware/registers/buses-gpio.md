@@ -165,9 +165,12 @@ Global registers occupy `0x000`–`0x03F`; each device occupies a 64-byte
 * - `0x04`
   - I2CG04 I2C6/I2C7 Pin Multiplexing
   - RW
-  - Bits 1:0 select the pin mux for I2C1/I2C2/I2C6/I2C7: `00` = 7-set I2C;
-    `01` = 6-set I2C + 2 Alert (I2C1/2); `10` = 6-set I2C + 1 FML (I2C1);
-    `11` = 5-set I2C + 2 FML (I2C1/2). Bits 31:2 reserved [DS §31.4.2 p.335](#sources)
+  - Bits 1:0 select the pin mux for I2C1/I2C2/I2C6/I2C7
+    (bits 31:2 reserved) [DS §31.4.2 p.335](#sources):
+    - `00` = 7-set I2C
+    - `01` = 6-set I2C + 2 Alert (I2C1/2)
+    - `10` = 6-set I2C + 1 FML (I2C1)
+    - `11` = 5-set I2C + 2 FML (I2C1/2)
 ```
 
 ### Per-device register map (offsets within each `0x40` window)

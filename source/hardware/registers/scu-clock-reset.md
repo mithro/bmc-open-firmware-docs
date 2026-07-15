@@ -1170,7 +1170,7 @@ silicon check is dead/unused (the subsequent `set_MPLL` writes literal
 
 - **AST2050/AST1100 A3 Datasheet V1.05** (in-repo:
   `datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`), sections cited as
-  `[DS …](#sources)`:
+  [DS …](#sources):
   - §8.1 Clock Information (p.84); §8.2 Clock & Reset Tree Mapping (p.85);
     §8.3 Reset Tree Control Table (p.86); §8.4 Symbol Description (p.87);
     §8.5 Clock Tree Architecture, Figures 22–37 (p.88-93);

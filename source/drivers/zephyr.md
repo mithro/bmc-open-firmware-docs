@@ -7,7 +7,7 @@ first-class architecture port.
 
 ## ARMv5 / ARM926EJ-S architecture port
 
-Added as topic branches in `mithro/zephyr`:
+Added as topic branches in [`mithro/zephyr`](https://github.com/mithro/zephyr):
 
 1. **`arch-arm926ejs`** — ARMv5TE architecture support: exception/interrupt
    model, MMU/cache setup, system timer, boot/startup, and the interrupt

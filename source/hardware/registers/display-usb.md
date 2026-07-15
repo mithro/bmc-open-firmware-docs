@@ -18,7 +18,7 @@ for the equivalent block it is cross-checked and cited.
 
 Citations use these short forms:
 
-- `[DS §N p.P](#sources)` — the A3 datasheet, chapter N, printed page P (= PDF page).
+- [DS §N p.P](#sources) — the A3 datasheet, chapter N, printed page P (= PDF page).
 - Named URLs — mainline Linux drivers and specs (see [Sources](#sources)).
 
 ```{admonition} G3 vs G4+ — offsets differ, but these three blocks mostly match
@@ -53,7 +53,7 @@ One hub controller plus **7 downstream device controllers** and a pool of **21
 programmable endpoints** that can be assigned to any device. USB 2.0 HS/FS,
 integrated DMA (M-bus, bypasses AHB), 32-stage descriptor rings per endpoint,
 2 KB of SRAM split into 16×128-byte IN-transmit pages, RC-independent remote
-wake-up. `[DS §15.1–15.2 p.154](#sources)`
+wake-up. [DS §15.1–15.2 p.154](#sources)
 
 ### 1.1 Address map (offset from `0x1E6A0000`)
 
@@ -93,7 +93,7 @@ wake-up. `[DS §15.1–15.2 p.154](#sources)`
 The **SETUP data buffers** are 8-byte scratch areas holding the raw 8-byte USB
 `SETUP` packet (`bmRequestType`, `bRequest`, `wValue`, `wIndex`, `wLength`) of
 the most recent CONTROL transfer for the root device and for each downstream
-device; they have no bit-field structure. `[DS §15.3.1 p.155](#sources)`
+device; they have no bit-field structure. [DS §15.3.1 p.155](#sources)
 
 ### 1.2 Root/Global (hub) register file `HUB00…HUB3C`
 
@@ -171,7 +171,7 @@ device; they have no bit-field structure. `[DS §15.3.1 p.155](#sources)`
   - RW
 ```
 
-`[DS §15.3.2 p.156–164](#sources)`
+[DS §15.3.2 p.156–164](#sources)
 
 ```{list-table} HUB00 (0x00) — Root Function Control & Status; reset 0
 :header-rows: 1
@@ -421,7 +421,7 @@ device; they have no bit-field structure. `[DS §15.3.1 p.155](#sources)`
 
 Soft reset clears controller status only (not all registers); for a full reset
 use SCU04. Set the bit to 1 to start, 0 to stop; no delay needed between.
-`[DS §15.3.2 p.162](#sources)`
+[DS §15.3.2 p.162](#sources)
 
 ```{list-table} HUB24 (0x24) — USB Status (debug, read-only); reset X
 :header-rows: 1
@@ -601,12 +601,12 @@ use SCU04. Set the bit to 1 to start, 0 to stop; no delay needed between.
 ```
 
 When any HUB3C bit is non-zero the hub returns this byte on an EP1 IN poll;
-otherwise it NAKs. `[DS §15.3.2 p.164](#sources)`
+otherwise it NAKs. [DS §15.3.2 p.164](#sources)
 
 ### 1.3 Downstream Device #1–#7 register file `DEV00…DEV0C`
 
 Identical layout for each of the 7 devices; device *N* base = `0x100 + (N−1)·0x10`.
-`[DS §15.3.3 p.165–166](#sources)`
+[DS §15.3.3 p.165–166](#sources)
 
 ```{list-table} DEV00 (+0x00) — Downstream Device Function Enable Control; reset 0
 :header-rows: 1
@@ -743,7 +743,7 @@ Identical layout for each of the 7 devices; device *N* base = `0x100 + (N−1)·
 ### 1.4 Programmable Endpoint #0–#20 register file `EPP00…EPP0C`
 
 Identical layout for each of the 21 pooled endpoints; endpoint *N* base =
-`0x200 + N·0x10`. `[DS §15.3.4 p.167–171](#sources)`
+`0x200 + N·0x10`. [DS §15.3.4 p.167–171](#sources)
 
 ```{list-table} EPP00 (+0x00) — Endpoint Configuration; reset 0
 :header-rows: 1
@@ -888,7 +888,7 @@ Identical layout for each of the 21 pooled endpoints; endpoint *N* base =
 Each descriptor-ring stage is an 8-byte entry in memory (pointed to by EPP08),
 not a register in the `0x1E6A0000` window. Bits are numbered by absolute
 descriptor bit (`DES_0` = word at byte offset 0, bits 31:0; `DES_1` = word at
-byte offset 4, bits 63:32). `[DS §15.3.5 p.172–173](#sources)`
+byte offset 4, bits 63:32). [DS §15.3.5 p.172–173](#sources)
 
 ```{list-table} DES_0 (bits 31:0) — Data Buffer Base Address; reset X
 :header-rows: 1
@@ -950,7 +950,7 @@ byte offset 4, bits 63:32). `[DS §15.3.5 p.172–173](#sources)`
 ### 1.6 Register reset table (§15.3.6)
 
 Which reset source clears which register/field (Y = cleared). Registers not
-listed have no reset control. `[DS §15.3.6 p.173](#sources)`
+listed have no reset control. [DS §15.3.6 p.173](#sources)
 
 ```{list-table} Reset sources per register
 :header-rows: 1
@@ -1071,7 +1071,7 @@ listed have no reset control. `[DS §15.3.6 p.173](#sources)`
 ```
 
 *HUB00[10:8] retains its value unless it equals 111 (test loop-back), per the
-datasheet's "Others" column. `[DS §15.3.6 p.173](#sources)`
+datasheet's "Others" column. [DS §15.3.6 p.173](#sources)
 
 ### 1.7 Mainline cross-check
 
@@ -1136,10 +1136,10 @@ compresses it with a mixed JPEG + Vector-Quantisation codec. Two YUV formats
 (420/444), block-change detection, CRC scene-change detection, arbitrary down-
 scaling with a 4×2 spatial filter, 12 JPEG quality levels, optional RC4
 encryption of the output stream, and a video-mode-change watchdog. Up to
-1920×1200×32bpp @ 60 Hz; ~30 fps at 1280×1024 YUV420. `[DS §20.1–20.2 p.232–233](#sources)`
+1920×1200×32bpp @ 60 Hz; ~30 fps at 1280×1024 YUV420. [DS §20.1–20.2 p.232–233](#sources)
 
 All registers are protected by the **VR000 key** (write `0x1A03_8AA8` to unlock;
-any other value locks — registers stay readable when locked). `[DS §20.3 p.234](#sources)`
+any other value locks — registers stay readable when locked). [DS §20.3 p.234](#sources)
 
 ### 2.1 Register file overview
 
@@ -1363,7 +1363,7 @@ any other value locks — registers stay readable when locked). `[DS §20.3 p.23
 
 Undefined offsets between the rows above (e.g. `0x068`, `0x080–0x08C`,
 `0x09C–0x2FC`, `0x318–0x31C`, `0x32C–0x33C`, `0x360–0x3FC`) are not documented
-and read as reserved. `[DS §20.3 p.234–255](#sources)`
+and read as reserved. [DS §20.3 p.234–255](#sources)
 
 ### 2.2 Key bit-field registers
 
@@ -1438,7 +1438,7 @@ and read as reserved. `[DS §20.3 p.234–255](#sources)`
 
 Auto/trigger modes (VR004[3],[5]): 0,0 = single-frame S/W trigger, frame-buffer;
 0,1 = single-frame H/W auto-trigger, frame-buffer; 1,1 = multi-frame H/W
-auto-trigger, stream-buffer (1,0 = N/A). `[DS §20.3 p.235](#sources)`
+auto-trigger, stream-buffer (1,0 = N/A). [DS §20.3 p.235](#sources)
 
 ```{list-table} VR008 (0x008) — Video Control; reset 0
 :header-rows: 1
@@ -1743,10 +1743,14 @@ auto-trigger, stream-buffer (1,0 = N/A). `[DS §20.3 p.235](#sources)`
   - Reserved (must be 0)
 * - 15:11
   - RW
-  - DCT luminance quant-table select: bit[15] chooses luminance(0)/chrominance(1) table set; bit[14:11] = table #0–#11
+  - DCT luminance quant-table select:
+    - bit[15] chooses luminance(0)/chrominance(1) table set
+    - bit[14:11] = table #0–#11
 * - 10:6
   - RW
-  - DCT chrominance quant-table select: bit[10] chooses set; bit[9:6] = table #0–#11
+  - DCT chrominance quant-table select:
+    - bit[10] chooses set
+    - bit[9:6] = table #0–#11
 * - 5
   - RW
   - Enable RC4 encryption of the compressed stream
@@ -2202,7 +2206,7 @@ the *VGA Device* PCI class when enabled and *Video Device* when disabled; shares
 the top of SDRAM for its frame buffer (size set by external trapping resistors).
 Max 1920×1200 @ 60 Hz (200 MHz video clock), 200 MHz triple RAMDAC, VESA DDC,
 64×64 hardware cursor, 24-bit DVO output. Reset only by PCI-bus reset or
-power-on. `[DS §34.1–34.2 p.368–369](#sources)`
+power-on. [DS §34.1–34.2 p.368–369](#sources)
 
 Registers are accessed via **legacy VGA I/O ports** (with the 3B*/3D* mono/color
 alias and 3C4/3CE/3C0 index+data pairs) and, for the extended set, also via an
@@ -2225,34 +2229,50 @@ the board-porting-critical part.
 * - VGAER — VGA Enable
   - R/W 3C3
   - 00h
-  - [0] RW VGA enable (0 disable, 1 enable); [7:1] reserved
+  - - [0] RW VGA enable (0 disable, 1 enable)
+    - [7:1] reserved
 * - VGAMR — Miscellaneous Output
   - W 3C2 / R 3CC
   - 00h
-  - [7] vertical-sync polarity (0 +, 1 −); [6] horizontal-sync polarity; [5] page bit for odd/even; [4] reserved; [3:2] clock select (00 25.175 MHz, 01 28.322 MHz, 1x D-PLL programmed); [1] enable video memory at VGA aperture; [0] I/O address select (0 = 3Bx, 1 = 3Dx). All RW
+  - - [7] vertical-sync polarity (0 +, 1 −)
+    - [6] horizontal-sync polarity
+    - [5] page bit for odd/even
+    - [4] reserved
+    - [3:2] clock select (00 25.175 MHz, 01 28.322 MHz, 1x D-PLL programmed)
+    - [1] enable video memory at VGA aperture
+    - [0] I/O address select (0 = 3Bx, 1 = 3Dx). All RW
 * - VGAFCR — Feature Control
   - W 3BA/3DA / R 3CA
   - 00h
-  - [3] feature control bit[2]; [1:0] feature control bit[1:0]; [7:4],[2] reserved. All RW
+  - - [3] feature control bit[2]
+    - [1:0] feature control bit[1:0]
+    - [7:4],[2] reserved. All RW
 * - VGAIR0 — Input Status #0
   - R 3C2
   - 00h
-  - [7] vertical-retrace interrupt flag; [4] video DAC comparator read-back; [6:5],[3:0] reserved
+  - - [7] vertical-retrace interrupt flag
+    - [4] video DAC comparator read-back
+    - [6:5],[3:0] reserved
 * - VGAIR1 — Input Status #1
   - R 3BA/3DA
   - X1h
-  - [5:4] diagnostic (00 P2/P0, 01 P5/P4, 10 P3/P1, 11 P7/P6 — pre-RAMDAC DVO bits); [3] vertical-retrace signal; [0] inversion of display-enable (0 during DE, 1 out of DE); [7:6],[2:1] reserved
+  - - [5:4] diagnostic (00 P2/P0, 01 P5/P4, 10 P3/P1, 11 P7/P6 — pre-RAMDAC DVO bits)
+    - [3] vertical-retrace signal
+    - [0] inversion of display-enable (0 during DE, 1 out of DE)
+    - [7:6],[2:1] reserved
 * - VGAFBR0 — Frame Buffer Segment Address #0
   - R/W 3CD
   - 00h
-  - [7:4] segment read address bit[3:0]; [3:0] segment write address bit[3:0]
+  - - [7:4] segment read address bit[3:0]
+    - [3:0] segment write address bit[3:0]
 * - VGAFBR1 — Frame Buffer Segment Address #1
   - R/W 3CB
   - 00h
-  - [7:4] segment read address bit[7:4]; [3:0] segment write address bit[7:4]
+  - - [7:4] segment read address bit[7:4]
+    - [3:0] segment write address bit[7:4]
 ```
 
-`[DS §34.3 p.369–371](#sources)`
+[DS §34.3 p.369–371](#sources)
 
 ### 3.2 Sequencer registers (index port 3C4, data port 3C5)
 
@@ -2267,30 +2287,46 @@ the board-porting-critical part.
 * - —
   - VGASRI — Sequencer Index (port 3C4)
   - 00h
-  - [5:0] index bit[5:0]; [7:6] reserved
+  - - [5:0] index bit[5:0]
+    - [7:6] reserved
 * - 00
   - VGASR0 — Reset
   - 00h
-  - [1] async reset (active-low: 0 reset, 1 run); [0] sync reset (active-low); [7:2] reserved
+  - - [1] async reset (active-low: 0 reset, 1 run)
+    - [0] sync reset (active-low)
+    - [7:2] reserved
 * - 01
   - VGASR1 — Clocking Mode
   - 00h
-  - [5] screen off (1 = off); [4] shift-load by 4; [3] divide video clock by 2; [2] shift-load by 2; [0] dot-clock (0 = 9-dot, 1 = 8-dot char); [7:6],[1] reserved
+  - - [5] screen off (1 = off)
+    - [4] shift-load by 4
+    - [3] divide video clock by 2
+    - [2] shift-load by 2
+    - [0] dot-clock (0 = 9-dot, 1 = 8-dot char)
+    - [7:6],[1] reserved
 * - 02
   - VGASR2 — Map Mask
   - 00h
-  - [3:0] enable memory write map[3:0]; [7:4] reserved
+  - - [3:0] enable memory write map[3:0]
+    - [7:4] reserved
 * - 03
   - VGASR3 — Character Map Select
   - 00h
-  - [5] CG map A select bit[2]; [4] CG map B select bit[2]; [3:2] CG map A select bit[1:0]; [1:0] CG map B select bit[1:0]; [7:6] reserved
+  - - [5] CG map A select bit[2]
+    - [4] CG map B select bit[2]
+    - [3:2] CG map A select bit[1:0]
+    - [1:0] CG map B select bit[1:0]
+    - [7:6] reserved
 * - 04
   - VGASR4 — Memory Mode
   - 00h
-  - [3] enable Chain-4 mode; [2] odd/even (0 = odd/even, 1 = sequential); [1] extended memory (0 = 64 KB, 1 = 256 KB); [7:4],[0] reserved
+  - - [3] enable Chain-4 mode
+    - [2] odd/even (0 = odd/even, 1 = sequential)
+    - [1] extended memory (0 = 64 KB, 1 = 256 KB)
+    - [7:4],[0] reserved
 ```
 
-`[DS §34.4 p.371–372](#sources)`
+[DS §34.4 p.371–372](#sources)
 
 ### 3.3 CRT Controller registers (index port 3B4/3D4, data 3B5/3D5)
 
@@ -2321,7 +2357,9 @@ the board-porting-critical part.
 * - 03
   - VGACR3 — Horizontal Blank End
   - XX
-  - [7] enable register read-back for indices 10–11; [6:5] horizontal display-enable skew bit[1:0]; [4:0] horizontal blank end bit[4:0]
+  - - [7] enable register read-back for indices 10–11
+    - [6:5] horizontal display-enable skew bit[1:0]
+    - [4:0] horizontal blank end bit[4:0]
 * - 04
   - VGACR4 — Horizontal Retrace Start
   - XX
@@ -2329,7 +2367,9 @@ the board-porting-critical part.
 * - 05
   - VGACR5 — Horizontal Retrace End
   - XX
-  - [7] horizontal blank end bit[5]; [6:5] horizontal retrace delay bit[1:0]; [4:0] horizontal retrace end bit[4:0]
+  - - [7] horizontal blank end bit[5]
+    - [6:5] horizontal retrace delay bit[1:0]
+    - [4:0] horizontal retrace end bit[4:0]
 * - 06
   - VGACR6 — Vertical Total
   - XX
@@ -2337,23 +2377,39 @@ the board-porting-critical part.
 * - 07
   - VGACR7 — Overflow
   - XX
-  - [7] V retrace start[9]; [6] V display-enable end[9]; [5] V total[9]; [4] line compare[8] (not covered by CR11[7] protection); [3] V blank start[8]; [2] V retrace start[8]; [1] V display-enable end[8]; [0] V total[8]
+  - - [7] V retrace start[9]
+    - [6] V display-enable end[9]
+    - [5] V total[9]
+    - [4] line compare[8] (not covered by CR11[7] protection)
+    - [3] V blank start[8]
+    - [2] V retrace start[8]
+    - [1] V display-enable end[8]
+    - [0] V total[8]
 * - 08
   - VGACR8 — Preset Row Scan
   - XX
-  - [6:5] byte panning bit[1:0]; [4:0] preset row scan bit[4:0]; [7] reserved
+  - - [6:5] byte panning bit[1:0]
+    - [4:0] preset row scan bit[4:0]
+    - [7] reserved
 * - 09
   - VGACR9 — Maximum Scan Line
   - XX
-  - [7] enable double scan (200→400 lines); [6] line compare[9]; [5] vertical blank[9]; [4:0] max row scan bit[4:0]
+  - - [7] enable double scan (200→400 lines)
+    - [6] line compare[9]
+    - [5] vertical blank[9]
+    - [4:0] max row scan bit[4:0]
 * - 0A
   - VGACRA — Cursor Start
   - XX
-  - [5] cursor off; [4:0] cursor start bit[4:0]; [7:6] reserved
+  - - [5] cursor off
+    - [4:0] cursor start bit[4:0]
+    - [7:6] reserved
 * - 0B
   - VGACRB — Cursor End
   - XX
-  - [6:5] cursor skew bit[1:0]; [4:0] cursor end bit[4:0]; [7] reserved
+  - - [6:5] cursor skew bit[1:0]
+    - [4:0] cursor end bit[4:0]
+    - [7] reserved
 * - 0C
   - VGACRC — Starting Address High
   - XX
@@ -2377,7 +2433,11 @@ the board-porting-critical part.
 * - 11
   - VGACR11 — Vertical Retrace End
   - 00h
-  - [7] protect CRT indices 00–07 (except CR07[4]); [6] reserved (R/W only); [5] disable vertical interrupt; [4] clear vertical interrupt flag (0 = clear, 1 = no-op); [3:0] vertical retrace end bit[3:0]
+  - - [7] protect CRT indices 00–07 (except CR07[4])
+    - [6] reserved (R/W only)
+    - [5] disable vertical interrupt
+    - [4] clear vertical interrupt flag (0 = clear, 1 = no-op)
+    - [3:0] vertical retrace end bit[3:0]
 * - 12
   - VGACR12 — Vertical Display Enable End
   - XX
@@ -2389,7 +2449,10 @@ the board-porting-critical part.
 * - 14
   - VGACR14 — Underline Location
   - XX
-  - [6] select double-word mode; [5] select count-by-4 (not implemented); [4:0] underline location bit[4:0]; [7] reserved
+  - - [6] select double-word mode
+    - [5] select count-by-4 (not implemented)
+    - [4:0] underline location bit[4:0]
+    - [7] reserved
 * - 15
   - VGACR15 — Vertical Blank Start
   - XX
@@ -2401,7 +2464,14 @@ the board-porting-critical part.
 * - 17
   - VGACR17 — Mode Control
   - 00h
-  - [7] hardware reset (active-low); [6] select byte mode; [5] address wrap enable (not implemented); [3] count-by-2 (not implemented); [2] horizontal retrace select (not implemented); [1] replace MA14 by RA1 (active-low); [0] replace MA13 by RA0 (active-low); [4] reserved
+  - - [7] hardware reset (active-low)
+    - [6] select byte mode
+    - [5] address wrap enable (not implemented)
+    - [3] count-by-2 (not implemented)
+    - [2] horizontal retrace select (not implemented)
+    - [1] replace MA14 by RA1 (active-low)
+    - [0] replace MA13 by RA0 (active-low)
+    - [4] reserved
 * - 18
   - VGACR18 — Line Compare
   - XX
@@ -2409,11 +2479,13 @@ the board-porting-critical part.
 * - 1E
   - VGACR1E — Graphics Latched Data 0 (R)
   - XX
-  - [1] attribute-controller register index toggle bit; [7:2],[0] reserved
+  - - [1] attribute-controller register index toggle bit
+    - [7:2],[0] reserved
 * - 1F
   - VGACR1F — Graphics Latched Data 1 (R)
   - 00h
-  - [5:0] attribute-controller register index bit[5:0]; [7:6] reserved
+  - - [5:0] attribute-controller register index bit[5:0]
+    - [7:6] reserved
 * - 22
   - VGACR22 — Graphics Latched Data 2 (R)
   - XX
@@ -2421,7 +2493,7 @@ the board-porting-critical part.
 ```
 
 Indices 19–1D, 20–21, and 23–7F are not defined by §34.5 (reserved / used for
-the extended set from index 80). `[DS §34.5 p.373–377](#sources)`
+the extended set from index 80). [DS §34.5 p.373–377](#sources)
 
 ### 3.4 Graphics Controller registers (index port 3CE, data 3CF)
 
@@ -2435,39 +2507,55 @@ the extended set from index 80). `[DS §34.5 p.373–377](#sources)`
   - —
 * - —
   - VGAGRI — Graphics Index (3CE)
-  - [3:0] index bit[3:0]; [7:4] reserved
+  - - [3:0] index bit[3:0]
+    - [7:4] reserved
   - —
 * - 00
   - VGAGR0 — Set/Reset Map
-  - [3:0] set/reset map bit[3:0]; [7:4] reserved
+  - - [3:0] set/reset map bit[3:0]
+    - [7:4] reserved
   - —
 * - 01
   - VGAGR1 — Enable Set/Reset Map
-  - [3:0] enable set/reset map bit[3:0]; [7:4] reserved
+  - - [3:0] enable set/reset map bit[3:0]
+    - [7:4] reserved
   - —
 * - 02
   - VGAGR2 — Color Compare
-  - [3:0] color compare map bit[3:0]; [7:4] reserved
+  - - [3:0] color compare map bit[3:0]
+    - [7:4] reserved
   - —
 * - 03
   - VGAGR3 — Data Rotate
-  - [4:3] function select bit[1:0]; [2:0] data rotate bit[3:0]; [7:5] reserved
+  - - [4:3] function select bit[1:0]
+    - [2:0] data rotate bit[3:0]
+    - [7:5] reserved
   - —
 * - 04
   - VGAGR4 — Read Map Selection
-  - [1:0] read map select bit[1:0]; [7:2] reserved
+  - - [1:0] read map select bit[1:0]
+    - [7:2] reserved
   - —
 * - 05
   - VGAGR5 — Mode
-  - [6] shift mode for graphics mode 13; [5] shift mode for modes 4/5; [4] odd/even mode; [3] read-mode select (0 normal, 1 color-compare); [1:0] write-mode select bit[1:0]; [7],[2] reserved
+  - - [6] shift mode for graphics mode 13
+    - [5] shift mode for modes 4/5
+    - [4] odd/even mode
+    - [3] read-mode select (0 normal, 1 color-compare)
+    - [1:0] write-mode select bit[1:0]
+    - [7],[2] reserved
   - —
 * - 06
   - VGAGR6 — Miscellaneous
-  - [3:2] memory address space (00 A000h/128 KB, 01 A000h/64 KB, 10 B000h/32 KB, 11 B800h/32 KB); [1] chain odd/even plane enable; [0] graphics mode (0 text, 1 graphics); [7:4] reserved
+  - - [3:2] memory address space (00 A000h/128 KB, 01 A000h/64 KB, 10 B000h/32 KB, 11 B800h/32 KB)
+    - [1] chain odd/even plane enable
+    - [0] graphics mode (0 text, 1 graphics)
+    - [7:4] reserved
   - —
 * - 07
   - VGAGR7 — Color Don't Care
-  - [3:0] color don't care bit[3:0]; [7:4] reserved
+  - - [3:0] color don't care bit[3:0]
+    - [7:4] reserved
   - —
 * - 08
   - VGAGR8 — Bit Mask
@@ -2475,7 +2563,7 @@ the extended set from index 80). `[DS §34.5 p.373–377](#sources)`
   - —
 ```
 
-`[DS §34.6 p.377–379](#sources)`
+[DS §34.6 p.377–379](#sources)
 
 ### 3.5 Attribute Controller registers (index+data port 3C0, read 3C1)
 
@@ -2489,15 +2577,25 @@ the extended set from index 80). `[DS §34.5 p.373–377](#sources)`
   - —
 * - —
   - VGAARI — Attribute Index (3C0 W / 3C1 R)
-  - [5] pallet address source (0 = CPU R/W address, 1 = graphics streaming data); [4:0] index bit[4:0]; [7:6] reserved
+  - - [5] pallet address source (0 = CPU R/W address, 1 = graphics streaming data)
+    - [4:0] index bit[4:0]
+    - [7:6] reserved
   - —
 * - 00–0F
   - VGAAR0–VGAARF — Pallet Register 00–0F (reset XX)
-  - [5:0] pallet data bit[5:0] (16×5-bit registers); [7:6] reserved
+  - - [5:0] pallet data bit[5:0] (16×5-bit registers)
+    - [7:6] reserved
   - —
 * - 10
   - VGAAR10 — Mode Control
-  - [7] internal palette size (0 = 6 bpp, 1 = 4 bpp, cascaded with index 14[1:0]); [6] pixel width (mode 13 only); [5] pixel-panning compatibility; [3] enable blink; [2] line-graphics extension (ASCII C0h–DFh); [1] monochrome display mode; [0] graphics mode (0 text, 1 graphics); [4] reserved
+  - - [7] internal palette size (0 = 6 bpp, 1 = 4 bpp, cascaded with index 14[1:0])
+    - [6] pixel width (mode 13 only)
+    - [5] pixel-panning compatibility
+    - [3] enable blink
+    - [2] line-graphics extension (ASCII C0h–DFh)
+    - [1] monochrome display mode
+    - [0] graphics mode (0 text, 1 graphics)
+    - [4] reserved
   - —
 * - 11
   - VGAAR11 — Border Color (reset XX)
@@ -2505,19 +2603,23 @@ the extended set from index 80). `[DS §34.5 p.373–377](#sources)`
   - —
 * - 12
   - VGAAR12 — Color Plane Enable (reset XX)
-  - [5:4] video status multiplexing bit[1:0]; [3:0] color-plane enable bit[3:0]; [7:6] reserved
+  - - [5:4] video status multiplexing bit[1:0]
+    - [3:0] color-plane enable bit[3:0]
+    - [7:6] reserved
   - —
 * - 13
   - VGAAR13 — Horizontal Pixel Panning (reset 0X)
-  - [3:0] horizontal pixel panning bit[3:0]; [7:4] reserved
+  - - [3:0] horizontal pixel panning bit[3:0]
+    - [7:4] reserved
   - —
 * - 14
   - VGAAR14 — Color Select (reset 0X)
-  - [3:0] color selection bit[3:0]; [7:4] reserved
+  - - [3:0] color selection bit[3:0]
+    - [7:4] reserved
   - —
 ```
 
-`[DS §34.7 p.377–380](#sources)`
+[DS §34.7 p.377–380](#sources)
 
 ### 3.6 RAMDAC registers (fixed I/O ports 3C6–3C9)
 
@@ -2536,7 +2638,8 @@ the extended set from index 80). `[DS §34.5 p.373–377](#sources)`
 * - VGADSR — RAMDAC Status
   - R 3C7
   - 00h
-  - [1:0] R status bit[1:0]; [7:2] reserved
+  - - [1:0] R status bit[1:0]
+    - [7:2] reserved
 * - VGADRR — Read Mode Address
   - W 3C7
   - 00h
@@ -2551,14 +2654,14 @@ the extended set from index 80). `[DS §34.5 p.373–377](#sources)`
   - [7:0] RW pallet data bit[7:0]
 ```
 
-`[DS §34.8 p.380–381](#sources)`
+[DS §34.8 p.380–381](#sources)
 
 ### 3.7 Aspeed Extended CRT registers (§34.9)
 
 Accessed at CRTC index 80h–D7h (data 3B5/3D5) and, per the datasheet, also at
 `MMIO Base + index`. This is the Aspeed-specific set that carries the
 frame-buffer base, scan pitch, extended overflow, mode/PLL controls and the
-hardware-cursor pointer. `[DS §34.9 p.382](#sources)`
+hardware-cursor pointer. [DS §34.9 p.382](#sources)
 
 ```{list-table} Extended CRT index map (§34.9 overview)
 :header-rows: 1
@@ -2615,7 +2718,13 @@ hardware-cursor pointer. `[DS §34.9 p.382](#sources)`
 * - 9F
   - VGACR9F — Scratch Register #31 / status
   - XX
-  - [7:6] R PCI power state D0–D3 (= PCIS44[1:0]); [5] R pallet-address source (= VGAARI[5]); [4] R pixel-mask status (= OR of VGAPMR[7:0]); [3] R VGA reset status (= VGACR17[7]); [2] R screen-display status (= VGASR1[5]); [1] R VGA-controller reset status (= AND of VGASR0[1:0]); [0] R VGA enable (= VGAER[0])
+  - - [7:6] R PCI power state D0–D3 (= PCIS44[1:0])
+    - [5] R pallet-address source (= VGAARI[5])
+    - [4] R pixel-mask status (= OR of VGAPMR[7:0])
+    - [3] R VGA reset status (= VGACR17[7])
+    - [2] R screen-display status (= VGASR1[5])
+    - [1] R VGA-controller reset status (= AND of VGASR0[1:0])
+    - [0] R VGA enable (= VGAER[0])
 ```
 
 ```{list-table} Extended CRT registers CRA0–CRA5 (PCI / color-mode / misc)
@@ -2629,27 +2738,57 @@ hardware-cursor pointer. `[DS §34.9 p.382](#sources)`
 * - A0
   - VGACRA0 — PCI Control #1
   - 00h
-  - [6] enable video-memory access by 32-bit chain-4 (graphics mode); [5] enable linear extended memory (>256 KB); [4] enable extended segmented memory (>256 KB); [3] enable burst memory read; [2] enable burst memory write; [1] enable read-ahead cache; [0] enable post-write buffer; [7] reserved
+  - - [6] enable video-memory access by 32-bit chain-4 (graphics mode)
+    - [5] enable linear extended memory (>256 KB)
+    - [4] enable extended segmented memory (>256 KB)
+    - [3] enable burst memory read
+    - [2] enable burst memory write
+    - [1] enable read-ahead cache
+    - [0] enable post-write buffer
+    - [7] reserved
 * - A1
   - VGACRA1 — PCI Control #2
   - 00h
-  - [3] disable re-locatable I/O-mapped VGA I/O decoding; [2] disable re-locatable memory-mapped VGA I/O decoding; [1] disable standard VGA I/O decoding; [0] disable standard VGA memory (A000h–BFFFh) decoding; [7:4] reserved
+  - - [3] disable re-locatable I/O-mapped VGA I/O decoding
+    - [2] disable re-locatable memory-mapped VGA I/O decoding
+    - [1] disable standard VGA I/O decoding
+    - [0] disable standard VGA memory (A000h–BFFFh) decoding
+    - [7:4] reserved
 * - A2
   - VGACRA2 — PCI Control #3
   - 00h
-  - [7] enable big-endian mode; [6] enable 16-bit big-endian (0 = 32-bit, 1 = 16-bit); [4] PCI retry for I/O while post-write buffer not empty; [3] PCI retry for memory write; [2] PCI retry for memory read; [5],[1:0] reserved
+  - - [7] enable big-endian mode
+    - [6] enable 16-bit big-endian (0 = 32-bit, 1 = 16-bit)
+    - [4] PCI retry for I/O while post-write buffer not empty
+    - [3] PCI retry for memory write
+    - [2] PCI retry for memory read
+    - [5],[1:0] reserved
 * - A3
   - VGACRA3 — Enhanced Color Mode
   - 00h
-  - [7] enable DVO interface; [6] enable dual-edge DVO; [3] enable 32-bpp true color (ARGB8888); [2] enable 16-bpp high color (RGB565); [1] enable 15-bpp high color (RGB555); [0] enable enhanced 256-color mode; [5:4] reserved
+  - - [7] enable DVO interface
+    - [6] enable dual-edge DVO
+    - [3] enable 32-bpp true color (ARGB8888)
+    - [2] enable 16-bpp high color (RGB565)
+    - [1] enable 15-bpp high color (RGB555)
+    - [0] enable enhanced 256-color mode
+    - [5:4] reserved
 * - A4
   - VGACRA4 — Misc. Control
   - 00h
-  - [7] software reset 2D engine; [6] trigger VGA interrupt to BMC; [5] enable Sub-System/Sub-Vendor ID write; [4] enable VGA BIOS flash write; [3:2] 2D-engine clock source (00 MCLK, 01 ~MCLK, 10/11 reserved); [1] enable 2D-engine clock throttling (idle → 1/16); [0] enable 2D-engine clock (0 stop, 1 enable)
+  - - [7] software reset 2D engine
+    - [6] trigger VGA interrupt to BMC
+    - [5] enable Sub-System/Sub-Vendor ID write
+    - [4] enable VGA BIOS flash write
+    - [3:2] 2D-engine clock source (00 MCLK, 01 ~MCLK, 10/11 reserved)
+    - [1] enable 2D-engine clock throttling (idle → 1/16)
+    - [0] enable 2D-engine clock (0 stop, 1 enable)
 * - A5
   - VGACRA5 — Segmented Memory Address Overflow
   - 00h
-  - [5:4] segmented memory read address bit[9:8]; [1:0] segmented memory write address bit[9:8]; [7:6],[3:2] reserved
+  - - [5:4] segmented memory read address bit[9:8]
+    - [1:0] segmented memory write address bit[9:8]
+    - [7:6],[3:2] reserved
 ```
 
 ```{list-table} Extended CRT registers CRA6–CRAB (threshold / RAMDAC / power-on trapping)
@@ -2663,15 +2802,21 @@ hardware-cursor pointer. `[DS §34.9 p.382](#sources)`
 * - A6
   - VGACRA6 — CRT Request Threshold Low
   - 00h
-  - [5:0] RW CRT request threshold low bit[5:0]; [7:6] reserved
+  - - [5:0] RW CRT request threshold low bit[5:0]
+    - [7:6] reserved
 * - A7
   - VGACRA7 — CRT Request Threshold High
   - 00h
-  - [5:0] RW CRT request threshold high bit[5:0]; [7:6] reserved
+  - - [5:0] RW CRT request threshold high bit[5:0]
+    - [7:6] reserved
 * - A8
   - VGACRA8 — RAMDAC Control
   - 00h
-  - [6] enable RAMDAC test mode (monitor sense); [4] disable RAMDAC mask function; [2] protect palette/gamma RAM from writes; [1] enable 24-bit gamma-correction RAM; [7],[5],[3],[0] reserved. All RW
+  - - [6] enable RAMDAC test mode (monitor sense)
+    - [4] disable RAMDAC mask function
+    - [2] protect palette/gamma RAM from writes
+    - [1] enable 24-bit gamma-correction RAM
+    - [7],[5],[3],[0] reserved. All RW
 * - A9
   - VGACRA9 — RAMDAC Test Pattern
   - 00h
@@ -2679,11 +2824,21 @@ hardware-cursor pointer. `[DS §34.9 p.382](#sources)`
 * - AA
   - VGACRAA — Power-On Trapping Status #1 (R)
   - X
-  - [7] CPU clock frequency select bit[0]; [6] bypass clock mode (1 = test clock); [5:4] ARM boot select (00 ROMCS0#/NOR, 01 ROMCS1#/NAND, 10 ROMCS2#/SPI, 11 disable ARM); [3] enable VGA BIOS ROM; [2] PCI interface (0 = PCI slave, 1 = PCI host); [1:0] total VGA memory size (00 8 MB, 01 16 MB, 10 32 MB, 11 64 MB)
+  - - [7] CPU clock frequency select bit[0]
+    - [6] bypass clock mode (1 = test clock)
+    - [5:4] ARM boot select (00 ROMCS0#/NOR, 01 ROMCS1#/NAND, 10 ROMCS2#/SPI, 11 disable ARM)
+    - [3] enable VGA BIOS ROM
+    - [2] PCI interface (0 = PCI slave, 1 = PCI host)
+    - [1:0] total VGA memory size (00 8 MB, 01 16 MB, 10 32 MB, 11 64 MB)
 * - AB
   - VGACRAB — Power-On Trapping Status #2 (R)
   - 00h
-  - [7:6] Chip ID (11 AST2100, 10 AST2050/AST1100); [5] bypass all PLL modules; [4] PCI class-code (0 video device, 1 VGA device); [3] PCI VGA config prefetch status; [2] PCI AD bus order swap (0 disable, 1 enable); [1:0] CPU clock select bit[2:1] (with CRAA[7]: 000 266, 001 233, 010 200, 011 166, 100 133, 101 100, 110 300, 111 24 MHz H-PLL bypass)
+  - - [7:6] Chip ID (11 AST2100, 10 AST2050/AST1100)
+    - [5] bypass all PLL modules
+    - [4] PCI class-code (0 video device, 1 VGA device)
+    - [3] PCI VGA config prefetch status
+    - [2] PCI AD bus order swap (0 disable, 1 enable)
+    - [1:0] CPU clock select bit[2:1] (with CRAA[7]: 000 266, 001 233, 010 200, 011 166, 100 133, 101 100, 110 300, 111 24 MHz H-PLL bypass)
 ```
 
 ```{list-table} Extended CRT registers CRAC–CRB3 (extended overflow / counter read-back); reset 00h
@@ -2695,19 +2850,33 @@ hardware-cursor pointer. `[DS §34.9 p.382](#sources)`
   - Fields (all RW)
 * - AC
   - VGACRAC — Extended Horizontal Overflow #1
-  - [6] H retrace start[8]; [4] H blank start[8]; [2] H display-enable end[8]; [0] H total[8]; [7],[5],[3],[1] reserved
+  - - [6] H retrace start[8]
+    - [4] H blank start[8]
+    - [2] H display-enable end[8]
+    - [0] H total[8]
+    - [7],[5],[3],[1] reserved
 * - AD
   - VGACRAD — Extended Horizontal Overflow #2
-  - [6:4] H retrace skew bit[2:0]; [2] H retrace end[5]; [0] H blank end[6]; [7],[3],[1] reserved
+  - - [6:4] H retrace skew bit[2:0]
+    - [2] H retrace end[5]
+    - [0] H blank end[6]
+    - [7],[3],[1] reserved
 * - AE
   - VGACRAE — Extended Vertical Overflow
-  - [7] disable line compare; [6:5] V retrace end[5:4]; [4] V blank end[8]; [3] V retrace start[10]; [2] V blank start[10]; [1] V display-enable end[10]; [0] V total[10]
+  - - [7] disable line compare
+    - [6:5] V retrace end[5:4]
+    - [4] V blank end[8]
+    - [3] V retrace start[10]
+    - [2] V blank start[10]
+    - [1] V display-enable end[10]
+    - [0] V total[10]
 * - AF
   - VGACRAF — Extended CRT Starting Address
   - [7:0] CRT starting address bit[23:16]
 * - B0
   - VGACRB0 — Extended CRT Offset
-  - [5:0] offset bit[13:8]; [7:6] reserved
+  - - [5:0] offset bit[13:8]
+    - [7:6] reserved
 * - B1
   - VGACRB1 — Horizontal Counter Read Back
   - [7:0] horizontal counter read-back bit[7:0] (R)
@@ -2716,10 +2885,12 @@ hardware-cursor pointer. `[DS §34.9 p.382](#sources)`
   - [7:0] vertical counter read-back bit[7:0] (R)
 * - B3
   - VGACRB3 — CRT Counter Read Back Overflow
-  - [4] H counter read-back[8]; [2:0] V counter read-back[10:8]; [7:5],[3] reserved
+  - - [4] H counter read-back[8]
+    - [2:0] V counter read-back[10:8]
+    - [7:5],[3] reserved
 ```
 
-Indices B4 and B5 are reserved (no register defined). `[DS §34.9 p.387](#sources)`
+Indices B4 and B5 are reserved (no register defined). [DS §34.9 p.387](#sources)
 
 ```{list-table} Extended CRT registers CRB6–CRBA (power / DDC / CRC read-back); reset noted
 :header-rows: 1
@@ -2732,11 +2903,23 @@ Indices B4 and B5 are reserved (no register defined). `[DS §34.9 p.387](#source
 * - B6
   - VGACRB6 — Power Management
   - 00h
-  - [4] enable bypass mode for video PLL; [3] power-down video PLL; [2] power-on RAMDAC (0 down, 1 on); [1] enable VSYNC off; [0] enable HSYNC off; [7:5] reserved. All RW
+  - - [4] enable bypass mode for video PLL
+    - [3] power-down video PLL
+    - [2] power-on RAMDAC (0 down, 1 on)
+    - [1] enable VSYNC off
+    - [0] enable HSYNC off
+    - [7:5] reserved. All RW
 * - B7
   - VGACRB7 — DDC Control
   - 00h
-  - [7] R CRC-signature-generation status (0 in-progress/never, 1 valid); [6] trig CRC-signature generation (≥1 frame; poll [7] before reading RGB CRC); [5] DDC data input; [4] DDC clock input; [3] DDC data output; [2] enable DDC data output buffer; [1] DDC clock output; [0] enable DDC clock output buffer
+  - - [7] R CRC-signature-generation status (0 in-progress/never, 1 valid)
+    - [6] trig CRC-signature generation (≥1 frame; poll [7] before reading RGB CRC)
+    - [5] DDC data input
+    - [4] DDC clock input
+    - [3] DDC data output
+    - [2] enable DDC data output buffer
+    - [1] DDC clock output
+    - [0] enable DDC clock output buffer
 * - B8
   - VGACRB8 — Blue CRC Signature Read Back
   - FCh
@@ -2762,7 +2945,10 @@ Indices B4 and B5 are reserved (no register defined). `[DS §34.9 p.387](#source
 * - BB
   - VGACRBB — PLL Overflow
   - 1Fh
-  - [5:4] video PLL extended post-divider (00 1/1, 01 1/2, 10 1/2, 11 1/4); [3:2] 28.322 MHz PLL extended post-divider bit[1:0]; [1:0] 25.175 MHz PLL extended post-divider bit[1:0]; [7:6] reserved
+  - - [5:4] video PLL extended post-divider (00 1/1, 01 1/2, 10 1/2, 11 1/4)
+    - [3:2] 28.322 MHz PLL extended post-divider bit[1:0]
+    - [1:0] 25.175 MHz PLL extended post-divider bit[1:0]
+    - [7:6] reserved
 * - BC
   - VGACRBC — 25.175 MHz PLL Setting
   - E9h
@@ -2770,7 +2956,9 @@ Indices B4 and B5 are reserved (no register defined). `[DS §34.9 p.387](#source
 * - BD
   - VGACRBD — 25.175 MHz PLL Setting
   - 65h
-  - [6:5] video PLL post-divider bit[1:0] (00 1/1, 01 1/2, 10 1/2, 11 1/4; effective when 25.175 MHz selected by legacy register); [4:0] video PLL de-numerator bit[4:0]; [7] reserved
+  - - [6:5] video PLL post-divider bit[1:0] (00 1/1, 01 1/2, 10 1/2, 11 1/4; effective when 25.175 MHz selected by legacy register)
+    - [4:0] video PLL de-numerator bit[4:0]
+    - [7] reserved
 * - BE
   - VGACRBE — 28.322 MHz PLL Setting
   - 95h
@@ -2778,7 +2966,9 @@ Indices B4 and B5 are reserved (no register defined). `[DS §34.9 p.387](#source
 * - BF
   - VGACRBF — 28.322 MHz PLL Setting
   - 62h
-  - [6:5] video PLL post-divider bit[1:0] (effective when 28.322 MHz selected by legacy register); [4:0] video PLL de-numerator bit[4:0]; [7] reserved
+  - - [6:5] video PLL post-divider bit[1:0] (effective when 28.322 MHz selected by legacy register)
+    - [4:0] video PLL de-numerator bit[4:0]
+    - [7] reserved
 * - C0
   - VGACRC0 — Video PLL Setting
   - 4Eh
@@ -2786,7 +2976,9 @@ Indices B4 and B5 are reserved (no register defined). `[DS §34.9 p.387](#source
 * - C1
   - VGACRC1 — Video PLL Setting
   - 61h
-  - [6:5] video PLL post-divider bit[1:0]; [4:0] video PLL de-numerator bit[4:0]; [7] reserved
+  - - [6:5] video PLL post-divider bit[1:0]
+    - [4:0] video PLL de-numerator bit[4:0]
+    - [7] reserved
 ```
 
 ```{list-table} Extended CRT registers CRC2–CRD7 (hardware cursor + scratch); reset 00h unless noted
@@ -2798,22 +2990,26 @@ Indices B4 and B5 are reserved (no register defined). `[DS §34.9 p.387](#source
   - Fields (all RW)
 * - C2
   - VGACRC2 — H/W Cursor X Position Offset
-  - [5:0] cursor X position offset bit[5:0]; [7:6] reserved
+  - - [5:0] cursor X position offset bit[5:0]
+    - [7:6] reserved
 * - C3
   - VGACRC3 — H/W Cursor Y Position Offset
-  - [5:0] cursor Y position offset bit[5:0]; [7:6] reserved
+  - - [5:0] cursor Y position offset bit[5:0]
+    - [7:6] reserved
 * - C4
   - VGACRC4 — H/W Cursor X Position #1
   - [7:0] cursor X position bit[7:0]
 * - C5
   - VGACRC5 — H/W Cursor X Position #2
-  - [3:0] cursor X position bit[11:8]; [7:4] reserved
+  - - [3:0] cursor X position bit[11:8]
+    - [7:4] reserved
 * - C6
   - VGACRC6 — H/W Cursor Y Position #1
   - [7:0] cursor Y position bit[7:0]
 * - C7
   - VGACRC7 — H/W Cursor Y Position #2
-  - [2:0] cursor Y position bit[10:8]; [7:3] reserved
+  - - [2:0] cursor Y position bit[10:8]
+    - [7:3] reserved
 * - C8
   - VGACRC8 — H/W Cursor Pattern Address #1
   - [7:0] cursor pattern memory address bit[11:4] (16-byte aligned; bit[3:0]=0)
@@ -2825,13 +3021,15 @@ Indices B4 and B5 are reserved (no register defined). `[DS §34.9 p.387](#source
   - [7:0] cursor pattern memory address bit[27:20]
 * - CB
   - VGACRCB — H/W Cursor Control
-  - [1] enable H/W cursor display; [0] cursor type (0 = 2-bpp, 1 = 16-bpp ARGB1555); [7:2] reserved
+  - - [1] enable H/W cursor display
+    - [0] cursor type (0 = 2-bpp, 1 = 16-bpp ARGB1555)
+    - [7:2] reserved
 * - CC–D7
   - VGACRCC–D7 — Scratch Register #32–#43 (reset XX)
   - [7:0] scratch register bit[7:0] (also serving the CC–CF reserved and D0–D7 SOC-scratch read-back slots of the overview map)
 ```
 
-`[DS §34.9 p.383–392](#sources)`
+[DS §34.9 p.383–392](#sources)
 
 ### 3.8 Mainline cross-check
 

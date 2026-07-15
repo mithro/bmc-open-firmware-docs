@@ -21,7 +21,7 @@ Mainline Aspeed drivers carry `aspeed,ast2400-*` / `aspeed,ast2500-*`
 `compatible` strings. The program's patch series (the [Linux driver page][program-linux])
 adds `aspeed,ast2050-*` where a G3 part diverges, and adds the two G3-only
 drivers (`irq-aspeed-g3-vic`, plus the [`ftgmac100`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.c) `FAST_MODE` RX fix and the
-[`clk-aspeed`](https://github.com/torvalds/linux/blob/master/drivers/clk/aspeed/clk-aspeed.c) AST2050 clock patch). "Not register-compatible" means the mainline
+[`clk-aspeed`](https://github.com/torvalds/linux/blob/master/drivers/clk/aspeed/clk-aspeed.c) AST2050 [clock patch](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/qemu-firmware/kernel/patches/0001-clk-aspeed-add-ast2050-support.patch)). "Not register-compatible" means the mainline
 driver's register layout does **not** match the G3 block and a G3-specific
 driver/compatible is required, not just an added match-table entry.
 ```
@@ -43,7 +43,7 @@ driver/compatible is required, not just an added match-table entry.
   - [ftgmac100.c][ftgmac100] · [.h][ftgmac100-h]
   - `faraday,ftgmac100`; `aspeed,ast2400-mac`; program `aspeed,ast2050-mac`
   - [MAC / MDIO / PHY][reg-mac]
-  - program adds `ast2050-mac` + `FAST_MODE` RX fix + MACCLK-default patch
+  - program adds `ast2050-mac` + `FAST_MODE` RX fix + [MACCLK-default patch](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch)
 * - [`i2c-aspeed`](https://github.com/torvalds/linux/blob/master/drivers/i2c/busses/i2c-aspeed.c)
   - i2c
   - [i2c-aspeed.c][i2c-aspeed]
@@ -73,7 +73,7 @@ driver/compatible is required, not just an added match-table entry.
   - [clk-aspeed.c][clk-aspeed]
   - `aspeed,ast2400-scu`; `aspeed,ast2500-scu`
   - [SCU / clock / reset][reg-scu]
-  - program patch adds AST2050 H-PLL / derived-clock support
+  - [program patch](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/qemu-firmware/kernel/patches/0001-clk-aspeed-add-ast2050-support.patch) adds AST2050 H-PLL / derived-clock support
 * - [`timer-fttmr010`](https://github.com/torvalds/linux/blob/master/drivers/clocksource/timer-fttmr010.c)
   - clocksource
   - [timer-fttmr010.c][timer-fttmr010]
@@ -208,7 +208,7 @@ driver/compatible is required, not just an added match-table entry.
   - KGPE-D16 **host-side** (SP5100 SMBus); not BMC-managed
 * - `irq-aspeed-g3-vic`
   - irqchip
-  - program patch — base [irq-aspeed-vic.c][vic-mainline]
+  - [program patch](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/kernel/patches/0003-irqchip-add-aspeed-ast2050-vic-g3.patch) — base [irq-aspeed-vic.c][vic-mainline]
   - `aspeed,ast2050-vic`
   - [Interrupt controller (VIC)][reg-uvt]
   - **program driver**: mainline VIC targets the AST2400+ block at `0x1E6C0080`; G3 VIC is the compact block at `0x1E6C0000`
@@ -223,7 +223,7 @@ driver/compatible is required, not just an added match-table entry.
   - patch on [clk-aspeed.c][clk-aspeed]
   - (adds AST2050 data)
   - [SCU / clock / reset][reg-scu]
-  - **program patch**: adds the G3 H-PLL / derived clocks
+  - **[program patch](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/qemu-firmware/kernel/patches/0001-clk-aspeed-add-ast2050-support.patch)**: adds the G3 H-PLL / derived clocks
 * - NS9360 ([`mach-ns9xxx`](https://github.com/torvalds/linux/tree/v2.6.39/arch/arm/mach-ns9xxx))
   - arch / platform
   - [mach-ns9xxx @ v2.6.39][mach-ns9xxx]
