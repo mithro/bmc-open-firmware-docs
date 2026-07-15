@@ -16,8 +16,9 @@ than that — the stock NS9360 firmware is a NET+OS RTOS image, so the U-Boot po
   board with no working firmware — proven on the real KGPE-D16, where the
   AST2050 U-Boot reaches an interactive `boot#` prompt.
 - **NS9360 (HPE iPDU)** — the open-firmware path replaces the proprietary
-  NET+OS image with the `hpe-ipdu-port` U-Boot (serial, GPIO, clock, I2C,
-  Ethernet, CFI NOR flash), which boots under the QEMU `ns9360` machine.
+  NET+OS image with the [`hpe-ipdu-port`](https://github.com/mithro/u-boot/tree/hpe-ipdu-port)
+  U-Boot (serial, GPIO, clock, I2C, Ethernet, CFI NOR flash), which boots under
+  the QEMU `ns9360` machine.
 
 ## Deliverables
 
@@ -29,7 +30,7 @@ than that — the stock NS9360 firmware is a NET+OS RTOS image, so the U-Boot po
   - Port
   - Status / acceptance
 * - AST2050 boards
-  - `mithro/u-boot@ast2050-port` — mainline-track topic branch (AST2400 base
+  - [`mithro/u-boot`](https://github.com/mithro/u-boot)`@ast2050-port` — mainline-track topic branch (AST2400 base
     adapted to the AST2050)
   - `boot-uboot-ssh` (U-Boot → Linux → SSH) green on the latest U-Boot;
     `c410x-tftp-netboot` network-boots the kernel to SSH
@@ -37,7 +38,7 @@ than that — the stock NS9360 firmware is a NET+OS RTOS image, so the U-Boot po
   - OpenBMC U-Boot `v2019.04-aspeed-openbmc` (`evb-ast2400` base)
   - builds and boots the chain in QEMU today
 * - HPE iPDU
-  - `mithro/u-boot@hpe-ipdu-port` — open NS9360 port
+  - [`mithro/u-boot@hpe-ipdu-port`](https://github.com/mithro/u-boot/tree/hpe-ipdu-port) — open NS9360 port
   - boots under the QEMU `ns9360` machine; serial-socket smoke test passes
 ```
 

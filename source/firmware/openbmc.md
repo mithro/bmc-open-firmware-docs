@@ -1,6 +1,6 @@
 # OpenBMC (Linux)
 
-The full-featured firmware track, built in the `mithro/openbmc` fork with a
+The full-featured firmware track, built in the [`mithro/openbmc`](https://github.com/mithro/openbmc) fork with a
 `meta-<board>` layer per board on top of `meta-aspeed`. Images are verified in
 QEMU (and on real hardware) via the {doc}`../emulation/testbench`.
 

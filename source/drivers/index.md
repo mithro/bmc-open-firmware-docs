@@ -16,8 +16,11 @@ zephyr
 
 ## Upstream patch-series & rebase workflow
 
-All upstream-track work lives in public forks (`mithro/linux`, `mithro/u-boot`,
-`mithro/qemu`, `mithro/zephyr`) as **one topic branch per subsystem**, each a
+All upstream-track work lives in public forks (`mithro/linux`,
+[`mithro/u-boot`](https://github.com/mithro/u-boot),
+[`mithro/qemu`](https://github.com/mithro/qemu),
+[`mithro/zephyr`](https://github.com/mithro/zephyr)) as **one topic branch per
+subsystem**, each a
 clean, small, rebasable `git format-patch` series on top of upstream. The
 program tracks **two variants of every stack simultaneously**:
 
