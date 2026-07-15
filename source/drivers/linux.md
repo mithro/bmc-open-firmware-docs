@@ -16,7 +16,8 @@ clean series in `mithro/linux`:
 ```{admonition} Interim vs. target
 :class: note
 
-Until the G3 dtsi lands, the boards boot on `aspeed_g4_defconfig` + a clock patch
+Until the G3 dtsi lands, the boards boot on `aspeed_g4_defconfig` + a
+[clock patch](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/qemu-firmware/kernel/patches/0001-clk-aspeed-add-ast2050-support.patch)
 + a board DTS based on `aspeed-g4.dtsi` (the AST2050 is register-compatible
 enough). The clean G3 series is the upstreamable form.
 ```
@@ -25,8 +26,9 @@ enough). The clean G3 series is the upstreamable form.
 
 Booting a modern kernel (6.6.x) on a real AST2050 surfaced two G3-specific bugs,
 both fixed and confirmed on silicon. The fixes are maintained as a patch series
-in the program repo (`asus-kgpe-d16-firmware/kernel/patches/`, applied on top of
-a Linux 6.6.70 base):
+in the program repo
+([`asus-kgpe-d16-firmware/kernel/patches/`](https://github.com/mithro/ai-shenanigans-for-bmcs/tree/main/asus-kgpe-d16-firmware/kernel/patches),
+applied on top of a Linux 6.6.70 base):
 
 ```{list-table}
 :header-rows: 1
@@ -34,12 +36,12 @@ a Linux 6.6.70 base):
 
 * - Patch
   - What it fixes
-* - `0001-clk-aspeed-add-ast2050-support`
+* - [`0001-clk-aspeed-add-ast2050-support`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/qemu-firmware/kernel/patches/0001-clk-aspeed-add-ast2050-support.patch)
   - the G3 H-PLL / derived-clock support the SoC exposes
-* - `0002-ftgmac100-ast2050-macclk`
+* - [`0002-ftgmac100-ast2050-macclk`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch)
   - leaves `MACCLK` at the U-Boot default on the G3 (the G3 U-Boot path never
     programs it); harmless on QEMU
-* - `0003-irqchip-add-aspeed-ast2050-vic-g3`
+* - [`0003-irqchip-add-aspeed-ast2050-vic-g3`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/kernel/patches/0003-irqchip-add-aspeed-ast2050-vic-g3.patch)
   - the compact G3 VIC driver (below) — the fix that unblocked the whole
     modern-kernel bring-up
 ```

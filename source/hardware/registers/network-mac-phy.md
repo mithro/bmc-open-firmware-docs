@@ -971,8 +971,8 @@ driver logs `Unsupported PHY mode rmii !` and never calls `adjust_link(up)`, so
 `MACCR` stays 0 and `eth0` gets no carrier. The MAC-clock rate was ruled out as the
 cause (see [`0002-ftgmac100-ast2050-macclk.patch`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch), which leaves MACCLK at the U-Boot
 default and, tested on real HW, does **not** fix RMII TX). Details:
-`asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md`,
-`asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch`.
+[`asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md),
+[`asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch).
 :::
 
 ---
@@ -1332,7 +1332,8 @@ strapping**, not by a writeable register — register 17 bit 0 (`RMIIMODE`) is a
 - The mainline driver treats RMII RCLK as an optional clock ("RCLK is for RMII,
   typically used for NCSI"), skipping it for the AST2400-class MAC; on AST2050 the
   50 MHz refclk path must physically exist for RMII TX/RX to clock.
-  [`ftgmac100.c`, `asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch`](#sources)
+  [`ftgmac100.c`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.c),
+  [`0002-ftgmac100-ast2050-macclk.patch`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch)
 
 RMII/MII AC timing (for board bring-up): TX/RX clock cycle 40 ns (25 MHz MII), data
 output setup 30 ns / hold 2.5 ns, data input setup 5 ns / hold 0 ns. [DS §4.7.2 p.68](#sources)
@@ -1444,7 +1445,7 @@ Project reverse-engineering / on-hardware evidence (private analysis repo
 - `asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md` — U-Boot-vs-Linux MAC/SCU
   register dumps over P2A, the `MACCR=0x80500/0x8050F` worked example, TX-ring probe,
   and the `ndo_open`/MACCR-write-stall root-cause trace.
-- `asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch` — the
+- [`asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch) — the
   AST2050 MACCLK behaviour + the note that MAC-clock rate is not the RMII-TX cause.
 - `asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md` and
   `asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md` — FTGMAC100 driver / PHY support,
