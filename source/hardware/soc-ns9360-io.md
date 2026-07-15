@@ -5,8 +5,8 @@ Continuation of {doc}`soc-ns9360`: the BBus utility/GPIO block, the AHB and BBus
 ## BBus Utility (GPIO)
 
 
-**Base address: 0x9060_0000** [HWRef p.463][mach-ns9xxx regs-bbu.h]
-[u-boot ns9750_bbus.h](#sources). This block owns the 73 GPIO pins, the master reset that
+**Base address: 0x9060_0000** [HWRef p.463](#sources), [mach-ns9xxx regs-bbu.h](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-bbu.h)
+[u-boot ns9750_bbus.h](https://github.com/u-boot/u-boot/blob/v2012.10/include/ns9750_bbus.h). This block owns the 73 GPIO pins, the master reset that
 holds the other BBus peripherals in reset out of power-up, the endian
 configuration for the bus masters, and USB configuration.
 
@@ -61,8 +61,8 @@ configuration for the bus masters, and USB configuration.
 Note the split layout: GPIO config #1-#7 at 0x010-0x028, then #8-#10 at
 0x100-0x108; control #1-#2 at 0x030/0x034, then #3 at 0x120; status #1-#2 at
 0x040/0x044, then #3 at 0x130 [HWRef p.463](#sources). Bases and offsets match
-[mach-ns9xxx regs-bbu.h](#sources) (`BBU_GCONFb1`=0x…010, `BBU_GCONFb2`=0x…100,
-`BBU_GCTRL1`=0x…030, `BBU_GSTAT1`=0x…040) and [u-boot ns9750_bbus.h](#sources)
+[mach-ns9xxx regs-bbu.h](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-bbu.h) (`BBU_GCONFb1`=0x…010, `BBU_GCONFb2`=0x…100,
+`BBU_GCTRL1`=0x…030, `BBU_GSTAT1`=0x…040) and [u-boot ns9750_bbus.h](https://github.com/u-boot/u-boot/blob/v2012.10/include/ns9750_bbus.h)
 (`MASTER_RESET`=0x00, `GPIO_CFG_BASE`=0x10, `GPIO_CTRL_BASE`=0x30,
 `GPIO_STAT_BASE`=0x40, `ENDIAN_CFG`=0x80).
 
@@ -94,8 +94,8 @@ config register, lowest-numbered pin in the least-significant nibble [HWRef p.46
 ```
 
 **Reset default per nibble = 0x3** → every pin comes up as **GPIO, input, no
-inversion** [HWRef p.473](#sources). This matches [mach-ns9xxx regs-bbu.h](#sources) (`BBU_GCONFx_DIR`
-= nibble bit 3, `_INV` = bit 2, `_FUNC` = bits 1:0) and [u-boot ns9750_bbus.h](#sources)
+inversion** [HWRef p.473](#sources). This matches [mach-ns9xxx regs-bbu.h](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-bbu.h) (`BBU_GCONFx_DIR`
+= nibble bit 3, `_INV` = bit 2, `_FUNC` = bits 1:0) and [u-boot ns9750_bbus.h](https://github.com/u-boot/u-boot/blob/v2012.10/include/ns9750_bbus.h)
 (`GPIO_CFG_OUTPUT`=0x08, `GPIO_CFG_FUNC_GPIO`=0x03). Because eight pins share one
 register, a driver must read-modify-write [PLAN-INCREMENTAL-PORT.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md).
 
@@ -193,8 +193,8 @@ per pin, reset 0) and inputs are read from GPIO Status #1/#2/#3 (0x040 / 0x044 /
 
 All BBus peripherals except the bridge are held in reset after power-up; software
 must clear these bits (write 0) before touching a peripheral's registers
-[HWRef p.464][PLAN-INCREMENTAL-PORT.md]. Bit assignments match
-[u-boot ns9750_bbus.h](#sources) (`MASTER_RESET_I2C`=0x80, `_SER1..4`, `_DMA`=0x01).
+[HWRef p.464](#sources), [PLAN-INCREMENTAL-PORT.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md). Bit assignments match
+[u-boot ns9750_bbus.h](https://github.com/u-boot/u-boot/blob/v2012.10/include/ns9750_bbus.h) (`MASTER_RESET_I2C`=0x80, `_SER1..4`, `_DMA`=0x01).
 
 ### Endian and USB configuration
 
@@ -414,7 +414,7 @@ full per-bit register depth on a dedicated page: {doc}`soc-ns9360-secondary`
 Every GPIO pin has up to four functions; function 3 is always plain GPIO, and
 functions 0/1/2 are peripheral roles selected by the config nibble above. The
 full 73-pin table is in the datasheet [HWRef p.50-59, Table 9](#sources); the rows a port
-must set for this board are [ANALYSIS.md][HWRef p.50-63]:
+must set for this board are [ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md), [HWRef p.50-63](#sources):
 
 ```{list-table} Key GPIO peripheral functions
 :header-rows: 1
@@ -460,7 +460,7 @@ values (e.g. GPIO Config #1 = 0x33333333, all of Serial B as GPIO inputs) are in
 The archived Linux and U-Boot support describe this exact SoC (Linux calls it
 NS9360; U-Boot's NS9750 register set is the same NET+ARM map), and the two agree
 on every base address and register offset — the useful, independent
-cross-reference for this document [mach-ns9xxx][u-boot ns9750].
+cross-reference for this document [mach-ns9xxx](https://github.com/torvalds/linux/tree/v2.6.39/arch/arm/mach-ns9xxx), [u-boot ns9750](https://github.com/u-boot/u-boot/tree/v2012.10).
 
 ```{list-table} Base-address agreement
 :header-rows: 1
@@ -501,7 +501,7 @@ block (0x20-0x58), and static config (0x200); the BBus GPIO config/ctrl/status
 serial channel bases (0x90200000/40, 0x90300000/40). The PLL field split (FS bits
 24:23, ND bits 20:16) and the clock derivation $\text{systemclock} = \text{crystal} \times (ND+1) \gg FS$,
 $\text{cpuclock} = \text{systemclock}/2$ are identical across both code bases and the
-datasheet [mach-ns9xxx processor-ns9360.c][u-boot ns9750dev.h][HWRef p.153].
+datasheet [mach-ns9xxx processor-ns9360.c](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/processor-ns9360.c), [u-boot ns9750dev.h](https://github.com/u-boot/u-boot/blob/v2012.10/include/configs/ns9750dev.h), [HWRef p.153](#sources).
 
 ## See also
 
@@ -540,15 +540,15 @@ In-repo analysis and port planning (board specifics, firmware evidence):
 
 Independent open-source cross-reference (register names, bases, bitfields):
 
-- [mach-ns9xxx](#sources) — Linux kernel `arch/arm/mach-ns9xxx` at tag v2.6.39:
+- [mach-ns9xxx](https://github.com/torvalds/linux/tree/v2.6.39/arch/arm/mach-ns9xxx) — Linux kernel `arch/arm/mach-ns9xxx` at tag v2.6.39:
   `include/mach/regs-sys-ns9360.h`, `regs-sys-common.h`, `regs-bbu.h`,
   `regs-mem.h`, `hardware.h`, `processor-ns9360.c`, `time-ns9360.c`,
   `gpio-ns9360.c`. Raw source, e.g.
   <https://raw.githubusercontent.com/torvalds/linux/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-sys-ns9360.h>.
-- [u-boot ns9750](#sources) — U-Boot at tag v2012.10: `include/ns9750_sys.h`,
+- [u-boot ns9750](https://github.com/u-boot/u-boot/tree/v2012.10) — U-Boot at tag v2012.10: `include/ns9750_sys.h`,
   [`ns9750_mem.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_mem.h), [`ns9750_bbus.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_bbus.h), [`ns9750_ser.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_ser.h), `include/configs/ns9750dev.h`,
   `drivers/serial/ns9750_serial.c`. Raw source, e.g.
   <https://raw.githubusercontent.com/u-boot/u-boot/v2012.10/include/ns9750_sys.h>.
-- [u-boot ns9750_eth.h](#sources) — the Ethernet register header is not in mainline
+- [u-boot ns9750_eth.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_eth.h) — the Ethernet register header is not in mainline
   U-Boot; the Digi-derived version is preserved in a mirror at
   <https://raw.githubusercontent.com/true-systems/om5p-ac-v2-unlocker/master/u-boot_mr1750/include/ns9750_eth.h>.

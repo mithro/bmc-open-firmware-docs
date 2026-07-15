@@ -12,7 +12,7 @@ number 90000675 rev J (cited [HWRef p.N](#sources), where the printed page numbe
 the PDF page number), supported by the **NS9360 Datasheet** 91001326 rev D
 ([Datasheet](#sources)). Every register base address and offset below is independently
 cross-checked against the archived open-source Linux `arch/arm/mach-ns9xxx`
-(cited [mach-ns9xxx](#sources)) and the U-Boot NS9750 support ([u-boot ns9750](#sources)); those
+(cited [mach-ns9xxx](https://github.com/torvalds/linux/tree/v2.6.39/arch/arm/mach-ns9xxx)) and the U-Boot NS9750 support ([u-boot ns9750](https://github.com/u-boot/u-boot/tree/v2012.10)); those
 two code bases agree on every base and offset, and that agreement is noted where
 it matters. See the Sources section at the end of this page.
 
@@ -89,7 +89,7 @@ it matters. See the Sources section at the end of this page.
 
 The board using this SoC pairs 32 MB SDRAM (ISSI IS42S32800D, 32-bit), 16 MB NOR
 flash (2× Macronix MX29LV640EB on CS0/CS1), an ICS1893 Ethernet PHY, and a
-29.4912 MHz system crystal [ANALYSIS.md][REFERENCE-MATERIAL.md].
+29.4912 MHz system crystal [ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md), [REFERENCE-MATERIAL.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md).
 
 ### System (AHB) address map
 
@@ -148,8 +148,8 @@ windows are re-mappable by software after boot [HWRef p.142-144, Table 47](#sour
 ```
 
 The BBus peripheral space (base 0x9000_0000) sub-decodes as follows
-[HWRef p.415-416, Table 305](#sources); confirmed by [mach-ns9xxx hardware.h](#sources) and
-[u-boot ns9750_ser.h](#sources).
+[HWRef p.415-416, Table 305](#sources); confirmed by [mach-ns9xxx hardware.h](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/include/mach/hardware.h) and
+[u-boot ns9750_ser.h](https://github.com/u-boot/u-boot/blob/v2012.10/include/ns9750_ser.h).
 
 ```{list-table} BBus peripheral base addresses
 :header-rows: 1
@@ -202,13 +202,13 @@ $$
 So the fixed ratio is **cpu : ahb : bbus = 4 : 2 : 1**. With the board's
 29.4912 MHz crystal at the 177 MHz grade (ND+1 = 24, FS = ÷2), f_vco =
 353.8944 MHz, giving CPU 176.9472 MHz, AHB 88.4736 MHz, BBus 44.2368 MHz
-[HWRef p.36 Table 3][REFERENCE-MATERIAL.md]. Speed grades: 177 MHz (0-70 °C),
+[HWRef p.36 Table 3](#sources), [REFERENCE-MATERIAL.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md). Speed grades: 177 MHz (0-70 °C),
 155 MHz (-40..+85 °C), 103 MHz [HWRef p.29](#sources).
 
 Linux computes the same tree: $\text{systemclock} = \text{CRYSTAL} \times (ND+1) \gg FS$ (the raw VCO
 output) and $\text{cpuclock} = \text{systemclock} / 2$, with $\text{CRYSTAL} = 29491200$
-[mach-ns9xxx processor-ns9360.c](#sources). U-Boot's [`ns9750dev.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/configs/ns9750dev.h) states the full tree
-explicitly as CPU = system/2, AHB = system/4, BBus = system/8 [u-boot ns9750dev.h](#sources).
+[mach-ns9xxx processor-ns9360.c](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/processor-ns9360.c). U-Boot's [`ns9750dev.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/configs/ns9750dev.h) states the full tree
+explicitly as CPU = system/2, AHB = system/4, BBus = system/8 [u-boot ns9750dev.h](https://github.com/u-boot/u-boot/blob/v2012.10/include/configs/ns9750dev.h).
 
 ```{admonition} "System clock" naming caveat
 :class: warning
@@ -220,7 +220,7 @@ ARM core runs at f_vco/2 ≈ 176.9 MHz. One repo port draft set
 `CONFIG_SYS_CLK_FREQ = 176.9 MHz` (= f_vco/2) and derived the buses from there,
 which shifts the BBus figure to ~22 MHz and changes UART divisor math; prefer
 the datasheet tree above (BBus = f_vco/8 ≈ 44.2 MHz) when computing baud rates
-[HWRef p.36][PLAN-INCREMENTAL-PORT.md].
+[HWRef p.36](#sources), [PLAN-INCREMENTAL-PORT.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md).
 ```
 
 USB is clocked by a **separate PLL** from an external 48 MHz crystal/oscillator
@@ -252,7 +252,7 @@ lock; a software reset lasts 128 CPU clocks [HWRef p.35](#sources).
 ### Bootstrap / strapping pins
 
 Sampled on the hard `reset_n` pin; "1" = internal pull-up, "0" = external
-pull-down [HWRef p.153-156, Table 49][ANALYSIS.md].
+pull-down [HWRef p.153-156, Table 49](#sources), [ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md).
 
 ```{list-table} Power-up strapping pins
 :header-rows: 1
@@ -284,7 +284,7 @@ The 5-bit ND strap does not map linearly; e.g. code `10010` = multiplier 24
 (the 176.9472 MHz grade) [HWRef p.155-156, Table 50](#sources). The board boots big-endian
 (gpio[44] = 0) and a software stub then switches the CPU and buses to
 little-endian to reuse the little-endian Digi/Linux/U-Boot code base
-[REFERENCE-MATERIAL.md][PLAN-INCREMENTAL-PORT.md].
+[REFERENCE-MATERIAL.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md), [PLAN-INCREMENTAL-PORT.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md).
 
 ## CPU — ARM926EJ-S
 
@@ -305,7 +305,7 @@ big→little endian [PLAN-INCREMENTAL-PORT.md](https://github.com/mithro/ai-shen
 ## System Control Module (SCM)
 
 
-**Base address: 0xA0900000** [HWRef p.143][mach-ns9xxx regs-sys-ns9360.h][u-boot ns9750_sys.h].
+**Base address: 0xA0900000** [HWRef p.143](#sources), [mach-ns9xxx regs-sys-ns9360.h](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-sys-ns9360.h), [u-boot ns9750_sys.h](https://github.com/u-boot/u-boot/blob/v2012.10/include/ns9750_sys.h).
 
 The SCM contains the AHB bus arbiter, system address decoding (the chip-select
 base/mask registers), the programmable timers, the software watchdog, the
@@ -404,9 +404,9 @@ blocks here follow the same convention within the limits of the source.
   - RTC clock divider (generates 100 Hz)
 ```
 
-Register offsets are confirmed bit-for-bit by [u-boot ns9750_sys.h](#sources) (`PLL`=0x188,
+Register offsets are confirmed bit-for-bit by [u-boot ns9750_sys.h](https://github.com/u-boot/u-boot/blob/v2012.10/include/ns9750_sys.h) (`PLL`=0x188,
 `CLOCK`=0x17C, `RESET`=0x180, `MISC`=0x184, `ISRADDR`=0x164, `TIMER_*`,
-`CS_*_BASE/MASK`) and [mach-ns9xxx regs-sys-ns9360.h](#sources) / `regs-sys-common.h`
+`CS_*_BASE/MASK`) and [mach-ns9xxx regs-sys-ns9360.h](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-sys-ns9360.h) / `regs-sys-common.h`
 (`SYS_PLL`=0xa0900188, `SYS_ISA`=0xa0900168, `SYS_TC`=0xa0900190, etc.).
 
 ### AHB bus arbiter (BRC0-BRC3)
@@ -454,7 +454,7 @@ There are **8 general-purpose 16/32-bit timer/counters** (Timer 0-7), each with 
 event-counter modes; two timers can be paired for PWM output [HWRef p.144-147](#sources).
 Each has a Reload Count register (0x044+), a read-back register (0x084+), and a
 control register (0x190+). Linux uses timer 0 as clocksource and timer 1 as
-clockevent, both clocked at the CPU rate [mach-ns9xxx time-ns9360.c](#sources).
+clockevent, both clocked at the CPU rate [mach-ns9xxx time-ns9360.c](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/time-ns9360.c).
 
 ```{admonition} Timer count discrepancy
 :class: note
@@ -519,8 +519,8 @@ bits [HWRef p.28, p.31, p.172](#sources). Treat the programmable set as Timer 0-
   - Reload enable: 0 = halt at terminal count, 1 = reload and continue
 ```
 
-Bit positions match [u-boot ns9750_sys.h](#sources) (TEN=15, INTC=9, TLCS=8:6, TM=5:4,
-INTS=3, UDS=2, TSZ=1, REN=0) and [mach-ns9xxx regs-sys-ns9360.h](#sources). The
+Bit positions match [u-boot ns9750_sys.h](https://github.com/u-boot/u-boot/blob/v2012.10/include/ns9750_sys.h) (TEN=15, INTC=9, TLCS=8:6, TM=5:4,
+INTS=3, UDS=2, TSZ=1, REN=0) and [mach-ns9xxx regs-sys-ns9360.h](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-sys-ns9360.h). The
 `Timer Interrupt Status` register (0x170) bits 15:0 = per-timer requests (1 =
 active) [HWRef p.172](#sources).
 
@@ -692,8 +692,8 @@ The 32 interrupt source IDs are hardwired [HWRef p.150-151]:
 
 **Offset 0x188.** Multiplier and divider fields, plus a software-change trigger
 that resets the chip to lock new settings [HWRef p.181-182](#sources). FS = bits 24:23 and
-ND = bits 20:16 match [mach-ns9xxx regs-sys-ns9360.h](#sources) (`SYS_PLL_FS`,
-`SYS_PLL_ND`, `SYS_PLL_SWC`) and [u-boot ns9750_sys.h](#sources) (`PLL_PLLFS_MA`=0x01800000,
+ND = bits 20:16 match [mach-ns9xxx regs-sys-ns9360.h](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-sys-ns9360.h) (`SYS_PLL_FS`,
+`SYS_PLL_ND`, `SYS_PLL_SWC`) and [u-boot ns9750_sys.h](https://github.com/u-boot/u-boot/blob/v2012.10/include/ns9750_sys.h) (`PLL_PLLFS_MA`=0x01800000,
 `PLL_PLLND_MA`=0x001F0000, `PLL_PLLSW`=0x00008000).
 
 ```{list-table} PLL Configuration (0x188) [HWRef p.181-182](#sources)
@@ -827,7 +827,7 @@ GPIO/BBus utility is not clock-gated in this register.
   - Ethernet MAC clock (reset 1)
 ```
 
-Bit assignments match [u-boot ns9750_sys.h](#sources) (`CLOCK_BBC`=0x40, `CLOCK_LCC`=0x20,
+Bit assignments match [u-boot ns9750_sys.h](https://github.com/u-boot/u-boot/blob/v2012.10/include/ns9750_sys.h) (`CLOCK_BBC`=0x40, `CLOCK_LCC`=0x20,
 `CLOCK_MCC`=0x10, `CLOCK_MACC`=0x01, `CLOCK_LPCS_MA`=0x380).
 
 ### Reset and Sleep Control register
@@ -909,7 +909,7 @@ enables, and (read-only) last-reset cause [HWRef p.177-179](#sources).
   - Ethernet MAC: 0 = reset, 1 = enabled (reset 1)
 ```
 
-Field bits match [u-boot ns9750_sys.h](#sources) (`RESET_CSE`=0x00080000, `RESET_BBT`=0x40,
+Field bits match [u-boot ns9750_sys.h](https://github.com/u-boot/u-boot/blob/v2012.10/include/ns9750_sys.h) (`RESET_CSE`=0x00080000, `RESET_BBT`=0x40,
 `RESET_MEMC`=0x10, `RESET_MACM`=0x01).
 
 ### Miscellaneous System Config and Status register
@@ -982,7 +982,7 @@ The bootstrap table reads gpio[44] as **0 = big / 1 = little** (p.154), while th
 `ENDM` register bit reads **0 = little / 1 = big** (p.184) — the register field is
 the inverse encoding of the pin. Both are as printed; the board straps gpio[44] = 0
 (big-endian boot) and software later selects little-endian
-[HWRef p.154, p.181][REFERENCE-MATERIAL.md]. Endianness lives in four places that
+[HWRef p.154, p.181](#sources), [REFERENCE-MATERIAL.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md). Endianness lives in four places that
 the BE→LE stub clears together: memory-controller Config bit 0, this ENDM bit,
 BBus Endian Config, and CP15 R1 bit 7 [PLAN-INCREMENTAL-PORT.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md).
 ```
@@ -1044,8 +1044,8 @@ the size and bit 0 is the enable (minimum region 4 KB) [HWRef p.183-191](#source
   - 0x7000_0000-0x7FFF_FFFF
 ```
 
-These match [mach-ns9xxx regs-sys-ns9360.h](#sources) (`SYS_SMCSDMB/DMM`=0x1d0/0x1d4,
-`SYS_SMCSSMB/SMM`=0x1f0/0x1f4) and [u-boot ns9750_sys.h](#sources)
+These match [mach-ns9xxx regs-sys-ns9360.h](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-sys-ns9360.h) (`SYS_SMCSDMB/DMM`=0x1d0/0x1d4,
+`SYS_SMCSSMB/SMM`=0x1f0/0x1f4) and [u-boot ns9750_sys.h](https://github.com/u-boot/u-boot/blob/v2012.10/include/ns9750_sys.h)
 (`CS_DYN_BASE/MASK`, `CS_STATIC_BASE/MASK`). U-Boot's `dram_init` reads
 `CS_DYN_MASK(0)` to size SDRAM [PLAN-INCREMENTAL-PORT.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md).
 
@@ -1053,8 +1053,8 @@ These match [mach-ns9xxx regs-sys-ns9360.h](#sources) (`SYS_SMCSDMB/DMM`=0x1d0/0
 
 `External Interrupt 0-3 Control` (0x214-0x220): bit 3 `STS` (raw signal), bit 2
 `CLR` (write 1 then 0), bit 1 `PLTY` (polarity/edge), bit 0 `LVEDG` (0 = level,
-1 = edge) [HWRef p.192-193](#sources); fields match [mach-ns9xxx](#sources) `SYS_EIC_*` and
-[u-boot ns9750_sys.h](#sources) `EXT_INT_CTRL_*`.
+1 = edge) [HWRef p.192-193](#sources); fields match [mach-ns9xxx](https://github.com/torvalds/linux/tree/v2.6.39/arch/arm/mach-ns9xxx) `SYS_EIC_*` and
+[u-boot ns9750_sys.h](https://github.com/u-boot/u-boot/blob/v2012.10/include/ns9750_sys.h) `EXT_INT_CTRL_*`.
 
 `RTC Clock Control` (0x224): 32-bit divider that generates the 100 Hz RTC clock;
 program to (PLL output frequency)/200 [HWRef p.193-194](#sources).
@@ -1097,16 +1097,16 @@ In-repo analysis and port planning (board specifics, firmware evidence):
 
 Independent open-source cross-reference (register names, bases, bitfields):
 
-- [mach-ns9xxx](#sources) — Linux kernel `arch/arm/mach-ns9xxx` at tag v2.6.39:
+- [mach-ns9xxx](https://github.com/torvalds/linux/tree/v2.6.39/arch/arm/mach-ns9xxx) — Linux kernel `arch/arm/mach-ns9xxx` at tag v2.6.39:
   `include/mach/regs-sys-ns9360.h`, `regs-sys-common.h`, `regs-bbu.h`,
   `regs-mem.h`, `hardware.h`, `processor-ns9360.c`, `time-ns9360.c`,
   `gpio-ns9360.c`. Raw source, e.g.
   <https://raw.githubusercontent.com/torvalds/linux/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-sys-ns9360.h>.
-- [u-boot ns9750](#sources) — U-Boot at tag v2012.10: `include/ns9750_sys.h`,
+- [u-boot ns9750](https://github.com/u-boot/u-boot/tree/v2012.10) — U-Boot at tag v2012.10: `include/ns9750_sys.h`,
   [`ns9750_mem.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_mem.h), [`ns9750_bbus.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_bbus.h), [`ns9750_ser.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_ser.h), `include/configs/ns9750dev.h`,
   `drivers/serial/ns9750_serial.c`. Raw source, e.g.
   <https://raw.githubusercontent.com/u-boot/u-boot/v2012.10/include/ns9750_sys.h>.
-- [u-boot ns9750_eth.h](#sources) — the Ethernet register header is not in mainline
+- [u-boot ns9750_eth.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_eth.h) — the Ethernet register header is not in mainline
   U-Boot; the Digi-derived version is preserved in a mirror at
   <https://raw.githubusercontent.com/true-systems/om5p-ac-v2-unlocker/master/u-boot_mr1750/include/ns9750_eth.h>.
 

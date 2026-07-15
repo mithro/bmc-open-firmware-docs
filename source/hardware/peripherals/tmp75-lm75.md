@@ -306,7 +306,7 @@ mapped to R1:R0, and at probe it sets R1:R0 = 12-bit and clears the OS bit
 
 - The devicetree binding file is now `lm75.yaml` (the older `national,lm75.yaml`
   path 404s on current mainline); the `national,lm75` *compatible* is unchanged.
-  [lm75.yaml](#sources)
+  [lm75.yaml](https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/hwmon/lm75.yaml)
 - The driver's `lm75b` type models the **NXP LM75B (11-bit)**, which is *not* the
   TI/National LM75B in this datasheet (a 9-bit National LM75 re-badge). For the
   datasheet part, use `national,lm75` (9-bit), **not** `national,lm75b`. [lm75.c](https://github.com/torvalds/linux/blob/master/drivers/hwmon/lm75.c)

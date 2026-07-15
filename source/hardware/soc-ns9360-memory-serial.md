@@ -5,7 +5,7 @@ Continuation of {doc}`soc-ns9360`: the external-memory controller, the Ethernet 
 ## Memory Controller
 
 
-**Base address: 0xA0700000** [HWRef p.281][mach-ns9xxx regs-mem.h][u-boot ns9750_mem.h].
+**Base address: 0xA0700000** [HWRef p.281](#sources), [mach-ns9xxx regs-mem.h](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-mem.h), [u-boot ns9750_mem.h](https://github.com/u-boot/u-boot/blob/v2012.10/include/ns9750_mem.h).
 
 An AMBA-AHB MultiPort Memory Controller (ARM PL172/PL175 lineage) with a dynamic
 (SDRAM / low-power SDRAM) controller and a static (ROM / Flash / SRAM) controller.
@@ -54,8 +54,8 @@ static memory is *not* supported [HWRef p.196-197](#sources).
   - Per-CS static memory width/timing
 ```
 
-Offsets confirmed by [mach-ns9xxx regs-mem.h](#sources) (`MEM_CTRL`=0xa0700000,
-`MEM_DMCONF`=0x100+8x, `MEM_SMC`=0x200+8x) and [u-boot ns9750_mem.h](#sources).
+Offsets confirmed by [mach-ns9xxx regs-mem.h](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-mem.h) (`MEM_CTRL`=0xa0700000,
+`MEM_DMCONF`=0x100+8x, `MEM_SMC`=0x200+8x) and [u-boot ns9750_mem.h](https://github.com/u-boot/u-boot/blob/v2012.10/include/ns9750_mem.h).
 
 ### Control, Status, Config
 
@@ -88,7 +88,7 @@ Offsets confirmed by [mach-ns9xxx regs-mem.h](#sources) (`MEM_CTRL`=0xa0700000,
 `Status` (0x004): bit 2 `SA` self-refresh acknowledge, bit 1 `WBS` write-buffer
 status, bit 0 `BUSY` [HWRef p.286](#sources). `Config` (0x008): bit 0 `END` endian
 (0 = little, 1 = big; reset from gpio[44], software-overridable) — this is the
-memory-controller half of the endian switch [HWRef p.286-287][mach-ns9xxx].
+memory-controller half of the endian switch [HWRef p.286-287](#sources), [mach-ns9xxx](https://github.com/torvalds/linux/tree/v2.6.39/arch/arm/mach-ns9xxx).
 
 ### Dynamic (SDRAM) controller
 
@@ -314,8 +314,8 @@ port draft uses CAS = 2, RAS = 3 [PLAN-INCREMENTAL-PORT.md](https://github.com/m
   - Memory width: 00 = 8-bit, 01 = 16-bit, 10 = 32-bit (CS1 from strap)
 ```
 
-Field bits match [mach-ns9xxx regs-mem.h](#sources) (`MEM_SMC_EW`=8, `MEM_SMC_PB`=7,
-`MEM_SMC_PC`=6, `MEM_SMC_PM`=3, `MEM_SMC_MW`=1:0) and [u-boot ns9750_mem.h](#sources).
+Field bits match [mach-ns9xxx regs-mem.h](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-mem.h) (`MEM_SMC_EW`=8, `MEM_SMC_PB`=7,
+`MEM_SMC_PC`=6, `MEM_SMC_PM`=3, `MEM_SMC_MW`=1:0) and [u-boot ns9750_mem.h](https://github.com/u-boot/u-boot/blob/v2012.10/include/ns9750_mem.h).
 Per-CS timing (all n = wait states, value ≈ n+1 HCLK):
 `StaticWaitWen` (0x204, WE delay), `StaticWaitOen` (0x208, OE delay),
 `StaticWaitRd` (0x20C, read), `StaticWaitPage` (0x210, page-mode read),
@@ -323,15 +323,15 @@ Per-CS timing (all n = wait states, value ≈ n+1 HCLK):
 [HWRef p.313-318](#sources). The shared `StaticExtendedWait` (0x080) times CS whose `EW`
 bit is set: bits 9:0 encode (n+1)×16 HCLK cycles [HWRef p.303](#sources). On this board the
 two 16-bit NOR chips use MW = 16-bit with page-burst, and the boot flash on CS0
-is auto-configured by the reset straps [ANALYSIS.md][PLAN-INCREMENTAL-PORT.md].
+is auto-configured by the reset straps [ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md), [PLAN-INCREMENTAL-PORT.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md).
 
 ## Ethernet Communication Module
 
 
-**Base address: 0xA0600000** [HWRef p.341][u-boot ns9750_eth.h]. The module is an
+**Base address: 0xA0600000** [HWRef p.341](#sources), [u-boot ns9750_eth.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_eth.h). The module is an
 Ethernet MAC plus a front-end (EFE). The MAC talks to an **external PHY** over a
 software-selected **MII or RMII** interface (the board uses MII to an ICS1893 PHY)
-[HWRef p.319-324][ANALYSIS.md]. Frames move by buffer-descriptor DMA: four
+[HWRef p.319-324](#sources), [ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md). Frames move by buffer-descriptor DMA: four
 receive descriptor rings (A/B/C/D) plus one transmit ring [HWRef p.328-334](#sources).
 
 ### Ethernet register map
@@ -399,7 +399,7 @@ receive descriptor rings (A/B/C/D) plus one transmit ring [HWRef p.328-334](#sou
   - On-chip TX buffer descriptor RAM (64 descriptors)
 ```
 
-Offsets and mnemonics confirmed by [u-boot ns9750_eth.h](#sources) (`EGCR1`=0x000,
+Offsets and mnemonics confirmed by [u-boot ns9750_eth.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_eth.h) (`EGCR1`=0x000,
 `MAC1`=0x400, `MCFG`=0x420, `SA1`=0x440, `RXAPTR`=0xA00, `TXBD`=0x1000, etc.).
 
 ### General control / status
@@ -597,7 +597,7 @@ Inter-packet gap and collision: `IPGT` (0x408, back-to-back, recommend 0x15 full
 collision window bits 13:8, RETX = retry limit bits 3:0, reset 0x370F), `MAXF`
 (0x414, max frame length, reset 0x0600 = 1536) [HWRef p.358-361](#sources). `SUPP` (0x418):
 bit 15 `RPERMII` (reset RMII), bit 8 `SPEED` (RMII 10/100) [HWRef p.362](#sources). MAC1/MAC2
-field bits match [u-boot ns9750_eth.h](#sources) (`MAC1_SRST`=0x8000, `MAC1_RXEN`=0x0001,
+field bits match [u-boot ns9750_eth.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_eth.h) (`MAC1_SRST`=0x8000, `MAC1_RXEN`=0x0001,
 `MAC2_FULLD`=0x0001, `MAC2_CRCEN`=0x0010, `MAC2_PADEN`=0x0020).
 
 ### MII management (PHY access)
@@ -679,11 +679,11 @@ undersize/fragment) [HWRef p.374-388](#sources). Enable via `EGCR2.STEN`; carry 
 
 **Base addresses:** channel B = 0x9020_0000, channel A = 0x9020_0040,
 channel C = 0x9030_0000, channel D = 0x9030_0040 [HWRef p.571-572](#sources)
-[u-boot ns9750_ser.h](#sources). Each channel is a 0x40-byte block with identical layout,
+[u-boot ns9750_ser.h](https://github.com/u-boot/u-boot/blob/v2012.10/include/ns9750_ser.h). Each channel is a 0x40-byte block with identical layout,
 independently configurable as UART, SPI master, or SPI slave (via `MODE` in
 Control Register B). On the board, channel A (0x9020_0040) is the debug console at
 115200 8N1 (J25 "Digi UART"), channel B carries the display unit link, and one
-channel drives the MAXQ3180 metering AFE by SPI [ANALYSIS.md][REFERENCE-MATERIAL.md].
+channel drives the MAXQ3180 metering AFE by SPI [ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md), [REFERENCE-MATERIAL.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md).
 
 ### Channel register map
 
@@ -723,7 +723,7 @@ channel drives the MAXQ3180 metering AFE by SPI [ANALYSIS.md][REFERENCE-MATERIAL
   - Software/hardware XON/XOFF, forced character
 ```
 
-Offsets confirmed by [u-boot ns9750_ser.h](#sources) (`CTRL_A`=0x00, `CTRL_B`=0x04,
+Offsets confirmed by [u-boot ns9750_ser.h](https://github.com/u-boot/u-boot/blob/v2012.10/include/ns9750_ser.h) (`CTRL_A`=0x00, `CTRL_B`=0x04,
 `STAT_A`=0x08, `BITRATE`=0x0C, `FIFO`=0x10, `RX_MATCH`=0x1C, `FLOW_CTRL`=0x34).
 Each channel has a 32-byte TX FIFO and 32-byte RX FIFO; data formats are
 5-8 data bits, odd/even/no parity, 1 or 2 stop bits; async up to 1.8432 Mbps
@@ -947,7 +947,7 @@ first), bit 15 `RTSTX` (RTS active only while transmitting, for multidrop)
   - Divisor: $N = \dfrac{F_\text{CLK}}{\text{oversample} \times \text{baud}} - 1$
 ```
 
-Field bits match [u-boot ns9750_ser.h](#sources) (`EBIT`=0x80000000, `TMODE`=0x40000000,
+Field bits match [u-boot ns9750_ser.h](https://github.com/u-boot/u-boot/blob/v2012.10/include/ns9750_ser.h) (`EBIT`=0x80000000, `TMODE`=0x40000000,
 `CLKMUX_MA`=0x03000000, `TCDR_MA`=bits 20:19, `RCDR_MA`=bits 18:16, `N_MA`=14:0).
 `CLKMUX` = 00 selects x1_sys_osc/2 ($= 29.4912/2 = 14.7456\,\text{MHz}$); `CLKMUX` = 01
 selects BCLK (the BBus clock) $= \text{AHB}/2 = f_\text{vco}/8 \approx 44.24\,\text{MHz}$ [HWRef p.566 Table 400](#sources).
@@ -959,12 +959,12 @@ Example N values for x1_sys_osc/2 at 16× oversampling: 115200 baud → N = 7,
 
 Digi's U-Boot serial driver computes $N = \dfrac{\text{CONFIG_SYS_CLK_FREQ}/8}{\text{baud} \times 16} - 1$,
 i.e. BBus clock = system(PLL)/8, using `CLKMUX = BCLK`
-[u-boot ns9750_serial.c](#sources). With the correct PLL/system clock (≈354 MHz), that
+[u-boot ns9750_serial.c](https://github.com/u-boot/u-boot/blob/v2012.10/drivers/serial/ns9750_serial.c). With the correct PLL/system clock (≈354 MHz), that
 BBus clock is ≈44.2 MHz, so 115200 8N1 (16×) gives N = 23. The clean
 datasheet-grounded alternative is `CLKMUX = x1_sys_osc/2` (14.7456 MHz), for which
 Table 407 gives N = 7 at 16× for 115200. Verify N against the actual selected
 `CLKMUX` source; do not reuse an N derived from a differently-labelled "system
-clock" [HWRef p.591][PLAN-INCREMENTAL-PORT.md].
+clock" [HWRef p.591](#sources), [PLAN-INCREMENTAL-PORT.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md).
 ```
 
 `FIFO Data` (0x10) is the single 32-bit TX/RX data port; the gap timers
@@ -1197,15 +1197,15 @@ In-repo analysis and port planning (board specifics, firmware evidence):
 
 Independent open-source cross-reference (register names, bases, bitfields):
 
-- [mach-ns9xxx](#sources) — Linux kernel `arch/arm/mach-ns9xxx` at tag v2.6.39:
+- [mach-ns9xxx](https://github.com/torvalds/linux/tree/v2.6.39/arch/arm/mach-ns9xxx) — Linux kernel `arch/arm/mach-ns9xxx` at tag v2.6.39:
   `include/mach/regs-sys-ns9360.h`, `regs-sys-common.h`, `regs-bbu.h`,
   `regs-mem.h`, `hardware.h`, `processor-ns9360.c`, `time-ns9360.c`,
   `gpio-ns9360.c`. Raw source, e.g.
   <https://raw.githubusercontent.com/torvalds/linux/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-sys-ns9360.h>.
-- [u-boot ns9750](#sources) — U-Boot at tag v2012.10: `include/ns9750_sys.h`,
+- [u-boot ns9750](https://github.com/u-boot/u-boot/tree/v2012.10) — U-Boot at tag v2012.10: `include/ns9750_sys.h`,
   [`ns9750_mem.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_mem.h), [`ns9750_bbus.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_bbus.h), [`ns9750_ser.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_ser.h), `include/configs/ns9750dev.h`,
   `drivers/serial/ns9750_serial.c`. Raw source, e.g.
   <https://raw.githubusercontent.com/u-boot/u-boot/v2012.10/include/ns9750_sys.h>.
-- [u-boot ns9750_eth.h](#sources) — the Ethernet register header is not in mainline
+- [u-boot ns9750_eth.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_eth.h) — the Ethernet register header is not in mainline
   U-Boot; the Digi-derived version is preserved in a mirror at
   <https://raw.githubusercontent.com/true-systems/om5p-ac-v2-unlocker/master/u-boot_mr1750/include/ns9750_eth.h>.
