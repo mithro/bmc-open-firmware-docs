@@ -230,8 +230,8 @@ shared-SoC ones and apply unchanged. [ANALYSIS.md:322](https://github.com/mithro
 ## Coverage notes and gaps
 
 
-- **PEX "product briefs" are family stand-ins.** The in-repo `PEX8696_ProductBrief.pdf`
-  and `PEX8647_ProductBrief.pdf` actually contain the **PEX8619** and **PEX8648**
+- **PEX "product briefs" are family stand-ins.** The in-repo [`PEX8696_ProductBrief.pdf`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/datasheets/PEX8696_ProductBrief.pdf)
+  and [`PEX8647_ProductBrief.pdf`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/datasheets/PEX8647_ProductBrief.pdf) actually contain the **PEX8619** and **PEX8648**
   briefs. They are same-generation ExpressLane 86xx Gen2 parts and are cited only
   for architecture common to the family; the exact PEX8696 (96-lane/24-port) and
   PEX8647 (48-lane/3-port) parameters are from Broadcom + the RE notes. A true
@@ -265,22 +265,22 @@ shared-SoC ones and apply unchanged. [ANALYSIS.md:322](https://github.com/mithro
   - 16
   - `0xF0` / `&i2c0` (base `0x1E78A040`)
   - `0x40`–`0x4F` (A1/A0 straps)
-  - Per-PCIe-slot 12 V current/power monitor. [IS_fl.bin.md:165-195](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/IS_fl.bin.md#L165-L195) [dts:402-411]
+  - Per-PCIe-slot 12 V current/power monitor. [IS_fl.bin.md:165-195](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/IS_fl.bin.md#L165-L195) [dts:402-411](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-bmc-dell-c410x.dts#L402-L411)
 * - ADT7462
   - 2
   - `0xF1` / `&i2c1` (base `0x1E78A080`)
   - `0x58`, `0x5C` behind PCA9544A mux `0x70`
-  - Board temperature zones + 8-fan tach/PWM control. [IS_fl.bin.md:81-95,141-163](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/IS_fl.bin.md#L81-L95) [dts:596-663]
+  - Board temperature zones + 8-fan tach/PWM control. [IS_fl.bin.md:81-95,141-163](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/IS_fl.bin.md#L81-L95) [dts:596-663](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-bmc-dell-c410x.dts#L596-L663)
 * - TMP75 (per-slot)
   - 16
   - `0xF4` / `&i2c4` (base `0x1E78A140`)
   - `0x5C`, behind 2× PCA9548 mux (`0x70`, `0x71`)
-  - Per-PCIe-slot temperature. Firmware tables call these "TMP100"; DT uses `ti,tmp75`. [IS_fl.bin.md:102-129](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/IS_fl.bin.md#L102-L129) [dts:733-851]
+  - Per-PCIe-slot temperature. Firmware tables call these "TMP100"; DT uses `ti,tmp75`. [IS_fl.bin.md:102-129](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/IS_fl.bin.md#L102-L129) [dts:733-851](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-bmc-dell-c410x.dts#L733-L851)
 * - LM75 (front board)
   - 1
   - `0xF6` / `&i2c6`
   - `0x4F` (8-bit `0x9E`)
-  - Front-board ambient temperature. [IS_fl.bin.md:131-139](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/IS_fl.bin.md#L131-L139) [dts:1104-1119]
+  - Front-board ambient temperature. [IS_fl.bin.md:131-139](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/IS_fl.bin.md#L131-L139) [dts:1104-1119](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-bmc-dell-c410x.dts#L1104-L1119)
 ```
 
 ```{admonition} TMP100 vs TMP75 vs LM75 — chip-identity caveat
@@ -293,8 +293,8 @@ The C410X firmware IO tables and symbol table name the per-slot sensor driver
 device with non-standard strapping (or a TMP100/TMP1075 variant). The
 reconstructed device tree models them with the register-compatible `ti,tmp75`
 binding because all these chips share the same LM75 register layout (pointer +
-temperature/config/T_LOW/T_HIGH). [dts:739-743,769] The front-board sensor at
-`0x4F` is bound `national,lm75`. [dts:1115-1116] This document covers the TMP75
+temperature/config/T_LOW/T_HIGH). [dts:739-743,769](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-bmc-dell-c410x.dts#L739-L743) The front-board sensor at
+`0x4F` is bound `national,lm75`. [dts:1115-1116](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-bmc-dell-c410x.dts#L1115-L1116) This document covers the TMP75
 and LM75 register sets; the per-slot part is functionally one of them.
 ```
 

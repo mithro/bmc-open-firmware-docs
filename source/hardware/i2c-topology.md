@@ -50,7 +50,7 @@ extension-bar connectors, covered on {doc}`../systems/hpe-ipdu`.
 * - {doc}`peripherals/pex8696-8647`
   - 4 + 2
   - PLX PCIe switches (bus 0xF3)
-* - AT24C256 EEPROM
+* - [AT24C256 EEPROM](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/datasheets/AT24C256_Datasheet.pdf)
   - 1
   - FRU data (bus 0xF2)
 ```

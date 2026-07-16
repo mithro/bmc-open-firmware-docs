@@ -389,7 +389,7 @@ from. [RAPTOR_ENGINEERING_AST2050_ANALYSIS.md:235-246,670-676](https://github.co
 - The host reaches the BMC over PCI as **ASPEED Graphics `[1a03:2000]` at
   `01:01.0`** (driver `ast`, 8 MB BAR0) — that BAR is the **P2A (PCIe→AHB)**
   doorway. IPMI KCS is declared (I/O `0xCA2`) but the BMC does **not** answer
-  (no functional firmware). [hardware-inventory/README.md:31-39](#sources)
+  (no functional firmware). [hardware-inventory/README.md:31-39](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hardware-inventory/README.md#L31-L39)
 ```
 
 **Independent BMC observation/control paths** (all cross-validated on real
@@ -401,7 +401,7 @@ live board reads a different value), `SCU14 = 0x00003EFF` (the **frequency-count
 measurement** register — the hardware straps are in `SCU70`, not `SCU14`).
 [JTAG-USAGE-GUIDE.md:250-256,442-444](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-USAGE-GUIDE.md#L250-L256) The DDR2 native window is `0x40000000`
 (64 MB); the SPI boot flash is at `0x14000000` (SMC controller `0x16000000`).
-[JTAG-USAGE-GUIDE.md:444](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-USAGE-GUIDE.md#L444) [datasheets/README.md:36-38](#sources)
+[JTAG-USAGE-GUIDE.md:444](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-USAGE-GUIDE.md#L444) [datasheets/README.md:36-38](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/README.md#L36-L38)
 
 ```{admonition} Crash-safety rule (AHB)
 :class: warning
@@ -415,11 +415,12 @@ the native DRAM window (`0x40000000`) and SoC register space.
 ### 3.3 BMC Ethernet PHY
 
 The AST2050 MAC0 uses **RMII** to an external Fast-Ethernet PHY. Public sources
-(15h.org, The Retro Web) identify it as a **Realtek RTL8201N** class part.
-[WebSearch: theretroweb / 15h.org] The in-repo analysis flags the exact PHY as an
+([15h.org](https://www.15h.org/), [The Retro Web](https://theretroweb.com/))
+identify it as a **Realtek RTL8201N** class part.
+The in-repo analysis flags the exact PHY as an
 **open question** — the RTL8201EL/RTL8211BN/RTL8201N names in the Raptor analysis
 are the AST2050 driver's *supported* list, not a confirmed board ID; a board photo
-/ ASMB schematic is needed to close it. [datasheets/README.md:152](#sources) Treat "RTL8201N"
+/ ASMB schematic is needed to close it. [datasheets/README.md:152](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/README.md#L152) Treat "RTL8201N"
 as the strong candidate pending physical confirmation.
 
 ---
@@ -431,7 +432,7 @@ The **AMD SP5100** (SB700-family) is the KGPE-D16 southbridge, paired with the
 **SR5690 (RD890)** northbridge over A-Link Express II. It is host-platform
 silicon managed by coreboot — **not** on the AST2050 BMC bus — but it is the
 board's SMBus/LPC/power/reset hub and hosts the W83795G, so it matters to BMC
-work. [datasheets/README.md:46-55,106-107](#sources) [hardware-inventory/README.md:17-19](#sources)
+work. [datasheets/README.md:46-55,106-107](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/README.md#L46-L55) [hardware-inventory/README.md:17-19](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hardware-inventory/README.md#L17-L19)
 
 ```{list-table} SP5100 interfaces relevant to BMC / board management
 :header-rows: 1
@@ -440,20 +441,21 @@ work. [datasheets/README.md:46-55,106-107](#sources) [hardware-inventory/README.
 * - Interface
   - Relevance
 * - SMBus controller
-  - Hosts the **W83795G at 0x2F** (`i2c-piix4`, I/O base `0x0B00`) plus DIMM SPD `0x50-0x57`; driven by an embedded 8051 core. [datasheets/README.md:52-53](#sources) [hardware-inventory/README.md:42](#sources) [JTAG-HEADERS.md:402-408](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-HEADERS.md#L402-L408)
+  - Hosts the **W83795G at 0x2F** (`i2c-piix4`, I/O base `0x0B00`) plus DIMM SPD `0x50-0x57`; driven by an embedded 8051 core. [datasheets/README.md:52-53](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/README.md#L52-L53) [hardware-inventory/README.md:42](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hardware-inventory/README.md#L42) [JTAG-HEADERS.md:402-408](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-HEADERS.md#L402-L408)
 * - LPC bus
-  - Connects the **W83667HG-A Super I/O** (host serial/COM, hwmon backup) and TPM; the LPC/Port-80 path is a candidate for the unidentified `NB_DEBUG_HEADER`. [datasheets/README.md:53](#sources) [HEADER-PINOUTS.md:141-144](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/HEADER-PINOUTS.md#L141-L144)
+  - Connects the **W83667HG-A Super I/O** (host serial/COM, hwmon backup) and TPM; the LPC/Port-80 path is a candidate for the unidentified `NB_DEBUG_HEADER`. [datasheets/README.md:53](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/README.md#L53) [HEADER-PINOUTS.md:141-144](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/HEADER-PINOUTS.md#L141-L144)
 * - Power / reset
   - SB700-family power sequencing, ACPI/power-management, and platform reset live here; the ASF remote power path (W83795G §1.8) drives platform power via the NIC side-band, parallel to any BMC path.
 * - SATA / USB / GPIO
-  - 6× SATA II, USB OHCI/EHCI, GPIO — host peripherals. [JTAG-HEADERS.md:410-417](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-HEADERS.md#L410-L417) [hardware-inventory/README.md:17-19](#sources)
+  - 6× SATA II, USB OHCI/EHCI, GPIO — host peripherals. [JTAG-HEADERS.md:410-417](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-HEADERS.md#L410-L417) [hardware-inventory/README.md:17-19](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hardware-inventory/README.md#L17-L19)
 * - Embedded 8051
   - The SP5100 (like the SR5690) contains an embedded microcontroller that "requires a firmware upload from the main platform firmware or via JTAG" to start; it may be reachable on the HDT scan chain. [JTAG-HEADERS.md:402-417](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-HEADERS.md#L402-L417)
 ```
 
 The SP5100's registers are documented in the in-repo **AMD SP5100 Register
 Reference Guide (publication 44413, 317 pp)** [SP5100 RG](#sources); its coreboot driver is
-`southbridge/amd/sb700`. [datasheets/README.md:107](#sources) For BMC firmware the key
+[`southbridge/amd/sb700`](https://github.com/coreboot/coreboot/tree/4.11/src/southbridge/amd/sb700)
+(coreboot 4.11, the last release carrying the KGPE-D16). [datasheets/README.md:107](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/README.md#L107) For BMC firmware the key
 takeaways are: the **hwmon (W83795G) lives on the SP5100 SMBus**, the **host
 serial console is a Super I/O behind SP5100 LPC** (distinct from the BMC's
 `AST_UART1`), and **platform power/reset is an SP5100/ASF concern**, separate from
@@ -481,8 +483,11 @@ the AST2050's own GPIO/WDT reset primitives (§3).
 
 - **[`asus-kgpe-d16-firmware/`](https://github.com/mithro/ai-shenanigans-for-bmcs/tree/main/asus-kgpe-d16-firmware)** — [`HEADER-PINOUTS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/HEADER-PINOUTS.md), [`JTAG-HEADERS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-HEADERS.md),
   [`JTAG-USAGE-GUIDE.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-USAGE-GUIDE.md), [`RPI4-OPENOCD-JTAG-WIRING.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RPI4-OPENOCD-JTAG-WIRING.md) (header pinouts +
-  RPi4 wiring), and the AST2050 bring-up docs (GPIO/power, verified
+  RPi4 wiring), [`datasheets/README.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/README.md),
+  [`hardware-inventory/README.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hardware-inventory/README.md),
+  [`HARDWARE-ACCESS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/HARDWARE-ACCESS.md),
+  and the AST2050 bring-up docs (GPIO/power, verified
   IDCODE `0x07926f0f`, `SCU7C=0x202`).
-- **AMD SP5100 Register Reference Guide** (44413) — the southbridge.
+- **[AMD SP5100 Register Reference Guide](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/AMD_SP5100_Register_Reference_Guide_44413.pdf)** (44413) — the southbridge.
 - The on-board hardware monitor is documented at
   {doc}`../hardware/peripherals/w83795g`.
