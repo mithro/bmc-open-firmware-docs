@@ -17,6 +17,9 @@ cross-reference must resolve.
 
 - **Markdown (MyST)** for prose; use `{doc}` / `{ref}` for cross-references so
   the link checker can validate them.
+- **Link everything that is linkable** — files, repos, datasheets, citations,
+  and topics documented on other pages. The full policy, with target
+  conventions per artifact type and examples, is {doc}`linking`.
 - **Dates** are ISO 8601 (`YYYY-MM-DD`).
 - Each hardware page follows the shared layout (bus/address → register map →
   reset values → behaviour → datasheet source) so a reader can build both a
