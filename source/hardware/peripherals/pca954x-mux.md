@@ -105,7 +105,7 @@ channel number for each ADT7462 is not pinned down in the RE notes — see §7 G
 
 ## 2.4 Linux binding ([`i2c-mux-pca954x`](https://github.com/torvalds/linux/blob/master/drivers/i2c/muxes/i2c-mux-pca954x.c))
 
-Mainline Linux drives both parts with **`drivers/i2c/muxes/i2c-mux-pca954x.c`**,
+Mainline Linux drives both parts with **[`drivers/i2c/muxes/i2c-mux-pca954x.c`](https://github.com/torvalds/linux/blob/master/drivers/i2c/muxes/i2c-mux-pca954x.c)**,
 DT compatibles **`nxp,pca9548`** and **`nxp,pca9544`** [i2c-mux-pca954x](#sources). The mux
 node nests one child `i2c` bus per channel (`reg = <N>`), under which the
 downstream sensors live. Useful options: **`i2c-mux-idle-disconnect`** (deselect
@@ -136,7 +136,7 @@ visibility on the currently selected channel(s).
 
 ## Sources
 
-- **PCA9548A datasheet** (NXP SCPS143) and **PCA9544A datasheet** (NXP SCPS146) —
-  channel-select registers, addressing, interrupt behaviour.
+- **[PCA9548A datasheet](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/datasheets/PCA9548A_Datasheet.pdf)** (NXP SCPS143) and **[PCA9544A datasheet](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/datasheets/PCA9544A_Datasheet.pdf)** (NXP SCPS146) —
+  channel-select registers, addressing, interrupt behaviour (in-repo PDFs).
 - **[`dell-c410x-firmware/ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/ANALYSIS.md)** / [`io-tables/`](https://github.com/mithro/ai-shenanigans-for-bmcs/tree/main/dell-c410x-firmware/io-tables) — the C410X mux tree usage.
 - Linux [`drivers/i2c/muxes/i2c-mux-pca954x.c`](https://github.com/torvalds/linux/blob/master/drivers/i2c/muxes/i2c-mux-pca954x.c) (`nxp,pca9548`/`nxp,pca9544`).
