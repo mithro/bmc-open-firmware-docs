@@ -3070,7 +3070,7 @@ through PCI I/O ports. `[aspeeddrm]`
 ## Sources
 
 - **AST2050/AST1100 A3 Datasheet, V1.05** (25 May 2010), in-repo PDF
-  `datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`. Chapters
+  [`datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf). Chapters
   transcribed here: **§15 USB 2.0 Virtual Hub Controller** (p.154–178; register
   file §15.3 p.155–173), **§20 Video Engine** (p.232–255; register file §20.3
   p.234–255), **§34 VGA Display Controller** (p.368–392; standard sets §34.3–34.8

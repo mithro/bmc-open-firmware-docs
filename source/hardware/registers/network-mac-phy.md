@@ -1418,7 +1418,7 @@ verify (`asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md`, "Change 10: Ethernet
 Primary hardware authority:
 
 - **ASPEED AST2050/AST1100 A3 Datasheet, V1.05** (2010-05-25), in-repo:
-  `datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`. Chapters used:
+  [`datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf). Chapters used:
   §1.3.14 / §2.6 (feature overview), §3 (pin table), §4.7.2 (MII/RMII interface,
   p.68), **§14 "10/100 Ethernet MAC Controller"** (register map p.124–143, function
   description incl. §14.4.6 MII management p.144–151), §16 (interrupt table), §18.2
@@ -1426,10 +1426,10 @@ Primary hardware authority:
 
 Software view of the same Faraday FTGMAC100 IP:
 
-- Mainline Linux `drivers/net/ethernet/faraday/ftgmac100.h` — register offsets and
+- Mainline Linux [`drivers/net/ethernet/faraday/ftgmac100.h`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h) — register offsets and
   `MACCR`/`PHYCR`/`PHYDATA` bit macros
   (<https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h>).
-- Mainline Linux `drivers/net/ethernet/faraday/ftgmac100.c` — MDIO read/write
+- Mainline Linux [`drivers/net/ethernet/faraday/ftgmac100.c`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.c) — MDIO read/write
   sequence, init flow, RMII/RCLK handling.
 
 External PHY:
@@ -1442,14 +1442,14 @@ External PHY:
 Project reverse-engineering / on-hardware evidence (private analysis repo
 `ai-shenanigans-for-bmcs/`):
 
-- `asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md` — U-Boot-vs-Linux MAC/SCU
+- [`asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md) — U-Boot-vs-Linux MAC/SCU
   register dumps over P2A, the `MACCR=0x80500/0x8050F` worked example, TX-ring probe,
   and the `ndo_open`/MACCR-write-stall root-cause trace.
 - [`asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch) — the
   AST2050 MACCLK behaviour + the note that MAC-clock rate is not the RMII-TX cause.
-- `asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md` and
-  `asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md` — FTGMAC100 driver / PHY support,
+- [`asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md) and
+  [`asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md) — FTGMAC100 driver / PHY support,
   DT `compatible` strings, SCU touch-points, IRQ mapping.
-- `asus-kgpe-d16-firmware/hwreg.h` (`AST_MAC1_BASE 0x1E660000`,
-  `AST_MAC2_BASE 0x1E680000`) and `asus-kgpe-d16-firmware/ast2050.h`
+- [`asus-kgpe-d16-firmware/hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h) (`AST_MAC1_BASE 0x1E660000`,
+  `AST_MAC2_BASE 0x1E680000`) and [`asus-kgpe-d16-firmware/ast2050.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h)
   (U-Boot `CONFIG_ASPEEDNIC`, MAC#1/#2 PHY-setting scratch-register semantics).

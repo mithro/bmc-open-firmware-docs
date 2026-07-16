@@ -335,5 +335,5 @@ mapped to R1:R0, and at probe it sets R1:R0 = 12-bit and clears the OS bit
 - **`dell-c410x-firmware/io-tables/`** + [`ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/ANALYSIS.md) — the per-slot sensors
   behind two PCA9548 muxes (firmware calls them TMP100 @ 0x5C; the DTS binds the
   register-compatible `ti,tmp75`) and the front-board LM75 @ 0x4F.
-- Linux `drivers/hwmon/lm75.c` (`ti,tmp75` / `national,lm75`) — the binding
+- Linux [`drivers/hwmon/lm75.c`](https://github.com/torvalds/linux/blob/master/drivers/hwmon/lm75.c) (`ti,tmp75` / `national,lm75`) — the binding
   (use `national,lm75` for the 9-bit TI/National part, not the NXP `lm75b`).

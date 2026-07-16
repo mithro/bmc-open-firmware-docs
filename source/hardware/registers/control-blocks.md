@@ -1256,7 +1256,7 @@ QEMU model and the `aspeed,ast2050-adc` compatible are still required.
 ## Sources
 
 - **AST2050/AST1100 A3 Datasheet V1.05** (in-repo:
-  `datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`; page numbers are
+  [`datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf); page numbers are
   the printed datasheet page in the footer), cited inline as [DS …](#sources):
   - §7 Multi-Function Pins — PWM1–4/PECII/PECIO pin-mux via SCU74 (mux table p.80).
   - §8.1 Clock Information — PWMCLK/TACHCLK/PECICLK/CLK1M/LCLK rates (p.84).
@@ -1271,25 +1271,25 @@ QEMU model and the `aspeed,ast2050-adc` compatible are still required.
   - §32 PECI Controller — PECI00-PECI3C (p.357-362).
   - Revision history & A1/A2 errata list (front matter) — PWM register removal
     (v0.92), VUART/PUART reset-on-reboot erratum, LHCR0 control note (v1.03).
-- **In-repo Raptor Engineering AST2050 port** (`asus-kgpe-d16-firmware/`):
+- **In-repo Raptor Engineering AST2050 port** ([`asus-kgpe-d16-firmware/`](https://github.com/mithro/ai-shenanigans-for-bmcs/tree/main/asus-kgpe-d16-firmware)):
   - [`ast2050.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h) — 24 MHz UART reference clock, NS16550 base addresses.
   - [`hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h) — SCU / timer / UART / interrupt-controller register offsets
     (the PWM/RTC/PECI/VUART blocks are *not* defined here; datasheet-only).
-- **In-repo mainline-driver analysis** (`dell-c410x-firmware/`), cited as
+- **In-repo mainline-driver analysis** ([`dell-c410x-firmware/`](https://github.com/mithro/ai-shenanigans-for-bmcs/tree/main/dell-c410x-firmware)), cited as
   [aspeed-mainline-drivers-analysis.md:…](#sources) / [aspeed-driver-quick-reference.md:…](#sources):
-  - PWM/tacho → `drivers/hwmon/aspeed-pwm-tacho.c` (`aspeed,ast2400-pwm-tacho`,
+  - PWM/tacho → [`drivers/hwmon/aspeed-pwm-tacho.c`](https://github.com/torvalds/linux/blob/master/drivers/hwmon/aspeed-pwm-tacho.c) (`aspeed,ast2400-pwm-tacho`,
     register-compatible with this G3 block).
-  - RTC → `drivers/rtc/rtc-aspeed.c` (`aspeed,ast2400-rtc`, **different** block).
-  - PECI → `drivers/peci/controller/peci-aspeed.c` (`aspeed,ast2400-peci`).
-  - VUART → `drivers/tty/serial/8250/8250_aspeed_vuart.c`
+  - RTC → [`drivers/rtc/rtc-aspeed.c`](https://github.com/torvalds/linux/blob/master/drivers/rtc/rtc-aspeed.c) (`aspeed,ast2400-rtc`, **different** block).
+  - PECI → [`drivers/peci/controller/peci-aspeed.c`](https://github.com/torvalds/linux/blob/master/drivers/peci/controller/peci-aspeed.c) (`aspeed,ast2400-peci`).
+  - VUART → [`drivers/tty/serial/8250/8250_aspeed_vuart.c`](https://github.com/torvalds/linux/blob/master/drivers/tty/serial/8250/8250_aspeed_vuart.c)
     (`aspeed,ast2400-vuart`) atop the generic 8250 core.
   - Overall finding: **no AST2050/AST1100 support in mainline; earliest is
     AST2400 (G4).**
 - **Web cross-references** (mainline driver source, for register/formula
   corroboration only):
-  - `drivers/hwmon/aspeed-pwm-tacho.c`:
+  - [`drivers/hwmon/aspeed-pwm-tacho.c`](https://github.com/torvalds/linux/blob/master/drivers/hwmon/aspeed-pwm-tacho.c):
     <https://codebrowser.dev/linux/linux/drivers/hwmon/aspeed-pwm-tacho.c.html>
-  - `drivers/peci/controller/peci-aspeed.c`:
+  - [`drivers/peci/controller/peci-aspeed.c`](https://github.com/torvalds/linux/blob/master/drivers/peci/controller/peci-aspeed.c):
     <https://codebrowser.dev/linux/linux/drivers/peci/controller/peci-aspeed.c.html>
-  - `drivers/tty/serial/8250/8250_aspeed_vuart.c`:
+  - [`drivers/tty/serial/8250/8250_aspeed_vuart.c`](https://github.com/torvalds/linux/blob/master/drivers/tty/serial/8250/8250_aspeed_vuart.c):
     <https://codebrowser.dev/linux/linux/drivers/tty/serial/8250/8250_aspeed_vuart.c.html>

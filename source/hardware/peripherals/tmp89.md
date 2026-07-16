@@ -225,5 +225,5 @@ when change baud rate in Dialog.c"). Capabilities the MCU exposes to the NS9360:
 
 - **TMP89FM42LUG datasheet** (Toshiba TLCS-870/C1) — device overview + the
   UART0 register set.
-- **`hpe-ipdu-firmware/ANALYSIS.md`** + [`HEADERS-J1-J6.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/HEADERS-J1-J6.md) — the sub-MCU role
+- **[`hpe-ipdu-firmware/ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md)** + [`HEADERS-J1-J6.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/HEADERS-J1-J6.md) — the sub-MCU role
   (display/bezel controller) and the reverse-engineered "Dialog" protocol.

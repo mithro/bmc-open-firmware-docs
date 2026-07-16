@@ -310,7 +310,7 @@ follows that standard, the pinout is: [`HEADERS-J1-J6.md`](https://github.com/mi
 
 ## Sources
 
-- **`hpe-ipdu-firmware/`** — [`ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md), [`HEADERS-J1-J6.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/HEADERS-J1-J6.md), [`STATUS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/STATUS.md)
+- **[`hpe-ipdu-firmware/`](https://github.com/mithro/ai-shenanigans-for-bmcs/tree/main/hpe-ipdu-firmware)** — [`ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md), [`HEADERS-J1-J6.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/HEADERS-J1-J6.md), [`STATUS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/STATUS.md)
   (board inventory, J1-J6 headers, reverse-engineered protocols).
 - Per-device references: {doc}`../hardware/peripherals/ics1893`,
   {doc}`../hardware/peripherals/maxq3180`, {doc}`../hardware/peripherals/tmp89`,

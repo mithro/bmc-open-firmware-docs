@@ -1169,7 +1169,7 @@ silicon check is dead/unused (the subsequent `set_MPLL` writes literal
 ## Sources
 
 - **AST2050/AST1100 A3 Datasheet V1.05** (in-repo:
-  `datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`), sections cited as
+  [`datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf)), sections cited as
   [DS …](#sources):
   - §8.1 Clock Information (p.84); §8.2 Clock & Reset Tree Mapping (p.85);
     §8.3 Reset Tree Control Table (p.86); §8.4 Symbol Description (p.87);
@@ -1181,7 +1181,7 @@ silicon check is dead/unused (the subsequent `set_MPLL` writes literal
   - §27 Watchdog Timer WDT00–WDT18 + operation (p.287-289).
   - Pin descriptions: SRST# (R20), EXTRST# (C9/GPIOB7), WDTRST (D9/GPIOB6),
     CLKIN (R22) (p.42-47).
-- **In-repo Raptor Engineering AST2050 port** (`asus-kgpe-d16-firmware/`):
+- **In-repo Raptor Engineering AST2050 port** ([`asus-kgpe-d16-firmware/`](https://github.com/mithro/ai-shenanigans-for-bmcs/tree/main/asus-kgpe-d16-firmware)):
   - [`hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h) — SCU/WDT/MMC register offset definitions.
   - [`ast2050.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h) — board config (24 MHz UART clock, DDR sizing).
   - [`platform.S`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S) — `lowlevel_init` DDR/PLL/SCU bring-up assembly (line refs

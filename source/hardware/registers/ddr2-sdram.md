@@ -1233,14 +1233,14 @@ Primary (in-repo, read-only reverse-engineering + datasheet):
 - ASPEED AST2050/AST1100 A3 Datasheet V1.05 — Chapter 17 "SDRAM Memory
   Controller" (pp. 183–203, register base `0x1E6E0000`) and Chapter 18 "System
   Control Unit" (SCU20 p.212, SCU40 p.215, SCU7C p.220). In repo at
-  `datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`. Cited inline as
+  [`datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf). Cited inline as
   [DS §x p.N](#sources) (N = datasheet printed page).
-- `asus-kgpe-d16-firmware/platform.S` — Raptor Engineering AST2050 U-Boot
+- [`asus-kgpe-d16-firmware/platform.S`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S) — Raptor Engineering AST2050 U-Boot
   `lowlevel_init` (hardware-verified DDR2 init). Cited as [platform.S:LINE](#sources).
-- `asus-kgpe-d16-firmware/hwreg.h` — register address definitions.
-- `asus-kgpe-d16-firmware/ast2050.h` — board configuration (`CONFIG_DRAM_UART_38400`,
+- [`asus-kgpe-d16-firmware/hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h) — register address definitions.
+- [`asus-kgpe-d16-firmware/ast2050.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h) — board configuration (`CONFIG_DRAM_UART_38400`,
   `PHYS_SDRAM_1_SIZE = 64 MiB`).
-- `asus-kgpe-d16-firmware/DDR2-INIT-REVERSE-ENGINEERING.md` — the detailed
+- [`asus-kgpe-d16-firmware/DDR2-INIT-REVERSE-ENGINEERING.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/DDR2-INIT-REVERSE-ENGINEERING.md) — the detailed
   line-by-line RE analysis (the ~0.29 % DLL-error result; Raptor-vs-AMI compare).
 
 Secondary (web, corroboration for JEDEC DDR2 procedure):

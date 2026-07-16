@@ -138,5 +138,5 @@ visibility on the currently selected channel(s).
 
 - **PCA9548A datasheet** (NXP SCPS143) and **PCA9544A datasheet** (NXP SCPS146) —
   channel-select registers, addressing, interrupt behaviour.
-- **`dell-c410x-firmware/ANALYSIS.md`** / `io-tables/` — the C410X mux tree usage.
-- Linux `drivers/i2c/muxes/i2c-mux-pca954x.c` (`nxp,pca9548`/`nxp,pca9544`).
+- **[`dell-c410x-firmware/ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/ANALYSIS.md)** / [`io-tables/`](https://github.com/mithro/ai-shenanigans-for-bmcs/tree/main/dell-c410x-firmware/io-tables) — the C410X mux tree usage.
+- Linux [`drivers/i2c/muxes/i2c-mux-pca954x.c`](https://github.com/torvalds/linux/blob/master/drivers/i2c/muxes/i2c-mux-pca954x.c) (`nxp,pca9548`/`nxp,pca9544`).

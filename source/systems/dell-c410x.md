@@ -316,8 +316,8 @@ and LM75 register sets; the per-slot part is functionally one of them.
 
 ## Sources
 
-- **`dell-c410x-firmware/ANALYSIS.md`**, the decoded **`io-tables/`**,
-  **`io-tables/gpio-pin-mapping.md`**, and **`pex-i2c-analysis/`** — the
+- **[`dell-c410x-firmware/ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/ANALYSIS.md)**, the decoded **[`io-tables/`](https://github.com/mithro/ai-shenanigans-for-bmcs/tree/main/dell-c410x-firmware/io-tables)**,
+  **[`io-tables/gpio-pin-mapping.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/gpio-pin-mapping.md)**, and **[`pex-i2c-analysis/`](https://github.com/mithro/ai-shenanigans-for-bmcs/tree/main/dell-c410x-firmware/pex-i2c-analysis)** — the
   reverse-engineered C410X I2C topology, power sequence, and GPIO map.
 - Per-device references: {doc}`../hardware/peripherals/pca9555`,
   {doc}`../hardware/peripherals/pca954x-mux`,

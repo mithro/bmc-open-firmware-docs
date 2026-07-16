@@ -1181,30 +1181,30 @@ that produces the 100 Hz tick lives in the SCM at 0xA0900224 [HWRef p.193](#sour
 Primary datasheets (in-repo, the authority for the register map):
 
 - **NS9360 Hardware Reference**, Digi 90000675 rev J — [HWRef p.N](#sources)
-  (`hpe-ipdu-firmware/datasheets/NS9360_HW_Reference_90000675_J.pdf`);
+  ([`hpe-ipdu-firmware/datasheets/NS9360_HW_Reference_90000675_J.pdf`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/datasheets/NS9360_HW_Reference_90000675_J.pdf));
   online: <https://ftp1.digi.com/support/documentation/90000675_J.pdf>.
 - **NS9360 Datasheet**, Digi 91001326 rev D — [Datasheet](#sources)
-  (`hpe-ipdu-firmware/datasheets/NS9360_datasheet_91001326_D.pdf`);
+  ([`hpe-ipdu-firmware/datasheets/NS9360_datasheet_91001326_D.pdf`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/datasheets/NS9360_datasheet_91001326_D.pdf));
   online: <https://ftp1.digi.com/support/documentation/91001326_D.pdf>.
 
 In-repo analysis and port planning (board specifics, firmware evidence):
 
-- [`ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md) — `hpe-ipdu-firmware/ANALYSIS.md` (board inventory, NS9360 I/O
+- [`ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md) — [`hpe-ipdu-firmware/ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md) (board inventory, NS9360 I/O
   map, firmware register usage).
-- [`REFERENCE-MATERIAL.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md) — `hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md`.
-- [`PLAN-INCREMENTAL-PORT.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md) — `hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md`
+- [`REFERENCE-MATERIAL.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md) — [`hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md).
+- [`PLAN-INCREMENTAL-PORT.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md) — [`hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md)
   (register quick reference and clock/baud derivation).
 
 Independent open-source cross-reference (register names, bases, bitfields):
 
-- [mach-ns9xxx](https://github.com/torvalds/linux/tree/v2.6.39/arch/arm/mach-ns9xxx) — Linux kernel `arch/arm/mach-ns9xxx` at tag v2.6.39:
-  `include/mach/regs-sys-ns9360.h`, `regs-sys-common.h`, `regs-bbu.h`,
-  `regs-mem.h`, `hardware.h`, `processor-ns9360.c`, `time-ns9360.c`,
-  `gpio-ns9360.c`. Raw source, e.g.
+- [mach-ns9xxx](https://github.com/torvalds/linux/tree/v2.6.39/arch/arm/mach-ns9xxx) — Linux kernel [`arch/arm/mach-ns9xxx`](https://github.com/torvalds/linux/tree/v2.6.39/arch/arm/mach-ns9xxx) at tag v2.6.39:
+  [`include/mach/regs-sys-ns9360.h`](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-sys-ns9360.h), [`regs-sys-common.h`](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-sys-common.h), [`regs-bbu.h`](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-bbu.h),
+  [`regs-mem.h`](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-mem.h), [`hardware.h`](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/include/mach/hardware.h), [`processor-ns9360.c`](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/processor-ns9360.c), [`time-ns9360.c`](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/time-ns9360.c),
+  [`gpio-ns9360.c`](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/gpio-ns9360.c). Raw source, e.g.
   <https://raw.githubusercontent.com/torvalds/linux/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-sys-ns9360.h>.
-- [u-boot ns9750](https://github.com/u-boot/u-boot/tree/v2012.10) — U-Boot at tag v2012.10: `include/ns9750_sys.h`,
-  [`ns9750_mem.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_mem.h), [`ns9750_bbus.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_bbus.h), [`ns9750_ser.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_ser.h), `include/configs/ns9750dev.h`,
-  `drivers/serial/ns9750_serial.c`. Raw source, e.g.
+- [u-boot ns9750](https://github.com/u-boot/u-boot/tree/v2012.10) — U-Boot at tag v2012.10: [`include/ns9750_sys.h`](https://github.com/u-boot/u-boot/blob/v2012.10/include/ns9750_sys.h),
+  [`ns9750_mem.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_mem.h), [`ns9750_bbus.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_bbus.h), [`ns9750_ser.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_ser.h), [`include/configs/ns9750dev.h`](https://github.com/u-boot/u-boot/blob/v2012.10/include/configs/ns9750dev.h),
+  [`drivers/serial/ns9750_serial.c`](https://github.com/u-boot/u-boot/blob/v2012.10/drivers/serial/ns9750_serial.c). Raw source, e.g.
   <https://raw.githubusercontent.com/u-boot/u-boot/v2012.10/include/ns9750_sys.h>.
 - [u-boot ns9750_eth.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_eth.h) — the Ethernet register header is not in mainline
   U-Boot; the Digi-derived version is preserved in a mirror at

@@ -479,7 +479,7 @@ the AST2050's own GPIO/WDT reset primitives (§3).
 
 ## Sources
 
-- **`asus-kgpe-d16-firmware/`** — [`HEADER-PINOUTS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/HEADER-PINOUTS.md), [`JTAG-HEADERS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-HEADERS.md),
+- **[`asus-kgpe-d16-firmware/`](https://github.com/mithro/ai-shenanigans-for-bmcs/tree/main/asus-kgpe-d16-firmware)** — [`HEADER-PINOUTS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/HEADER-PINOUTS.md), [`JTAG-HEADERS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-HEADERS.md),
   [`JTAG-USAGE-GUIDE.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-USAGE-GUIDE.md), [`RPI4-OPENOCD-JTAG-WIRING.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RPI4-OPENOCD-JTAG-WIRING.md) (header pinouts +
   RPi4 wiring), and the AST2050 bring-up docs (GPIO/power, verified
   IDCODE `0x07926f0f`, `SCU7C=0x202`).
