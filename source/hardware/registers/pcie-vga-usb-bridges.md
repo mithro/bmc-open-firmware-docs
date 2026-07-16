@@ -480,7 +480,7 @@ Host-Interface-Control registers. [DS §30 p.319-321](#sources)
 
 `HICR5[8] ENL2H` tells you whether the LPC-to-AHB bridge is *live*. On the
 KGPE-D16, `0x1E789080` (HICR5) reads **`0x98000000`** → HWMBASE = `0x98`, **ENL2H
-= 0 → the iLPC bridge is Disabled** (only P2A is usable in-band). culvert's
+= 0 → the iLPC bridge is Disabled** (only P2A is usable in-band). [culvert](https://github.com/mithro/culvert)'s
 `aspeed,ast2050-ilpc-ahb-bridge` ops read exactly this bit. [CULVERT-G3](#sources)
 ```
 

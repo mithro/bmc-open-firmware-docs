@@ -111,7 +111,7 @@ KGPE-D16 board = AST2050-A2/A3 (and AST1100-A2/A3 share the same code).
 ```
 
 Clock gates and PLLs relevant to these blocks live in the SCU
-(`base 0x1E6E2000`), covered in the SCU register reference and summarised in the SCU-posture table on {doc}`pcie-vga-usb-bridges`.
+(`base 0x1E6E2000`), covered in the {doc}`SCU register reference <scu-clock-reset>` and summarised in the SCU-posture table on {doc}`pcie-vga-usb-bridges`.
 Key gates: `SCU0C[15]` UARTCLK, `SCU0C[5]` VGA DCLK, `SCU0C[4]` PCI-slave BCLK,
 `SCU0C[14]` USB2.0 clock, `SCU0C[0]` Video-Engine ECLK. [DS §18 p.209-210](#sources)
 

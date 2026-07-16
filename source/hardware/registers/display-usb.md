@@ -1118,7 +1118,9 @@ stock UHCI host model (e.g. `piix3-usb-uhci`) presents the identical interface.
 :class: important
 
 The AST2050 has **no EHCI / USB 2.0 host controller**. This is stated explicitly
-in the hardware-verified Raptor analysis — *"the AST2050 has UHCI only (no
+in the hardware-verified Raptor analysis
+([`RAPTOR_ENGINEERING_AST2050_ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md))
+— *"the AST2050 has UHCI only (no
 EHCI/USB 2.0) … Do NOT add EHCI — AST2050 doesn't have it."* A `usb@1e6a1000`
 EHCI node does appear in the G4-template real-hardware DTS, but that base address
 is carried over from the AST2400 (G4) binding and does **not** correspond to G3

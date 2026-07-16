@@ -78,7 +78,7 @@ config, which lists `CFG_CMD_HACTEST` and `CFG_CMD_MICTEST` [ast2050.h](https://
 (OpenBMC / u-bmc) nor the C410X path programs HACE; the block is present on the
 SoC but idle. The only reference in the KGPE-D16 firmware is the disabled SLT
 `CFG_CMD_HACTEST` self-test [ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h). No mainline Linux driver targets the
-G3 HACE — the mainline `drivers/crypto/aspeed/` (aspeed-hace) driver supports
+G3 HACE — the mainline [`drivers/crypto/aspeed/`](https://github.com/torvalds/linux/tree/master/drivers/crypto/aspeed) (aspeed-hace) driver supports
 only the later AST2500/AST2600 HACE, which has a different, scatter-gather
 register interface.
 
@@ -859,7 +859,7 @@ P-Bus (the bus that carries the PCI slave controller's commands), i.e. it is
 only meaningful when the AST2050 is the PCI **master**. On both target boards the
 AST2050 is a PCI **endpoint** (VGA / BMC device), not a bus master, so the
 outbound A2P path is not exercised. The *inbound* counterpart — the P-to-AHB
-(P2A) back door in ch. 36 — is the one the project actually uses (culvert's
+(P2A) back door in ch. 36 — is the one the project actually uses ([culvert](https://github.com/mithro/culvert)'s
 `p2a` access). No mainline driver programs A2P.
 
 A2P is a **one-way** bridge providing a path for the ARM to reach IP modules on
@@ -898,7 +898,7 @@ AHB and is normally locked [DS §36 p.400](#sources).
 
 **Used on target boards?** Not by the open firmware. The AST2050's VGA is wired
 on the KGPE-D16 (onboard display) and the C410X, but the open-firmware stacks use
-the plain framebuffer (mainline `drivers/gpu/drm/ast` on later parts does no G3
+the plain framebuffer (mainline [`drivers/gpu/drm/ast`](https://github.com/torvalds/linux/tree/master/drivers/gpu/drm/ast) on later parts does no G3
 2D acceleration); the 2D engine here is programmed only by the proprietary VGA
 BIOS / driver. Documented for completeness; the block is present on the SoC.
 
@@ -1593,8 +1593,8 @@ Each cursor pixel is a 16-bit word in the frame-buffer shape area
   `CFG_CMD_HACTEST` / `CFG_CMD_MICTEST` [ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h).
 - **Mainline Linux:** the AST2050 (G3) predates mainline ASPEED support
   (earliest is the AST2400 / G4), so no mainline driver targets these G3 block
-  instances. The related later-generation drivers — `drivers/crypto/aspeed`
-  (HACE, AST2500/AST2600 only) and `drivers/gpu/drm/ast` (desktop AST VGA) — do
+  instances. The related later-generation drivers — [`drivers/crypto/aspeed`](https://github.com/torvalds/linux/tree/master/drivers/crypto/aspeed)
+  (HACE, AST2500/AST2600 only) and [`drivers/gpu/drm/ast`](https://github.com/torvalds/linux/tree/master/drivers/gpu/drm/ast) (desktop AST VGA) — do
   not program the register interfaces documented here.
 
 ## Gaps and caveats

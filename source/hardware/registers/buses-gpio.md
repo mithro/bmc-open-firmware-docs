@@ -33,7 +33,7 @@ registers are 32-bit and accessed on the APB bus (little-endian).
 ## SoC address map (relevant bases)
 
 From the ARM Address Space Mapping table [DS §9 p.97](#sources), cross-checked against the
-Raptor U-Boot headers [hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h), [ast2050.h]:
+Raptor U-Boot headers [hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h), [ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h):
 
 ```{list-table}
 :header-rows: 1
@@ -108,7 +108,7 @@ are physically present; the `@300`–`@480` nodes have no backing hardware.
 ### Address / channel layout
 
 Global registers occupy `0x000`–`0x03F`; each device occupies a 64-byte
-(`0x40`) window [DS §31.4.1 p.334]:
+(`0x40`) window [DS §31.4.1 p.334](#sources):
 
 ```{list-table}
 :header-rows: 1
@@ -367,8 +367,8 @@ recovery.
 
 `Freq(SCL) = Freq(CoreClock) / (tBaseCyc × (tCKLow + tCKHigh))`, with
 `tBaseCyc ∈ {1,2,4,…,32768}` and `tCKLow, tCKHigh ∈ {1..8}` [DS §31.3 p.329](#sources).
-A full divisor→(Base clock, tCKHigh, tCKLow) lookup is tabulated at [DS §31.3.1
-p.333]. Corroborated by [i2c-aspeed.c](https://github.com/torvalds/linux/blob/master/drivers/i2c/busses/i2c-aspeed.c)'s `aspeed_i2c_24xx_get_clk_reg_val`.
+A full divisor→(Base clock, tCKHigh, tCKLow) lookup is tabulated at
+[DS §31.3.1 p.333](#sources). Corroborated by [i2c-aspeed.c](https://github.com/torvalds/linux/blob/master/drivers/i2c/busses/i2c-aspeed.c)'s `aspeed_i2c_24xx_get_clk_reg_val`.
 
 #### I2CD08 — Clock & AC Timing Control #2 (`+0x08`) [DS §31.4.3 p.338](#sources)
 
@@ -753,9 +753,9 @@ CE's type field in `SMC00`.
 
 By default the SMC **merges continuous-address reads** so that reads within 16
 clocks issue a single SPI read command, reducing per-access command overhead;
-setting `SMC04[12]=1` disables this (with a performance penalty) [DS §11.3
-p.107]. Except in User Mode the address space supports up to 16 MiB [DS §11.3
-p.108]. Boot/execute reads use Normal Read (`03h`) at HCLK/16, MSB-first, no
+setting `SMC04[12]=1` disables this (with a performance penalty)
+[DS §11.3 p.107](#sources). Except in User Mode the address space supports up to 16 MiB
+[DS §11.3 p.108](#sources). Boot/execute reads use Normal Read (`03h`) at HCLK/16, MSB-first, no
 dummy cycles by reset default. The AST2050 SMC read path binds unchanged in the
 QEMU/kernel G3 model [drivers-analysis](#sources).
 ```
@@ -1326,7 +1326,7 @@ Register offsets and bank byte-lane layout are identical to mainline
 ### Bank byte-lane layout
 
 Every A–D register packs four ports into one word; the E–H (extended) registers
-mirror it [DS §23.3 p.263-265]:
+mirror it [DS §23.3 p.263-265](#sources):
 
 ```{list-table}
 :header-rows: 1
@@ -1362,7 +1362,7 @@ mirror it [DS §23.3 p.263-265]:
 ### Interrupt trigger-mode encoding
 
 The three sensitivity registers (`GPIO0C/10/14` and `GPIO2C/30/34`) jointly
-encode the trigger mode per pin [DS §23.3 p.269]:
+encode the trigger mode per pin [DS §23.3 p.269](#sources):
 
 ```{list-table}
 :header-rows: 1
@@ -1397,7 +1397,7 @@ encode the trigger mode per pin [DS §23.3 p.269]:
 ### Debounce configuration
 
 The two debounce-setting registers select which of three debounce timers applies
-to a pin [DS §23.3 p.269]:
+to a pin [DS §23.3 p.269](#sources):
 
 ```{list-table}
 :header-rows: 1

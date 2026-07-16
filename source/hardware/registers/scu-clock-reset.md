@@ -635,8 +635,8 @@ where **OD** is the output-divider bit, **Numerator** = bits[10:5],
 **Denumerator** = bits[3:0]. The **post-divider** field (bits[14:12]) then
 divides $F_\text{out}$ further (÷1/2/4/8/16). Worked example: the SCU24 reset value
 `0x00004291` decodes to N=20, OD=1, D=1, post=÷2 → $24 \cdot (2-1) \cdot (22/2) / 2 = 132\,\text{MHz}$,
-matching the datasheet's stated 133 MHz H-PLL default. [DS §SCU24 p.212,
-§SCU20 p.211-212]
+matching the datasheet's stated 133 MHz H-PLL default.
+[DS §SCU24 p.212, §SCU20 p.211-212](#sources)
 
 This is the same equation the mainline AST2400 clock driver implements
 ($F = 24\,\text{MHz} \times (2-\text{OD}) \times \frac{N+2}{D+1}$, with N=`(val>>5)&0x3f`, OD=`(val>>4)&1`,

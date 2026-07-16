@@ -187,7 +187,7 @@ The BBus peripheral space (base 0x9000_0000) sub-decodes as follows
 
 A crystal (or external oscillator) feeds an on-chip PLL. The PLL VCO output is
 divided down by fixed ratios to the CPU, AHB (system + memory bus), and BBus
-(peripheral bus) clocks [HWRef p.36, p.153, Figure 39]:
+(peripheral bus) clocks [HWRef p.36, p.153, Figure 39](#sources):
 
 $$
 \begin{aligned}
@@ -229,7 +229,7 @@ USB is clocked by a **separate PLL** from an external 48 MHz crystal/oscillator
 ### Boot and reset
 
 The chip supports two glueless boot methods, selected by the `reset_done`
-strap sampled at power-up [HWRef p.32-35]:
+strap sampled at power-up [HWRef p.32-35](#sources):
 
 - **`reset_done` = 1 (default): boot from flash/ROM** on the system memory bus
   (8-, 16-, or 32-bit static memory). The board boots from NOR flash on CS0
@@ -612,7 +612,7 @@ handling), and writing any value to `ISRADDR` clears the mask [HWRef p.151, p.17
 Status Raw` (0x16C) reports all levels; `Active Interrupt Level Status` (0x18C,
 bits 5:0) reports the current level [HWRef p.168, p.171, p.182](#sources).
 
-The 32 interrupt source IDs are hardwired [HWRef p.150-151]:
+The 32 interrupt source IDs are hardwired [HWRef p.150-151](#sources):
 
 ```{list-table} NS9360 interrupt source IDs
 :header-rows: 1

@@ -377,7 +377,7 @@ fan-tach clock divide from `PTCR10[3:1]` / `PTCR18[3:1]` (÷4…÷65536). [DS p.
 The register offsets (`0x00` CTRL, `0x04` CLK, `0x08`/`0x0C` duty, `0x10`–`0x1C`
 Type M/N, `0x20` tach source, `0x2C` result, `0x30`/`0x34` interrupt,
 `0x38`/`0x3C` limits) and this RPM relationship match the mainline G4 driver
-`drivers/hwmon/aspeed-pwm-tacho.c` (compatible `aspeed,ast2400-pwm-tacho`),
+[`drivers/hwmon/aspeed-pwm-tacho.c`](https://github.com/torvalds/linux/blob/master/drivers/hwmon/aspeed-pwm-tacho.c) (compatible `aspeed,ast2400-pwm-tacho`),
 which is register-compatible with this G3 block. [aspeed-mainline-drivers-analysis.md:99,105](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-mainline-drivers-analysis.md#L99)
 
 ### PTCR30 / PTCR34 — Interrupt Control / Status (offsets 0x30 / 0x34)
@@ -548,7 +548,7 @@ in whether/when they poll `RTC0C[5]`. [DS §24.4 p.273-274](#sources)
 
 The AST2050 RTC register map (control at `0x0C`, restart at `0x10`, reset at
 `0x14`, no year counter) **differs from** the mainline G4 driver
-`drivers/rtc/rtc-aspeed.c` (compatible `aspeed,ast2400-rtc`), which targets a
+[`drivers/rtc/rtc-aspeed.c`](https://github.com/torvalds/linux/blob/master/drivers/rtc/rtc-aspeed.c) (compatible `aspeed,ast2400-rtc`), which targets a
 redesigned RTC block (year register + control at a different offset). The
 mainline driver cannot bind to this block unmodified. [aspeed-mainline-drivers-analysis.md:150](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-mainline-drivers-analysis.md#L150) [aspeed-driver-quick-reference.md:83](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-driver-quick-reference.md#L83)
 
@@ -849,7 +849,7 @@ clear** status bits (the OR of which is VIC #15). [DS p.360-361](#sources)
   - 1=pending; write 1 to clear. [DS p.361](#sources)
 ```
 
-The mainline PECI host driver is `drivers/peci/controller/peci-aspeed.c`
+The mainline PECI host driver is [`drivers/peci/controller/peci-aspeed.c`](https://github.com/torvalds/linux/blob/master/drivers/peci/controller/peci-aspeed.c)
 (compatibles `aspeed,ast2400-peci` / `ast2500-peci` / `ast2600-peci`); it does
 not list an AST2050 compatible. [aspeed-mainline-drivers-analysis.md:38](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-mainline-drivers-analysis.md#L38)
 
@@ -1178,7 +1178,7 @@ The pass-through UART exposes **only the ARM-only extended registers**
   **LPC Host Control Register 0** (`LHCR0`)`[12:8]` — distinct from the Host
   Interface Control Register HICR0. [DS revision history, v1.03](#sources)
   [DS §30 p.311](#sources)
-- Mainline `drivers/tty/serial/8250/8250_aspeed_vuart.c`
+- Mainline [`drivers/tty/serial/8250/8250_aspeed_vuart.c`](https://github.com/torvalds/linux/blob/master/drivers/tty/serial/8250/8250_aspeed_vuart.c)
   (compat `aspeed,ast2400-vuart`) uses the same extended-register offsets
   (GCRA `0x20`, GCRB `0x24`, address `0x28`/`0x2C`); the standard 8250 core
   covers the `0x00`–`0x1C` block. There is no AST2050 compatible string.
