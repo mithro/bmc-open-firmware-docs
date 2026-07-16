@@ -417,7 +417,7 @@ the native DRAM window (`0x40000000`) and SoC register space.
 
 The AST2050 {doc}`MAC0 <../hardware/registers/network-mac-phy>` uses **RMII**
 to an external Fast-Ethernet PHY. Public sources
-([15h.org](https://www.15h.org/), [The Retro Web](https://theretroweb.com/))
+([15h.org](https://15h.org/index.php/Home), [The Retro Web](https://theretroweb.com/))
 identify it as a **Realtek RTL8201N** class part.
 The in-repo analysis flags the exact PHY as an
 **open question** — the RTL8201EL/RTL8211BN/RTL8201N names in the Raptor analysis

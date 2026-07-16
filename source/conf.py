@@ -72,6 +72,7 @@ linkcheck_ignore = [
     # Valid pages that anti-bot / rate-limit the CI link checker (HTTP 403).
     r"https://developer\.arm\.com/.*",
     r"https://www\.renesas\.com/.*",
+    r"https://theretroweb\.com/.*",
     # Valid datasheet mirrors on personal / regional hosts that intermittently
     # fail DNS/TLS from CI runners (kept as references; not CI-reliable).
     r"https?://(www\.)?belchip\.by/.*",
