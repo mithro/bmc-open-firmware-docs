@@ -3,7 +3,8 @@
 This page is a register-by-register reference for the ASPEED **AST2050 (G3)**
 SDRAM / DDR2 memory controller, plus the complete cold-boot DDR2 bring-up
 procedure. It is written for people re-implementing the boot code (U-Boot,
-OpenBMC, a QEMU model) and cross-checks every value against the ASPEED
+{doc}`OpenBMC </firmware/openbmc>`, a QEMU model) and cross-checks every value
+against the ASPEED
 AST2050/AST1100 A3 datasheet, the hardware-verified Raptor Engineering U-Boot
 [`platform.S`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S), and the JEDEC JESD79-2 DDR2 standard.
 
@@ -1172,7 +1173,8 @@ the end — both of which the Aspeed order honours [JESD79-2B](#sources).
 ## 8. Self-refresh and clock-switch sequences (datasheet)
 
 Not used in the cold-boot path but part of the controller contract, and useful
-for a faithful model [DS §17.6-17.7 p.203](#sources):
+for a [faithful model](../../emulation/qemu.md#faithful-g3-model)
+[DS §17.6-17.7 p.203](#sources):
 
 - **Enter self-refresh:** stop all IP traffic (swap ARM code to static flash),
   then `MCR34[2]=1` (optionally `[4:3]` for extra saving).

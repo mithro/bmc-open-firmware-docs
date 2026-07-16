@@ -55,7 +55,9 @@ TAP IDCODE is `0x09105031`.
 
 
 The Core Unit controller board is a single-SoC design: the NS9360 is the only
-general-purpose processor. The MAXQ3180 (metering) and TMP89FM42 (display) are
+general-purpose processor. The
+{doc}`MAXQ3180 <../hardware/peripherals/maxq3180>` (metering) and
+{doc}`TMP89FM42 <../hardware/peripherals/tmp89>` (display) are
 satellite devices on dedicated serial links, and the Ethernet PHY hangs off the
 NS9360 MII/MAC. [`ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md)
 
@@ -67,7 +69,7 @@ NS9360 MII/MAC. [`ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmc
   - Ref des
   - Link to NS9360
   - Purpose
-* - ICS1893AFLF Ethernet PHY
+* - {doc}`ICS1893AFLF Ethernet PHY <../hardware/peripherals/ics1893>`
   - U10
   - MII/RMII + MDIO/MDC (SMI)
   - 10/100 RJ-45 management port

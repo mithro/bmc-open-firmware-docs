@@ -56,7 +56,8 @@ acceptance test for a faithful QEMU model [io-tables](#sources).
 
 
 The reverse-engineered end-to-end power-on flow, from front-panel button to
-steady-green, mixing AST2050 on-chip GPIO, PCA9555 #5 outputs, and PEX8696 I2C.
+steady-green, mixing AST2050 on-chip GPIO, PCA9555 #5 outputs, and
+{doc}`PEX8696 <../hardware/peripherals/pex8696-8647>` I2C.
 
 ```{list-table} C410X 12-step power-on
 :header-rows: 1
@@ -115,8 +116,8 @@ actual order (`0x11 → 0x33 → 0x77 → 0xFF`) [gpio-map](#sources), [PEX-I2C]
 ## GPIO pin map (control-relevant subset)
 
 
-The AST2050 uses 38 on-chip GPIO lines; the ones that drive this control fabric
-are:
+The AST2050 uses 38 on-chip {doc}`GPIO <../hardware/registers/buses-gpio>`
+lines; the ones that drive this control fabric are:
 
 ```{list-table} Control-fabric AST2050 GPIO pins
 :header-rows: 1
@@ -206,13 +207,13 @@ uses are:
   - Location
   - Notes
 * - Serial console
-  - **UART0** `0x1E783000` (`ttyS0`)
+  - {doc}`UART0 <../hardware/registers/uart-vic-timers>` `0x1E783000` (`ttyS0`)
   - 115200 8N1, vt100; the stock `bootargs` are `console=ttyS0,115200n8`
 * - Serial-over-LAN (SOL)
   - **UART1** `0x1E784000`
   - remote serial console over IPMI (the second SoC UART)
 * - vKVM
-  - Video Engine + `avct_server`
+  - {doc}`Video Engine <../hardware/registers/display-usb>` + `avct_server`
   - Avocent virtual-KVM console server (`vkcs.ko`) — video capture + USB HID
 * - Out-of-band AHB
   - P2A / iLPC bridges

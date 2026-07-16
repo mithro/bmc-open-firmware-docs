@@ -754,7 +754,8 @@ Bit-sum check for `SENSE`: bits 1–10 (`0x7FE`) + 12 (`0x1000`) + 15 (`0x8000`)
 
 ### Bring-up sequence (no firmware present)
 
-The verified G3 VIC init (`g3vic_init_hw`): [g3-vic patch](#sources)
+The verified G3 VIC init (`g3vic_init_hw`, packaged as the
+{doc}`G3 VIC Linux driver </drivers/linux>`): [g3-vic patch](#sources)
 
 1. `VIC14 = 0xFFFFFFFF` (disable all) and `VIC1C = 0xFFFFFFFF` (clear soft ints).
 2. `VIC0C = 0` (all sources as IRQ, none FIQ).

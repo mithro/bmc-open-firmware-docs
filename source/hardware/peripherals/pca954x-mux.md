@@ -101,7 +101,8 @@ ch3, `0x00` = none (POR default) [PCA9544A DS p.14](#sources).
 The 16 per-slot temperature sensors all share one I2C address, so the two 8-channel
 PCA9548As are mandatory to reach them one at a time; the two ADT7462s likewise share
 an address behind the 4-channel PCA9544A [io-tables](#sources). (The exact PCA9544A raw
-channel number for each ADT7462 is not pinned down in the RE notes — see §7 Gaps.)
+channel number for each ADT7462 is not pinned down in the RE notes — see the
+[C410X coverage notes and gaps](../../systems/dell-c410x.md#coverage-notes-and-gaps).)
 
 ## 2.4 Linux binding ([`i2c-mux-pca954x`](https://github.com/torvalds/linux/blob/master/drivers/i2c/muxes/i2c-mux-pca954x.c))
 

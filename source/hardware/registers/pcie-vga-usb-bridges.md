@@ -17,7 +17,8 @@ load-bearing value is backed by at least two of these.
 ## PCI-slave endpoint, VGA & Video Engine
 
 The AST2050 presents itself to the host over a 32-bit / 33 MHz **PCI slave**
-function (the "PCIe/VGA endpoint" of a board like the C410X is this PCIS block).
+function (the "PCIe/VGA endpoint" of a board like the
+{doc}`C410X </systems/dell-c410x>` is this PCIS block).
 The endpoint fronts three internal engines — the **VGA display controller**, the
 **2D graphics engine**, and the **P2A bridge** — sharing the top of SDRAM as a
 frame buffer. [DS §33.1 p.363](#sources), [DS §34.1 p.369](#sources)
@@ -357,7 +358,8 @@ separately at `SCU0C[7]`.)
 Three mechanisms give access to (or steer) the internal AHB space. All three are
 the AST2050's version of the interfaces flagged industry-wide as
 **CVE-2019-6260 ("Pantsdown")** for the AST2400/2500 — arbitrary host→BMC AHB
-read/write. On the AST2050 they are the *intended* out-of-band bring-up path for a
+read/write. On the AST2050 they are the *intended*
+{doc}`out-of-band bring-up path </debug/bring-up>` for a
 dead-firmware board. [CVE-2019-6260 / Pantsdown][pantsdown]
 
 ### AHB Bus Controller — unlock key + boot-area remap
@@ -492,7 +494,8 @@ when the ARM is disabled (see also `HICR5[19:16]`/`HICR5[13:12]`). [DS §30 p.32
 
 ### SCU posture: clock gates, straps, reset flags
 
-The bits that decide whether these bridges/blocks are alive and how the SoC boots.
+The bits that decide whether these bridges/blocks are alive and how the SoC
+boots (full detail in the {doc}`SCU register reference <scu-clock-reset>`).
 `Base of SCU = 0x1E6E2000`; unlock with `SCU00 = 0x1688A8A8` (RMW to preserve the
 strap). [DS §18 p.205](#sources), [P2A-BOOT](#sources)
 

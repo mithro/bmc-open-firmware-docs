@@ -45,7 +45,8 @@ The AST2050 Ethernet signal chain: the on-chip **FTGMAC100** MAC reaches the
 external **RTL8201CP** PHY over two channels — a **clause-22 MDIO/MDC**
 management bus (link/speed/duplex) and the **RMII data path** — then through
 magnetics to the RJ-45. The MDIO speed read is the path the `FAST_MODE` fix
-corrects (see §10 below and {doc}`/drivers/linux`).
+corrects (see §10 below, {doc}`/drivers/linux`, and the faithful QEMU model
+that reproduces the bug, {doc}`/emulation/qemu`).
 ```
 
 :::{list-table} MAC module address & interrupt map

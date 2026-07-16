@@ -37,7 +37,8 @@ A Python module abstracting a **`Target`** with a pluggable backend:
 ```
 
 The `Target` exposes serial, SSH, `i2cdetect`, sensor (hwmon) reads, and GPIO
-operations. Board-level benches — the C410X `i2cdetect` map, sensor reads, GPIO
+operations. Board-level benches — the C410X `i2cdetect` map
+({doc}`../hardware/i2c-topology`), sensor reads, GPIO
 presence lines, and the 12-step power-on sequence — are written **once** and run
 against both backends. This is how QEMU and silicon are proven to behave
 identically ({doc}`../debug/index`).

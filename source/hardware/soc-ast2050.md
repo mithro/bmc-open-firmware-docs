@@ -87,7 +87,8 @@ mis-detects the part.
   {ref}`the G3 VIC section <g3-vic>` below and {doc}`../drivers/linux`.
 - **SCU clocking** — H-PLL post-divider layout and hardware-strap bit positions
   differ from the AST2400. This is the primary reason a stock `palmetto-bmc`
-  (AST2400) machine is only a smoke-test stand-in, not the target.
+  (AST2400) machine is only a smoke-test stand-in, not the target
+  ({doc}`../emulation/qemu`).
 - **SDRAM / static-memory controllers** — different register semantics; only
   relevant to from-scratch DRAM init (U-Boot), not to a warm-booted kernel.
 - **Everything else** (MAC, GPIO, I2C, watchdog, SMC read path, UART) is close
@@ -140,7 +141,8 @@ the peripherals are high-level. A dedicated Linux driver,
 
 ## DRAM (DDR2)
 
-The AST2050 memory controller drives DDR2 at `0x40000000`. On the KGPE-D16 BMC
+The AST2050 memory controller ({doc}`registers/ddr2-sdram`) drives DDR2 at
+`0x40000000`. On the KGPE-D16 BMC
 the fitted size is **64 MiB, hardware-verified** — a size that matters because
 modern full OpenBMC will not fit (see {doc}`../firmware/openbmc`). Bringing DRAM
 up from cold on real silicon required a faithful re-creation of the vendor init

@@ -2,7 +2,8 @@
 
 Complete register-by-register reference for the three large **display / USB**
 blocks of the Aspeed **AST2050 (SoC generation 3, "G3"; also sold as AST1100)**
-that are only summarised elsewhere in these docs:
+that are only summarised elsewhere in these docs
+(notably on {doc}`pcie-vga-usb-bridges`):
 
 1. the **USB 2.0 Virtual Hub Controller** (§15, base `0x1E6A0000`, VIC #5) — and
    its companion **USB 1.1 UHCI host controller** (base `0x1E6B0000`, §1b),
@@ -1099,7 +1100,7 @@ offset `0x00`/`0x02`/`0x04`, `FRNUM` `0x06`, `FRBASEADD` `0x08`, `SOFMOD` `0x0C`
 and `PORTSC1`/`PORTSC2` at `0x10`/`0x12`. It is therefore documented here by
 reference to that standard, which the mainline driver already implements. This
 host controller carries the BMC's USB **virtual media** and **virtual
-keyboard/mouse**.
+keyboard/mouse** — the HID half of the vKVM path ({doc}`/firmware/openbmc`).
 
 - **Clock gate** — `SCU0C[7]` "Stop UCLK (USB 1.1)", the only SCU trace of the
   block. [DS §18 p.209](#sources) [`hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)
@@ -1134,7 +1135,8 @@ at `0x1E6A0000` (§1 above), not an EHCI host. Model and port accordingly: a UHC
 ## 2. Video (Capture/Compression) Engine (§20, base `0x1E700000`)
 
 Captures the internal VGA output (or an external DVO/ADC source) into DRAM and
-compresses it with a mixed JPEG + Vector-Quantisation codec. Two YUV formats
+compresses it with a mixed JPEG + Vector-Quantisation codec — the capture half
+of the vKVM path ({doc}`/firmware/openbmc`). Two YUV formats
 (420/444), block-change detection, CRC scene-change detection, arbitrary down-
 scaling with a 4×2 spatial filter, 12 JPEG quality levels, optional RC4
 encryption of the output stream, and a video-mode-change watchdog. Up to

@@ -88,7 +88,8 @@ it matters. See the Sources section at the end of this page.
 ```
 
 The board using this SoC pairs 32 MB SDRAM (ISSI IS42S32800D, 32-bit), 16 MB NOR
-flash (2× Macronix MX29LV640EB on CS0/CS1), an ICS1893 Ethernet PHY, and a
+flash (2× Macronix MX29LV640EB on CS0/CS1), an
+{doc}`ICS1893 Ethernet PHY <peripherals/ics1893>`, and a
 29.4912 MHz system crystal [ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md), [REFERENCE-MATERIAL.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md).
 
 ### System (AHB) address map
@@ -238,7 +239,9 @@ strap sampled at power-up [HWRef p.32-35](#sources):
   engine drives Serial channel B in SPI-master mode, reads a 128-130 byte
   configuration header (memory-controller + SDRAM mode settings) from EEPROM
   address 0, programs the memory controller, copies the image into SDRAM at
-  address 0, then releases the CPU [HWRef p.32-34, p.425-427](#sources).
+  address 0, then releases the CPU [HWRef p.32-34, p.425-427](#sources); the
+  boot engine is detailed under
+  [SPI-EEPROM boot logic](soc-ns9360-io.md#spi-eeprom-boot-logic).
 
 At power-on reset, **static CS1 is mirrored onto CS0 and CS4**; clearing the
 address-mirror bit (`M`) in the memory-controller Control register makes the

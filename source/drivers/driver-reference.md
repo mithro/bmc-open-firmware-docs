@@ -357,7 +357,9 @@ after Linux **v2.6.39**, and it predates device tree. The board's stock firmware
 is NET+OS (a ThreadX RTOS), and the open-firmware path chosen for it is a
 **U-Boot port** based on the Digi **CC9P9360** vendor U-Boot (no mainline
 U-Boot support), not OpenBMC/Linux. Two iPDU sensors likewise have no mainline
-driver: the **MAXQ3180** energy-measurement AFE (SPI) and the **TMP89** sub-MCU
+driver: the {doc}`MAXQ3180 <../hardware/peripherals/maxq3180>`
+energy-measurement AFE (SPI) and the
+{doc}`TMP89 <../hardware/peripherals/tmp89>` sub-MCU
 (custom serial protocol); both require custom drivers.
 
 ## See also

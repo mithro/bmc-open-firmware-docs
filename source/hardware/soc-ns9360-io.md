@@ -399,8 +399,9 @@ DMA2 channels 1-12 map to the USB device control endpoints and endpoints 1-10
 a Buffer Descriptor Pointer (+0x00), a Control register (+0x10, fields CE/CA/MODE
 fly-by/BTE burst/BDR refetch/RST/STATE/INDEX), and a Status/Interrupt-Enable
 register (+0x14, NCIP/ECIP/NRIP/CAIP/PCIP pending + enables) [HWRef p.453-460](#sources). The
-firmware's heaviest users are the serial channels feeding the display link and the
-metering SPI [ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md).
+firmware's heaviest users are the serial channels feeding the
+{doc}`display link </hardware/peripherals/tmp89>` and the
+{doc}`metering SPI </hardware/peripherals/maxq3180>` [ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md).
 
 ## LCD, IEEE 1284, USB host & USB device (secondary blocks)
 

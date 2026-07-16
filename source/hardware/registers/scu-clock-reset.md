@@ -472,10 +472,12 @@ assignments are spread across the datasheet's multi-function-pin tables (§18.2,
     {doc}`PWM & fan-tach <control-blocks>`
 * - `SCU74[20]`
   - MAC#2 MDC/MDIO
-  - routes the second MAC's MDIO management pins
+  - routes the second MAC's MDIO management pins — see
+    {doc}`MAC MDIO/PHY <network-mac-phy>`
 * - `SCU74[25]`
   - MAC PHY#1 status
-  - routes MAC#1 `PHYLINK` / `PHYPD#` pins
+  - routes MAC#1 `PHYLINK` / `PHYPD#` pins — see
+    {doc}`MAC MDIO/PHY <network-mac-phy>`
 * - `SCU74[27]`
   - GPIOE ↔ MAC
   - selects GPIOE group 2 (MII/RMII2 TXD/RXD) vs group 1 (VP / TACH) — see

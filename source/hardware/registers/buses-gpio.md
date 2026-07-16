@@ -568,8 +568,10 @@ active at the same time [DS §31.4.3 p.342](#sources).
   (256 B shared SRAM at `0x200`), DMA buffer (up to 4 KiB from SDRAM, Devices
   #1/#2 only) [DS §31.2.5 p.328](#sources). Initialization order: write `I2CD00` enable,
   `I2CD04`, `I2CD08`, `I2CD10=0xFFFFFFFF`, `I2CD0C` enables [DS §31.5.1 p.344](#sources).
-- Board usage: on the Dell C410X, I2C engine 3 (bus `0xF3`) drives the PEX PCIe
-  switches; expander/sensor buses `0xF0`–`0xF6` hang off the other engines
+- Board usage: on the Dell C410X, I2C engine 3 (bus `0xF3`) drives the
+  {doc}`PEX PCIe switches </hardware/peripherals/pex8696-8647>`; expander/sensor
+  buses `0xF0`–`0xF6` hang off the other engines
+  ({doc}`board I2C topology </hardware/i2c-topology>`)
   [gpio-pin-mapping](#sources). Corroborated by mainline [i2c-aspeed.c](https://github.com/torvalds/linux/blob/master/drivers/i2c/busses/i2c-aspeed.c)
   (`aspeed,ast2400-i2c-bus`), whose register map matches the above.
 
@@ -1483,7 +1485,8 @@ ball with a multi-function alternate (chosen via SCU multi-function control):
 On the Dell C410X, firmware drives 38 of these on-chip GPIOs through the AESS
 kernel driver — e.g. GPIOA4/A5 as I2C-expander interrupt inputs, GPIOB0–B7 as
 thermal/PSU/PCIe-switch alerts, GPIOE0–E5 as power-sequencing controls, GPIOF6
-as the PEX8696 reset — alongside 80 off-chip PCA9555 expander lines
+as the {doc}`PEX8696 </hardware/peripherals/pex8696-8647>` reset — alongside 80
+off-chip {doc}`PCA9555 </hardware/peripherals/pca9555>` expander lines
 [gpio-pin-mapping](#sources).
 
 ---

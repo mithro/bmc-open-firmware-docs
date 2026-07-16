@@ -859,7 +859,8 @@ P-Bus (the bus that carries the PCI slave controller's commands), i.e. it is
 only meaningful when the AST2050 is the PCI **master**. On both target boards the
 AST2050 is a PCI **endpoint** (VGA / BMC device), not a bus master, so the
 outbound A2P path is not exercised. The *inbound* counterpart — the P-to-AHB
-(P2A) back door in ch. 36 — is the one the project actually uses ([culvert](https://github.com/mithro/culvert)'s
+(P2A) back door in ch. 36 — is the one the project actually uses to cold-boot
+the BMC ({doc}`/debug/bring-up`; [culvert](https://github.com/mithro/culvert)'s
 `p2a` access). No mainline driver programs A2P.
 
 A2P is a **one-way** bridge providing a path for the ARM to reach IP modules on

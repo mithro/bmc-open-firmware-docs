@@ -1,8 +1,10 @@
 # Dell C410X I2C topology
 
 The AST2050 BMC manages every board peripheral over **7 I2C buses**. This map is
-the reverse-engineered ground truth that the reconstructed device tree, the
-`c410x-bmc` QEMU machine, and the OpenBMC entity-manager configuration all mirror.
+the reverse-engineered ground truth that the
+[reconstructed device tree](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-bmc-dell-c410x.dts),
+the `c410x-bmc` QEMU machine, and the OpenBMC entity-manager configuration all
+mirror.
 
 ```{figure} /_static/diagrams/c410x-i2c-topology.svg
 :alt: The C410X I2C topology — the AST2050 I2C engine fanning out to seven buses through PCA9544A/PCA9548A muxes to the sensor, GPIO-expander and PEX-switch devices.

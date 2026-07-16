@@ -1235,7 +1235,8 @@ driver exposes each channel through the [Linux IIO subsystem](https://docs.kerne
 the device-tree binding is
 [`aspeed,ast2400-adc.yaml`](https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/iio/adc/aspeed,ast2400-adc.yaml).
 The ADC is unused on both program boards but present in silicon, so a faithful
-QEMU model and the `aspeed,ast2050-adc` compatible are still required.
+{doc}`QEMU model </emulation/qemu>` and the `aspeed,ast2050-adc` compatible are
+still required.
 
 ## See also
 

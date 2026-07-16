@@ -393,8 +393,9 @@ from. [RAPTOR_ENGINEERING_AST2050_ANALYSIS.md:235-246,670-676](https://github.co
 ```
 
 **Independent BMC observation/control paths** (all cross-validated on real
-hardware): (1) **JTAG** run-control via `AST_JTAG1` (§2.1); (2) **P2A/culvert**
-over the PCI BAR; (3) the **BMC UART** via `AST_UART1` (§2.2). SoC power/clock
+hardware): (1) **JTAG** run-control via `AST_JTAG1` (§2.1); (2)
+{doc}`P2A/culvert </debug/bring-up>` over the PCI BAR; (3) the **BMC UART**
+via `AST_UART1` (§2.2). SoC power/clock
 state is visible in the SCU: `SCU7C = 0x00000202` (silicon rev),
 `SCU04 = 0x000FFE5C` (the datasheet reset value of the reset-control register; a
 live board reads a different value), `SCU14 = 0x00003EFF` (the **frequency-counter
@@ -414,7 +415,8 @@ the native DRAM window (`0x40000000`) and SoC register space.
 
 ### 3.3 BMC Ethernet PHY
 
-The AST2050 MAC0 uses **RMII** to an external Fast-Ethernet PHY. Public sources
+The AST2050 {doc}`MAC0 <../hardware/registers/network-mac-phy>` uses **RMII**
+to an external Fast-Ethernet PHY. Public sources
 ([15h.org](https://www.15h.org/), [The Retro Web](https://theretroweb.com/))
 identify it as a **Realtek RTL8201N** class part.
 The in-repo analysis flags the exact PHY as an
@@ -429,9 +431,12 @@ as the strong candidate pending physical confirmation.
 
 
 The **AMD SP5100** (SB700-family) is the KGPE-D16 southbridge, paired with the
-**SR5690 (RD890)** northbridge over A-Link Express II. It is host-platform
+**SR5690 (RD890)** northbridge
+([in-repo register reference](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/AMD_SR5690_Register_Reference_Guide_43871.pdf))
+over A-Link Express II. It is host-platform
 silicon managed by coreboot — **not** on the AST2050 BMC bus — but it is the
-board's SMBus/LPC/power/reset hub and hosts the W83795G, so it matters to BMC
+board's SMBus/LPC/power/reset hub and hosts the
+{doc}`W83795G <../hardware/peripherals/w83795g>`, so it matters to BMC
 work. [datasheets/README.md:46-55,106-107](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/README.md#L46-L55) [hardware-inventory/README.md:17-19](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hardware-inventory/README.md#L17-L19)
 
 ```{list-table} SP5100 interfaces relevant to BMC / board management

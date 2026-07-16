@@ -330,7 +330,8 @@ is auto-configured by the reset straps [ANALYSIS.md](https://github.com/mithro/a
 
 **Base address: 0xA0600000** [HWRef p.341](#sources), [u-boot ns9750_eth.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_eth.h). The module is an
 Ethernet MAC plus a front-end (EFE). The MAC talks to an **external PHY** over a
-software-selected **MII or RMII** interface (the board uses MII to an ICS1893 PHY)
+software-selected **MII or RMII** interface (the board uses MII to an
+{doc}`ICS1893 PHY </hardware/peripherals/ics1893>`)
 [HWRef p.319-324](#sources), [ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md). Frames move by buffer-descriptor DMA: four
 receive descriptor rings (A/B/C/D) plus one transmit ring [HWRef p.328-334](#sources).
 
@@ -682,8 +683,9 @@ channel C = 0x9030_0000, channel D = 0x9030_0040 [HWRef p.571-572](#sources)
 [u-boot ns9750_ser.h](https://github.com/u-boot/u-boot/blob/v2012.10/include/ns9750_ser.h). Each channel is a 0x40-byte block with identical layout,
 independently configurable as UART, SPI master, or SPI slave (via `MODE` in
 Control Register B). On the board, channel A (0x9020_0040) is the debug console at
-115200 8N1 (J25 "Digi UART"), channel B carries the display unit link, and one
-channel drives the MAXQ3180 metering AFE by SPI [ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md), [REFERENCE-MATERIAL.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md).
+115200 8N1 (J25 "Digi UART"), channel B carries the
+{doc}`display unit link </hardware/peripherals/tmp89>`, and one
+channel drives the {doc}`MAXQ3180 </hardware/peripherals/maxq3180>` metering AFE by SPI [ANALYSIS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/ANALYSIS.md), [REFERENCE-MATERIAL.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/REFERENCE-MATERIAL.md).
 
 ### Channel register map
 

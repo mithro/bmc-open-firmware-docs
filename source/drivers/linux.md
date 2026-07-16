@@ -121,7 +121,8 @@ drivers are needed except the PCIe switch (handled in userspace):
 ```
 
 **Acceptance:** both board DTBs build and boot to SSH on the QEMU machine, on
-both the stable and master kernel variants, and the `c410x-board-bench` confirms
+both the stable and master kernel variants, and the `c410x-board-bench`
+({doc}`/emulation/testbench`) confirms
 every device above is bound (`i2cdetect`/`hwmon` map matches).
 
 ## NS9360 (iPDU)
@@ -129,7 +130,7 @@ every device above is bound (`i2cdetect`/`hwmon` map matches).
 No mainline support exists. The path is to forward-port the archived
 [`arch/arm/mach-ns9xxx`](https://github.com/torvalds/linux/tree/v2.6.39/arch/arm/mach-ns9xxx) (≈ Linux 2.6.39) toward a modern kernel, device-tree-ifying
 it. This is the highest-risk kernel item; the acceptance target is a console boot
-on the QEMU `ns9360` machine.
+on the QEMU `ns9360` machine ({doc}`/emulation/qemu`).
 
 ## See also
 
