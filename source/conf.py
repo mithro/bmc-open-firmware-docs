@@ -77,6 +77,8 @@ linkcheck_ignore = [
     # fail DNS/TLS from CI runners (kept as references; not CI-reliable).
     r"https?://(www\.)?belchip\.by/.*",
     r"https?://realtek\.info/.*",
+    # Valid but intermittently times out (>15 s) from CI runners.
+    r"https://www\.raptorengineering\.com/.*",
 ]
 linkcheck_timeout = 15
 linkcheck_retries = 2
