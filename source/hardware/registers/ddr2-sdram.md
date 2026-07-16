@@ -731,7 +731,7 @@ values, so the low-speed clock path is never actually used on this board
 ### 4.7 MCR60 — IO buffer mode
 
 `MCR60 = 0x032AA02A` [platform.S:447-449](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L447-L449) configures the DDR2 pad electricals
-[DS §17.3 p.196-197]:
+[DS §17.3 p.196-197](#sources):
 
 ```{list-table} MCR60 IO Buffer Mode — decode of 0x032AA02A
 :header-rows: 1

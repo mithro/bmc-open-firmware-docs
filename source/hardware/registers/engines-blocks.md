@@ -25,7 +25,7 @@ Conventions used in the register tables below:
 
 The six blocks sit at these bases in the ch. 9 address map, and four of them own
 a dedicated interrupt line in the ch. 10 Interrupt Source Table
-[DS §10 p.99]:
+[DS §10 p.99](#sources):
 
 :::{list-table} Block bases and VIC interrupt lines
 :header-rows: 1
@@ -367,7 +367,7 @@ assigned** (reserved gap between HACE10 and HACE1C) [DS §19 p.222](#sources).
 ### Crypto context buffer layout
 
 The context buffer pointed to by HACE08 has an algorithm-specific layout
-[DS §19 p.227]:
+[DS §19 p.227](#sources):
 
 :::{list-table} Crypto context buffer formats
 :header-rows: 1
@@ -627,7 +627,7 @@ It implements 8 32-bit registers backed by two software-supplied DRAM buffers: a
 ### Page control bits & buffer formats
 
 Each 4 KB page carries 2 control bits in the control buffer that decide MICE's
-behaviour on that page [DS §13 p.119]:
+behaviour on that page [DS §13 p.119](#sources):
 
 :::{list-table} MIC page-control-bit modes
 :header-rows: 1
@@ -655,7 +655,7 @@ behaviour on that page [DS §13 p.119]:
   - Yes
 :::
 
-Buffer layout (M = MIC0C[27:12]) [DS §13 p.120]:
+Buffer layout (M = MIC0C[27:12]) [DS §13 p.120](#sources):
 
 - **Control buffer**: 2 bits per page — page #0 occupies bits `000–001`, page #1
   bits `002–003`, … page #M bits `2*M – 2*M+1`. Total size
@@ -1553,7 +1553,7 @@ bits belong to the Video Engine and are outside this block [DS §37 p.401](#sour
 ### Cursor shape structure
 
 Each cursor pixel is a 16-bit word in the frame-buffer shape area
-[DS §37 p.403]:
+[DS §37 p.403](#sources):
 
 - **Monochrome (AND-XOR-RGB444):** [DS §37 p.403](#sources)
 
