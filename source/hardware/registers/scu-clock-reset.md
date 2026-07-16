@@ -1170,7 +1170,7 @@ silicon check is dead/unused (the subsequent `set_MPLL` writes literal
 
 - **AST2050/AST1100 A3 Datasheet V1.05** (in-repo:
   [`datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf)), sections cited as
-  [DS …](#sources):
+  **DS …**:
   - §8.1 Clock Information (p.84); §8.2 Clock & Reset Tree Mapping (p.85);
     §8.3 Reset Tree Control Table (p.86); §8.4 Symbol Description (p.87);
     §8.5 Clock Tree Architecture, Figures 22–37 (p.88-93);
@@ -1191,7 +1191,7 @@ silicon check is dead/unused (the subsequent `set_MPLL` writes literal
   - [`RAPTOR-PORTING-GUIDE.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md) — G3-vs-G4 strap bit differences, clock tree,
     reset/WDT porting notes.
 - **Web cross-references:**
-  - Mainline Linux `drivers/clk/clk-aspeed.c` (AST2400/G4) — H-PLL formula
+  - Mainline Linux [`drivers/clk/aspeed/clk-aspeed.c`](https://github.com/torvalds/linux/blob/master/drivers/clk/aspeed/clk-aspeed.c) (AST2400/G4) — H-PLL formula
     $F = 24\,\text{MHz} \times (2-\text{OD}) \times \frac{N+2}{D+1}$, strap decode:
     <https://codebrowser.dev/linux/linux/drivers/clk/clk-aspeed.c.html>
   - Aspeed SCU device-tree binding (context):

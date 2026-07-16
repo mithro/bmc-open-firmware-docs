@@ -3076,7 +3076,7 @@ through PCI I/O ports. `[aspeeddrm]`
   p.234–255), **§34 VGA Display Controller** (p.368–392; standard sets §34.3–34.8
   p.369–381, Aspeed extended CRT §34.9 p.382–392). Doc (printed) page = PDF page.
 - Mainline Linux drivers used as cross-checks:
-  - [`aspeed-vhub` register header ([`vhub.h`](https://github.com/torvalds/linux/blob/master/drivers/usb/gadget/udc/aspeed-vhub/vhub.h))][vhubh] — USB gadget virtual-hub
+  - [`aspeed-vhub` register header (`vhub.h`)][vhubh] — USB gadget virtual-hub
     register offsets `HUB00…HUB3C` and per-device / per-endpoint windows.
   - [`aspeed-video.c` V4L2 driver][aspeedvideo] — Video Engine `VE_*` register
     offsets matching `VR000…VR308` and the `0x1A03_8AA8` protection key.

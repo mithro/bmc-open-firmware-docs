@@ -1257,7 +1257,7 @@ QEMU model and the `aspeed,ast2050-adc` compatible are still required.
 
 - **AST2050/AST1100 A3 Datasheet V1.05** (in-repo:
   [`datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf); page numbers are
-  the printed datasheet page in the footer), cited inline as [DS …](#sources):
+  the printed datasheet page in the footer), cited inline as **DS …**:
   - §7 Multi-Function Pins — PWM1–4/PECII/PECIO pin-mux via SCU74 (mux table p.80).
   - §8.1 Clock Information — PWMCLK/TACHCLK/PECICLK/CLK1M/LCLK rates (p.84).
   - §9 ARM Address Space Mapping — the four block base addresses (p.97).
@@ -1275,8 +1275,9 @@ QEMU model and the `aspeed,ast2050-adc` compatible are still required.
   - [`ast2050.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h) — 24 MHz UART reference clock, NS16550 base addresses.
   - [`hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h) — SCU / timer / UART / interrupt-controller register offsets
     (the PWM/RTC/PECI/VUART blocks are *not* defined here; datasheet-only).
-- **In-repo mainline-driver analysis** ([`dell-c410x-firmware/`](https://github.com/mithro/ai-shenanigans-for-bmcs/tree/main/dell-c410x-firmware)), cited as
-  [aspeed-mainline-drivers-analysis.md:…](#sources) / [aspeed-driver-quick-reference.md:…](#sources):
+- **In-repo mainline-driver analysis** ([`dell-c410x-firmware/`](https://github.com/mithro/ai-shenanigans-for-bmcs/tree/main/dell-c410x-firmware)):
+  [`aspeed-mainline-drivers-analysis.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-mainline-drivers-analysis.md) /
+  [`aspeed-driver-quick-reference.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-driver-quick-reference.md), cited inline by file name:
   - PWM/tacho → [`drivers/hwmon/aspeed-pwm-tacho.c`](https://github.com/torvalds/linux/blob/master/drivers/hwmon/aspeed-pwm-tacho.c) (`aspeed,ast2400-pwm-tacho`,
     register-compatible with this G3 block).
   - RTC → [`drivers/rtc/rtc-aspeed.c`](https://github.com/torvalds/linux/blob/master/drivers/rtc/rtc-aspeed.c) (`aspeed,ast2400-rtc`, **different** block).

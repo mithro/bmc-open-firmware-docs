@@ -1510,7 +1510,7 @@ as the PEX8696 reset — alongside 80 off-chip PCA9555 expander lines
 
 **Primary datasheet**
 
-- **[DS](#sources)** *ASPEED AST2050/AST1100 A3 Datasheet, V1.05* (2010-05-25), in-repo at
+- **DS** *ASPEED AST2050/AST1100 A3 Datasheet, V1.05* (2010-05-25), in-repo at
   [`datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf). Sections used:
   - §9 ARM Address Space Mapping (p.97)
   - §11 Static Memory Controller — overview p.100-101, registers p.105-112
@@ -1526,15 +1526,15 @@ as the PEX8696 reset — alongside 80 off-chip PCA9555 expander lines
   register base addresses (SMC `0x16000000`, GPIO `0x1E780000`, SCU/SDRAM/AHBC).
 - **[ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h)** [`asus-kgpe-d16-firmware/ast2050.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h) — Raptor U-Boot board config
   (flash windows `0x14000000`/`0x10000000`, single-SPI boot, `CONFIG_HARD_I2C`).
-- **[RAPTOR-ANALYSIS](#sources)** [`asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md)
+- **RAPTOR-ANALYSIS** [`asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md)
   — I2C engine base `0x1E78A000`, 14-bus SDK templating, AHB backdoor confirmation.
-- **[culvert](#sources)** [`asus-kgpe-d16-firmware/CULVERT-UART-JTAG-DEBUG.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/CULVERT-UART-JTAG-DEBUG.md) and
+- **culvert** [`asus-kgpe-d16-firmware/CULVERT-UART-JTAG-DEBUG.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/CULVERT-UART-JTAG-DEBUG.md) and
   [`CULVERT-G3-HARDWARE-RESULTS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/CULVERT-G3-HARDWARE-RESULTS.md) — iLPC2AHB / LPC2AHB posture via
   `HICR5[8] ENL2H` + `HICR7 ADRBASE` / `HICR8 ADRMASK`; confirmed disabled on hardware.
-- **[drivers-analysis](#sources)** [`dell-c410x-firmware/aspeed-mainline-drivers-analysis.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-mainline-drivers-analysis.md)
+- **drivers-analysis** [`dell-c410x-firmware/aspeed-mainline-drivers-analysis.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-mainline-drivers-analysis.md)
   — mainline driver ↔ AST2050 mapping (i2c-aspeed, gpio-aspeed, spi-aspeed-smc,
   aspeed-lpc-ctrl/snoop).
-- **[gpio-pin-mapping](#sources)** [`dell-c410x-firmware/io-tables/gpio-pin-mapping.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/gpio-pin-mapping.md)
+- **gpio-pin-mapping** [`dell-c410x-firmware/io-tables/gpio-pin-mapping.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/gpio-pin-mapping.md)
   — C410X on-chip GPIO A/B/E/F usage and per-bit function.
 
 **Secondary (mainline Linux, register cross-check)**
@@ -1546,5 +1546,5 @@ as the PEX8696 reset — alongside 80 off-chip PCA9555 expander lines
 - **[gpio-aspeed.c](https://github.com/torvalds/linux/blob/master/drivers/gpio/gpio-aspeed.c)** [`drivers/gpio/gpio-aspeed.c`](https://github.com/torvalds/linux/blob/master/drivers/gpio/gpio-aspeed.c) (torvalds/linux) — bank layout
   `data 0x00 / dir 0x04 / irq 0x08,0x0c,0x10,0x14,0x18 / tolerance 0x1c /
   debounce 0x40,0x44 / timers 0x50,0x54,0x58 / ext data 0x20`, 8 banks; matches §23.3.
-- **spi-aspeed-smc.c** (torvalds/linux) — targets the AST2400+ FMC/SPI, whose
+- **[`spi-aspeed-smc.c`](https://github.com/torvalds/linux/blob/master/drivers/spi/spi-aspeed-smc.c)** (torvalds/linux) — targets the AST2400+ FMC/SPI, whose
   layout differs from the legacy AST2050 SMC; noted as a weak cross-reference for §11.

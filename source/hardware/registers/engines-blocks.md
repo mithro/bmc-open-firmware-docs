@@ -1632,7 +1632,7 @@ Each cursor pixel is a 16-bit word in the frame-buffer shape area
 
 ## Sources
 
-- [DS](#sources) ASPEED, *AST2050 / AST1100 A3 Datasheet, V1.05* (25 May 2010), in-repo at
+- **DS** ASPEED, *AST2050 / AST1100 A3 Datasheet, V1.05* (25 May 2010), in-repo at
   [`datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf). Chapters used:
   §10 Interrupt Source Table (p.99); §13 Memory Integrity Check Controller
   (p.116–120); §19 Hash & Crypto Engine / HACE (p.221–227); §21 AHB-to-P-Bus
@@ -1643,7 +1643,7 @@ Each cursor pixel is a 16-bit word in the frame-buffer shape area
   [`asus-kgpe-d16-firmware/ast2050.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h).
 - [hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h) Raptor Engineering AST2100/AST2050 SoC register locations, in-repo at
   [`asus-kgpe-d16-firmware/hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h).
-- [aspeed-crypto](#sources) Mainline Linux ASPEED HACE driver (AST2500/AST2600):
+- **aspeed-crypto** Mainline Linux ASPEED HACE driver (AST2500/AST2600):
   <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/crypto/aspeed>
-- [aspeed-drm](#sources) Mainline Linux ASPEED VGA (`ast`) DRM driver:
+- **aspeed-drm** Mainline Linux ASPEED VGA (`ast`) DRM driver:
   <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpu/drm/ast>

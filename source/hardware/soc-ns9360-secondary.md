@@ -2313,7 +2313,7 @@ The endpoint FIFO *data* is moved by the USB device BBus DMA controller at
 
 Primary datasheet (in-repo, the authority for the register map):
 
-- **NS9360 Hardware Reference**, Digi 90000675 rev J — [HWRef p.N](#sources), where `N`
+- **NS9360 Hardware Reference**, Digi 90000675 rev J — cited inline as **HWRef p.N**, where `N`
   is the printed document page (identical to the PDF page). In-repo at
   [`hpe-ipdu-firmware/datasheets/NS9360_HW_Reference_90000675_J.pdf`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/datasheets/NS9360_HW_Reference_90000675_J.pdf); online at
   [ftp1.digi.com/90000675_J.pdf][hwref-url]. Chapters used: ch 12 LCD

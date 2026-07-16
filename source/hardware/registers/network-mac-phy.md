@@ -1427,8 +1427,7 @@ Primary hardware authority:
 Software view of the same Faraday FTGMAC100 IP:
 
 - Mainline Linux [`drivers/net/ethernet/faraday/ftgmac100.h`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h) — register offsets and
-  `MACCR`/`PHYCR`/`PHYDATA` bit macros
-  (<https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h>).
+  `MACCR`/`PHYCR`/`PHYDATA` bit macros.
 - Mainline Linux [`drivers/net/ethernet/faraday/ftgmac100.c`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.c) — MDIO read/write
   sequence, init flow, RMII/RCLK handling.
 
@@ -1439,8 +1438,8 @@ External PHY:
   incl. `RMIIMODE` (<https://belchip.by/sitedocs/38346.pdf>; also
   <http://realtek.info/pdf/rtl8201cp.pdf>).
 
-Project reverse-engineering / on-hardware evidence (private analysis repo
-`ai-shenanigans-for-bmcs/`):
+Project reverse-engineering / on-hardware evidence (analysis repo
+[`ai-shenanigans-for-bmcs`](https://github.com/mithro/ai-shenanigans-for-bmcs)):
 
 - [`asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md) — U-Boot-vs-Linux MAC/SCU
   register dumps over P2A, the `MACCR=0x80500/0x8050F` worked example, TX-ring probe,

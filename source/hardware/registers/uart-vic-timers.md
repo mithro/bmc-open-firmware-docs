@@ -962,7 +962,7 @@ delivery is fixed. [TIMER-RCA](#sources)
 
 ## Sources
 
-- **AST2050/AST1100 A3 Datasheet, V1.05** (25 May 2010), in-repo PDF. Chapters
+- **[AST2050/AST1100 A3 Datasheet, V1.05](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf)** (25 May 2010), in-repo PDF. Chapters
   used here: §9 ARM Address Space (p.97-98), §10 Interrupt Source Table / Table 36
   (p.99), §16 Interrupt Controller / VIC (p.179-182), §18 SCU (p.204-220), §25
   Timer Controller (p.275-278), §26 UART 16550 (p.279-286).

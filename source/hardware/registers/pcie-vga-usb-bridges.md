@@ -615,7 +615,7 @@ strap). [DS §18 p.205](#sources), [P2A-BOOT](#sources)
 
 ## Sources
 
-- **AST2050/AST1100 A3 Datasheet, V1.05** (25 May 2010), in-repo PDF. Chapters
+- **[AST2050/AST1100 A3 Datasheet, V1.05](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf)** (25 May 2010), in-repo PDF. Chapters
   used here: §12 AHB Bus Controller (p.113-115), §15 USB2.0 Virtual Hub
   (p.154-157), §18 SCU (p.204-220), §20 Video Engine (p.232-235), §30 LPC
   Controller / iLPC-to-AHB (p.311-326), §33 PCI Slave Controller (p.363-368), §34

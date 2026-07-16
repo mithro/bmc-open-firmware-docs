@@ -1180,10 +1180,10 @@ that produces the 100 Hz tick lives in the SCM at 0xA0900224 [HWRef p.193](#sour
 
 Primary datasheets (in-repo, the authority for the register map):
 
-- **NS9360 Hardware Reference**, Digi 90000675 rev J — [HWRef p.N](#sources)
+- **NS9360 Hardware Reference**, Digi 90000675 rev J — cited inline as **HWRef p.N**
   ([`hpe-ipdu-firmware/datasheets/NS9360_HW_Reference_90000675_J.pdf`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/datasheets/NS9360_HW_Reference_90000675_J.pdf));
   online: <https://ftp1.digi.com/support/documentation/90000675_J.pdf>.
-- **NS9360 Datasheet**, Digi 91001326 rev D — [Datasheet](#sources)
+- **NS9360 Datasheet**, Digi 91001326 rev D — cited inline as **Datasheet**
   ([`hpe-ipdu-firmware/datasheets/NS9360_datasheet_91001326_D.pdf`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/datasheets/NS9360_datasheet_91001326_D.pdf));
   online: <https://ftp1.digi.com/support/documentation/91001326_D.pdf>.
 
