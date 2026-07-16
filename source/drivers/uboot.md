@@ -6,8 +6,9 @@ The target is mainline U-Boot on the latest tag/master, with an `ast2050-port`
 topic branch in [`mithro/u-boot`](https://github.com/mithro/u-boot) that adapts the Aspeed AST2400 base to the
 AST2050 (DRAM/SoC init ported from the board's low-level [`platform.S`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S)).
 
-- **Interim:** the OpenBMC U-Boot (`v2019.04-aspeed-openbmc`, `evb-ast2400`
-  base) already builds and boots the chain in QEMU.
+- **Interim:** the OpenBMC U-Boot
+  ([`v2019.04-aspeed-openbmc`](https://github.com/openbmc/u-boot/tree/v2019.04-aspeed-openbmc),
+  `evb-ast2400` base) already builds and boots the chain in QEMU.
 - **TFTP netboot:** the full network-boot path (`tftpboot` → `bootm`) is verified
   in QEMU with a slirp TFTP server and mirrored on real hardware by the board's
   TFTP boot harness.

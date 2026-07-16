@@ -27,6 +27,6 @@ cross-reference must resolve.
 ## Relationship to the program repository
 
 This public site is authored content plus curated material synced from the
-(private) program repository. Reverse-engineering detail derived from proprietary
+[program repository](https://github.com/mithro/ai-shenanigans-for-bmcs). Reverse-engineering detail derived from proprietary
 firmware is only published once cleared; interface contracts and public-datasheet
 register maps are published freely so the models and drivers can be built openly.

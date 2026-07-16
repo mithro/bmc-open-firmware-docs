@@ -54,12 +54,12 @@ but not yet complete.
   - port needed
   - [`ftgmac100`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.c)
 * - MDIO / MII
-  - [`ftgmac100`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.c) internal MDIO / `mdio-aspeed`
+  - [`ftgmac100`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.c) internal MDIO / [`mdio-aspeed`](https://github.com/torvalds/linux/blob/master/drivers/net/mdio/mdio-aspeed.c)
   - within MAC
   - port needed
   - within MAC model
 * - PHY (RTL8201CP)
-  - `realtek` / generic clause-22 PHY
+  - [`realtek`](https://github.com/torvalds/linux/tree/master/drivers/net/phy/realtek) / generic clause-22 PHY
   - generic PHY
   - Zephyr `phy` clause-22
   - PHY-status model
@@ -74,7 +74,7 @@ but not yet complete.
   - port needed
   - `aspeed-smc`
 * - {doc}`LPC <../hardware/registers/buses-gpio>`
-  - `aspeed-lpc-*` (KCS/SNOOP/etc.)
+  - [`aspeed-lpc-*`](https://github.com/torvalds/linux/tree/master/drivers/soc/aspeed) (KCS/SNOOP/etc.)
   - —
   - port needed
   - LPC (part)
@@ -84,7 +84,7 @@ but not yet complete.
   - Zephyr `gpio`, port needed
   - `aspeed-gpio` (planned)
 * - {doc}`Interrupt controller (VIC) <../hardware/registers/uart-vic-timers>`
-  - **`irq-aspeed-g3-vic`** (program driver)
+  - **[`irq-aspeed-g3-vic`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/kernel/patches/0003-irqchip-add-aspeed-ast2050-vic-g3.patch)** (program driver)
   - [`platform.S`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S) polls
   - Zephyr `intc`, port needed
   - `aspeed-vic` (G3)
@@ -109,7 +109,7 @@ but not yet complete.
   - out of scope
   - — (planned)
 * - {doc}`P2A / iLPC AHB bridges <../hardware/registers/pcie-vga-usb-bridges>`
-  - — (out-of-band; `culvert` userspace)
+  - — (out-of-band; [`culvert`](https://github.com/mithro/culvert) userspace)
   - —
   - —
   - endpoint model
@@ -144,7 +144,7 @@ but not yet complete.
 * - {doc}`PCA9555 <../hardware/peripherals/pca9555>`
   - C410X
   - [`gpio-pca953x`](https://github.com/torvalds/linux/blob/master/drivers/gpio/gpio-pca953x.c)
-  - `entity-manager` + `phosphor-gpio-monitor`
+  - [`entity-manager`](https://github.com/openbmc/entity-manager) + [`phosphor-gpio-monitor`](https://github.com/openbmc/phosphor-gpio-monitor)
   - Zephyr `gpio/pca95xx`
 * - {doc}`PCA9548/9544 <../hardware/peripherals/pca954x-mux>`
   - C410X
@@ -191,31 +191,31 @@ Which OpenBMC service implements each BMC feature, and the hardware path it uses
   - Daemon
   - Hardware path
 * - Redfish / web
-  - `bmcweb`
+  - [`bmcweb`](https://github.com/openbmc/bmcweb)
   - HTTPS → D-Bus
 * - IPMI (LAN + host)
-  - `phosphor-host-ipmid` / `phosphor-ipmi-net`
+  - [`phosphor-host-ipmid`](https://github.com/openbmc/phosphor-host-ipmid) / [`phosphor-net-ipmid`](https://github.com/openbmc/phosphor-net-ipmid)
   - host IPMI over **KCS** (LPC); LAN over the MAC
 * - Sensors
-  - `dbus-sensors` + `entity-manager`
+  - [`dbus-sensors`](https://github.com/openbmc/dbus-sensors) + [`entity-manager`](https://github.com/openbmc/entity-manager)
   - hwmon (INA219/ADT7462/LM75) over I2C
 * - Fan control
-  - `phosphor-pid-control`
+  - [`phosphor-pid-control`](https://github.com/openbmc/phosphor-pid-control)
   - ADT7462 PWM/tach
 * - Power / state
-  - `phosphor-state-manager`
+  - [`phosphor-state-manager`](https://github.com/openbmc/phosphor-state-manager)
   - GPIO ([`gpio-aspeed`](https://github.com/torvalds/linux/blob/master/drivers/gpio/gpio-aspeed.c) / PCA9555)
 * - Serial-over-LAN
-  - `obmc-console`
+  - [`obmc-console`](https://github.com/openbmc/obmc-console)
   - the SoC UART
 * - System identity / FRU
-  - `entity-manager` + FRU EEPROM
+  - [`entity-manager`](https://github.com/openbmc/entity-manager) + FRU EEPROM
   - I2C EEPROM
 * - vKVM
-  - `obmc-ikvm`
+  - [`obmc-ikvm`](https://github.com/openbmc/obmc-ikvm)
   - Video Engine capture + USB HID
 * - Firmware update
-  - `phosphor-bmc-code-mgmt`
+  - [`phosphor-bmc-code-mgmt`](https://github.com/openbmc/phosphor-bmc-code-mgmt)
   - SPI/SMC flash
 ```
 

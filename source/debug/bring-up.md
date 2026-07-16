@@ -93,7 +93,8 @@ which the P2A "VGA" window filters to zero ({doc}`../drivers/linux`).
 
 On a bench board with no serving firmware the SMC flash-read window returns zero
 (the SMC is not clocked on a dead BMC), so flash **dumping** on such a board uses
-an external SPI emulator (spispy on an FPGA) rather than P2A. Once the BMC runs
+an external SPI emulator ([spispy](https://github.com/osresearch/spispy) on an
+FPGA) rather than P2A. Once the BMC runs
 the program's own firmware, in-band flash access via `culvert` becomes available.
 
 ## See also

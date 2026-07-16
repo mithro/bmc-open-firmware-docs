@@ -6,7 +6,7 @@ QEMU in CI and against real hardware on the bench.**
 ## Layer 1 — qtest (device-model correctness)
 
 Per-component register-level benches live in the QEMU fork under
-`tests/qtest/` (C), run headless via `meson test --suite qtest` in the
+[`tests/qtest/`](https://github.com/mithro/qemu/tree/d16-ast2050-machine/tests/qtest) (C), run headless via `meson test --suite qtest` in the
 `qemu-qtest` CI job. Each bench asserts:
 
 - reset values of every documented register,

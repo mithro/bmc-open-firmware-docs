@@ -79,7 +79,7 @@ machine meets all four of its boot criteria ({doc}`emulation/qemu`).
 This is still an actively developed program. Pages (or rows) marked *(planned)*
 describe work that is scaffolded but not yet complete; each carries an acceptance
 criterion so progress is unambiguous. The authoritative implementation history
-lives in the (private) program repository — see {doc}`about`.
+lives in the [program repository](https://github.com/mithro/ai-shenanigans-for-bmcs) — see {doc}`about`.
 ```
 
 ```{toctree}

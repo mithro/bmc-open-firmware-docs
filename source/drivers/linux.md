@@ -8,7 +8,7 @@ clean series in [`mithro/linux`](https://github.com/mithro/linux):
 1. **[`clk-aspeed`](https://github.com/torvalds/linux/blob/master/drivers/clk/aspeed/clk-aspeed.c)** — add AST2050 clock support (the H-PLL/derived clocks a G3
    part exposes).
 2. **`aspeed-g3.dtsi`** — a new SoC include describing the AST2050 peripheral
-   layout, mirroring `aspeed-g4.dtsi` with the G3 base addresses.
+   layout, mirroring [`aspeed-g4.dtsi`](https://github.com/torvalds/linux/blob/master/arch/arm/boot/dts/aspeed/aspeed-g4.dtsi) with the G3 base addresses.
 3. **`aspeed,ast2050-*` compatibles** on the affected drivers so they bind on G3.
 4. **Board DTS** — [`aspeed-bmc-asus-kgpe-d16.dts`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/qemu-firmware/dts/aspeed-bmc-asus-kgpe-d16.dts) and [`aspeed-bmc-dell-c410x.dts`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-bmc-dell-c410x.dts)
    include the G3 dtsi.
@@ -16,9 +16,10 @@ clean series in [`mithro/linux`](https://github.com/mithro/linux):
 ```{admonition} Interim vs. target
 :class: note
 
-Until the G3 dtsi lands, the boards boot on `aspeed_g4_defconfig` + a
+Until the G3 dtsi lands, the boards boot on
+[`aspeed_g4_defconfig`](https://github.com/torvalds/linux/blob/master/arch/arm/configs/aspeed_g4_defconfig) + a
 [clock patch](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/qemu-firmware/kernel/patches/0001-clk-aspeed-add-ast2050-support.patch)
-+ a board DTS based on `aspeed-g4.dtsi` (the AST2050 is register-compatible
++ a board DTS based on [`aspeed-g4.dtsi`](https://github.com/torvalds/linux/blob/master/arch/arm/boot/dts/aspeed/aspeed-g4.dtsi) (the AST2050 is register-compatible
 enough). The clean G3 series is the upstreamable form.
 ```
 
@@ -126,7 +127,7 @@ every device above is bound (`i2cdetect`/`hwmon` map matches).
 ## NS9360 (iPDU)
 
 No mainline support exists. The path is to forward-port the archived
-`arch/arm/mach-ns9xxx` (≈ Linux 2.6.39) toward a modern kernel, device-tree-ifying
+[`arch/arm/mach-ns9xxx`](https://github.com/torvalds/linux/tree/v2.6.39/arch/arm/mach-ns9xxx) (≈ Linux 2.6.39) toward a modern kernel, device-tree-ifying
 it. This is the highest-risk kernel item; the acceptance target is a console boot
 on the QEMU `ns9360` machine.
 

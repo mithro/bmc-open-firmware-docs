@@ -55,8 +55,11 @@ JTAG at ~100 kHz.
 
 ## OpenOCD
 
-The program ships verified OpenOCD configs (`ast2050.cfg`, `rpi4-jtag.cfg`,
-board `.cfg`) using the `linuxgpiod` bit-bang driver. The NS9360 (iPDU) has an
+The program ships verified OpenOCD configs
+([`ast2050.cfg`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/openocd/ast2050.cfg),
+[`rpi4-jtag.cfg`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/openocd/rpi4-jtag.cfg),
+board [`kgpe-d16-bmc.cfg`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/openocd/kgpe-d16-bmc.cfg))
+using the `linuxgpiod` bit-bang driver. The NS9360 (iPDU) has an
 equivalent J1–J6 header set and its own config.
 
 ```sh
@@ -65,7 +68,7 @@ sudo openocd -f rpi4-jtag.cfg -f ast2050.cfg -c "init; scan_chain; shutdown"
 ```
 
 These configs and the wiring detail are maintained in the program's
-[`RPI4-OPENOCD-JTAG-WIRING.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RPI4-OPENOCD-JTAG-WIRING.md) / `openocd/` reference and drive the HIL backend.
+[`RPI4-OPENOCD-JTAG-WIRING.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RPI4-OPENOCD-JTAG-WIRING.md) / [`openocd/`](https://github.com/mithro/ai-shenanigans-for-bmcs/tree/main/asus-kgpe-d16-firmware/openocd) reference and drive the HIL backend.
 
 ## See also
 
