@@ -73,6 +73,8 @@ linkcheck_ignore = [
     r"https://developer\.arm\.com/.*",
     r"https://www\.renesas\.com/.*",
     r"https://theretroweb\.com/.*",
+    r"https://www\.intel\.com/.*",
+    r"https://www\.jedec\.org/.*",
     # Valid datasheet mirrors on personal / regional hosts that intermittently
     # fail DNS/TLS from CI runners (kept as references; not CI-reliable).
     r"https?://(www\.)?belchip\.by/.*",
