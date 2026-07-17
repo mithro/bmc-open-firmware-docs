@@ -45,7 +45,7 @@ and the machine-generated all-355-ball table
 ```
 
 The AST2050 is wired with three distinct "personalities"
-[[BMC-WIRING §1]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#1-high-level-block-diagram):
+[BMC-WIRING §1](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#1-high-level-block-diagram):
 
 - **Baseboard controller** — LPC, PCI-33 and GPIO to the chipset for power
   sequencing, reset control and sensor access (§4–§6, §11 below, and the
@@ -192,7 +192,7 @@ The BMC's private DRAM is a single Hynix **HY5PS121621CFP-25** — DDR2, 32M×16
 remote-KVM frame buffer. Every data/strobe/address/control line runs through
 isolated series-resistor networks (`QRN1`–`QRN12`, nets `AST_MEMxx` →
 `R_AST_MEMxx`) for source-series termination.
-[[BMC-WIRING §3]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#3-ddr2-memory-interface--qu2)
+[BMC-WIRING §3](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#3-ddr2-memory-interface--qu2)
 
 Key control balls: `CS#`=W16, `RAS#`=AA16, `CAS#`=AB16, `WE#`=W17,
 `CK/CK#`=AA19/AB19, `CKE`=AB18, `ODT`=AB21; `DQ0–15` sit across the W/Y/AA/AB
@@ -211,7 +211,7 @@ this part (4-bank, ×16, DLL) is what the DDR2-init bring-up work derived
 Balls **T2/T3** carry `AST_P1/P0_DDR_THERM#` — BMC GPIO inputs monitoring the
 *host's* DDR3 DIMM/CPU thermal alarms (§11). They have nothing to do with the
 BMC's own DDR2 interface above.
-[[BMC-WIRING §3]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#3-ddr2-memory-interface--qu2)
+[BMC-WIRING §3](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#3-ddr2-memory-interface--qu2)
 ```
 
 ## 4. SPI firmware flash → `BMC_FW1`
@@ -264,7 +264,7 @@ sharing the bus with the Nuvoton {doc}`W83667HG-A Super-I/O
 </hardware/peripherals/w83667hg>` (`OU1`) and the TPM module header (`TPM1`).
 This bus carries the host's KCS/IPMI, mailbox and virtual-UART register access
 into the BMC.
-[[BMC-WIRING §5]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#5-lpc-host-bus--sp5100-su1--super-io-ou1)
+[BMC-WIRING §5](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#5-lpc-host-bus--sp5100-su1--super-io-ou1)
 
 ```{list-table} LPC bus — same net, three peers
 :header-rows: 1
@@ -338,7 +338,7 @@ drives the full multiplexed interface (`AD0–31`, `C/BE0–3#`, `FRAME#`,
 `IRDY#`, `TRDY#`, `DEVSEL#`, `STOP#`, `PAR`, `IDSEL`), clocked by
 `SB_PCI_CLK1` (ball P22) with reset `SB_PCI_RST#` (ball B10) — 45 balls in
 all.
-[[BMC-WIRING §6]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#6-pci-33-mhz-bus-vga--ikvm--sp5100-su1--pci-slots)
+[BMC-WIRING §6](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#6-pci-33-mhz-bus-vga--ikvm--sp5100-su1--pci-slots)
 
 This is the datapath behind two things documented elsewhere:
 
@@ -358,14 +358,14 @@ A single USB port wired as a **device** (the remote-KVM virtual
 keyboard/mouse/CD), connected to the SP5100's USB host controller:
 `AST_USB+` = B22 and `AST_USB-` = A21 → `SU1` E12/E14 (`USB_HSD6P/N`), with the
 `AST_USBRPU` pull-up strap on B21 and USB analog power on B18/B20.
-[[BMC-WIRING §9]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#9-usb-device-port--sp5100-su1)
+[BMC-WIRING §9](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#9-usb-device-port--sp5100-su1)
 The BMC-side USB device controller (the virtual hub) is documented in
 {doc}`/hardware/registers/display-usb`.
 
 ## 8. Ethernet — dedicated PHY plus NC-SI sideband
 
 The AST2050 MAC is wired **two ways at once** through its pin-mux
-[[BMC-WIRING §7]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#7-ethernet--dual-channel-dedicated-phy--nc-si-sideband):
+[BMC-WIRING §7](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#7-ethernet--dual-channel-dedicated-phy--nc-si-sideband):
 
 - **Channel 1 — dedicated management port.** The `AST_RMII1*` nets plus
   MDIO/MDC run to `U5`, a Realtek **RTL8201N-GR**
@@ -381,7 +381,7 @@ The AST2050 MAC is wired **two ways at once** through its pin-mux
 Both channels are clocked at 50 MHz from a dedicated management clock
 generator `CU2` (ICS **ICS9112AM-16LFT**): nets `C_MNG_50M_AST_RMII1RXCLK`
 (ball A7) and `C_MNG_50M_AST_RMII2RXCLK` (ball B7).
-[[QU1_pins § Ethernet]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/pinmaps/QU1_pins.md#ethernet-rmii--nc-si-18)
+[QU1_pins § Ethernet](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/pinmaps/QU1_pins.md#ethernet-rmii--nc-si-18)
 
 ```{list-table} Ethernet balls (18)
 :header-rows: 1
@@ -452,14 +452,14 @@ The on-chip VGA DAC drives the rear HD-15 (`VGA1`, plus the `VGA_HDR1`
 header): analog RGB from balls E1/D1/C1 through buffer transistors
 `QD3/QD4/QD5`, H/V sync (U2/R4) through the Toshiba **TC74VHCT125AF** quad
 buffer `QU6`, and the DDC/EDID I²C pair on B1/B2 direct to the connector.
-[[BMC-WIRING §8]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#8-vga--video-output--vga1)
+[BMC-WIRING §8](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#8-vga--video-output--vga1)
 Connector pinout: {doc}`kgpe-d16-connectors`; the display-engine registers are
 in {doc}`/hardware/registers/display-usb`.
 
 ## 10. Serial and Serial-over-LAN
 
 Two separate serial paths leave the BMC
-[[BMC-WIRING §12]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#12-serial--serial-over-lan-sol):
+[BMC-WIRING §12](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#12-serial--serial-over-lan-sol):
 
 - **BMC console** — SoC **UART2** (`TXD2`=U21, `RXD2`=U20) runs to the 4-pin
   `AST_UART1` header. This is the `ttyS1` console used throughout the
@@ -473,7 +473,7 @@ Two separate serial paths leave the BMC
 
 The remaining UART1 modem-control balls (`NDTR1`=U19, `NDCD1`=V19,
 `NDSR1`=V20, `NRI1`=V22) are unconnected.
-[[QU1_pins § Serial]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/pinmaps/QU1_pins.md#serial--sol-uart-11)
+[QU1_pins § Serial](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/pinmaps/QU1_pins.md#serial--sol-uart-11)
 UART programming detail: {doc}`/hardware/registers/uart-vic-timers`.
 
 ## 11. Power / reset / platform control GPIO
@@ -621,7 +621,7 @@ Sources: [BMC-WIRING §13](https://github.com/mithro/ai-shenanigans-for-bmcs/blo
 ## 13. Chip inventory around the BMC
 
 Every identity below is quoted from the schematic's part-description field
-[[README]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/README.md#confirmed-chip-inventory-from-the-schematic):
+[README](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/README.md#confirmed-chip-inventory-from-the-schematic):
 
 ```{list-table}
 :header-rows: 1

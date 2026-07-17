@@ -179,7 +179,7 @@ photo-derived bring-up documentation assumed ({doc}`kgpe-d16` §2.2's header
 table predates the schematic work). The signal pins remain 3.3 V TTL — the
 rule "never connect pin 1 to an RPi" stands, and is now *more* important, not
 less: +5 V would exceed the Pi's absolute maximum.
-[[BMC-CONNECTORS `AST_UART1`]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/BMC-CONNECTORS.md#ast_uart1--bmc-serial-console)
+[BMC-CONNECTORS `AST_UART1`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/BMC-CONNECTORS.md#ast_uart1--bmc-serial-console)
 ```
 
 The RPi4 crossover wiring recipe stays on {doc}`kgpe-d16` §2.2, and the
@@ -324,7 +324,7 @@ manual as the "ASMB4/5 management-module slot" with an unpublished pinout, and
 its SPI role was an unconfirmed rumour ({doc}`kgpe-d16` §2.3 preserved that
 history). The netlist settles it: `BMC_FW1` is the BMC's SPI firmware socket,
 with the pinout above.
-[[BMC-CONNECTORS `BMC_FW1`]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/BMC-CONNECTORS.md#bmc_fw1--bmc-spi-firmware-socket)
+[BMC-CONNECTORS `BMC_FW1`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/BMC-CONNECTORS.md#bmc_fw1--bmc-spi-firmware-socket)
 ```
 
 ## 5. `PANEL1` — system front panel

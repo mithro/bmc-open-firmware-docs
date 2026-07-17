@@ -462,7 +462,7 @@ schematic's part-description field, confirming what public sources
 ([15h.org](https://15h.org/index.php/Home), [The Retro Web](https://theretroweb.com/))
 had suggested and the in-repo analysis had held open pending physical
 confirmation. [datasheets/README.md:152](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/README.md#L152)
-[[schematic-wiring]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/pinmaps/QU1_pins.md#ethernet-rmii--nc-si-18)
+[schematic-wiring](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/pinmaps/QU1_pins.md#ethernet-rmii--nc-si-18)
 The part's registers and wiring: {doc}`../hardware/peripherals/rtl8201n`.
 
 The schematic also revealed a **second network channel**: the MAC's RMII2

@@ -15,7 +15,7 @@ addresses quoted below are the standard values from each part's datasheet (or
 JEDEC, for DIMM SPD/TSOD) — treat them as datasheet-derived, not read from
 silicon, except where a page linked below records a live-board observation
 (e.g. the W83795G at `0x2F` seen by lm-sensors).
-[[I2C-TOPOLOGY]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/I2C-SMBUS-TOPOLOGY.md)
+[I2C-TOPOLOGY](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/I2C-SMBUS-TOPOLOGY.md)
 ```
 
 ```{figure} /_static/diagrams/kgpe-d16-bmc-i2c-topology.svg
@@ -29,7 +29,7 @@ The BMC-centric view of the switching fabric — the {ref}`per-bus diagrams belo
 ## 1. Masters
 
 Seven controllers can drive management buses on this board
-[[I2C-TOPOLOGY §1]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/I2C-SMBUS-TOPOLOGY.md#1-masters):
+[I2C-TOPOLOGY §1](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/I2C-SMBUS-TOPOLOGY.md#1-masters):
 
 ```{list-table}
 :header-rows: 1
@@ -80,7 +80,7 @@ program's kernel patches program ({doc}`/drivers/linux`).
 Three analog parts sit between the BMC and the end devices. None of them is
 I²C-addressable — they are transparent switches steered by GPIO nets — so
 "selecting a channel" means driving pins, not sending bus transactions.
-[[BMC-WIRING §10.3]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#103-how-the-muxes-are-controlled-the-steps-in-detail)
+[BMC-WIRING §10.3](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#103-how-the-muxes-are-controlled-the-steps-in-detail)
 
 ```{list-table} Mux fabric parts (all non-addressable)
 :header-rows: 1
@@ -103,7 +103,7 @@ I²C-addressable — they are transparent switches steered by GPIO nets — so
 The 74HC4052 truth table gives the channel selection:
 `S1:S0 = 00→Y0, 01→Y1, 10→Y2, 11→Y3` — so DIMM bank A–D = `10`, bank E–H =
 `11`, aux front panel = `00`.
-[[BMC-WIRING §10.3]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#103-how-the-muxes-are-controlled-the-steps-in-detail)
+[BMC-WIRING §10.3](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#103-how-the-muxes-are-controlled-the-steps-in-detail)
 
 ```{admonition} Why a mux at all?
 :class: note
@@ -112,7 +112,7 @@ SPD EEPROMs live at fixed addresses `0x50`–`0x57`, so sixteen DIMMs would
 collide on one bus. The `QU5` demux splits them into two eight-slot banks with
 their own `0x50`–`0x57` spaces, and the board FRU EEPROM (also `0x50`-range)
 is isolated on the separate `I2C5` segment for the same reason.
-[[BMC-WIRING §10.3]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#103-how-the-muxes-are-controlled-the-steps-in-detail)
+[BMC-WIRING §10.3](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#103-how-the-muxes-are-controlled-the-steps-in-detail)
 This is the same problem the Dell C410X solves with addressable PCA954x muxes
 ({doc}`/hardware/peripherals/pca954x-mux`) — the KGPE-D16 uses analog parts
 steered by GPIO instead, so there is no mux device to probe on the bus.
@@ -130,7 +130,7 @@ steered by GPIO instead, so there is no mux device to probe on the bus.
    and read the SPD bytes (the C1 temperature sensor answers at
    `0x18 + <slot index>` in the same mux state).
 
-[[BMC-WIRING §10.3]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#103-how-the-muxes-are-controlled-the-steps-in-detail)
+[BMC-WIRING §10.3](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#103-how-the-muxes-are-controlled-the-steps-in-detail)
 The SPD/TSOD devices themselves are documented in
 {doc}`/hardware/peripherals/dimm-spd-tsod`.
 
@@ -191,7 +191,7 @@ southbridge — both can reach the W83795G and both can drive the DIMM mux (the
 `U23` buffer decides whose select lines win). In practice the BMC owns the bus
 for out-of-band monitoring while the host is off, and the SP5100/host takes it
 during POST and runtime.
-[[SP5100-WIRING §9.2]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/SP5100-SOUTHBRIDGE-WIRING.md#92-shared-with-the-bmc-arbitration)
+[SP5100-WIRING §9.2](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/SP5100-SOUTHBRIDGE-WIRING.md#92-shared-with-the-bmc-arbitration)
 An open BMC firmware must treat every device on this segment as potentially
 contended — a mid-transaction host grab is a real hazard the arbitration
 hardware does not prevent.
@@ -205,7 +205,7 @@ hardware does not prevent.
 The BMC's dedicated link to the power supply for PMBus telemetry (voltages,
 currents, fan, status); the PSU's alert line lands on the BMC's `SALT1` ball.
 The header pinout is on {doc}`kgpe-d16-connectors`.
-[[I2C-TOPOLOGY §3.1]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/I2C-SMBUS-TOPOLOGY.md#31-bmc-i2c1--psu-smbus-pmbus)
+[I2C-TOPOLOGY §3.1](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/I2C-SMBUS-TOPOLOGY.md#31-bmc-i2c1--psu-smbus-pmbus)
 
 ```{figure} /_static/diagrams/kgpe-d16-i2c-bus-psu.svg
 :alt: PSU SMBus topology — BMC I2C1 (balls A15/B15) direct to the PSUSMB1 header, alert on ball B12.
@@ -219,7 +219,7 @@ the {doc}`W83795G </hardware/peripherals/w83795g>` hardware monitor and the
 `QU9` entry to the DIMM-SPD fabric (the related pairs `I2C3`/`SMBus2` and
 `I2C6` are point-to-point BMC↔southbridge links on adjacent nets — see the
 table in §3).
-[[I2C-TOPOLOGY §3.2]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/I2C-SMBUS-TOPOLOGY.md#32-shared-platform-sensor-bus-multi-master)
+[I2C-TOPOLOGY §3.2](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/I2C-SMBUS-TOPOLOGY.md#32-shared-platform-sensor-bus-multi-master)
 
 ```{figure} /_static/diagrams/kgpe-d16-i2c-bus-sensor.svg
 :alt: Shared platform sensor bus — AST2050 I2C2/3/6 and SP5100 SMBus1/2 reaching the W83795G hardware monitor at 0x2F and the QU9 switch toward the DIMM mux.
@@ -231,7 +231,7 @@ table in §3).
 Two eight-slot banks behind the `QU9`→`QU5` fabric (§2): bank A–D on segment
 `I2C10`, bank E–H on `I2C11`; SPD at `0x50`–`0x57` and TSOD at `0x18`–`0x1F`
 per bank. Device detail: {doc}`/hardware/peripherals/dimm-spd-tsod`.
-[[I2C-TOPOLOGY §3.3]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/I2C-SMBUS-TOPOLOGY.md#33-dimm-spd--tsod-buses-via-mux)
+[I2C-TOPOLOGY §3.3](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/I2C-SMBUS-TOPOLOGY.md#33-dimm-spd--tsod-buses-via-mux)
 
 ```{figure} /_static/diagrams/kgpe-d16-i2c-bus-dimm-spd.svg
 :alt: DIMM SPD/TSOD topology — I2C2 through the QU9 FET switch onto the I2C7 common, the QU5 analog mux fanning to the A–D and E–H DIMM banks, with the U23 buffer arbitrating the select lines between BMC and SP5100.
@@ -244,10 +244,10 @@ The BMC's `I2C4` reaches the W83795G's TSI pins through level-shift FETs; the
 hardware monitor in turn masters the AMD **SB-TSI** interface to each
 processor's die-temperature endpoint (CPU0 `0x4C`, CPU1 `0x4D`). The SB-TSI
 register interface is specified in the in-repo AMD Family 10h BKDG
-[[BKDG]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/AMD_Family_10h_BKDG_31116.pdf),
+[BKDG](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/AMD_Family_10h_BKDG_31116.pdf),
 and the W83795G side (Bank 3, DTS registers) in
 {doc}`/hardware/peripherals/w83795g` §1.11.
-[[I2C-TOPOLOGY §3.4]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/I2C-SMBUS-TOPOLOGY.md#34-cpu-thermal-sb-tsi)
+[I2C-TOPOLOGY §3.4](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/I2C-SMBUS-TOPOLOGY.md#34-cpu-thermal-sb-tsi)
 
 ```{figure} /_static/diagrams/kgpe-d16-i2c-bus-cputemp.svg
 :alt: CPU thermal topology — BMC I2C4 through level-shift FETs to the W83795G TSI pins, the W83795G mastering SB-TSI to CPU0 at 0x4C and CPU1 at 0x4D.
@@ -260,7 +260,7 @@ The BMC's private inventory/indicator bus: the {doc}`HT24LC08 FRU EEPROM
 </hardware/peripherals/ht24lc08>` and the two {doc}`W83601G expanders
 </hardware/peripherals/w83601g>` that drive the sixteen per-DIMM error LEDs.
 Both expanders are reset by the Super-I/O's `SIO_RSMRST#`.
-[[I2C-TOPOLOGY §3.5]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/I2C-SMBUS-TOPOLOGY.md#35-bmc-i2c5--board-inventory--dimm-led-expanders)
+[I2C-TOPOLOGY §3.5](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/I2C-SMBUS-TOPOLOGY.md#35-bmc-i2c5--board-inventory--dimm-led-expanders)
 
 ```{figure} /_static/diagrams/kgpe-d16-i2c-bus-inventory.svg
 :alt: Inventory bus topology — BMC I2C5 to the HT24LC08 FRU EEPROM at 0x50-0x53 and the two W83601G DIMM-error-LED GPIO expanders.
@@ -274,7 +274,7 @@ controllers making the processor rails: `PU2` (**ASP0902QGK**, CPU0 core) and
 `PU7` (**ASP0906QGK**, CPU1/northbridge), supported by the `PU1` ASP0910 SVI
 switch and `PU4`/`PU9`/`PU10` UP6282 bucks. The BMC has no path onto this
 segment — it matters to BMC work only as context for what the host owns.
-[[I2C-TOPOLOGY §3.6]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/I2C-SMBUS-TOPOLOGY.md#36-sp5100-smbus0--cpunb-voltage-regulators)
+[I2C-TOPOLOGY §3.6](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/I2C-SMBUS-TOPOLOGY.md#36-sp5100-smbus0--cpunb-voltage-regulators)
 
 ```{figure} /_static/diagrams/kgpe-d16-i2c-bus-vr.svg
 :alt: VR PMBus topology — SP5100 SMBus0 to the ASP0902QGK and ASP0906QGK voltage-regulator PWM controllers.
@@ -283,7 +283,7 @@ segment — it matters to BMC work only as context for what the host owns.
 
 ### 4.7 Remaining segments and straps
 
-[[I2C-TOPOLOGY §3.7–3.9]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/I2C-SMBUS-TOPOLOGY.md#37-other-segments--straps)
+[I2C-TOPOLOGY §3.7–3.9](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/I2C-SMBUS-TOPOLOGY.md#37-other-segments--straps)
 
 - **SP5100 `SMBus3` (level-shifted)** — brought out on `SU1` E20/E21 but
   **unpopulated** on this board.
