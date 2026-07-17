@@ -3,7 +3,11 @@
 Register-by-register reference for the Aspeed **AST2050 / AST1100 (G3)** networking
 subsystem: the two Faraday **FTGMAC100** 10/100 Ethernet MAC modules, their built-in
 **MDIO/MII management interface**, and a representative external PHY (the Realtek
-**RTL8201CP** RMII 10/100 transceiver used on the KGPE-D16 BMC).
+**RTL8201CP** RMII 10/100 transceiver, which the faithful QEMU model implements).
+The KGPE-D16's physical PHY is the sibling **RTL8201N-GR** — identified from the
+board's schematic netlist, and documented with its own register map at
+{doc}`/hardware/peripherals/rtl8201n`; the two parts carry the *same* PHY ID
+(`0x0000`/`0x8201`), so they are indistinguishable to ID-probing software.
 
 Every register field below is cross-referenced against **at least two independent
 sources**: the Aspeed AST2050/AST1100 A3 datasheet (the hardware authority), the
@@ -42,7 +46,7 @@ supported** on this chip). [DS §14.1 p.124](#sources)
 :width: 100%
 
 The AST2050 Ethernet signal chain: the on-chip **FTGMAC100** MAC reaches the
-external **RTL8201CP** PHY over two channels — a **clause-22 MDIO/MDC**
+external **RTL8201-family** PHY over two channels — a **clause-22 MDIO/MDC**
 management bus (link/speed/duplex) and the **RMII data path** — then through
 magnetics to the RJ-45. The MDIO speed read is the path the `FAST_MODE` fix
 corrects (see §10 below, {doc}`/drivers/linux`, and the faithful QEMU model
@@ -1073,12 +1077,17 @@ AHB-state difference from probe time), documented in
 
 ## 10. External PHY — Realtek RTL8201CP (RMII 10/100)
 
-The KGPE-D16 BMC uses a Realtek **RTL8201CP** single-port 10/100 PHY on the MAC's
-RMII interface (the mainline `ftgmac100_26` driver also lists RTL8201EL / RTL8201N /
-RTL8211BN as supported PHYs;
-[`asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md)). The RTL8201CP
-exposes the standard IEEE 802.3 clause-22 register set (registers 0–6) plus Realtek
-vendor registers (16–31). [RTL8201CP DS §6 p.8–13](#sources)
+The RTL8201-family part documented here is the **RTL8201CP** — the variant the
+faithful QEMU model implements and the Raptor `ftgmac100_26` driver's
+supported-PHY list centres on (that list also names RTL8201EL / RTL8201N /
+RTL8211BN;
+[`asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md)).
+The KGPE-D16's board part is the sibling **RTL8201N-GR** (schematic-identified;
+{doc}`/hardware/peripherals/rtl8201n` has its register map and the differences).
+Both expose the standard IEEE 802.3 clause-22 register set (registers 0–6) plus
+Realtek vendor registers (16–31) and report the same PHY ID, so everything in
+this section applies to software probing either part.
+[RTL8201CP DS §6 p.8–13](#sources)
 
 ### 10.1 PHY identification (registers 2 & 3)
 
