@@ -332,12 +332,12 @@ segment — it matters to BMC work only as context for what the host owns.
 * - DIMM-LED expander
   - `U27`
   - Winbond {doc}`W83601G </hardware/peripherals/w83601g>`
-  - strapped (`A0`–`A2`)
+  - `0x18`–`0x1F` (strapped `A0`–`A2`)
   - BMC `I2C5`
 * - DIMM-LED expander
   - `U28`
   - Winbond {doc}`W83601G </hardware/peripherals/w83601g>`
-  - strapped (`A0`–`A2`)
+  - `0x18`–`0x1F` (strapped, ≠ `U27`)
   - BMC `I2C5`
 * - DIMM SPD ×16
   - `DIMM_A1`…`H2`
