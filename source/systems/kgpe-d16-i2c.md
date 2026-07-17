@@ -178,7 +178,7 @@ The SPD/TSOD devices themselves are documented in
   - front auxiliary-panel I2C on `AUX_PANEL1`
 ```
 
-Sources: [BMC-WIRING §10.4](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#104-bmc-ic-bus-assignments-quick-reference),
+Sources: [BMC-WIRING §10.4](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#104-bmc-i²c-bus-assignments-quick-reference),
 ball-level far ends from
 [`QU1_pins.md` § I2C / SMBus](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/pinmaps/QU1_pins.md#i2c--smbus-16)
 and [`SU1_pins.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/pinmaps/SU1_pins.md).
@@ -400,7 +400,7 @@ Source: [I2C-TOPOLOGY §2](https://github.com/mithro/ai-shenanigans-for-bmcs/blo
   through resistors and analog switches to its endpoints).
 - **[`AST2050-BMC-WIRING.md` §10](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#10-i²c--smbus-topology-traced-through-every-mux--expander)** — the BMC-centric fabric
   documentation: mux control, worked access sequences, per-device table.
-- **[`SP5100-SOUTHBRIDGE-WIRING.md` §9](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/SP5100-SOUTHBRIDGE-WIRING.md#9-smbus--ic)** — the southbridge's four SMBus
+- **[`SP5100-SOUTHBRIDGE-WIRING.md` §9](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/SP5100-SOUTHBRIDGE-WIRING.md#9-smbus--i²c)** — the southbridge's four SMBus
   segments and the shared-bus arbitration.
 - **[`pinmaps/QU1_pins.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/pinmaps/QU1_pins.md)** / **[`pinmaps/SU1_pins.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/pinmaps/SU1_pins.md)** — ball-level net endpoints.
 - **[AMD Family 10h BKDG](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/AMD_Family_10h_BKDG_31116.pdf)** (31116) — the SB-TSI protocol/register

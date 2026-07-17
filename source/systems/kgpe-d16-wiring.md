@@ -565,12 +565,12 @@ events and disable CPUs. (`P0`/`P1` refer to the two Opteron sockets.)
 * - T3
   - `VP4/GPIOE4/TACH4`
   - `AST_P0_DDR_THERM#`
-  - CPU1 + DIMM A–D
+  - socket-0 CPU + DIMM A–D
   - socket-0 DIMM/CPU thermal
 * - T2
   - `VP5/GPIOE5/TACH5`
   - `AST_P1_DDR_THERM#`
-  - CPU2 + DIMM E–H
+  - socket-1 CPU + DIMM E–H
   - socket-1 DIMM/CPU thermal
 * - T1
   - `VPACLK/GPIOH7`
