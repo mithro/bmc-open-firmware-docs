@@ -14,13 +14,36 @@ port.
 * - CPU core
   - ARM926EJ-S (ARMv5TE)
 * - DRAM
-  - DDR2, mapped at `0x40000000`
+  - DDR2, mapped at `0x40000000` — Hynix HY5PS121621CFP-25 (`QU2`), 32M×16 = **64 MB** ({doc}`kgpe-d16-wiring` §3)
 * - Boot flash
-  - SPI NOR at `0x14000000`
+  - SPI NOR at `0x14000000`, in the **socketed** `BMC_FW1` carrier (§2.3; pinout on {doc}`kgpe-d16-connectors`)
+* - Power
+  - **always-on**: every BMC rail is standby (`_AUX`), cascaded from PSU `+5VSB` ({doc}`kgpe-d16-wiring` §2)
 * - Console
   - SoC **UART2** (`0x1E784000`) = Linux `ttyS1`; firmware **115200 8N1** (the rig bring-up observed 1200 — see the console note in §2.2)
 * - Debug
   - `AST_JTAG1` (BMC JTAG) + AMD HDT (host CPU); see {doc}`../debug/jtag-uart`
+```
+
+```{admonition} Schematic-derived wiring pages
+:class: seealso
+
+The board's schematic netlist has been reverse-engineered pin-by-pin
+([`schematic-wiring/`](https://github.com/mithro/ai-shenanigans-for-bmcs/tree/main/asus-kgpe-d16-firmware/schematic-wiring)
+in the program repo), giving three companion pages with the wiring ground
+truth this overview summarises: {doc}`kgpe-d16-wiring` (every AST2050 ball, by
+function), {doc}`kgpe-d16-i2c` (the complete I²C/SMBus/PMBus topology) and
+{doc}`kgpe-d16-connectors` (pinouts for every BMC-wired header). Where the
+older bring-up notes below disagreed with the netlist, the corrections are
+flagged inline.
+```
+
+```{toctree}
+:hidden:
+
+kgpe-d16-wiring
+kgpe-d16-i2c
+kgpe-d16-connectors
 ```
 
 ## Why this board leads the SoC work
@@ -102,17 +125,17 @@ is **not** 5 V tolerant. [RPI4-OPENOCD-JTAG-WIRING.md:41-44](https://github.com/
   - USB-serial / Pi UART0
   - ✅ Raptor
 * - BMC_FW1
-  - ASMB4/5 management-module / firmware slot
-  - flashrom (SPI) — verify
-  - 🔶 / ⚠️
+  - BMC SPI firmware socket (2×7 DIP) + feature straps
+  - flashrom (SPI)
+  - ✅ schematic (§2.3)
 * - NB_JTAG_HEADER
   - AMD HDT (CPU/NB debug), 20-pin HDT+ (1.27 mm)
   - proprietary probe only
   - ⚠️ not OpenOCD
 * - NB_DEBUG_HEADER
-  - 2nd HDT? / POST / LPC — unconfirmed
-  - identify first
-  - ⚠️
+  - SR5690 PCIe hot-plug/debug SMBus (`PCIE_HP_SCL/SDA`)
+  - SMBus probe
+  - ✅ schematic ({doc}`kgpe-d16-i2c` §4.7)
 * - TEST_CON1 / TEST_CON2
   - factory ICT test pads
   - unknown
@@ -222,12 +245,17 @@ bring-up path is the leading theory) and is documented rather than asserted
 either way — treat both numbers as candidates and probe before relying on one.
 ```
 
-A 1×4 header just above the AST2050; ends fixed by Raptor's photo as **+3.3 V …
-GND**, the two middle pins TX/RX (confirm by probing — BMC TXD idles high and
-bursts at boot). **3.3 V TTL** (baud: see the note above). [HEADER-PINOUTS.md:98-126](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/HEADER-PINOUTS.md#L98-L126)
+A 1×4 header just above the AST2050. The schematic netlist has since settled
+the pinout the bring-up had partially inferred from Raptor's photo: **pin 1 =
+`+5VSB`** (not the +3.3 V the photo suggested), **pin 2 = BMC TXD**
+(ball U21, `TXD2`), **pin 3 = BMC RXD** (ball U20, `RXD2`), **pin 4 = GND**
+({doc}`kgpe-d16-connectors` §2). The signal pins remain **3.3 V TTL** (baud:
+see the note above) — and the "never connect pin 1" rule is now even more
+important, since +5 V exceeds an RPi's absolute maximum.
+[HEADER-PINOUTS.md:98-126](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/HEADER-PINOUTS.md#L98-L126)
+[BMC-CONNECTORS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/BMC-CONNECTORS.md#ast_uart1--bmc-serial-console)
 
-
-```{list-table} AST_UART1 → RPi4 (leave +3.3 V unconnected; cross TX↔RX)
+```{list-table} AST_UART1 → RPi4 (leave pin 1 unconnected; cross TX↔RX)
 :header-rows: 1
 :widths: 30 34 36
 
@@ -235,39 +263,49 @@ bursts at boot). **3.3 V TTL** (baud: see the note above). [HEADER-PINOUTS.md:98
   - Signal
   - RPi4
 * - 1
-  - +3.3 V (BMC rail)
+  - +5VSB (schematic-corrected; photo said +3.3 V)
   - — (do NOT connect)
-* - 2 or 3
-  - BMC TXD
+* - 2
+  - BMC TXD (`AST_TXD2_R`, ball U21)
   - GPIO15 / RXD, phys 10
-* - 3 or 2
-  - BMC RXD
+* - 3
+  - BMC RXD (`AST_RXD2_R`, ball U20)
   - GPIO14 / TXD, phys 8
 * - 4
   - GND
   - GND, phys 6
 ```
 
-Sources: [HEADER-PINOUTS.md:105-126](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/HEADER-PINOUTS.md#L105-L126) [RPI4-OPENOCD-JTAG-WIRING.md:211-238](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RPI4-OPENOCD-JTAG-WIRING.md#L211-L238). This
-header is the SoC's **UART2** (NS16550 at `0x1E784000` = Linux `ttyS1`), per the
-note above — not the SoC UART1 at `0x1E783000`.
+Sources: [BMC-CONNECTORS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/BMC-CONNECTORS.md#ast_uart1--bmc-serial-console)
+(netlist pinout), [HEADER-PINOUTS.md:105-126](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/HEADER-PINOUTS.md#L105-L126) [RPI4-OPENOCD-JTAG-WIRING.md:211-238](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RPI4-OPENOCD-JTAG-WIRING.md#L211-L238)
+(the original bring-up wiring). This header is the SoC's **UART2** (NS16550 at
+`0x1E784000` = Linux `ttyS1`), per the note above — not the SoC UART1 at
+`0x1E783000`.
 [RPI4-OPENOCD-JTAG-WIRING.md:236-238](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RPI4-OPENOCD-JTAG-WIRING.md#L236-L238) Press **Delete** within ~3 s of U-Boot start
 to reach the bootloader.
 
-### 2.3 BMC_FW1 — ASMB4/5 module / firmware slot 🔶
+### 2.3 BMC_FW1 — BMC SPI firmware socket ✅
 
-The ASUS manual (§2.7.2) shows only its location and **pin 1 at lower-left**, with
-the note that it supports an **ASUS Server Management Board 4 (ASMB4)** iKVM
-module; no per-pin signals are published. [HEADER-PINOUTS.md:73-94](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/HEADER-PINOUTS.md#L73-L94) Its rumored
-role as a BMC-SPI-flash recovery path is **unconfirmed** — treat it as a flashrom
-(SPI) target only if continuity to the AST2050 boot flash (an SOIC-8 near the SoC)
-is proven. If it is SPI, drive it from the Pi's hardware SPI0 with Raptor's
-`ast2050-flashrom` fork. [RPI4-OPENOCD-JTAG-WIRING.md:242-268](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RPI4-OPENOCD-JTAG-WIRING.md#L242-L268)
+**Identity resolved by the schematic.** The ASUS manual (§2.7.2) shows only
+its location, pin 1 at lower-left, and a note about the **ASMB4** iKVM module,
+so the bring-up docs treated its rumoured SPI role as unconfirmed.
+[HEADER-PINOUTS.md:73-94](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/HEADER-PINOUTS.md#L73-L94)
+The netlist settles it: `BMC_FW1` is the BMC's **socketed SPI firmware
+flash** — SPI clock/MOSI/MISO plus chip-selects 0 and 2 straight to the
+AST2050's ROM-controller balls, powered from `+3V3_AUX`, and carrying the
+`AST_IKVMEN#`, `AST_SOLEN#` and `BMC_PRESENT#` feature straps. Full pinout
+and signal table: {doc}`kgpe-d16-connectors` §4; BMC-side balls:
+{doc}`kgpe-d16-wiring` §4. A socketed firmware chip means reflashing needs no
+soldering — e.g. the Pi's hardware SPI0 with Raptor's `ast2050-flashrom`
+fork. [RPI4-OPENOCD-JTAG-WIRING.md:242-268](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RPI4-OPENOCD-JTAG-WIRING.md#L242-L268)
+[BMC-CONNECTORS.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/BMC-CONNECTORS.md#bmc_fw1--bmc-spi-firmware-socket)
+
 ```{figure} /_static/diagrams/kgpe-d16-bmc-fw1.svg
-:alt: BMC_FW1 generic 2-row header footprint (ASMB4-iKVM slot); pin 1 lower-left; proprietary pinout.
+:alt: BMC_FW1 2x7 socket pinout from the schematic netlist — SPI MOSI/CLK/MISO/CS0/CS2 to BMC balls Y1/Y2/AA4/AB9/W7, +3V3_AUX flash power, and the IKVMEN#, SOLEN# and BMC_PRESENT# feature straps.
 :width: 90%
 
-**BMC_FW1** — the ASMB4/5 management-module / SPI-flash slot (proprietary pinout; treat as a template and probe before wiring).
+**BMC_FW1** — the BMC SPI firmware socket, pinout read from the schematic
+netlist (previously documented here as a proprietary-pinout template).
 ```
 
 ### 2.4 AMD HDT (NB_JTAG_HEADER) — CPU debug, 20-pin HDT+ (1.27 mm) ⚠️
@@ -338,8 +376,10 @@ InterTech / AMD HDT kit). [JTAG-HEADERS.md:62-95,236-239](https://github.com/mit
 Source: [JTAG-HEADERS.md:96-140](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-HEADERS.md#L96-L140). A 26-pin (25-signal + key) 2.54 mm HDT variant
 exists for older boards. [JTAG-HEADERS.md:142-171](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-HEADERS.md#L142-L171) The likely on-board JTAG scan
 chain is `CPU1 → CPU2 → SR5690 → SP5100` (order unconfirmed).
-[JTAG-HEADERS.md:358-376](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-HEADERS.md#L358-L376) **NB_DEBUG_HEADER** and **TEST_CON1/2** are unconfirmed
-(possible 2nd HDT / POST / LPC / factory ICT) — identify before driving.
+[JTAG-HEADERS.md:358-376](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-HEADERS.md#L358-L376) **NB_DEBUG_HEADER** — long unidentified — is resolved by
+the schematic as the **SR5690's PCIe hot-plug/debug SMBus** (`NB_DEBUG_HEADER1`,
+nets `PCIE_HP_SCL/SDA`; {doc}`kgpe-d16-i2c` §4.7). **TEST_CON1/2** remain
+unconfirmed factory-ICT candidates — identify before driving.
 [HEADER-PINOUTS.md:130-159](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/HEADER-PINOUTS.md#L130-L159)
 
 ---
@@ -413,31 +453,38 @@ the native DRAM window (`0x40000000`) and SoC register space.
 [JTAG-USAGE-GUIDE.md:318-322](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-USAGE-GUIDE.md#L318-L322)
 ```
 
-### 3.3 BMC Ethernet PHY
+### 3.3 BMC Ethernet — PHY resolved, plus an NC-SI sideband
 
-The AST2050 {doc}`MAC0 <../hardware/registers/network-mac-phy>` uses **RMII**
-to an external Fast-Ethernet PHY. Public sources
+**The PHY question is closed.** The AST2050 {doc}`MAC
+<../hardware/registers/network-mac-phy>` uses **RMII** to a Realtek
+**RTL8201N-GR** (board ref `U5`, QFN-64) — the identity is read from the
+schematic's part-description field, confirming what public sources
 ([15h.org](https://15h.org/index.php/Home), [The Retro Web](https://theretroweb.com/))
-identify it as a **Realtek RTL8201N** class part.
-The in-repo analysis flags the exact PHY as an
-**open question** — the RTL8201EL/RTL8211BN/RTL8201N names in the Raptor analysis
-are the AST2050 driver's *supported* list, not a confirmed board ID; a board photo
-/ ASMB schematic is needed to close it. [datasheets/README.md:152](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/README.md#L152) Treat "RTL8201N"
-as the strong candidate pending physical confirmation.
+had suggested and the in-repo analysis had held open pending physical
+confirmation. [datasheets/README.md:152](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/README.md#L152)
+[[schematic-wiring]](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/pinmaps/QU1_pins.md#ethernet-rmii--nc-si-18)
+The part's registers and wiring: {doc}`../hardware/peripherals/rtl8201n`.
+
+The schematic also revealed a **second network channel**: the MAC's RMII2
+nets are bussed to *both* Intel 82574L host NICs as an NC-SI sideband, so the
+BMC can share the host's LAN ports — see
+{doc}`../hardware/peripherals/intel-82574l` and {doc}`kgpe-d16-wiring` §8.
 
 ---
 
 ## AMD SP5100 southbridge context
 
 
-The **AMD SP5100** (SB700-family) is the KGPE-D16 southbridge, paired with the
-**SR5690 (RD890)** northbridge
+The **AMD SP5100** (SB700-family) is the KGPE-D16 southbridge (`SU1`,
+FCBGA-528), paired with the **SR5690 (RD890)** northbridge
 ([in-repo register reference](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/AMD_SR5690_Register_Reference_Guide_43871.pdf))
-over A-Link Express II. It is host-platform
-silicon managed by coreboot — **not** on the AST2050 BMC bus — but it is the
-board's SMBus/LPC/power/reset hub and hosts the
-{doc}`W83795G <../hardware/peripherals/w83795g>`, so it matters to BMC
-work. [datasheets/README.md:46-55,106-107](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/README.md#L46-L55) [hardware-inventory/README.md:17-19](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hardware-inventory/README.md#L17-L19)
+over A-Link Express II. It is host-platform silicon managed by coreboot, but
+the schematic work showed the BMC meets it on **four buses** — the AST2050 is
+an LPC peripheral, a PCI device and a USB device of the SP5100, and the two
+share the multi-master sensor SMBus ({doc}`kgpe-d16-wiring`,
+{doc}`kgpe-d16-i2c`). Its complete 528-ball wiring is documented in
+[`SP5100-SOUTHBRIDGE-WIRING.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/SP5100-SOUTHBRIDGE-WIRING.md).
+[datasheets/README.md:46-55,106-107](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/README.md#L46-L55) [hardware-inventory/README.md:17-19](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hardware-inventory/README.md#L17-L19)
 
 ```{list-table} SP5100 interfaces relevant to BMC / board management
 :header-rows: 1
@@ -446,11 +493,11 @@ work. [datasheets/README.md:46-55,106-107](https://github.com/mithro/ai-shenanig
 * - Interface
   - Relevance
 * - SMBus controller
-  - Hosts the **W83795G at 0x2F** (`i2c-piix4`, I/O base `0x0B00`) plus DIMM SPD `0x50-0x57`; driven by an embedded 8051 core. [datasheets/README.md:52-53](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/README.md#L52-L53) [hardware-inventory/README.md:42](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hardware-inventory/README.md#L42) [JTAG-HEADERS.md:402-408](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-HEADERS.md#L402-L408)
+  - Four segments (`SMBus0`–`3`): `SMBus0` is the private CPU/NB voltage-regulator SVI link; **`SMBus1`/`SMBus2` are shared with the BMC** — the same wires as BMC `I2C2`/`I2C3`, reaching the **W83795G at 0x2F** (`i2c-piix4`, I/O base `0x0B00`) and the DIMM SPD mux; ownership arbitrated by the `U23` buffer ({doc}`kgpe-d16-i2c` §3). [SP5100-SOUTHBRIDGE-WIRING.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/SP5100-SOUTHBRIDGE-WIRING.md#9-smbus--ic) [hardware-inventory/README.md:42](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hardware-inventory/README.md#L42)
 * - LPC bus
-  - Connects the **W83667HG-A Super I/O** (host serial/COM, hwmon backup) and TPM; the LPC/Port-80 path is a candidate for the unidentified `NB_DEBUG_HEADER`. [datasheets/README.md:53](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/README.md#L53) [HEADER-PINOUTS.md:141-144](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/HEADER-PINOUTS.md#L141-L144)
+  - Hosts the **BMC (KCS/IPMI path)**, the **W83667HG-A Super I/O** ({doc}`../hardware/peripherals/w83667hg`) and the TPM header on one bus ({doc}`kgpe-d16-wiring` §5). [datasheets/README.md:53](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/README.md#L53) [SP5100-SOUTHBRIDGE-WIRING.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/SP5100-SOUTHBRIDGE-WIRING.md#4-lpc-host-bus--bmc-qu1--super-io-ou1--tpm)
 * - Power / reset
-  - SB700-family power sequencing, ACPI/power-management, and platform reset live here; the ASF remote power path (W83795G §1.8) drives platform power via the NIC side-band, parallel to any BMC path.
+  - The ACPI power state machine (`SLP_S3#`/`SLP_S5#`, `PWR_GOOD`, `RSMRST#`) lives here, cooperating with the Super-I/O — and this is where the BMC's remote-power GPIOs physically land (`AST_ATXPSON#` → PSU, `SYS_PWRGD` → BMC ball D9; {doc}`kgpe-d16-wiring` §11). The ASF remote power path (W83795G §1.8) is a third, parallel control path via the NIC side-band. [SP5100-SOUTHBRIDGE-WIRING.md](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/SP5100-SOUTHBRIDGE-WIRING.md#11-power--reset--acpi-state-machine)
 * - SATA / USB / GPIO
   - 6× SATA II, USB OHCI/EHCI, GPIO — host peripherals. [JTAG-HEADERS.md:410-417](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/JTAG-HEADERS.md#L410-L417) [hardware-inventory/README.md:17-19](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hardware-inventory/README.md#L17-L19)
 * - Embedded 8051
@@ -461,10 +508,14 @@ The SP5100's registers are documented in the in-repo **AMD SP5100 Register
 Reference Guide (publication 44413, 317 pp)** [SP5100 RG](#sources); its coreboot driver is
 [`southbridge/amd/sb700`](https://github.com/coreboot/coreboot/tree/4.11/src/southbridge/amd/sb700)
 (coreboot 4.11, the last release carrying the KGPE-D16). [datasheets/README.md:107](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/README.md#L107) For BMC firmware the key
-takeaways are: the **hwmon (W83795G) lives on the SP5100 SMBus**, the **host
-serial console is a Super I/O behind SP5100 LPC** (distinct from the BMC's
-`AST_UART1`), and **platform power/reset is an SP5100/ASF concern**, separate from
-the AST2050's own GPIO/WDT reset primitives (§3).
+takeaways are: the **hwmon (W83795G) sits on a bus the BMC and SP5100 share**
+(so an open BMC firmware can read it directly, subject to the arbitration
+hazards in {doc}`kgpe-d16-i2c` §3), the **host serial console is a Super I/O
+UART behind SP5100 LPC** (distinct from the BMC's `AST_UART1`, but joinable
+to the BMC through the SOL mux — {doc}`kgpe-d16-wiring` §10), and **platform
+power/reset is a three-way handshake** between the SP5100's ACPI machine, the
+Super-I/O's sequencing logic, and the BMC's platform-control GPIOs
+({doc}`kgpe-d16-wiring` §11).
 
 ---
 
@@ -472,6 +523,7 @@ the AST2050's own GPIO/WDT reset primitives (§3).
 
 **Related pages**
 
+- {doc}`kgpe-d16-wiring` · {doc}`kgpe-d16-i2c` · {doc}`kgpe-d16-connectors` — the schematic-derived wiring companion pages
 - {doc}`/hardware/soc-ast2050` — the AST2050 SoC this board's BMC is built on
 - {doc}`/debug/jtag-uart` — the JTAG/UART wiring and OpenOCD invocation
 - {doc}`/debug/bring-up` — the P2A + JTAG out-of-band bring-up paths
@@ -493,6 +545,12 @@ the AST2050's own GPIO/WDT reset primitives (§3).
   [`HARDWARE-ACCESS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/HARDWARE-ACCESS.md),
   and the AST2050 bring-up docs (GPIO/power, verified
   IDCODE `0x07926f0f`, `SCU7C=0x202`).
+- **[`schematic-wiring/`](https://github.com/mithro/ai-shenanigans-for-bmcs/tree/main/asus-kgpe-d16-firmware/schematic-wiring)** — the pin-level netlist reverse
+  engineering ([`AST2050-BMC-WIRING.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md),
+  [`BMC-CONNECTORS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/BMC-CONNECTORS.md),
+  [`I2C-SMBUS-TOPOLOGY.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/I2C-SMBUS-TOPOLOGY.md),
+  [`SP5100-SOUTHBRIDGE-WIRING.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/SP5100-SOUTHBRIDGE-WIRING.md)) —
+  the source of the identity resolutions and corrections flagged on this page.
 - **[AMD SP5100 Register Reference Guide](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/AMD_SP5100_Register_Reference_Guide_44413.pdf)** (44413) — the southbridge.
 - The on-board hardware monitor is documented at
   {doc}`../hardware/peripherals/w83795g`.
