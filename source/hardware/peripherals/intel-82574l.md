@@ -87,10 +87,10 @@ Supporting details from the same netlist extract:
   [QU1_pins.md:206](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/pinmaps/QU1_pins.md#L206)
   Consistently, the 82574L's NC-SI pin set defines no RX_ER output at all.
   [82574 DS §2.3.4 Table 10 p.23](#sources)
-- **Per-NIC disable straps.** Super-I/O GPIOs `SIO_LAN1DISABLE#` (W83667HG-A
-  GP37, pin 76) and `SIO_LAN2DISABLE#` (GP50, pin 75) run to `LU1`/`LU2`
-  respectively, each via a `LAN_SW1`/`LAN_SW2` jumper — either NIC can be
-  strapped off. The Super-I/O's `PME#` (pin 65) is bussed to both NICs and all
+- **Per-NIC disable straps.** Super-I/O GPIOs `SIO_LAN1DISABLE#`
+  ({doc}`W83667HG-A <w83667hg>` GP37, pin 76) and `SIO_LAN2DISABLE#` (GP50,
+  pin 75) run to `LU1`/`LU2` respectively, each via a `LAN_SW1`/`LAN_SW2`
+  jumper — either NIC can be strapped off. The Super-I/O's `PME#` (pin 65) is bussed to both NICs and all
   PCIe slots.
   [W83667HG-SUPERIO-WIRING.md:209-211](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/W83667HG-SUPERIO-WIRING.md#L209-L211)
 

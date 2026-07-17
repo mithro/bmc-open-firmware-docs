@@ -59,7 +59,7 @@ Seven controllers can drive management buses on this board
   - `ZU1`
   - private serial-EEPROM bus
   - loads its own FireWire GUID/config at power-up
-* - W83667HG-A Super-I/O
+* - {doc}`W83667HG-A Super-I/O </hardware/peripherals/w83667hg>`
   - `OU1`
   - `GP37`/`GP50` straps only
   - LAN-disable straps (GPIO, not a live bus)
