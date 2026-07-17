@@ -1,6 +1,6 @@
-# KGPE-D16 I²C / SMBus / PMBus topology
+# KGPE-D16 I2C / SMBus / PMBus topology
 
-The complete management-bus map of the ASUS KGPE-D16 — every I²C, SMBus and
+The complete management-bus map of the ASUS KGPE-D16 — every I2C, SMBus and
 PMBus connection, every master, every mux, and the exact steps the AST2050 BMC
 must take to reach each device. Extracted from the board's schematic netlist
 (see the provenance note on {doc}`kgpe-d16-wiring`); the source documents are
@@ -69,7 +69,7 @@ Seven controllers can drive management buses on this board
   - fan-curve select straps (GPIO, not a live bus)
 ```
 
-The AST2050 side is eight hardware I²C controllers (`SDA1/SCL1` …
+The AST2050 side is eight hardware I2C controllers (`SDA1/SCL1` …
 `SDA7/SCL7` on dedicated balls, plus a muxed eighth segment); their register
 interface is documented in {doc}`/hardware/registers/buses-gpio`, and the AC
 timing they need on real G3 silicon is the vendor `0x77700300` value the
@@ -78,7 +78,7 @@ program's kernel patches program ({doc}`/drivers/linux`).
 ## 2. The switching fabric
 
 Three analog parts sit between the BMC and the end devices. None of them is
-I²C-addressable — they are transparent switches steered by GPIO nets — so
+I2C-addressable — they are transparent switches steered by GPIO nets — so
 "selecting a channel" means driving pins, not sending bus transactions.
 [BMC-WIRING §10.3](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#103-how-the-muxes-are-controlled-the-steps-in-detail)
 
@@ -175,7 +175,7 @@ The SPD/TSOD devices themselves are documented in
 * - `I2C8`
   - (muxed)
   - via `QU9`/`QU5` channel `Y0`
-  - front auxiliary-panel I²C on `AUX_PANEL1`
+  - front auxiliary-panel I2C on `AUX_PANEL1`
 ```
 
 Sources: [BMC-WIRING §10.4](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#104-bmc-ic-bus-assignments-quick-reference),
@@ -382,10 +382,10 @@ Source: [I2C-TOPOLOGY §2](https://github.com/mithro/ai-shenanigans-for-bmcs/blo
 
 **Related pages**
 
-- {doc}`kgpe-d16-wiring` — the BMC's full pin-level wiring (this page is its I²C chapter, expanded)
+- {doc}`kgpe-d16-wiring` — the BMC's full pin-level wiring (this page is its I2C chapter, expanded)
 - {doc}`kgpe-d16-connectors` — the `PSUSMB1` and `AUX_PANEL1` header pinouts
 - {doc}`/hardware/i2c-topology` — the Dell C410X equivalent of this map (addressable PCA954x muxes instead of analog switches)
-- {doc}`/hardware/registers/buses-gpio` — the AST2050 I²C controller registers
+- {doc}`/hardware/registers/buses-gpio` — the AST2050 I2C controller registers
 - {doc}`/hardware/peripherals/index` — the device catalogue
 
 **External references**

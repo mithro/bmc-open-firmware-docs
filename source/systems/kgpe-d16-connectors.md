@@ -53,7 +53,7 @@ bring-up, from before the schematic became available).
 * - `AUX_PANEL1`
   - 2×10 header
   - ASUS auxiliary panel
-  - locator LED/button, I²C8, LAN LEDs (§6)
+  - locator LED/button, I2C8, LAN LEDs (§6)
 * - `PSUSMB1`
   - 1×5 header
   - PSU SMBus/PMBus
@@ -73,7 +73,7 @@ Source: [BMC-CONNECTORS "Connectors at a glance"](https://github.com/mithro/ai-s
 ## 1. `VGA1` — VGA output (HD-15)
 
 Driven by the AST2050's integrated video ({doc}`kgpe-d16-wiring` §9): analog
-RGB via buffer transistors `QD3/4/5`, DDC/EDID I²C direct, H/V sync buffered
+RGB via buffer transistors `QD3/4/5`, DDC/EDID I2C direct, H/V sync buffered
 by `QU6`.
 
 ```{figure} /_static/diagrams/kgpe-d16-vga1.svg
@@ -378,6 +378,10 @@ the keyed/absent slot.
   - `+5V`
   - +5 V
   - —
+* - 5
+  - —
+  - key (absent pin)
+  - —
 * - 3, 9, 13, 16, 18, 19
   - `GND`
   - ground
@@ -388,6 +392,7 @@ the keyed/absent slot.
   - —
 ```
 
+(Pins 2 and 8 are not recorded in the source's `PANEL1` table.)
 Source: [BMC-CONNECTORS `PANEL1`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/BMC-CONNECTORS.md#panel1--system-front-panel).
 The BMC-side meaning of these nets is in the {doc}`platform-control GPIO map
 <kgpe-d16-wiring>` (§11).
@@ -417,11 +422,11 @@ button, the front `I2C8` segment (routed through the mux fabric —
   - —
 * - 4
   - `I2C8SCL`
-  - front I²C8 clock
+  - front I2C8 clock
   - `QU5` pin 12, `QU9` pin 11
 * - 10
   - `I2C8SDA`
-  - front I²C8 data
+  - front I2C8 data
   - `QU5` pin 1, `QU9` pin 14
 * - 11, 17
   - `AUX_BMCLOCLED#`
@@ -608,7 +613,7 @@ Source: [BMC-CONNECTORS jumper sections](https://github.com/mithro/ai-shenanigan
 
 - {doc}`kgpe-d16` — board overview; the RPi4 wiring recipes for `AST_JTAG1`/`AST_UART1` live there
 - {doc}`kgpe-d16-wiring` — where every net in these tables terminates on the BMC
-- {doc}`kgpe-d16-i2c` — the bus fabric behind `PSUSMB1` and the `AUX_PANEL1` I²C8 pins
+- {doc}`kgpe-d16-i2c` — the bus fabric behind `PSUSMB1` and the `AUX_PANEL1` I2C8 pins
 - {doc}`/debug/jtag-uart` — driving `AST_JTAG1` with OpenOCD
 
 **External references**

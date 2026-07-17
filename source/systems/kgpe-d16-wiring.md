@@ -5,7 +5,7 @@ How the ASUS KGPE-D16 wires its Aspeed AST2050 BMC (board reference designator
 through the series resistors, muxes, expanders and buffers to its far end. This
 page condenses the program's pin-level reverse engineering of the board's
 schematic netlist; the {doc}`kgpe-d16` overview covers the board as a whole, and
-two companion pages cover the {doc}`I²C/SMBus topology <kgpe-d16-i2c>` and the
+two companion pages cover the {doc}`I2C/SMBus topology <kgpe-d16-i2c>` and the
 {doc}`connectors and headers <kgpe-d16-connectors>`.
 
 ```{admonition} Provenance — netlist, not inference
@@ -37,7 +37,7 @@ and the machine-generated all-355-ball table
 * - Supplies
   - `+1V2_AUX` core (20 balls) · `+1V8_AUX` DDR2 I/O (6) · `+3V3_AUX` I/O (18) · 66 ground balls
 * - External DRAM
-  - `QU2` — Hynix **HY5PS121621CFP-25**, DDR2 32M×16, 1.8 V = **64 MB**
+  - `QU2` — Hynix **HY5PS121621CFP-25**, DDR2 32M×16, 1.8 V = **64 MiB**
 * - Firmware
   - `BMC_FW1` — **socketed** SPI flash ({doc}`pinout <kgpe-d16-connectors>`)
 * - Always-on?
@@ -49,7 +49,7 @@ The AST2050 is wired with three distinct "personalities"
 
 - **Baseboard controller** — LPC, PCI-33 and GPIO to the chipset for power
   sequencing, reset control and sensor access (§4–§6, §11 below, and the
-  {doc}`I²C topology page <kgpe-d16-i2c>`).
+  {doc}`I2C topology page <kgpe-d16-i2c>`).
 - **Remote-KVM engine** — its own DDR2 frame buffer (§3), a VGA output (§9), a
   USB *device* port for virtual keyboard/mouse/media (§7), and a PCI attachment
   used to capture host video (§6).
@@ -86,7 +86,7 @@ The AST2050 is wired with three distinct "personalities"
 * - VGA / video out
   - 14
   - §9
-* - I²C / SMBus (8 controllers)
+* - I2C / SMBus (8 controllers)
   - 16
   - {doc}`kgpe-d16-i2c`
 * - Serial / SOL (UART)
@@ -185,10 +185,10 @@ The always-on design is why the board behaves as "power-on-with-AC" on the
 bench rig ({doc}`kgpe-d16` §3.2) — the BMC and its {doc}`SCU straps
 </hardware/registers/scu-clock-reset>` come up as soon as mains is applied.
 
-## 3. DDR2 memory → `QU2` (64 MB)
+## 3. DDR2 memory → `QU2` (64 MiB)
 
 The BMC's private DRAM is a single Hynix **HY5PS121621CFP-25** — DDR2, 32M×16,
-1.8 V, i.e. **64 MB on a 16-bit bus**. It serves as BMC system RAM *and* the
+1.8 V, i.e. **64 MiB on a 16-bit bus**. It serves as BMC system RAM *and* the
 remote-KVM frame buffer. Every data/strobe/address/control line runs through
 isolated series-resistor networks (`QRN1`–`QRN12`, nets `AST_MEMxx` →
 `R_AST_MEMxx`) for source-series termination.
@@ -199,7 +199,7 @@ Key control balls: `CS#`=W16, `RAS#`=AA16, `CAS#`=AB16, `WE#`=W17,
 rows 10–15. The full 48-ball table with per-net `QU2` endpoints is in
 [`QU1_pins.md` § DDR2 memory](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/pinmaps/QU1_pins.md#ddr2-memory-48).
 
-This is the physical confirmation of the **64 MB constraint** that shapes the
+This is the physical confirmation of the **64 MiB constraint** that shapes the
 firmware track: a stripped, Redfish-only OpenBMC build is required to fit
 ({doc}`/firmware/openbmc`), and the SDRAM controller programming for exactly
 this part (4-bank, ×16, DLL) is what the DDR2-init bring-up work derived
@@ -356,11 +356,17 @@ Which reset drives the VGA/iKVM function is jumper-selectable (`VGA_SW1`:
 
 A single USB port wired as a **device** (the remote-KVM virtual
 keyboard/mouse/CD), connected to the SP5100's USB host controller:
-`AST_USB+` = B22 and `AST_USB-` = A21 → `SU1` E12/E14 (`USB_HSD6P/N`), with the
-`AST_USBRPU` pull-up strap on B21 and USB analog power on B18/B20.
+`AST_USB+` = B22 and `AST_USB-` = A21 → `SU1` **C10/D10** (`USB_HSD8P/N`,
+high-speed pair 8), with the `AST_USBRPU` pull-up strap on B21 and USB analog
+power on B18/B20.
+[QU1_pins § USB](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/pinmaps/QU1_pins.md#usb-6)
+[SU1_pins § USB](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/pinmaps/SU1_pins.md#usb-37)
+(The narrative source
 [BMC-WIRING §9](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#9-usb-device-port--sp5100-su1)
-The BMC-side USB device controller (the virtual hub) is documented in
-{doc}`/hardware/registers/display-usb`.
+says "SU1 E12/E14", but the machine-generated pinmaps show E12/E14 =
+`USB_HSD6P/N` going to the `USB78` header — the BMC pair is C10/D10; this
+page follows the netlist tables.) The BMC-side USB device controller (the
+virtual hub) is documented in {doc}`/hardware/registers/display-usb`.
 
 ## 8. Ethernet — dedicated PHY plus NC-SI sideband
 
@@ -374,7 +380,7 @@ The AST2050 MAC is wired **two ways at once** through its pin-mux
   question in the board docs — the schematic's part-description field names
   the exact PHY.
 - **Channel 2 — NC-SI-style sideband.** The `AST_RMII2*` nets are **bussed to
-  both** Intel **WG82574L** host NICs (`LU1` = LAN1, `LU2` = LAN2;
+  both** Intel **82574L** host NICs (`LU1` = LAN1, `LU2` = LAN2;
   {doc}`part page </hardware/peripherals/intel-82574l>`), so the BMC can share
   the host's network ports.
 
@@ -451,7 +457,7 @@ RMII/`FAST_MODE` behaviour verified on this exact board) is in
 The on-chip VGA DAC drives the rear HD-15 (`VGA1`, plus the `VGA_HDR1`
 header): analog RGB from balls E1/D1/C1 through buffer transistors
 `QD3/QD4/QD5`, H/V sync (U2/R4) through the Toshiba **TC74VHCT125AF** quad
-buffer `QU6`, and the DDC/EDID I²C pair on B1/B2 direct to the connector.
+buffer `QU6`, and the DDC/EDID I2C pair on B1/B2 direct to the connector.
 [BMC-WIRING §8](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#8-vga--video-output--vga1)
 Connector pinout: {doc}`kgpe-d16-connectors`; the display-engine registers are
 in {doc}`/hardware/registers/display-usb`.
@@ -528,34 +534,34 @@ events and disable CPUs. (`P0`/`P1` refer to the two Opteron sockets.)
   - clear CMOS/RTC
 * - D8
   - `GPIOC2/PWM1`
-  - `AST_CPU1DISABLE#`
-  - `CPU1`
-  - disable CPU1
+  - `AST_CPU0DISABLE#`
+  - socket-0 CPU
+  - disable the socket-0 CPU
 * - C8
   - `GPIOC3/PWM2`
-  - `AST_CPU2DISABLE#`
-  - `CPU2`
-  - disable CPU2
+  - `AST_CPU1DISABLE#`
+  - socket-1 CPU
+  - disable the socket-1 CPU
 * - V4
   - `VP8/GPIOF0/TACH8`
-  - `TTL_P1_THERMTRIP#`
-  - CPUs, `SU1`
-  - CPU1 THERMTRIP# (fatal)
+  - `TTL_P0_THERMTRIP#`
+  - CPUs, `SU1` J6
+  - socket-0 THERMTRIP# (fatal)
 * - V3
   - `VP9/GPIOF1/TACH9`
-  - `TTL_P2_THERMTRIP#`
-  - CPUs, `SU1`
-  - CPU2 THERMTRIP#
+  - `TTL_P1_THERMTRIP#`
+  - CPUs, `SU1` J6
+  - socket-1 THERMTRIP#
 * - V2
   - `VP10/GPIOF2/TACH10`
-  - `TTL_P1_PROCHOT#`
-  - `CPU1`
-  - CPU1 PROCHOT# monitor
+  - `TTL_P0_PROCHOT#`
+  - socket-0 CPU
+  - socket-0 PROCHOT# monitor
 * - V1
   - `VP11/GPIOF3/TACH11`
-  - `TTL_P2_PROCHOT#`
-  - `CPU2`
-  - CPU2 PROCHOT# monitor
+  - `TTL_P1_PROCHOT#`
+  - socket-1 CPU
+  - socket-1 PROCHOT# monitor
 * - T3
   - `VP4/GPIOE4/TACH4`
   - `AST_P0_DDR_THERM#`
@@ -579,7 +585,12 @@ events and disable CPUs. (`P0`/`P1` refer to the two Opteron sockets.)
 ```
 
 Source: [BMC-WIRING §11](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/AST2050-BMC-WIRING.md#11-power--reset--platform-control-gpio)
-(§13 for `AST_SRST#`). The southbridge half of this handshake — the ACPI sleep
+(§13 for `AST_SRST#`); net-name strings verified against
+[QU1_pins § Power / reset](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/pinmaps/QU1_pins.md#power--reset--platform-control-17).
+The netlist numbers the sockets **0-based** in these net names
+(`AST_CPU0DISABLE#`, `TTL_P0_*`); the narrative source's §11 table renders
+the same nets 1-based (`CPU1DISABLE`, `P1_*`) — this table uses the literal
+netlist strings so a grep of the netlist lands on the right ball. The southbridge half of this handshake — the ACPI sleep
 states, `RSMRST#`, `PWR_GOOD` and the power-button flip-flop — is tabulated in
 [SP5100-SOUTHBRIDGE-WIRING §11](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/SP5100-SOUTHBRIDGE-WIRING.md#11-power--reset--acpi-state-machine)
 and [W83667HG-SUPERIO-WIRING §6](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/W83667HG-SUPERIO-WIRING.md#6-power--reset--acpi-sequencing);
@@ -589,7 +600,7 @@ initialisation Raptor's U-Boot applies on this board is quoted in
 {doc}`kgpe-d16` §3.1.
 
 ```{admonition} These nets are the remote-power-control ground truth
-:class: tip
+:class: important
 
 `AST_ATXPSON#` (A9) driving PS_ON# through the `U8` glue is the physical basis
 of the BMC power on/off/reset capability exercised in the program's
@@ -632,7 +643,7 @@ Every identity below is quoted from the schematic's part-description field
   - Role
 * - `QU2`
   - Hynix HY5PS121621CFP-25
-  - BMC DDR2 SDRAM, 64 MB (§3)
+  - BMC DDR2 SDRAM, 64 MiB (§3)
 * - `BMC_FW1`
   - socketed SPI flash
   - BMC firmware (§4)
@@ -647,19 +658,19 @@ Every identity below is quoted from the schematic's part-description field
   - hardware monitor — {doc}`/hardware/peripherals/w83795g`
 * - `U27` / `U28`
   - Winbond W83601G ×2
-  - DIMM error-LED I²C GPIO expanders — {doc}`/hardware/peripherals/w83601g`
+  - DIMM error-LED I2C GPIO expanders — {doc}`/hardware/peripherals/w83601g`
 * - `U25`
   - Holtek HT24LC08
   - board FRU EEPROM — {doc}`/hardware/peripherals/ht24lc08`
 * - `QU9`
   - TI SN74CBTLV3125
-  - I²C FET bus switch — {doc}`kgpe-d16-i2c`
+  - I2C FET bus switch — {doc}`kgpe-d16-i2c`
 * - `QU5`
   - 74HC4052
-  - dual 4-channel I²C mux (DIMM SPD fan-out) — {doc}`kgpe-d16-i2c`
+  - dual 4-channel I2C mux (DIMM SPD fan-out) — {doc}`kgpe-d16-i2c`
 * - `U23`
   - 74LVC125
-  - BMC-vs-southbridge I²C source-select — {doc}`kgpe-d16-i2c`
+  - BMC-vs-southbridge I2C source-select — {doc}`kgpe-d16-i2c`
 * - `QU8`
   - Pericom PI5C3257
   - 2:1 UART mux (SOL selection, §10)
@@ -695,7 +706,7 @@ Every identity below is quoted from the schematic's part-description field
 The bus-switch/mux/buffer parts (`QU9`, `QU5`, `U23`, `QU8`, `QU6`, the glue
 logic, the LDOs and the clock generators) are **non-addressable analog/logic
 parts — they have no register interface**; the BMC controls them only through
-the select/enable nets documented in {doc}`kgpe-d16-i2c` (I²C fabric) and §10
+the select/enable nets documented in {doc}`kgpe-d16-i2c` (I2C fabric) and §10
 (SOL mux).
 
 ## See also
@@ -703,7 +714,7 @@ the select/enable nets documented in {doc}`kgpe-d16-i2c` (I²C fabric) and §10
 **Related pages**
 
 - {doc}`kgpe-d16` — board overview, debug headers, bring-up status
-- {doc}`kgpe-d16-i2c` — the I²C/SMBus/PMBus topology this page only summarises
+- {doc}`kgpe-d16-i2c` — the I2C/SMBus/PMBus topology this page only summarises
 - {doc}`kgpe-d16-connectors` — pinout diagrams for every BMC-wired connector
 - {doc}`/hardware/soc-ast2050` — the AST2050 SoC itself
 - {doc}`/hardware/registers/index` — the per-block register documentation

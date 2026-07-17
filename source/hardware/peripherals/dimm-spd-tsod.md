@@ -1,6 +1,6 @@
 # DIMM SPD EEPROM + TSOD — on-module management devices
 
-Every DDR3 DIMM carries a small I²C management subsystem of its own: a
+Every DDR3 DIMM carries a small I2C management subsystem of its own: a
 **256-byte SPD (Serial Presence Detect) EEPROM** holding the module's identity
 and timing parameters per JEDEC Standard 21-C Annex K, and — on modules that
 populate it — a **TSOD (Temperature Sensor On DIMM)**, a JEDEC JC-42.4 /
@@ -17,10 +17,10 @@ mux ([WIRING §10.2](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main
 This page covers the on-DIMM devices themselves; the mux fabric that reaches
 them is documented in {doc}`/systems/kgpe-d16-i2c`.
 
-## KGPE-D16 board topology
+## 1.1 KGPE-D16 board topology
 
 Sixteen SPDs would collide in one `0x50`–`0x57` address window, so the board
-splits the slots into two 8-slot banks, each a separate physical I²C segment
+splits the slots into two 8-slot banks, each a separate physical I2C segment
 behind the QU5 (74HC4052) analog mux; each bank gets its own full `0x50`–`0x57`
 (SPD) and `0x18`–`0x1F` (TSOD) space.
 [TOPOLOGY §3.3](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/I2C-SMBUS-TOPOLOGY.md#33-dimm-spd--tsod-buses-via-mux)
@@ -62,9 +62,9 @@ eight modules per bank enumerate as `0x50 + slot-index` / `0x18 + slot-index`.
 actually populate a thermal sensor (check SPD byte 32 bit 7 first).
 [21-C Annex K byte 32](#sources)
 
-## SPD EEPROM (JEDEC 21-C Annex K, DDR3)
+## 1.2 SPD EEPROM (JEDEC 21-C Annex K, DDR3)
 
-### Device and addressing
+### 1.2.1 Device and addressing
 
 The DDR3 SPD device is a plain **24C02-class 256-byte EEPROM** — one flat
 page, no bank switching — selected by device-type code `1010` plus the three
@@ -79,7 +79,7 @@ Of the 256 bytes, manufacturers typically program 128 or 176 bytes; byte 0
 encodes both the bytes-used count and the total SPD device size.
 [21-C Annex K byte 0](#sources)
 
-### Byte-map highlights
+### 1.2.2 Byte-map highlights
 
 ```{list-table} DDR3 SPD byte map (JEDEC 21-C Annex K)
 :header-rows: 1
@@ -133,7 +133,7 @@ Sources: [21-C Annex K §1.1, bytes 0–255](#sources); the XMP placement is
 convention in the customer-use area, not part of the JEDEC standard
 ([Wikipedia SPD](https://en.wikipedia.org/wiki/Serial_presence_detect)).
 
-### Write protection
+### 1.2.3 Write protection
 
 The critical first half of the array (bytes `0x00`–`0x7F` — everything the
 memory controller needs) can be write-protected in hardware. Protection
@@ -156,9 +156,9 @@ external programmer, and a protected SPD is effectively read-only in the
 field. [TSE2002B3C DS p.15](#sources) The protection state survives power
 cycles. [TSE2002B3C DS p.15](#sources)
 
-## TSOD (JC-42.4 / TSE2002 temperature sensor)
+## 1.3 TSOD (JC-42.4 / TSE2002 temperature sensor)
 
-### Register map
+### 1.3.1 Register map
 
 The TS half of the device answers at device-type code `0011` (`0x18`–`0x1F`)
 and exposes **16-bit big-endian registers behind an 8-bit pointer** (write the
@@ -215,7 +215,7 @@ IDT TSE2002B3C; the Linux driver uses the same map):
 Sources: [TSE2002B3C DS p.23-25,28](#sources); hysteresis steps per JC 42.4
 ([docs.kernel.org jc42](#sources)).
 
-### Temperature format
+### 1.3.2 Temperature format
 
 The Temperature Data Register (`0x05`) packs status and value into one word:
 **bit 15 = above TCRIT, bit 14 = above High limit, bit 13 = below Low limit;
@@ -256,7 +256,7 @@ mechanics and diagrams in {doc}`/systems/kgpe-d16-i2c`. In short:
 - **SPD** — the [`at24`](https://github.com/torvalds/linux/blob/master/drivers/misc/eeprom/at24.c)
   EEPROM driver, device name `"spd"` / DT compatible `atmel,spd`: a 24c02
   entry flagged read-only ([at24.c:178-180](https://github.com/torvalds/linux/blob/master/drivers/misc/eeprom/at24.c#L178-L180)).
-  On PC hosts the I²C core auto-instantiates it (`"spd"` for DDR/DDR2/DDR3,
+  On PC hosts the I2C core auto-instantiates it (`"spd"` for DDR/DDR2/DDR3,
   `"ee1004"` for DDR4) from SMBIOS DIMM data at `0x50 + n`
   ([i2c-smbus.c:426-462](https://github.com/torvalds/linux/blob/master/drivers/i2c/i2c-smbus.c#L426-L462));
   a BMC devicetree must declare the nodes itself. Decode the content with
@@ -271,7 +271,7 @@ mechanics and diagrams in {doc}`/systems/kgpe-d16-i2c`. In short:
   MCP98xx, ST STTS2002/424, ON CAT34TS02, Atmel AT30TS00, …) and exposes
   `temp1_input` plus min/max/crit limits and alarms.
   [docs.kernel.org jc42](#sources)
-- **The mux** — QU5 is a GPIO-selected analog mux, not an addressable I²C
+- **The mux** — QU5 is a GPIO-selected analog mux, not an addressable I2C
   switch, so a devicetree models it with
   [`i2c-mux-gpio`](https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/i2c/i2c-mux-gpio.yaml)
   (see {doc}`/systems/kgpe-d16-i2c`).

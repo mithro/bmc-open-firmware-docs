@@ -1,6 +1,6 @@
-# Intel WG82574L — host gigabit NICs with NC-SI sideband
+# Intel 82574L — host gigabit NICs with NC-SI sideband
 
-## Overview
+## 1.1 Overview
 
 The Intel **82574L** is a single-port PCIe (x1, Rev. 1.1) gigabit Ethernet
 MAC+PHY in a 9 mm × 9 mm 64-pin QFN. [82574 DS §1.0 p.12](#sources) The
@@ -20,7 +20,7 @@ dedicated management PHY. The dedicated-PHY channel (RMII1 → Realtek RTL8201N,
 General host-NIC features (descriptor rings, offloads, PCIe interface) are out
 of scope — see the datasheet.
 
-## Board wiring — AST2050 RMII2 bussed to both NICs
+## 1.2 Board wiring — AST2050 RMII2 bussed to both NICs
 
 The six RMII2 data/control nets leave the AST2050 (`QU1`) and land on **the
 same pin of both `LU1` and `LU2`** — a multi-drop bus, not two point-to-point
@@ -94,7 +94,7 @@ Supporting details from the same netlist extract:
   PCIe slots.
   [W83667HG-SUPERIO-WIRING.md:209-211](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/W83667HG-SUPERIO-WIRING.md#L209-L211)
 
-## Sideband capability: NC-SI *or* SMBus — this board wires NC-SI
+## 1.3 Sideband capability: NC-SI *or* SMBus — this board wires NC-SI
 
 The critical question for an open BMC firmware is what protocol those pins
 speak. The datasheet is explicit that the 82574L supports **both** sideband
@@ -128,7 +128,7 @@ contradiction — but note the wiring alone does not prove the sideband is
 *enabled*: that depends on the NVM image in each NIC's flash/EEPROM (next
 section), which has not been dumped in this program.
 
-## What the 82574L's NC-SI implementation provides
+## 1.4 What the 82574L's NC-SI implementation provides
 
 - **Compliance**: "The 82574L supports all the mandatory features of the
   NC-SI specification (rev 1.0.0a)." Supported commands include Clear Initial
@@ -155,7 +155,7 @@ section), which has not been dumped in this program.
   shared MAC address mode"), Set/Get Intel Management Control, and TCO Reset.
   [82574 DS §8.12.2.1 p.246](#sources)
 
-## Manageability configuration (NVM) and traffic routing
+## 1.5 Manageability configuration (NVM) and traffic routing
 
 How BMC traffic shares the port, per the datasheet:
 
@@ -180,7 +180,7 @@ How BMC traffic shares the port, per the datasheet:
   **NC-SI Package ID (bits 14:12)** plus the NC-SI code pointer.
   [82574 DS §6.2.1.6-6.2.2.4 p.127-128](#sources)
 
-## Access from the BMC side
+## 1.6 Access from the BMC side
 
 The BMC end of this bus is the AST2050's second MAC (MAC2) with its pin-mux
 set to RMII — the register-level programming model (MACCR, descriptor rings,
@@ -200,7 +200,7 @@ faithful QEMU model ({doc}`/emulation/qemu`). This section records the wiring
 and datasheet facts a future bring-up would start from; nothing here has been
 exercised on silicon.
 
-## Drivers
+## 1.7 Drivers
 
 - **Host side**: the 82574L is driven by the mainline Linux
   [`e1000e`](https://github.com/torvalds/linux/tree/master/drivers/net/ethernet/intel/e1000e)
