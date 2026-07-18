@@ -73,12 +73,26 @@ linkcheck_ignore = [
     r"https://developer\.arm\.com/.*",
     r"https://www\.renesas\.com/.*",
     r"https://theretroweb\.com/.*",
+    r"https://www\.intel\.com/.*",
+    r"https://www\.jedec\.org/.*",
     # Valid datasheet mirrors on personal / regional hosts that intermittently
     # fail DNS/TLS from CI runners (kept as references; not CI-reliable).
     r"https?://(www\.)?belchip\.by/.*",
     r"https?://realtek\.info/.*",
     # Valid but intermittently times out (>15 s) from CI runners.
     r"https://www\.raptorengineering\.com/.*",
+    # Wayback Machine snapshots are immutable once captured, but archive.org
+    # throttles CI-sized request bursts with 500s / refused connections (not
+    # clean 429s, so Sphinx's rate-limit retry never engages).
+    r"https://web\.archive\.org/.*",
+]
+# GitHub renders `#L15` / `#L426-L462` line anchors on blob pages in
+# JavaScript, so they are never present in the fetched HTML and linkcheck
+# reports "Anchor not found" for links that work fine in a browser. Skip
+# fragment verification for line-number-shaped anchors only; real markdown
+# heading anchors are still checked.
+linkcheck_anchors_ignore = [
+    r"^L\d+(-L\d+)?$",
 ]
 linkcheck_timeout = 15
 linkcheck_retries = 2

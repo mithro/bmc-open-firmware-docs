@@ -44,6 +44,30 @@ model code and driver bindings are reused across boards.
   - hwmon
   - KGPE-D16
   - Nuvoton voltage/temp/fan monitor + Smart-Fan control
+* - {doc}`rtl8201n`
+  - Ethernet PHY
+  - KGPE-D16
+  - Realtek 10/100 RMII PHY — the BMC's dedicated management LAN
+* - {doc}`intel-82574l`
+  - NIC (NC-SI)
+  - KGPE-D16
+  - Intel host GbE ×2; NC-SI sideband shared with the BMC
+* - {doc}`w83601g`
+  - GPIO expander
+  - KGPE-D16
+  - Winbond 2-wire GPIO ×2 — the 16 DIMM error LEDs
+* - {doc}`ht24lc08`
+  - EEPROM
+  - KGPE-D16
+  - Holtek 24Cxx-class board FRU (+ FireWire config) EEPROMs
+* - {doc}`dimm-spd-tsod`
+  - DIMM devices
+  - KGPE-D16
+  - JEDEC SPD EEPROMs + TSOD temp sensors, 16 slots via mux
+* - {doc}`w83667hg`
+  - Super-I/O
+  - KGPE-D16
+  - Nuvoton LPC Super-I/O — the BMC's LPC peer and SOL partner
 * - {doc}`ics1893`
   - Ethernet PHY
   - iPDU
@@ -65,6 +89,12 @@ pca954x-mux
 pex8696-8647
 maxq3180
 w83795g
+rtl8201n
+intel-82574l
+w83601g
+ht24lc08
+dimm-spd-tsod
+w83667hg
 ics1893
 tmp89
 ```

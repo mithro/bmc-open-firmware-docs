@@ -17,12 +17,15 @@ The C410X seven-bus I2C topology (see {doc}`../systems/dell-c410x` for the full 
 :class: note
 
 This topology is the **Dell C410X** BMC I2C map. The other two program boards
-differ: on the **KGPE-D16** the documented sensors (the W83795G, DIMM SPD) sit on
-the *host* SP5100 SMBus, **not** the AST2050 BMC's own I2C engines — what the BMC
-drives on its I2C buses on that board is still being characterised on silicon (an
-open hardware item), so it is intentionally not asserted here. The **iPDU** uses
-the Digi NS9360's I2C controller ({doc}`soc-ns9360-memory-serial`) to reach its
-extension-bar connectors, covered on {doc}`../systems/hpe-ipdu`.
+have their own: the **KGPE-D16** map is now fully characterised from the
+board's schematic netlist — eight AST2050 controllers reaching the W83795G,
+the DIMM SPD/TSOD banks, the FRU EEPROM and the PSU through an *analog*
+switch fabric shared multi-master with the host SP5100 — documented on
+{doc}`../systems/kgpe-d16-i2c`. (Earlier revisions of this note said those
+sensors were reachable only from the host SMBus; the netlist shows the bus is
+shared.) The **iPDU** uses the Digi NS9360's I2C controller
+({doc}`soc-ns9360-memory-serial`) to reach its extension-bar connectors,
+covered on {doc}`../systems/hpe-ipdu`.
 ```
 
 ## Device count summary

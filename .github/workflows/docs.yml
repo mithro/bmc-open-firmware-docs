@@ -11,6 +11,11 @@ permissions:
 
 jobs:
   build:
+    # A push to a branch in this repo also fires the pull_request event for
+    # its open PR, so the same commit ran twice concurrently — the duplicate
+    # linkcheck bursts got 429-throttled (github.com, web.archive.org). Run
+    # the pull_request job only for forks, where there is no push run.
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
