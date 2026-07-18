@@ -1,10 +1,10 @@
-# Open BMC & Firmware — documentation
+# Tim's Random Documentation for his Open BMC & Firmware
 
 Read the Docs / Sphinx source for the open BMC & firmware program covering the
 Aspeed AST2050 boards (ASUS KGPE-D16, Dell PowerEdge C410X) and the Digi NS9360
 board (HPE iPDU AF531A).
 
-Rendered: <https://bmc-open-firmware.readthedocs.io> (once connected).
+Rendered: <https://bmc-open-firmware-docs.readthedocs.io/>.
 
 ## Build locally
 
