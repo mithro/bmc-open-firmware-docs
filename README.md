@@ -76,23 +76,21 @@ board description. The NS9360 is a separate track on the same CPU core.
 
 Each `source/<path>.md` file renders as `<path>.html` on the site.
 
-```
-source/
-  index.md          landing page and toctrees
-  systems/          the three boards; the KGPE-D16 also has schematic-derived
-                    wiring, I2C-topology, and connector pin-out pages
-  hardware/         SoC and peripheral reference
-    registers/        AST2050 register-block reference
-    peripherals/      per-IC register pages (W83795G, PEX8696/8647, INA219, ...)
-  emulation/        the QEMU machines and the test benches that verify them
-  drivers/          Linux, U-Boot, and Zephyr driver work + peripheral map
-  firmware/         OpenBMC (Linux) and WallaBMC (Zephyr) tracks + U-Boot
-  debug/            silicon bring-up, JTAG/UART/SPI, hardware-in-the-loop rig
-  linking.md        linking and citation policy for doc authors
-  references.md     archived datasheets and external reference material
-  contributing.md   how to build and contribute
-  about.md          program background and licensing
-```
+| Source | Contents |
+| --- | --- |
+| [`source/index.md`](source/index.md) | Landing page and toctrees |
+| [`source/systems/`](source/systems/) | The three boards; the KGPE-D16 also has schematic-derived wiring, I2C-topology, and connector pin-out pages |
+| [`source/hardware/`](source/hardware/) | SoC and peripheral reference |
+| [`source/hardware/registers/`](source/hardware/registers/) | AST2050 register-block reference |
+| [`source/hardware/peripherals/`](source/hardware/peripherals/) | Per-IC register pages (W83795G, PEX8696/8647, INA219, ...) |
+| [`source/emulation/`](source/emulation/) | The QEMU machines and the test benches that verify them |
+| [`source/drivers/`](source/drivers/) | Linux, U-Boot, and Zephyr driver work, plus the peripheral map |
+| [`source/firmware/`](source/firmware/) | OpenBMC (Linux) and WallaBMC (Zephyr) tracks, plus U-Boot |
+| [`source/debug/`](source/debug/) | Silicon bring-up, JTAG/UART/SPI, the hardware-in-the-loop rig |
+| [`source/linking.md`](source/linking.md) | Linking and citation policy for doc authors |
+| [`source/references.md`](source/references.md) | Archived datasheets and external reference material |
+| [`source/contributing.md`](source/contributing.md) | How to build and contribute |
+| [`source/about.md`](source/about.md) | Program background and licensing |
 
 ## Status, by consumer
 
