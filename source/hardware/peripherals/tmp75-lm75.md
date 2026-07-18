@@ -13,15 +13,15 @@ On the C410X:
   The firmware mux index is `0x00`–`0x07` for mux #1 and `0x10`–`0x17` for mux #2.
   IPMI sensors `0x07`–`0x16` read the Temperature register. The firmware driver is
   `G_sOEMTMP100_I2CTEMP_IOSAPI`; the DT binds `ti,tmp75`.
-  [IS_fl.bin.md:102-129](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/IS_fl.bin.md#L102-L129) [dts:733-851] [ANALYSIS.md:499](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/ANALYSIS.md#L499)
+  [IS_fl.bin.md:102-129](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/IS_fl.bin.md#L102-L129) [dts:733-851](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-bmc-dell-c410x.dts#L733-L851) [ANALYSIS.md:499](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/ANALYSIS.md#L499)
 - **1× LM75 front-board sensor** on bus `0xF6` (`&i2c6`) at 7-bit `0x4F` (8-bit
   `0x9E`). IPMI sensor `0x17` ("FB Temp"). Firmware driver
   `G_sLM75_I2CTEMP_IOSAPI`; the DT binds `national,lm75`.
-  [IS_fl.bin.md:131-139](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/IS_fl.bin.md#L131-L139) [dts:1104-1119] [ANALYSIS.md:501](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/ANALYSIS.md#L501)
+  [IS_fl.bin.md:131-139](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/IS_fl.bin.md#L131-L139) [dts:1104-1119](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-bmc-dell-c410x.dts#L1104-L1119) [ANALYSIS.md:501](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/ANALYSIS.md#L501)
 
 (See the chip-identity caveat above: the per-slot part is addressed at `0x5C`,
 outside the standard LM75/TMP75 `0x48`–`0x4F` range, so it is a register-compatible
-LM75-class variant rather than a stock TMP75.) [dts:739-743] [TMP75 DS p.11](#sources)
+LM75-class variant rather than a stock TMP75.) [dts:739-743](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-bmc-dell-c410x.dts#L739-L743) [TMP75 DS p.11](#sources)
 
 ## Register map (pointer-selected)
 
@@ -293,7 +293,7 @@ state for 27 addresses. [TMP75 DS p.11](#sources) [LM75 DS p.13](#sources)
 
 Mainline Linux drives both with the `hwmon`/[`lm75`](https://github.com/torvalds/linux/blob/master/drivers/hwmon/lm75.c) driver via a chip-type table.
 The C410X uses `compatible = "ti,tmp75"` (per-slot) and `compatible =
-"national,lm75"` (front board). [dts:769,1116] [lm75.c](https://github.com/torvalds/linux/blob/master/drivers/hwmon/lm75.c) The driver's registers are
+"national,lm75"` (front board). [dts:769,1116](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-bmc-dell-c410x.dts#L769) [lm75.c](https://github.com/torvalds/linux/blob/master/drivers/hwmon/lm75.c) The driver's registers are
 `LM75_REG_TEMP` 0x00, `LM75_REG_CONF` 0x01, `LM75_REG_HYST` 0x02, `LM75_REG_MAX`
 0x03 — matching the datasheet map. It exposes `temp1_input` (RO), `temp1_max`
 (= T_OS / T_HIGH, RW, reset 80 °C) and `temp1_max_hyst` (= T_HYST / T_LOW, RW,
@@ -330,10 +330,10 @@ mapped to R1:R0, and at probe it sets R1:R0 = 12-bit and clears the OS bit
 
 ## Sources
 
-- **TMP75 datasheet** (TI SBOS288) and **LM75 datasheet** (National/TI SNIS153)
-  — the pointer + 4 registers, resolution, and OS/ALERT behaviour.
-- **`dell-c410x-firmware/io-tables/`** + [`ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/ANALYSIS.md) — the per-slot sensors
+- **[TMP75 datasheet](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/datasheets/TMP75_Datasheet.pdf)** (TI SBOS288) and **[LM75 datasheet](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/datasheets/LM75_Datasheet.pdf)** (National/TI SNIS153)
+  — the pointer + 4 registers, resolution, and OS/ALERT behaviour (in-repo PDFs).
+- **[`dell-c410x-firmware/io-tables/`](https://github.com/mithro/ai-shenanigans-for-bmcs/tree/main/dell-c410x-firmware/io-tables)** + [`ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/ANALYSIS.md) — the per-slot sensors
   behind two PCA9548 muxes (firmware calls them TMP100 @ 0x5C; the DTS binds the
   register-compatible `ti,tmp75`) and the front-board LM75 @ 0x4F.
-- Linux `drivers/hwmon/lm75.c` (`ti,tmp75` / `national,lm75`) — the binding
+- Linux [`drivers/hwmon/lm75.c`](https://github.com/torvalds/linux/blob/master/drivers/hwmon/lm75.c) (`ti,tmp75` / `national,lm75`) — the binding
   (use `national,lm75` for the 9-bit TI/National part, not the NXP `lm75b`).

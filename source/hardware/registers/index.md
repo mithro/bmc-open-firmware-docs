@@ -31,8 +31,9 @@ SETUP data buffers (raw 8-byte packet scratch areas with no bit structure), two
 reserved Video-Engine registers, the A2P bridge (specified as address windows
 plus an enable strap, with no per-register bitfields), and the **USB 1.1 UHCI
 host controller** at `0x1E6B0000` (a standard Intel UHCI block, documented by
-reference to the UHCI specification and the mainline `uhci-hcd` driver rather
-than re-transcribed). Each is called out where it occurs — nothing is silently
+reference to the UHCI specification and the mainline
+[`uhci-hcd`](https://github.com/torvalds/linux/blob/master/drivers/usb/host/uhci-hcd.c)
+driver rather than re-transcribed). Each is called out where it occurs — nothing is silently
 omitted. (The AST2050 has **no EHCI / USB 2.0 host**; that block exists only on
 the AST2400/G4.)
 ```

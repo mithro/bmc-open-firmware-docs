@@ -56,7 +56,8 @@ acceptance test for a faithful QEMU model [io-tables](#sources).
 
 
 The reverse-engineered end-to-end power-on flow, from front-panel button to
-steady-green, mixing AST2050 on-chip GPIO, PCA9555 #5 outputs, and PEX8696 I2C.
+steady-green, mixing AST2050 on-chip GPIO, PCA9555 #5 outputs, and
+{doc}`PEX8696 <../hardware/peripherals/pex8696-8647>` I2C.
 
 ```{list-table} C410X 12-step power-on
 :header-rows: 1
@@ -115,8 +116,8 @@ actual order (`0x11 → 0x33 → 0x77 → 0xFF`) [gpio-map](#sources), [PEX-I2C]
 ## GPIO pin map (control-relevant subset)
 
 
-The AST2050 uses 38 on-chip GPIO lines; the ones that drive this control fabric
-are:
+The AST2050 uses 38 on-chip {doc}`GPIO <../hardware/registers/buses-gpio>`
+lines; the ones that drive this control fabric are:
 
 ```{list-table} Control-fabric AST2050 GPIO pins
 :header-rows: 1
@@ -206,13 +207,13 @@ uses are:
   - Location
   - Notes
 * - Serial console
-  - **UART0** `0x1E783000` (`ttyS0`)
+  - {doc}`UART0 <../hardware/registers/uart-vic-timers>` `0x1E783000` (`ttyS0`)
   - 115200 8N1, vt100; the stock `bootargs` are `console=ttyS0,115200n8`
 * - Serial-over-LAN (SOL)
   - **UART1** `0x1E784000`
   - remote serial console over IPMI (the second SoC UART)
 * - vKVM
-  - Video Engine + `avct_server`
+  - {doc}`Video Engine <../hardware/registers/display-usb>` + `avct_server`
   - Avocent virtual-KVM console server (`vkcs.ko`) — video capture + USB HID
 * - Out-of-band AHB
   - P2A / iLPC bridges
@@ -230,8 +231,8 @@ shared-SoC ones and apply unchanged. [ANALYSIS.md:322](https://github.com/mithro
 ## Coverage notes and gaps
 
 
-- **PEX "product briefs" are family stand-ins.** The in-repo `PEX8696_ProductBrief.pdf`
-  and `PEX8647_ProductBrief.pdf` actually contain the **PEX8619** and **PEX8648**
+- **PEX "product briefs" are family stand-ins.** The in-repo [`PEX8696_ProductBrief.pdf`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/datasheets/PEX8696_ProductBrief.pdf)
+  and [`PEX8647_ProductBrief.pdf`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/datasheets/PEX8647_ProductBrief.pdf) actually contain the **PEX8619** and **PEX8648**
   briefs. They are same-generation ExpressLane 86xx Gen2 parts and are cited only
   for architecture common to the family; the exact PEX8696 (96-lane/24-port) and
   PEX8647 (48-lane/3-port) parameters are from Broadcom + the RE notes. A true
@@ -265,22 +266,22 @@ shared-SoC ones and apply unchanged. [ANALYSIS.md:322](https://github.com/mithro
   - 16
   - `0xF0` / `&i2c0` (base `0x1E78A040`)
   - `0x40`–`0x4F` (A1/A0 straps)
-  - Per-PCIe-slot 12 V current/power monitor. [IS_fl.bin.md:165-195](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/IS_fl.bin.md#L165-L195) [dts:402-411]
+  - Per-PCIe-slot 12 V current/power monitor. [IS_fl.bin.md:165-195](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/IS_fl.bin.md#L165-L195) [dts:402-411](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-bmc-dell-c410x.dts#L402-L411)
 * - ADT7462
   - 2
   - `0xF1` / `&i2c1` (base `0x1E78A080`)
   - `0x58`, `0x5C` behind PCA9544A mux `0x70`
-  - Board temperature zones + 8-fan tach/PWM control. [IS_fl.bin.md:81-95,141-163](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/IS_fl.bin.md#L81-L95) [dts:596-663]
+  - Board temperature zones + 8-fan tach/PWM control. [IS_fl.bin.md:81-95,141-163](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/IS_fl.bin.md#L81-L95) [dts:596-663](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-bmc-dell-c410x.dts#L596-L663)
 * - TMP75 (per-slot)
   - 16
   - `0xF4` / `&i2c4` (base `0x1E78A140`)
   - `0x5C`, behind 2× PCA9548 mux (`0x70`, `0x71`)
-  - Per-PCIe-slot temperature. Firmware tables call these "TMP100"; DT uses `ti,tmp75`. [IS_fl.bin.md:102-129](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/IS_fl.bin.md#L102-L129) [dts:733-851]
+  - Per-PCIe-slot temperature. Firmware tables call these "TMP100"; DT uses `ti,tmp75`. [IS_fl.bin.md:102-129](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/IS_fl.bin.md#L102-L129) [dts:733-851](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-bmc-dell-c410x.dts#L733-L851)
 * - LM75 (front board)
   - 1
   - `0xF6` / `&i2c6`
   - `0x4F` (8-bit `0x9E`)
-  - Front-board ambient temperature. [IS_fl.bin.md:131-139](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/IS_fl.bin.md#L131-L139) [dts:1104-1119]
+  - Front-board ambient temperature. [IS_fl.bin.md:131-139](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/IS_fl.bin.md#L131-L139) [dts:1104-1119](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-bmc-dell-c410x.dts#L1104-L1119)
 ```
 
 ```{admonition} TMP100 vs TMP75 vs LM75 — chip-identity caveat
@@ -293,8 +294,8 @@ The C410X firmware IO tables and symbol table name the per-slot sensor driver
 device with non-standard strapping (or a TMP100/TMP1075 variant). The
 reconstructed device tree models them with the register-compatible `ti,tmp75`
 binding because all these chips share the same LM75 register layout (pointer +
-temperature/config/T_LOW/T_HIGH). [dts:739-743,769] The front-board sensor at
-`0x4F` is bound `national,lm75`. [dts:1115-1116] This document covers the TMP75
+temperature/config/T_LOW/T_HIGH). [dts:739-743,769](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-bmc-dell-c410x.dts#L739-L743) The front-board sensor at
+`0x4F` is bound `national,lm75`. [dts:1115-1116](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-bmc-dell-c410x.dts#L1115-L1116) This document covers the TMP75
 and LM75 register sets; the per-slot part is functionally one of them.
 ```
 
@@ -316,8 +317,8 @@ and LM75 register sets; the per-slot part is functionally one of them.
 
 ## Sources
 
-- **`dell-c410x-firmware/ANALYSIS.md`**, the decoded **`io-tables/`**,
-  **`io-tables/gpio-pin-mapping.md`**, and **`pex-i2c-analysis/`** — the
+- **[`dell-c410x-firmware/ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/ANALYSIS.md)**, the decoded **[`io-tables/`](https://github.com/mithro/ai-shenanigans-for-bmcs/tree/main/dell-c410x-firmware/io-tables)**,
+  **[`io-tables/gpio-pin-mapping.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/io-tables/gpio-pin-mapping.md)**, and **[`pex-i2c-analysis/`](https://github.com/mithro/ai-shenanigans-for-bmcs/tree/main/dell-c410x-firmware/pex-i2c-analysis)** — the
   reverse-engineered C410X I2C topology, power sequence, and GPIO map.
 - Per-device references: {doc}`../hardware/peripherals/pca9555`,
   {doc}`../hardware/peripherals/pca954x-mux`,

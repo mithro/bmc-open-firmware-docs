@@ -87,7 +87,8 @@ mis-detects the part.
   {ref}`the G3 VIC section <g3-vic>` below and {doc}`../drivers/linux`.
 - **SCU clocking** — H-PLL post-divider layout and hardware-strap bit positions
   differ from the AST2400. This is the primary reason a stock `palmetto-bmc`
-  (AST2400) machine is only a smoke-test stand-in, not the target.
+  (AST2400) machine is only a smoke-test stand-in, not the target
+  ({doc}`../emulation/qemu`).
 - **SDRAM / static-memory controllers** — different register semantics; only
   relevant to from-scratch DRAM init (U-Boot), not to a warm-booted kernel.
 - **Everything else** (MAC, GPIO, I2C, watchdog, SMC read path, UART) is close
@@ -134,12 +135,14 @@ bridge) has no firmware to configure the VIC, the driver programs
 sense/event/dual per the datasheet interrupt-source table itself: timers 16–18
 and the watchdog (27) are rising-edge, the RTC sources (22–26) are both-edge, and
 the peripherals are high-level. A dedicated Linux driver,
-`irq-aspeed-g3-vic.c` (compatible `aspeed,ast2050-vic`), implements this — see
+[`irq-aspeed-g3-vic.c`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/kernel/patches/0003-irqchip-add-aspeed-ast2050-vic-g3.patch)
+(compatible `aspeed,ast2050-vic`), implements this — see
 {doc}`../drivers/linux`.
 
 ## DRAM (DDR2)
 
-The AST2050 memory controller drives DDR2 at `0x40000000`. On the KGPE-D16 BMC
+The AST2050 memory controller ({doc}`registers/ddr2-sdram`) drives DDR2 at
+`0x40000000`. On the KGPE-D16 BMC
 the fitted size is **64 MiB, hardware-verified** — a size that matters because
 modern full OpenBMC will not fit (see {doc}`../firmware/openbmc`). Bringing DRAM
 up from cold on real silicon required a faithful re-creation of the vendor init
@@ -177,8 +180,8 @@ drivers, then (4) the two board `.dts` files include the G3 dtsi. See
 :class: note
 
 Full register-bit detail lives in the program's [`ast2050.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h) / [`hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)
-(U-Boot-style config + hardware register headers) and the Aspeed AST2050
-datasheet. This page captures the SoC-level map a model/driver needs; per-block
+(U-Boot-style config + hardware register headers) and the
+[Aspeed AST2050 datasheet](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf). This page captures the SoC-level map a model/driver needs; per-block
 bit tables are added as each block is modelled.
 ```
 

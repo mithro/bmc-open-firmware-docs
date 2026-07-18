@@ -3,7 +3,11 @@
 Register-by-register reference for the Aspeed **AST2050 / AST1100 (G3)** networking
 subsystem: the two Faraday **FTGMAC100** 10/100 Ethernet MAC modules, their built-in
 **MDIO/MII management interface**, and a representative external PHY (the Realtek
-**RTL8201CP** RMII 10/100 transceiver used on the KGPE-D16 BMC).
+**RTL8201CP** RMII 10/100 transceiver, which the faithful QEMU model implements).
+The KGPE-D16's physical PHY is the sibling **RTL8201N-GR** — identified from the
+board's schematic netlist, and documented with its own register map at
+{doc}`/hardware/peripherals/rtl8201n`; the two parts carry the *same* PHY ID
+(`0x0000`/`0x8201`), so they are indistinguishable to ID-probing software.
 
 Every register field below is cross-referenced against **at least two independent
 sources**: the Aspeed AST2050/AST1100 A3 datasheet (the hardware authority), the
@@ -16,14 +20,14 @@ they matter for a faithful re-implementation.
 Citation keys:
 
 - [DS §x p.N](#sources) — *ASPEED AST2050/AST1100 A3 Datasheet V1.05* (2010-05-25), the
-  in-repo PDF (`datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`, titled
+  in-repo PDF ([`datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf), titled
   "AST1100 Software Programming Guide").
 - [`ftgmac100.h`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h) / [`ftgmac100.c`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.c) — mainline Linux
   `drivers/net/ethernet/faraday/ftgmac100.{h,c}`.
 - [RTL8201CP DS §x p.N](#sources) — *Realtek RTL8201CP Single-Chip/Port 10/100 Fast Ethernet
   PHYceiver Datasheet*, Track ID JATR-1076-21 Rev. 1.24.
 - Repo file references are given by path under the private analysis repo
-  `ai-shenanigans-for-bmcs/`.
+  [`ai-shenanigans-for-bmcs`](https://github.com/mithro/ai-shenanigans-for-bmcs).
 
 Full source list in [Sources](#sources).
 
@@ -42,10 +46,11 @@ supported** on this chip). [DS §14.1 p.124](#sources)
 :width: 100%
 
 The AST2050 Ethernet signal chain: the on-chip **FTGMAC100** MAC reaches the
-external **RTL8201CP** PHY over two channels — a **clause-22 MDIO/MDC**
+external **RTL8201-family** PHY over two channels — a **clause-22 MDIO/MDC**
 management bus (link/speed/duplex) and the **RMII data path** — then through
 magnetics to the RJ-45. The MDIO speed read is the path the `FAST_MODE` fix
-corrects (see §10 below and {doc}`/drivers/linux`).
+corrects (see §10 below, {doc}`/drivers/linux`, and the faithful QEMU model
+that reproduces the bug, {doc}`/emulation/qemu`).
 ```
 
 :::{list-table} MAC module address & interrupt map
@@ -69,25 +74,26 @@ corrects (see §10 below and {doc}`/drivers/linux`).
   - `AST_MAC2_BASE` in repo [`hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)
 :::
 
-- Base addresses: [DS §14.3 p.125](#sources), memory map [DS §9 p.? "1E66:0000 … Fast Ethernet
-  MAC Controller #1"], repo `asus-kgpe-d16-firmware/hwreg.h` (`AST_MAC1_BASE
+- Base addresses: [DS §14.3 p.125](#sources), memory map
+  [DS §9 p.? "1E66:0000 … Fast Ethernet MAC Controller #1"](#sources), repo
+  [`asus-kgpe-d16-firmware/hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h) (`AST_MAC1_BASE
   0x1E660000`, `AST_MAC2_BASE 0x1E680000`).
 - Interrupts: VIC IRQ 2 = "MAC1 interrupt", IRQ 3 = "MAC2 interrupt", both
   *sensitive high-level trigger* [DS §16 interrupt table p.? "MAC1/MAC2 interrupt"](#sources);
   the Raptor port maps these as `IRQ 2: MAC0`, `IRQ 3: MAC1`
-  (`asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md`).
+  ([`asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md)).
 - Physical address = base + offset. [DS §14.3 p.125](#sources)
 - Only **one GMII** interface exists (pin-count limited), so if GMII were used only
   one MAC could be enabled — moot on AST2050 which is 10/100 only. [DS §14.1 p.124](#sources)
 
-Feature summary [DS §14.2 p.124]: dual IEEE 802.3 MAC; MII×1 / RMII×2 (GMII×1 in the
+Feature summary [DS §14.2 p.124](#sources): dual IEEE 802.3 MAC; MII×1 / RMII×2 (GMII×1 in the
 superset); AHB bus-master + slave; integrated link-list DMA engine with direct M-Bus
 access; 802.1Q VLAN insert/delete; high-priority TX queue (QoS/CoS); independent
 TX/RX FIFO; half & full duplex; flow control (full duplex) and back-pressure (half
 duplex). The Faraday IP is the same block mainline Linux drives as
 `faraday,ftgmac100` / `aspeed,ast2400-mac`; the AST2050 DT uses
 `compatible = "aspeed,ast2050-mac", "faraday,ftgmac100"`
-(`asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md`).
+([`asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md)).
 
 ---
 
@@ -434,7 +440,7 @@ The BADR registers point to descriptor rings in system memory; each descriptor i
 
 Descriptor bit definitions: [DS §14.4.1 TXDES p.144–145](#sources), [DS §14.4.2 RXDES p.146](#sources).
 The `OWN`/`EDOTR` semantics were used directly in the project's on-hardware TX-ring
-probe (`asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md`, "TX descriptor ring
+probe ([`asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md), "TX descriptor ring
 probe" section — U-Boot's 1-descriptor ring with `EDOTR` set, `OWN=SW`).
 
 ---
@@ -498,8 +504,8 @@ same bit position (e.g. IER[10] enables ISR[10]). [DS §14.3 p.125–126](#sourc
 
 ### 4.1 ITC — Interrupt Timer Control (`0x30`, reset 0, recommended `0x0000_1010`)
 
-Interrupt mitigation: batch TX/RX interrupts by a threshold count and a timer. [DS
-§14.3 p.128–130]
+Interrupt mitigation: batch TX/RX interrupts by a threshold count and a timer.
+[DS §14.3 p.128–130](#sources)
 
 :::{list-table} MAC30 ITC bitfields
 :header-rows: 1
@@ -531,13 +537,13 @@ Interrupt mitigation: batch TX/RX interrupts by a threshold count and a timer. [
   - Max wait (in RX cycle times) to issue RX IRQ after a packet; 0 = disabled.
 :::
 
-When both THR and CNT are 0, TX interrupting is governed by `TXIC` in TXDES#1. [DS
-§14.3 p.128–130]
+When both THR and CNT are 0, TX interrupting is governed by `TXIC` in TXDES#1.
+[DS §14.3 p.128–130](#sources)
 
 ### 4.2 APTC — Automatic Polling Timer Control (`0x34`, reset 0, recommended `0x0000_0001`)
 
-Lets the engine auto-poll descriptors instead of relying on poll-demand writes. [DS
-§14.3 p.131]
+Lets the engine auto-poll descriptors instead of relying on poll-demand writes.
+[DS §14.3 p.131](#sources)
 
 :::{list-table} MAC34 APTC bitfields
 :header-rows: 1
@@ -613,8 +619,8 @@ Lets the engine auto-poll descriptors instead of relying on poll-demand writes. 
 :::
 
 [DS §14.3 p.132–133](#sources). `DMAFIFOS` (`0x3C`, reset `0x0C00_0000`, read-only) exposes the
-TX/RX DMA request/grant, FIFO-empty flags and DMA state machines for debug [DS §14.3
-p.134].
+TX/RX DMA request/grant, FIFO-empty flags and DMA state machines for debug
+[DS §14.3 p.134](#sources).
 
 ### 4.4 TPAFCR (`0x48`, reset `0x0000_00F1`) and RBSR (`0x4C`, reset `0x0000_0640`)
 
@@ -764,7 +770,7 @@ leaves `MACCR = 0x0008_0500` = `FAST_MODE(19) | CRC_APD(10) | FULLDUP(8)` before
 enabling DMA, then reaches `0x0008_050F` after also setting
 `TXDMA_EN|RXDMA_EN|TXMAC_EN|RXMAC_EN` (bits 3:0). Verify: `0x80000 | 0x400 | 0x100 =
 0x80500`, `+ 0xF = 0x8050F` — consistent with the bit map above. Captured over P2A in
-`asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md`.
+[`asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md).
 
 ---
 
@@ -915,7 +921,7 @@ access goes through **PHYCR (`0x60`)** and **PHYDATA (`0x64`)**. [DS §14.4.6 p.
 
 ### 7.3 Clause-22 frame format
 
-The MDIO bit stream is sampled on the rising edge of MDC [DS §14.4.6 p.150]:
+The MDIO bit stream is sampled on the rising edge of MDC [DS §14.4.6 p.150](#sources):
 
 :::{list-table} MII management frame (clause 22)
 :header-rows: 1
@@ -1049,7 +1055,7 @@ default and, tested on real HW, does **not** fix RMII TX). Details:
 
 ## 9. Bring-up / initialisation order (datasheet §14.5)
 
-Datasheet-prescribed init sequence [DS §14.5.1 p.150–151]:
+Datasheet-prescribed init sequence [DS §14.5.1 p.150–151](#sources):
 
 1. Set `GMAC MODE` (MACCR[9]) and `SPEED 100` (MACCR[19]) appropriately (0/1 → 100M
    on AST2050).
@@ -1065,18 +1071,23 @@ This matches the mainline `ftgmac100_init_all` / `ftgmac100_reset_and_config_mac
 flow. On the AST2050 rig, the modern driver was found to **hang on the first MACCR
 write** inside `ndo_open` in the post-P2A-reset context (open issue — a clock/reset/
 AHB-state difference from probe time), documented in
-`asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md`.
+[`asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md).
 
 ---
 
 ## 10. External PHY — Realtek RTL8201CP (RMII 10/100)
 
-The KGPE-D16 BMC uses a Realtek **RTL8201CP** single-port 10/100 PHY on the MAC's
-RMII interface (the mainline `ftgmac100_26` driver also lists RTL8201EL / RTL8201N /
-RTL8211BN as supported PHYs;
-`asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md`). The RTL8201CP
-exposes the standard IEEE 802.3 clause-22 register set (registers 0–6) plus Realtek
-vendor registers (16–31). [RTL8201CP DS §6 p.8–13](#sources)
+The RTL8201-family part documented here is the **RTL8201CP** — the variant the
+faithful QEMU model implements and the Raptor `ftgmac100_26` driver's
+supported-PHY list centres on (that list also names RTL8201EL / RTL8201N /
+RTL8211BN;
+[`asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md)).
+The KGPE-D16's board part is the sibling **RTL8201N-GR** (schematic-identified;
+{doc}`/hardware/peripherals/rtl8201n` has its register map and the differences).
+Both expose the standard IEEE 802.3 clause-22 register set (registers 0–6) plus
+Realtek vendor registers (16–31) and report the same PHY ID, so everything in
+this section applies to software probing either part.
+[RTL8201CP DS §6 p.8–13](#sources)
 
 ### 10.1 PHY identification (registers 2 & 3)
 
@@ -1278,8 +1289,8 @@ matches `0x0000_8201`.
 :::
 
 [RTL8201CP DS §6.5 p.10](#sources). **Register 5 ANLPAR** (link-partner ability) mirrors ANAR
-but is read-only and reflects the partner's advertised abilities [RTL8201CP DS §6.6
-p.10–11]. **Register 6 ANER** holds AN-expansion status: bit 4 `MLF` (multiple link
+but is read-only and reflects the partner's advertised abilities
+[RTL8201CP DS §6.6 p.10–11](#sources). **Register 6 ANER** holds AN-expansion status: bit 4 `MLF` (multiple link
 fault), bit 3 `LP_NP_ABLE`, bit 2 `NP_ABLE`, bit 1 `PAGE_RX`, bit 0 `LP_NW_ABLE`
 [RTL8201CP DS §6.7 p.11](#sources).
 
@@ -1322,8 +1333,8 @@ strapping**, not by a writeable register — register 17 bit 0 (`RMIIMODE`) is a
 - **RMII uses a shared 50 MHz reference clock** for both TX and RX (vs. separate
   25 MHz TXC/RXC in MII). On the AST2050 pinout the pin `RMIIRCLK` (input direction,
   pin A7 in MII mode = `MIITXCK`) is the **RMII 1 50 MHz reference clock**; the second
-  RMII channel uses `RMII2RCLK` (pin B7 in MII mode = `MIIRXCK`). [DS §3 pin table
-  "RMIIRCLK … RMII 1 50MHz reference clock"; DS §4.7.2 p.68]
+  RMII channel uses `RMII2RCLK` (pin B7 in MII mode = `MIIRXCK`).
+  [DS §3 pin table "RMIIRCLK … RMII 1 50MHz reference clock"; DS §4.7.2 p.68](#sources)
 - In RMII mode the AST2050 exposes 2-bit data buses `RMIITXD[1:0]` / `RMIIRXD[1:0]`,
   plus `RMIITXEN`, `RMIICRSDV` (carrier-sense/data-valid) and `RMIIRXER`; the MII-mode
   4-bit `MIITXD[3:0]`/`MIIRXD[3:0]` are unused. [DS §3 pin table; DS §4.7.2 p.68](#sources)
@@ -1383,7 +1394,7 @@ de-asserts its reset, routes its pins, and selects the interface mode. Relevant 
 (working NIC) and Linux ran were **byte-identical**:
 `SCU04=0x000ff658`, `SCU08=0x61800070`, `SCU0C=0x000c3e89`, `SCU48=0x00000000`
 (MAC clock delay), `SCU70=0x00819582`, `SCU74=0x4204d000`
-(`asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md`). Decoding
+([`asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md)). Decoding
 `SCU70[8:6]` from `0x00819582` gives `0b110` = **RMII(MAC#1)+RMII(MAC#2)**, matching
 the RMII wiring; and `SCU04` bit 11 = 0 (MAC#1 reset released). This confirms the
 clock/pinmux/reset/PHY-mode class is correctly configured on the rig and is *not* the
@@ -1394,7 +1405,7 @@ The Raptor porting notes flag the same SCU touch-points: pinmux/interface-mode
 (the G3 multi-function pin-control registers **SCU74/SCU78** — what the AST2400
 calls the SCU80–9C group, which does not exist on the G3; see
 {doc}`scu-clock-reset`) and the SCU48 MAC clock-delay as the AST2050-specific items to
-verify (`asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md`, "Change 10: Ethernet
+verify ([`asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md), "Change 10: Ethernet
 (FTGMAC100)").
 
 ---
@@ -1418,7 +1429,7 @@ verify (`asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md`, "Change 10: Ethernet
 Primary hardware authority:
 
 - **ASPEED AST2050/AST1100 A3 Datasheet, V1.05** (2010-05-25), in-repo:
-  `datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`. Chapters used:
+  [`datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf). Chapters used:
   §1.3.14 / §2.6 (feature overview), §3 (pin table), §4.7.2 (MII/RMII interface,
   p.68), **§14 "10/100 Ethernet MAC Controller"** (register map p.124–143, function
   description incl. §14.4.6 MII management p.144–151), §16 (interrupt table), §18.2
@@ -1426,10 +1437,9 @@ Primary hardware authority:
 
 Software view of the same Faraday FTGMAC100 IP:
 
-- Mainline Linux `drivers/net/ethernet/faraday/ftgmac100.h` — register offsets and
-  `MACCR`/`PHYCR`/`PHYDATA` bit macros
-  (<https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h>).
-- Mainline Linux `drivers/net/ethernet/faraday/ftgmac100.c` — MDIO read/write
+- Mainline Linux [`drivers/net/ethernet/faraday/ftgmac100.h`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.h) — register offsets and
+  `MACCR`/`PHYCR`/`PHYDATA` bit macros.
+- Mainline Linux [`drivers/net/ethernet/faraday/ftgmac100.c`](https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/faraday/ftgmac100.c) — MDIO read/write
   sequence, init flow, RMII/RCLK handling.
 
 External PHY:
@@ -1439,17 +1449,17 @@ External PHY:
   incl. `RMIIMODE` (<https://belchip.by/sitedocs/38346.pdf>; also
   <http://realtek.info/pdf/rtl8201cp.pdf>).
 
-Project reverse-engineering / on-hardware evidence (private analysis repo
-`ai-shenanigans-for-bmcs/`):
+Project reverse-engineering / on-hardware evidence (analysis repo
+[`ai-shenanigans-for-bmcs`](https://github.com/mithro/ai-shenanigans-for-bmcs)):
 
-- `asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md` — U-Boot-vs-Linux MAC/SCU
+- [`asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/NIC-MAC-REGISTER-COMPARISON.md) — U-Boot-vs-Linux MAC/SCU
   register dumps over P2A, the `MACCR=0x80500/0x8050F` worked example, TX-ring probe,
   and the `ndo_open`/MACCR-write-stall root-cause trace.
 - [`asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/kernel/patches/0002-ftgmac100-ast2050-macclk.patch) — the
   AST2050 MACCLK behaviour + the note that MAC-clock rate is not the RMII-TX cause.
-- `asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md` and
-  `asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md` — FTGMAC100 driver / PHY support,
+- [`asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md) and
+  [`asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md) — FTGMAC100 driver / PHY support,
   DT `compatible` strings, SCU touch-points, IRQ mapping.
-- `asus-kgpe-d16-firmware/hwreg.h` (`AST_MAC1_BASE 0x1E660000`,
-  `AST_MAC2_BASE 0x1E680000`) and `asus-kgpe-d16-firmware/ast2050.h`
+- [`asus-kgpe-d16-firmware/hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h) (`AST_MAC1_BASE 0x1E660000`,
+  `AST_MAC2_BASE 0x1E680000`) and [`asus-kgpe-d16-firmware/ast2050.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h)
   (U-Boot `CONFIG_ASPEEDNIC`, MAC#1/#2 PHY-setting scratch-register semantics).

@@ -3,7 +3,8 @@
 This page is a register-by-register reference for the ASPEED **AST2050 (G3)**
 SDRAM / DDR2 memory controller, plus the complete cold-boot DDR2 bring-up
 procedure. It is written for people re-implementing the boot code (U-Boot,
-OpenBMC, a QEMU model) and cross-checks every value against the ASPEED
+{doc}`OpenBMC </firmware/openbmc>`, a QEMU model) and cross-checks every value
+against the ASPEED
 AST2050/AST1100 A3 datasheet, the hardware-verified Raptor Engineering U-Boot
 [`platform.S`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S), and the JEDEC JESD79-2 DDR2 standard.
 
@@ -426,7 +427,7 @@ device**, or the controller malfunctions [DS §17.3 p.185](#sources).
 ### 3.1 The two build-time values decoded
 
 [`platform.S`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S) selects one of two constants by compile flag, then ORs in the VGA
-aperture bits read from `SCU70[3:2]` [platform.S:363-377]:
+aperture bits read from `SCU70[3:2]` [platform.S:363-377](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L363-L377):
 
 ```{list-table} MCR04 constants — datasheet-accurate decode
 :header-rows: 1
@@ -471,7 +472,7 @@ The `0x00000D89` alternative programs a 128 MiB, 8-bank geometry.
 `SCU70[3:2]` (two board strap resistors) is masked, shifted left by 2, and ORed
 into `MCR04[5:4]` so the VGA aperture size in `MCR04` always tracks the strap
 [platform.S:363-377](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L363-L377) [DS §17.3 p.185 MCR04](#sources). The graphics segment sits at the top
-of DRAM [DS §17.4.2 p.202]:
+of DRAM [DS §17.4.2 p.202](#sources):
 
 - `MCR04[5:4]=0`, 8 MB → base `0xF80_0000`
 - `MCR04[5:4]=1`, 16 MB → base `0xF00_0000`
@@ -480,8 +481,8 @@ of DRAM [DS §17.4.2 p.202]:
 
 Internal 28-bit addresses split into Row / Bank / Column per `MCR04[1:0]` (CA)
 and the bank/bus-width mode; e.g. for a 4/8-bank device with 16-bit bus and
-CA=10, `A[27:13]`=row, `A[12:11]`=bank, `A[10:0]`=column [DS §17.4.1 p.201-202,
-Figure 66].
+CA=10, `A[27:13]`=row, `A[12:11]`=bank, `A[10:0]`=column
+[DS §17.4.1 p.201-202, Figure 66](#sources).
 
 ---
 
@@ -528,7 +529,7 @@ exactly the graphics/PCI/2D masters, cross-referenced against the REQ table in
   - Refresh cycles per refresh period: `0000`=disabled, `0001`=1, … `1xxx`=8
 ```
 
-Two values are used [platform.S:510-512,538-540]:
+Two values are used [platform.S:510-512,538-540](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L510-L512):
 
 - **Initial `0x00005A08`** — period `0x5A`=90 → $12\,\text{MHz}/90 = 133\,\text{kHz} \approx 7.5\,\mu\text{s}$
   refresh interval (within the DDR2 7.8 µs limit), and `[3:0]=8` → **8 refresh
@@ -715,15 +716,15 @@ values, so the low-speed clock path is never actually used on this board
 
 ### 4.6 MCR38 / MCR3C / MCR40–MCR48 — arbitration
 
-- **MCR38 Page Miss Latency Mask `0xFFFFFF82`** [platform.S:407-409]:
+- **MCR38 Page Miss Latency Mask `0xFFFFFF82`** [platform.S:407-409](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L407-L409):
   `[2:0]`=2 (page-miss threshold); `[31:3]` per-REQ mask where bit(n+3) masks
   REQn once its page-miss counter exceeds the threshold. Bits for REQ0–REQ3
   (the VGA/CRT streams) are **0 = never masked**, all others = masked — matching
   the datasheet's "keep CRT refresh high-priority" guidance [DS §17.3 p.195](#sources).
-- **MCR3C Priority Group `0x00000000`** [platform.S:411-413]: every
+- **MCR3C Priority Group `0x00000000`** [platform.S:411-413](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L411-L413): every
   `REQ(n)>REQ(n+1)` bit = 0 → strict fixed priority per [§1.1](#11-fixed-priority-dram-requestors-req0req22)
   [DS §17.3 p.195](#sources).
-- **MCR40/MCR44/MCR48 Max Grant Length = `0`** [platform.S:415-425]: 4 bits per
+- **MCR40/MCR44/MCR48 Max Grant Length = `0`** [platform.S:415-425](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L415-L425): 4 bits per
   REQ (REQ0–REQ22). Field code → length: `0/1`=2, `2/3`=4, … `14/15`=16 grants.
   All zero = 2-grant cap everywhere / no special bandwidth reservation
   [DS §17.3 p.195-196](#sources). (`0x4C` is written 0 but is undocumented; see the map.)
@@ -731,7 +732,7 @@ values, so the low-speed clock path is never actually used on this board
 ### 4.7 MCR60 — IO buffer mode
 
 `MCR60 = 0x032AA02A` [platform.S:447-449](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S#L447-L449) configures the DDR2 pad electricals
-[DS §17.3 p.196-197]:
+[DS §17.3 p.196-197](#sources):
 
 ```{list-table} MCR60 IO Buffer Mode — decode of 0x032AA02A
 :header-rows: 1
@@ -1172,7 +1173,8 @@ the end — both of which the Aspeed order honours [JESD79-2B](#sources).
 ## 8. Self-refresh and clock-switch sequences (datasheet)
 
 Not used in the cold-boot path but part of the controller contract, and useful
-for a faithful model [DS §17.6-17.7 p.203]:
+for a [faithful model](../../emulation/qemu.md#faithful-g3-model)
+[DS §17.6-17.7 p.203](#sources):
 
 - **Enter self-refresh:** stop all IP traffic (swap ARM code to static flash),
   then `MCR34[2]=1` (optionally `[4:3]` for extra saving).
@@ -1190,7 +1192,7 @@ for a faithful model [DS §17.6-17.7 p.203]:
 
 - **Shared SoC-level values** (identical in the Raptor AST2050 code and the
   independent AMI AST2100/AST2300 code, so they are controller requirements, not
-  board tuning) [DDR2-INIT-REVERSE-ENGINEERING.md §7.1]: `MCR00` unlock key
+  board tuning) [DDR2-INIT-REVERSE-ENGINEERING.md §7.1](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/DDR2-INIT-REVERSE-ENGINEERING.md): `MCR00` unlock key
   `0xFC600309`; DLL block `MCR6C=0x00909090`, `MCR64` pre/final
   (`0x00050000`/`0x002D3000`), `MCR68=0x02020202`; `MCR08=0x0011030F`;
   `MCR38=0xFFFFFF82`; `MCR60=0x032AA02A`; the `MCR28` fire order (5,7,3,1) and the
@@ -1233,14 +1235,14 @@ Primary (in-repo, read-only reverse-engineering + datasheet):
 - ASPEED AST2050/AST1100 A3 Datasheet V1.05 — Chapter 17 "SDRAM Memory
   Controller" (pp. 183–203, register base `0x1E6E0000`) and Chapter 18 "System
   Control Unit" (SCU20 p.212, SCU40 p.215, SCU7C p.220). In repo at
-  `datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`. Cited inline as
-  [DS §x p.N](#sources) (N = datasheet printed page).
-- `asus-kgpe-d16-firmware/platform.S` — Raptor Engineering AST2050 U-Boot
-  `lowlevel_init` (hardware-verified DDR2 init). Cited as [platform.S:LINE](#sources).
-- `asus-kgpe-d16-firmware/hwreg.h` — register address definitions.
-- `asus-kgpe-d16-firmware/ast2050.h` — board configuration (`CONFIG_DRAM_UART_38400`,
+  [`datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf). Cited inline as
+  **DS §x p.N** (N = datasheet printed page).
+- [`asus-kgpe-d16-firmware/platform.S`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S) — Raptor Engineering AST2050 U-Boot
+  `lowlevel_init` (hardware-verified DDR2 init). Cited as **platform.S:LINE**.
+- [`asus-kgpe-d16-firmware/hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h) — register address definitions.
+- [`asus-kgpe-d16-firmware/ast2050.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h) — board configuration (`CONFIG_DRAM_UART_38400`,
   `PHYS_SDRAM_1_SIZE = 64 MiB`).
-- `asus-kgpe-d16-firmware/DDR2-INIT-REVERSE-ENGINEERING.md` — the detailed
+- [`asus-kgpe-d16-firmware/DDR2-INIT-REVERSE-ENGINEERING.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/DDR2-INIT-REVERSE-ENGINEERING.md) — the detailed
   line-by-line RE analysis (the ~0.29 % DLL-error result; Raptor-vs-AMI compare).
 
 Secondary (web, corroboration for JEDEC DDR2 procedure):

@@ -1,8 +1,10 @@
 # Dell C410X I2C topology
 
 The AST2050 BMC manages every board peripheral over **7 I2C buses**. This map is
-the reverse-engineered ground truth that the reconstructed device tree, the
-`c410x-bmc` QEMU machine, and the OpenBMC entity-manager configuration all mirror.
+the reverse-engineered ground truth that the
+[reconstructed device tree](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/aspeed-bmc-dell-c410x.dts),
+the `c410x-bmc` QEMU machine, and the OpenBMC entity-manager configuration all
+mirror.
 
 ```{figure} /_static/diagrams/c410x-i2c-topology.svg
 :alt: The C410X I2C topology — the AST2050 I2C engine fanning out to seven buses through PCA9544A/PCA9548A muxes to the sensor, GPIO-expander and PEX-switch devices.
@@ -15,12 +17,15 @@ The C410X seven-bus I2C topology (see {doc}`../systems/dell-c410x` for the full 
 :class: note
 
 This topology is the **Dell C410X** BMC I2C map. The other two program boards
-differ: on the **KGPE-D16** the documented sensors (the W83795G, DIMM SPD) sit on
-the *host* SP5100 SMBus, **not** the AST2050 BMC's own I2C engines — what the BMC
-drives on its I2C buses on that board is still being characterised on silicon (an
-open hardware item), so it is intentionally not asserted here. The **iPDU** uses
-the Digi NS9360's I2C controller ({doc}`soc-ns9360-memory-serial`) to reach its
-extension-bar connectors, covered on {doc}`../systems/hpe-ipdu`.
+have their own: the **KGPE-D16** map is now fully characterised from the
+board's schematic netlist — eight AST2050 controllers reaching the W83795G,
+the DIMM SPD/TSOD banks, the FRU EEPROM and the PSU through an *analog*
+switch fabric shared multi-master with the host SP5100 — documented on
+{doc}`../systems/kgpe-d16-i2c`. (Earlier revisions of this note said those
+sensors were reachable only from the host SMBus; the netlist shows the bus is
+shared.) The **iPDU** uses the Digi NS9360's I2C controller
+({doc}`soc-ns9360-memory-serial`) to reach its extension-bar connectors,
+covered on {doc}`../systems/hpe-ipdu`.
 ```
 
 ## Device count summary
@@ -50,7 +55,7 @@ extension-bar connectors, covered on {doc}`../systems/hpe-ipdu`.
 * - {doc}`peripherals/pex8696-8647`
   - 4 + 2
   - PLX PCIe switches (bus 0xF3)
-* - AT24C256 EEPROM
+* - [AT24C256 EEPROM](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/dell-c410x-firmware/datasheets/AT24C256_Datasheet.pdf)
   - 1
   - FRU data (bus 0xF2)
 ```

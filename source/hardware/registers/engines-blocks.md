@@ -25,7 +25,7 @@ Conventions used in the register tables below:
 
 The six blocks sit at these bases in the ch. 9 address map, and four of them own
 a dedicated interrupt line in the ch. 10 Interrupt Source Table
-[DS §10 p.99]:
+[DS §10 p.99](#sources):
 
 :::{list-table} Block bases and VIC interrupt lines
 :header-rows: 1
@@ -78,7 +78,7 @@ config, which lists `CFG_CMD_HACTEST` and `CFG_CMD_MICTEST` [ast2050.h](https://
 (OpenBMC / u-bmc) nor the C410X path programs HACE; the block is present on the
 SoC but idle. The only reference in the KGPE-D16 firmware is the disabled SLT
 `CFG_CMD_HACTEST` self-test [ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h). No mainline Linux driver targets the
-G3 HACE — the mainline `drivers/crypto/aspeed/` (aspeed-hace) driver supports
+G3 HACE — the mainline [`drivers/crypto/aspeed/`](https://github.com/torvalds/linux/tree/master/drivers/crypto/aspeed) (aspeed-hace) driver supports
 only the later AST2500/AST2600 HACE, which has a different, scatter-gather
 register interface.
 
@@ -367,7 +367,7 @@ assigned** (reserved gap between HACE10 and HACE1C) [DS §19 p.222](#sources).
 ### Crypto context buffer layout
 
 The context buffer pointed to by HACE08 has an algorithm-specific layout
-[DS §19 p.227]:
+[DS §19 p.227](#sources):
 
 :::{list-table} Crypto context buffer formats
 :header-rows: 1
@@ -627,7 +627,7 @@ It implements 8 32-bit registers backed by two software-supplied DRAM buffers: a
 ### Page control bits & buffer formats
 
 Each 4 KB page carries 2 control bits in the control buffer that decide MICE's
-behaviour on that page [DS §13 p.119]:
+behaviour on that page [DS §13 p.119](#sources):
 
 :::{list-table} MIC page-control-bit modes
 :header-rows: 1
@@ -655,7 +655,7 @@ behaviour on that page [DS §13 p.119]:
   - Yes
 :::
 
-Buffer layout (M = MIC0C[27:12]) [DS §13 p.120]:
+Buffer layout (M = MIC0C[27:12]) [DS §13 p.120](#sources):
 
 - **Control buffer**: 2 bits per page — page #0 occupies bits `000–001`, page #1
   bits `002–003`, … page #M bits `2*M – 2*M+1`. Total size
@@ -859,7 +859,8 @@ P-Bus (the bus that carries the PCI slave controller's commands), i.e. it is
 only meaningful when the AST2050 is the PCI **master**. On both target boards the
 AST2050 is a PCI **endpoint** (VGA / BMC device), not a bus master, so the
 outbound A2P path is not exercised. The *inbound* counterpart — the P-to-AHB
-(P2A) back door in ch. 36 — is the one the project actually uses (culvert's
+(P2A) back door in ch. 36 — is the one the project actually uses to cold-boot
+the BMC ({doc}`/debug/bring-up`; [culvert](https://github.com/mithro/culvert)'s
 `p2a` access). No mainline driver programs A2P.
 
 A2P is a **one-way** bridge providing a path for the ARM to reach IP modules on
@@ -898,7 +899,7 @@ AHB and is normally locked [DS §36 p.400](#sources).
 
 **Used on target boards?** Not by the open firmware. The AST2050's VGA is wired
 on the KGPE-D16 (onboard display) and the C410X, but the open-firmware stacks use
-the plain framebuffer (mainline `drivers/gpu/drm/ast` on later parts does no G3
+the plain framebuffer (mainline [`drivers/gpu/drm/ast`](https://github.com/torvalds/linux/tree/master/drivers/gpu/drm/ast) on later parts does no G3
 2D acceleration); the 2D engine here is programmed only by the proprietary VGA
 BIOS / driver. Documented for completeness; the block is present on the SoC.
 
@@ -1553,7 +1554,7 @@ bits belong to the Video Engine and are outside this block [DS §37 p.401](#sour
 ### Cursor shape structure
 
 Each cursor pixel is a 16-bit word in the frame-buffer shape area
-[DS §37 p.403]:
+[DS §37 p.403](#sources):
 
 - **Monochrome (AND-XOR-RGB444):** [DS §37 p.403](#sources)
 
@@ -1593,8 +1594,8 @@ Each cursor pixel is a 16-bit word in the frame-buffer shape area
   `CFG_CMD_HACTEST` / `CFG_CMD_MICTEST` [ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h).
 - **Mainline Linux:** the AST2050 (G3) predates mainline ASPEED support
   (earliest is the AST2400 / G4), so no mainline driver targets these G3 block
-  instances. The related later-generation drivers — `drivers/crypto/aspeed`
-  (HACE, AST2500/AST2600 only) and `drivers/gpu/drm/ast` (desktop AST VGA) — do
+  instances. The related later-generation drivers — [`drivers/crypto/aspeed`](https://github.com/torvalds/linux/tree/master/drivers/crypto/aspeed)
+  (HACE, AST2500/AST2600 only) and [`drivers/gpu/drm/ast`](https://github.com/torvalds/linux/tree/master/drivers/gpu/drm/ast) (desktop AST VGA) — do
   not program the register interfaces documented here.
 
 ## Gaps and caveats
@@ -1632,18 +1633,18 @@ Each cursor pixel is a 16-bit word in the frame-buffer shape area
 
 ## Sources
 
-- [DS](#sources) ASPEED, *AST2050 / AST1100 A3 Datasheet, V1.05* (25 May 2010), in-repo at
-  `datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`. Chapters used:
+- **DS** ASPEED, *AST2050 / AST1100 A3 Datasheet, V1.05* (25 May 2010), in-repo at
+  [`datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf). Chapters used:
   §10 Interrupt Source Table (p.99); §13 Memory Integrity Check Controller
   (p.116–120); §19 Hash & Crypto Engine / HACE (p.221–227); §21 AHB-to-P-Bus
   Bridge (p.256); §22 MDMA Engine (p.257–261); §35 2D Graphics Engine
   (p.393–399); §36 P-Bus-to-AHB Bridge (p.400); §37 Graphics Hardware Cursor
   (p.401–403). Doc page = PDF page (offset 0).
 - [ast2050.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h) Raptor Engineering AST2050 U-Boot board config, in-repo at
-  `asus-kgpe-d16-firmware/ast2050.h`.
+  [`asus-kgpe-d16-firmware/ast2050.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h).
 - [hwreg.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h) Raptor Engineering AST2100/AST2050 SoC register locations, in-repo at
-  `asus-kgpe-d16-firmware/hwreg.h`.
-- [aspeed-crypto](#sources) Mainline Linux ASPEED HACE driver (AST2500/AST2600):
+  [`asus-kgpe-d16-firmware/hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h).
+- **aspeed-crypto** Mainline Linux ASPEED HACE driver (AST2500/AST2600):
   <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/crypto/aspeed>
-- [aspeed-drm](#sources) Mainline Linux ASPEED VGA (`ast`) DRM driver:
+- **aspeed-drm** Mainline Linux ASPEED VGA (`ast`) DRM driver:
   <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpu/drm/ast>

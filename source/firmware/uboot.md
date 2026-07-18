@@ -35,7 +35,7 @@ than that — the stock NS9360 firmware is a NET+OS RTOS image, so the U-Boot po
   - `boot-uboot-ssh` (U-Boot → Linux → SSH) green on the latest U-Boot;
     `c410x-tftp-netboot` network-boots the kernel to SSH
 * - AST2050 boards (interim)
-  - OpenBMC U-Boot `v2019.04-aspeed-openbmc` (`evb-ast2400` base)
+  - OpenBMC U-Boot [`v2019.04-aspeed-openbmc`](https://github.com/openbmc/u-boot/tree/v2019.04-aspeed-openbmc) (`evb-ast2400` base)
   - builds and boots the chain in QEMU today
 * - HPE iPDU
   - [`mithro/u-boot@hpe-ipdu-port`](https://github.com/mithro/u-boot/tree/hpe-ipdu-port) — open NS9360 port

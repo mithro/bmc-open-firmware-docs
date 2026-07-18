@@ -111,7 +111,7 @@ KGPE-D16 board = AST2050-A2/A3 (and AST1100-A2/A3 share the same code).
 ```
 
 Clock gates and PLLs relevant to these blocks live in the SCU
-(`base 0x1E6E2000`), covered in the SCU register reference and summarised in the SCU-posture table on {doc}`pcie-vga-usb-bridges`.
+(`base 0x1E6E2000`), covered in the {doc}`SCU register reference <scu-clock-reset>` and summarised in the SCU-posture table on {doc}`pcie-vga-usb-bridges`.
 Key gates: `SCU0C[15]` UARTCLK, `SCU0C[5]` VGA DCLK, `SCU0C[4]` PCI-slave BCLK,
 `SCU0C[14]` USB2.0 clock, `SCU0C[0]` Video-Engine ECLK. [DS §18 p.209-210](#sources)
 
@@ -754,7 +754,8 @@ Bit-sum check for `SENSE`: bits 1–10 (`0x7FE`) + 12 (`0x1000`) + 15 (`0x8000`)
 
 ### Bring-up sequence (no firmware present)
 
-The verified G3 VIC init (`g3vic_init_hw`): [g3-vic patch](#sources)
+The verified G3 VIC init (`g3vic_init_hw`, packaged as the
+{doc}`G3 VIC Linux driver </drivers/linux>`): [g3-vic patch](#sources)
 
 1. `VIC14 = 0xFFFFFFFF` (disable all) and `VIC1C = 0xFFFFFFFF` (clear soft ints).
 2. `VIC0C = 0` (all sources as IRQ, none FIQ).
@@ -962,7 +963,7 @@ delivery is fixed. [TIMER-RCA](#sources)
 
 ## Sources
 
-- **AST2050/AST1100 A3 Datasheet, V1.05** (25 May 2010), in-repo PDF. Chapters
+- **[AST2050/AST1100 A3 Datasheet, V1.05](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf)** (25 May 2010), in-repo PDF. Chapters
   used here: §9 ARM Address Space (p.97-98), §10 Interrupt Source Table / Table 36
   (p.99), §16 Interrupt Controller / VIC (p.179-182), §18 SCU (p.204-220), §25
   Timer Controller (p.275-278), §26 UART 16550 (p.279-286).

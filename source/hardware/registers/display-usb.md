@@ -2,7 +2,8 @@
 
 Complete register-by-register reference for the three large **display / USB**
 blocks of the Aspeed **AST2050 (SoC generation 3, "G3"; also sold as AST1100)**
-that are only summarised elsewhere in these docs:
+that are only summarised elsewhere in these docs
+(notably on {doc}`pcie-vga-usb-bridges`):
 
 1. the **USB 2.0 Virtual Hub Controller** (§15, base `0x1E6A0000`, VIC #5) — and
    its companion **USB 1.1 UHCI host controller** (base `0x1E6B0000`, §1b),
@@ -1099,7 +1100,7 @@ offset `0x00`/`0x02`/`0x04`, `FRNUM` `0x06`, `FRBASEADD` `0x08`, `SOFMOD` `0x0C`
 and `PORTSC1`/`PORTSC2` at `0x10`/`0x12`. It is therefore documented here by
 reference to that standard, which the mainline driver already implements. This
 host controller carries the BMC's USB **virtual media** and **virtual
-keyboard/mouse**.
+keyboard/mouse** — the HID half of the vKVM path ({doc}`/firmware/openbmc`).
 
 - **Clock gate** — `SCU0C[7]` "Stop UCLK (USB 1.1)", the only SCU trace of the
   block. [DS §18 p.209](#sources) [`hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h)
@@ -1118,7 +1119,9 @@ stock UHCI host model (e.g. `piix3-usb-uhci`) presents the identical interface.
 :class: important
 
 The AST2050 has **no EHCI / USB 2.0 host controller**. This is stated explicitly
-in the hardware-verified Raptor analysis — *"the AST2050 has UHCI only (no
+in the hardware-verified Raptor analysis
+([`RAPTOR_ENGINEERING_AST2050_ANALYSIS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR_ENGINEERING_AST2050_ANALYSIS.md))
+— *"the AST2050 has UHCI only (no
 EHCI/USB 2.0) … Do NOT add EHCI — AST2050 doesn't have it."* A `usb@1e6a1000`
 EHCI node does appear in the G4-template real-hardware DTS, but that base address
 is carried over from the AST2400 (G4) binding and does **not** correspond to G3
@@ -1132,7 +1135,8 @@ at `0x1E6A0000` (§1 above), not an EHCI host. Model and port accordingly: a UHC
 ## 2. Video (Capture/Compression) Engine (§20, base `0x1E700000`)
 
 Captures the internal VGA output (or an external DVO/ADC source) into DRAM and
-compresses it with a mixed JPEG + Vector-Quantisation codec. Two YUV formats
+compresses it with a mixed JPEG + Vector-Quantisation codec — the capture half
+of the vKVM path ({doc}`/firmware/openbmc`). Two YUV formats
 (420/444), block-change detection, CRC scene-change detection, arbitrary down-
 scaling with a 4×2 spatial filter, 12 JPEG quality levels, optional RC4
 encryption of the output stream, and a video-mode-change watchdog. Up to
@@ -3070,13 +3074,13 @@ through PCI I/O ports. `[aspeeddrm]`
 ## Sources
 
 - **AST2050/AST1100 A3 Datasheet, V1.05** (25 May 2010), in-repo PDF
-  `datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`. Chapters
+  [`datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf). Chapters
   transcribed here: **§15 USB 2.0 Virtual Hub Controller** (p.154–178; register
   file §15.3 p.155–173), **§20 Video Engine** (p.232–255; register file §20.3
   p.234–255), **§34 VGA Display Controller** (p.368–392; standard sets §34.3–34.8
   p.369–381, Aspeed extended CRT §34.9 p.382–392). Doc (printed) page = PDF page.
 - Mainline Linux drivers used as cross-checks:
-  - [`aspeed-vhub` register header ([`vhub.h`](https://github.com/torvalds/linux/blob/master/drivers/usb/gadget/udc/aspeed-vhub/vhub.h))][vhubh] — USB gadget virtual-hub
+  - [`aspeed-vhub` register header (`vhub.h`)][vhubh] — USB gadget virtual-hub
     register offsets `HUB00…HUB3C` and per-device / per-endpoint windows.
   - [`aspeed-video.c` V4L2 driver][aspeedvideo] — Video Engine `VE_*` register
     offsets matching `VR000…VR308` and the `0x1A03_8AA8` protection key.

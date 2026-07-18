@@ -8,7 +8,9 @@ Linux/U-Boot support, per-component test benches, and OpenBMC (Linux) and
 WallaBMC (Zephyr) firmware.
 
 The implementation history — including experiments and approaches that did not
-work out — lives in the program's git history. This site is the developer-facing
+work out — lives in the git history of the
+[program repository](https://github.com/mithro/ai-shenanigans-for-bmcs)
+(`mithro/ai-shenanigans-for-bmcs`). This site is the developer-facing
 reference: enough to build both QEMU models and drivers for every component, and
 to bring up every layer of the stack.
 

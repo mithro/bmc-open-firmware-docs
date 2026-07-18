@@ -6,7 +6,7 @@ QEMU in CI and against real hardware on the bench.**
 ## Layer 1 — qtest (device-model correctness)
 
 Per-component register-level benches live in the QEMU fork under
-`tests/qtest/` (C), run headless via `meson test --suite qtest` in the
+[`tests/qtest/`](https://github.com/mithro/qemu/tree/d16-ast2050-machine/tests/qtest) (C), run headless via `meson test --suite qtest` in the
 `qemu-qtest` CI job. Each bench asserts:
 
 - reset values of every documented register,
@@ -37,7 +37,8 @@ A Python module abstracting a **`Target`** with a pluggable backend:
 ```
 
 The `Target` exposes serial, SSH, `i2cdetect`, sensor (hwmon) reads, and GPIO
-operations. Board-level benches — the C410X `i2cdetect` map, sensor reads, GPIO
+operations. Board-level benches — the C410X `i2cdetect` map
+({doc}`../hardware/i2c-topology`), sensor reads, GPIO
 presence lines, and the 12-step power-on sequence — are written **once** and run
 against both backends. This is how QEMU and silicon are proven to behave
 identically ({doc}`../debug/index`).

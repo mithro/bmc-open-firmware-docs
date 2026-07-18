@@ -17,6 +17,9 @@ cross-reference must resolve.
 
 - **Markdown (MyST)** for prose; use `{doc}` / `{ref}` for cross-references so
   the link checker can validate them.
+- **Link everything that is linkable** — files, repos, datasheets, citations,
+  and topics documented on other pages. The full policy, with target
+  conventions per artifact type and examples, is {doc}`linking`.
 - **Dates** are ISO 8601 (`YYYY-MM-DD`).
 - Each hardware page follows the shared layout (bus/address → register map →
   reset values → behaviour → datasheet source) so a reader can build both a
@@ -27,6 +30,6 @@ cross-reference must resolve.
 ## Relationship to the program repository
 
 This public site is authored content plus curated material synced from the
-(private) program repository. Reverse-engineering detail derived from proprietary
+[program repository](https://github.com/mithro/ai-shenanigans-for-bmcs). Reverse-engineering detail derived from proprietary
 firmware is only published once cleared; interface contracts and public-datasheet
 register maps are published freely so the models and drivers can be built openly.

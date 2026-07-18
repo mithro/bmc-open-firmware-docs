@@ -472,10 +472,12 @@ assignments are spread across the datasheet's multi-function-pin tables (§18.2,
     {doc}`PWM & fan-tach <control-blocks>`
 * - `SCU74[20]`
   - MAC#2 MDC/MDIO
-  - routes the second MAC's MDIO management pins
+  - routes the second MAC's MDIO management pins — see
+    {doc}`MAC MDIO/PHY <network-mac-phy>`
 * - `SCU74[25]`
   - MAC PHY#1 status
-  - routes MAC#1 `PHYLINK` / `PHYPD#` pins
+  - routes MAC#1 `PHYLINK` / `PHYPD#` pins — see
+    {doc}`MAC MDIO/PHY <network-mac-phy>`
 * - `SCU74[27]`
   - GPIOE ↔ MAC
   - selects GPIOE group 2 (MII/RMII2 TXD/RXD) vs group 1 (VP / TACH) — see
@@ -635,8 +637,8 @@ where **OD** is the output-divider bit, **Numerator** = bits[10:5],
 **Denumerator** = bits[3:0]. The **post-divider** field (bits[14:12]) then
 divides $F_\text{out}$ further (÷1/2/4/8/16). Worked example: the SCU24 reset value
 `0x00004291` decodes to N=20, OD=1, D=1, post=÷2 → $24 \cdot (2-1) \cdot (22/2) / 2 = 132\,\text{MHz}$,
-matching the datasheet's stated 133 MHz H-PLL default. [DS §SCU24 p.212,
-§SCU20 p.211-212]
+matching the datasheet's stated 133 MHz H-PLL default.
+[DS §SCU24 p.212, §SCU20 p.211-212](#sources)
 
 This is the same equation the mainline AST2400 clock driver implements
 ($F = 24\,\text{MHz} \times (2-\text{OD}) \times \frac{N+2}{D+1}$, with N=`(val>>5)&0x3f`, OD=`(val>>4)&1`,
@@ -1169,8 +1171,8 @@ silicon check is dead/unused (the subsequent `set_MPLL` writes literal
 ## Sources
 
 - **AST2050/AST1100 A3 Datasheet V1.05** (in-repo:
-  `datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`), sections cited as
-  [DS …](#sources):
+  [`datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf)), sections cited as
+  **DS …**:
   - §8.1 Clock Information (p.84); §8.2 Clock & Reset Tree Mapping (p.85);
     §8.3 Reset Tree Control Table (p.86); §8.4 Symbol Description (p.87);
     §8.5 Clock Tree Architecture, Figures 22–37 (p.88-93);
@@ -1181,7 +1183,7 @@ silicon check is dead/unused (the subsequent `set_MPLL` writes literal
   - §27 Watchdog Timer WDT00–WDT18 + operation (p.287-289).
   - Pin descriptions: SRST# (R20), EXTRST# (C9/GPIOB7), WDTRST (D9/GPIOB6),
     CLKIN (R22) (p.42-47).
-- **In-repo Raptor Engineering AST2050 port** (`asus-kgpe-d16-firmware/`):
+- **In-repo Raptor Engineering AST2050 port** ([`asus-kgpe-d16-firmware/`](https://github.com/mithro/ai-shenanigans-for-bmcs/tree/main/asus-kgpe-d16-firmware)):
   - [`hwreg.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/hwreg.h) — SCU/WDT/MMC register offset definitions.
   - [`ast2050.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/ast2050.h) — board config (24 MHz UART clock, DDR sizing).
   - [`platform.S`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/platform.S) — `lowlevel_init` DDR/PLL/SCU bring-up assembly (line refs
@@ -1191,7 +1193,7 @@ silicon check is dead/unused (the subsequent `set_MPLL` writes literal
   - [`RAPTOR-PORTING-GUIDE.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/RAPTOR-PORTING-GUIDE.md) — G3-vs-G4 strap bit differences, clock tree,
     reset/WDT porting notes.
 - **Web cross-references:**
-  - Mainline Linux `drivers/clk/clk-aspeed.c` (AST2400/G4) — H-PLL formula
+  - Mainline Linux [`drivers/clk/aspeed/clk-aspeed.c`](https://github.com/torvalds/linux/blob/master/drivers/clk/aspeed/clk-aspeed.c) (AST2400/G4) — H-PLL formula
     $F = 24\,\text{MHz} \times (2-\text{OD}) \times \frac{N+2}{D+1}$, strap decode:
     <https://codebrowser.dev/linux/linux/drivers/clk/clk-aspeed.c.html>
   - Aspeed SCU device-tree binding (context):

@@ -1,7 +1,8 @@
 # OpenBMC (Linux)
 
 The full-featured firmware track, built in the [`mithro/openbmc`](https://github.com/mithro/openbmc) fork with a
-`meta-<board>` layer per board on top of `meta-aspeed`. Images are verified in
+`meta-<board>` layer per board on top of
+[`meta-aspeed`](https://github.com/openbmc/openbmc/tree/master/meta-aspeed). Images are verified in
 QEMU (and on real hardware) via the {doc}`../emulation/testbench`.
 
 ## Running on the real AST2050
@@ -49,13 +50,13 @@ silicon. The table records that distinction honestly.
   - `phosphor-state-manager` → GPIO
   - QEMU (Redfish `Reset` drives the modelled power-state GPIO)
 * - Serial-over-LAN
-  - `obmc-console`
+  - [`obmc-console`](https://github.com/openbmc/obmc-console)
   - **silicon** — SOL session operational
 * - IPMI
   - IPMI-over-LAN and host-local IPMI via **KCS**
-  - **silicon** — `ipmitool` returns ASUSTek / KGPE-D16
+  - **silicon** — [`ipmitool`](https://github.com/ipmitool/ipmitool) returns ASUSTek / KGPE-D16
 * - USB, NC-SI, KVM, firmware update
-  - obmc-ikvm / phosphor-ipmi / update flows
+  - [`obmc-ikvm`](https://github.com/openbmc/obmc-ikvm) / phosphor-ipmi / update flows
   - QEMU-demonstrated; see faithfulness notes below
 ```
 
@@ -77,7 +78,8 @@ firmware are shaped to match them.
 
 The Dell C410X is the sensor-dense target (16× INA219, 2× ADT7462, 16× TMP75,
 5× PCA9555, the PEX8696/8647 PCIe switches) — its 72-sensor topology
-({doc}`../hardware/i2c-topology`) drives the `dbus-sensors` / `entity-manager`
+({doc}`../hardware/i2c-topology`) drives the `dbus-sensors` /
+[`entity-manager`](https://github.com/openbmc/entity-manager)
 and PCIe-switch-daemon work. The hardware demonstration to date is on the
 KGPE-D16 (the board on the bench); the C410X contributes the rich I2C/sensor
 model that the same daemons consume.

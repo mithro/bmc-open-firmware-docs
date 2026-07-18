@@ -17,7 +17,8 @@ load-bearing value is backed by at least two of these.
 ## PCI-slave endpoint, VGA & Video Engine
 
 The AST2050 presents itself to the host over a 32-bit / 33 MHz **PCI slave**
-function (the "PCIe/VGA endpoint" of a board like the C410X is this PCIS block).
+function (the "PCIe/VGA endpoint" of a board like the
+{doc}`C410X </systems/dell-c410x>` is this PCIS block).
 The endpoint fronts three internal engines — the **VGA display controller**, the
 **2D graphics engine**, and the **P2A bridge** — sharing the top of SDRAM as a
 frame buffer. [DS §33.1 p.363](#sources), [DS §34.1 p.369](#sources)
@@ -357,7 +358,8 @@ separately at `SCU0C[7]`.)
 Three mechanisms give access to (or steer) the internal AHB space. All three are
 the AST2050's version of the interfaces flagged industry-wide as
 **CVE-2019-6260 ("Pantsdown")** for the AST2400/2500 — arbitrary host→BMC AHB
-read/write. On the AST2050 they are the *intended* out-of-band bring-up path for a
+read/write. On the AST2050 they are the *intended*
+{doc}`out-of-band bring-up path </debug/bring-up>` for a
 dead-firmware board. [CVE-2019-6260 / Pantsdown][pantsdown]
 
 ### AHB Bus Controller — unlock key + boot-area remap
@@ -480,7 +482,7 @@ Host-Interface-Control registers. [DS §30 p.319-321](#sources)
 
 `HICR5[8] ENL2H` tells you whether the LPC-to-AHB bridge is *live*. On the
 KGPE-D16, `0x1E789080` (HICR5) reads **`0x98000000`** → HWMBASE = `0x98`, **ENL2H
-= 0 → the iLPC bridge is Disabled** (only P2A is usable in-band). culvert's
+= 0 → the iLPC bridge is Disabled** (only P2A is usable in-band). [culvert](https://github.com/mithro/culvert)'s
 `aspeed,ast2050-ilpc-ahb-bridge` ops read exactly this bit. [CULVERT-G3](#sources)
 ```
 
@@ -492,7 +494,8 @@ when the ARM is disabled (see also `HICR5[19:16]`/`HICR5[13:12]`). [DS §30 p.32
 
 ### SCU posture: clock gates, straps, reset flags
 
-The bits that decide whether these bridges/blocks are alive and how the SoC boots.
+The bits that decide whether these bridges/blocks are alive and how the SoC
+boots (full detail in the {doc}`SCU register reference <scu-clock-reset>`).
 `Base of SCU = 0x1E6E2000`; unlock with `SCU00 = 0x1688A8A8` (RMW to preserve the
 strap). [DS §18 p.205](#sources), [P2A-BOOT](#sources)
 
@@ -615,7 +618,7 @@ strap). [DS §18 p.205](#sources), [P2A-BOOT](#sources)
 
 ## Sources
 
-- **AST2050/AST1100 A3 Datasheet, V1.05** (25 May 2010), in-repo PDF. Chapters
+- **[AST2050/AST1100 A3 Datasheet, V1.05](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/datasheets/aspeed/AST2050_AST1100_A3_Datasheet_V1.05.pdf)** (25 May 2010), in-repo PDF. Chapters
   used here: §12 AHB Bus Controller (p.113-115), §15 USB2.0 Virtual Hub
   (p.154-157), §18 SCU (p.204-220), §20 Video Engine (p.232-235), §30 LPC
   Controller / iLPC-to-AHB (p.311-326), §33 PCI Slave Controller (p.363-368), §34

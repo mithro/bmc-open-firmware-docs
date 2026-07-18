@@ -1189,7 +1189,7 @@ level-detect enables/polarity (0 = low, 1 = high) [HWRef p.658-659, Tables 444-4
 **Base address: 0x9080_0000** — chapter 16 [HWRef p.663, p.667](#sources). A USB 2.0
 full-/low-speed host built from a standard OpenHCI (OHCI 1.0) controller plus a
 NS9360-specific "USB Host Front End" (UHFE) wrapper that bridges OHCI to the
-BBus. The address space splits in two [HWRef p.667, Table 449]:
+BBus. The address space splits in two [HWRef p.667, Table 449](#sources):
 
 ```{list-table} USB host address map (base 0x9080_0000) [HWRef p.667, Table 449](#sources)
 :header-rows: 1
@@ -1435,7 +1435,7 @@ these bitfields:
 
 `HcInterruptStatus` (0x100C, write-1-to-clear), `HcInterruptEnable` (0x1010,
 write-1-to-set) and `HcInterruptDisable` (0x1014, write-1-to-clear the enable)
-share one event-bit layout [HWRef p.680-685, Tables 458-460]:
+share one event-bit layout [HWRef p.680-685, Tables 458-460](#sources):
 
 ```{list-table} OHCI interrupt event bits (HcInterruptStatus / Enable / Disable)
 :header-rows: 1
@@ -2140,7 +2140,7 @@ EP10 [HWRef p.736-737, Table 489](#sources). Register map:
 Each **FIFO Interrupt Status** register packs three status bits per endpoint —
 `ACKn` / `NAKn` / `ERRORn`, where *n* is the FIFO number — into byte-aligned
 fields; the meanings (per direction) are defined once in Table 490
-[HWRef p.738, Table 490](#sources). The bit positions are [HWRef p.738-745, Tables 491-494]:
+[HWRef p.738, Table 490](#sources). The bit positions are [HWRef p.738-745, Tables 491-494](#sources):
 
 ```{list-table} FIFO Interrupt Status bit layout (Enable registers mirror these positions)
 :header-rows: 1
@@ -2176,8 +2176,8 @@ fields; the meanings (per direction) are defined once in Table 490
 Within each 3-bit group the high bit is `ACKn`, the middle `NAKn`, the low
 `ERRORn` (all RW1TC); for IN endpoints ACK = host ACK received, NAK = NAK sent
 (no data ready), ERROR = no ACK / STALL sent; for OUT endpoints ACK = ACK sent,
-NAK = NAK sent (FIFO full), ERROR = receive error / STALL sent [HWRef p.738,
-Table 490]. The FIFO Interrupt Enable registers (0x3004/3014/3024/3034) carry an
+NAK = NAK sent (FIFO full), ERROR = receive error / STALL sent
+[HWRef p.738, Table 490](#sources). The FIFO Interrupt Enable registers (0x3004/3014/3024/3034) carry an
 enable bit at each of these positions [HWRef p.742-748, Tables 495-498](#sources).
 
 ```{list-table} FIFO Packet Control #1–#12 (0x3080–0x30AC) [HWRef p.749, Table 499](#sources)
@@ -2313,34 +2313,34 @@ The endpoint FIFO *data* is moved by the USB device BBus DMA controller at
 
 Primary datasheet (in-repo, the authority for the register map):
 
-- **NS9360 Hardware Reference**, Digi 90000675 rev J — [HWRef p.N](#sources), where `N`
+- **NS9360 Hardware Reference**, Digi 90000675 rev J — cited inline as **HWRef p.N**, where `N`
   is the printed document page (identical to the PDF page). In-repo at
-  `hpe-ipdu-firmware/datasheets/NS9360_HW_Reference_90000675_J.pdf`; online at
+  [`hpe-ipdu-firmware/datasheets/NS9360_HW_Reference_90000675_J.pdf`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/datasheets/NS9360_HW_Reference_90000675_J.pdf); online at
   [ftp1.digi.com/90000675_J.pdf][hwref-url]. Chapters used: ch 12 LCD
   (p.543–562), ch 15 IEEE 1284 (p.635–662), ch 16 USB host (p.663–710), ch 17
   USB device (p.723–752).
 
 In-repo analysis / port planning (board specifics):
 
-- [`PLAN-INCREMENTAL-PORT.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md) — `hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md`
+- [`PLAN-INCREMENTAL-PORT.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md) — [`hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/PLAN-INCREMENTAL-PORT.md)
   (LCD palette RAM used as endian-switch scratch; register quick reference).
 
 Open-source cross-reference (register names, bases, bitfields):
 
 - [mach-ns9xxx regs-bbu.h](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-bbu.h), [mach-ns9xxx regs-sys-ns9360.h](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-sys-ns9360.h) — mainline Linux
-  `arch/arm/mach-ns9xxx` (tag v2.6.39). Verified to contain **no** LCD / IEEE 1284
-  / USB register definitions; only GPIO (`regs-bbu.h`) and system-control
-  (`regs-sys-ns9360.h`) registers. Raw source, e.g.
+  [`arch/arm/mach-ns9xxx`](https://github.com/torvalds/linux/tree/v2.6.39/arch/arm/mach-ns9xxx) (tag v2.6.39). Verified to contain **no** LCD / IEEE 1284
+  / USB register definitions; only GPIO ([`regs-bbu.h`](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-bbu.h)) and system-control
+  ([`regs-sys-ns9360.h`](https://github.com/torvalds/linux/blob/v2.6.39/arch/arm/mach-ns9xxx/include/mach/regs-sys-ns9360.h)) registers. Raw source, e.g.
   [regs-bbu.h][machbbu-url].
 - [digi-uboot ns9360_usb.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9360_usb.h) — FS-Forth / Digi U-Boot for the CC9P9360
   (in-repo at
-  `hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9360_usb.h`):
+  [`hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9360_usb.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9360_usb.h)):
   confirms OHCI base `0x9080_1000` and `HcRhPortStatus` at `+0x54`.
 - [digi-uboot ns9750_usb_ohci.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_usb_ohci.h) — same tree,
-  `include/ns9750_usb_ohci.h`: standard OHCI `HcControl` / `HcCommandStatus`
+  [`include/ns9750_usb_ohci.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_usb_ohci.h): standard OHCI `HcControl` / `HcCommandStatus`
   bit masks (`OHCI_CTRL_CBSR/PLE/IE/CLE/BLE/HCFS/IR/RWC/RWE`, `OHCI_HCR/CLF/BLF/OCR`),
   matching the datasheet bitfields above.
-- [digi-uboot ns9750_bbus.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_bbus.h) — same tree, `include/ns9750_bbus.h`: BBus Master
+- [digi-uboot ns9750_bbus.h](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_bbus.h) — same tree, [`include/ns9750_bbus.h`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/hpe-ipdu-firmware/uboot-port/reference/digi-cc9p9360-uboot/u-boot-1.1.4-digi/U-Boot/include/ns9750_bbus.h): BBus Master
   Reset bits (`…RESET_1284`=0x40, `…RESET_USB`) and USB configuration bits
   (`USB_CFG_CFG_HOST/DEVICE/DIS`) that gate these blocks; note the 2-port NS9750
   uses one combined USB reset bit whereas the NS9360 splits host/device.
