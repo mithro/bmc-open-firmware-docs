@@ -81,6 +81,7 @@ linkcheck_ignore = [
     r"https?://realtek\.info/.*",
     # Valid but intermittently times out (>15 s) from CI runners.
     r"https://www\.raptorengineering\.com/.*",
+    r"https://www\.nuvoton\.com/.*",
     # Wayback Machine snapshots are immutable once captured, but archive.org
     # throttles CI-sized request bursts with 500s / refused connections (not
     # clean 429s, so Sphinx's rate-limit retry never engages).
