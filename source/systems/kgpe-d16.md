@@ -308,6 +308,19 @@ fork. [RPI4-OPENOCD-JTAG-WIRING.md:242-268](https://github.com/mithro/ai-shenani
 netlist (previously documented here as a proprietary-pinout template).
 ```
 
+```{figure} /_static/images/kgpe-d16-manual-asmb4-install.png
+:alt: ASUS manual §2.5.9 photos — step 1 locates the BMC_FW header on the motherboard, circled beside an onboard Aspeed AST2050 chip; step 2 presses the small ASMB4 management card down into the header.
+:width: 100%
+
+**ASUS KGPE-D16 User Guide §2.5.9, "Installing ASMB4 management board"** —
+the manual's own photos of the socket in use: the ASMB4 "management board" is
+a small daughtercard pressed into the `BMC_FW` header beside the onboard
+Aspeed AST2050. This is the visual companion to the identity resolution
+above: the AST2050 BMC lives on the motherboard, and what seats in `BMC_FW1`
+is the socketed firmware module. © ASUSTeK Computer Inc.; the full manual is
+[mirrored in the program repo](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/KGPE-D16_Manual.pdf).
+```
+
 ### 2.4 AMD HDT (NB_JTAG_HEADER) — CPU debug, 20-pin HDT+ (1.27 mm) ⚠️
 
 The host/CPU debug port: **AMD HDT** (Hardware Debug Tool), a proprietary JTAG
@@ -559,5 +572,7 @@ Super-I/O's sequencing logic, and the BMC's platform-control GPIOs
   [`SP5100-SOUTHBRIDGE-WIRING.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/SP5100-SOUTHBRIDGE-WIRING.md)) —
   the source of the identity resolutions and corrections flagged on this page.
 - **[AMD SP5100 Register Reference Guide](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/AMD_SP5100_Register_Reference_Guide_44413.pdf)** (44413) — the southbridge.
+- **[ASUS KGPE-D16 User Guide](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/KGPE-D16_Manual.pdf)** — the vendor manual (connector
+  locations, §2.5.9 ASMB4 installation photos reproduced above, © ASUSTeK).
 - The on-board hardware monitor is documented at
   {doc}`../hardware/peripherals/w83795g`.

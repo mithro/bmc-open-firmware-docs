@@ -482,6 +482,24 @@ The remaining UART1 modem-control balls (`NDTR1`=U19, `NDCD1`=V19,
 [QU1_pins § Serial](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/pinmaps/QU1_pins.md#serial--sol-uart-11)
 UART programming detail: {doc}`/hardware/registers/uart-vic-timers`.
 
+The host-side port of this shared path is the board's 10-1-pin `COM2`
+header. Its `O_*2` signal names are the same net family as the Super-I/O's
+UART B — `SOUTB`/`SINB` (pins 72/71) leave the
+{doc}`W83667HG-A </hardware/peripherals/w83667hg>` as `O_TXD2_R`/`O_RXD2_R`
+and enter mux `QU8` opposite the BMC's UART1
+([OU1_pins § Serial](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/pinmaps/OU1_pins.md)).
+
+```{figure} /_static/images/kgpe-d16-manual-com2.png
+:alt: ASUS manual excerpt — "Serial port connector (10-1 pin COM2)": board-location drawing and a pinout naming O_RXD2, O_DTR2, O_DSR2, O_CTS2 on the top row and O_DCD2, O_TXD2, GND, O_RTS2, O_RI2 on the bottom row, with pin 10 removed.
+:width: 100%
+
+The **ASUS KGPE-D16 User Guide**'s "Serial port connector (10-1 pin COM2)" —
+the header a serial-port bracket cables to. With `BMC_PRESENT#` selecting the
+BMC side of the `QU8` mux, this is the physical port Serial-over-LAN takes
+over. © ASUSTeK Computer Inc.; the full manual is
+[mirrored in the program repo](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/KGPE-D16_Manual.pdf).
+```
+
 ## 11. Power / reset / platform control GPIO
 
 These 17 balls are what make the AST2050 a *baseboard* controller — they can
@@ -738,3 +756,5 @@ the select/enable nets documented in {doc}`kgpe-d16-i2c` (I2C fabric) and §10
 - **[`BMC-CONNECTORS.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/BMC-CONNECTORS.md)** — connector/header/jumper pinouts.
 - **[`schematic-wiring/README.md`](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/schematic-wiring/README.md)** — provenance, chip inventory, and the
   `.FZ` extraction/regeneration tooling.
+- **[ASUS KGPE-D16 User Guide](https://github.com/mithro/ai-shenanigans-for-bmcs/blob/main/asus-kgpe-d16-firmware/datasheets/KGPE-D16_Manual.pdf)** — the vendor manual; the COM2
+  connector figure in §10 is reproduced from it (© ASUSTeK).
