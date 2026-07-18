@@ -81,6 +81,10 @@ linkcheck_ignore = [
     r"https?://realtek\.info/.*",
     # Valid but intermittently times out (>15 s) from CI runners.
     r"https://www\.raptorengineering\.com/.*",
+    # Wayback Machine snapshots are immutable once captured, but archive.org
+    # throttles CI-sized request bursts with 500s / refused connections (not
+    # clean 429s, so Sphinx's rate-limit retry never engages).
+    r"https://web\.archive\.org/.*",
 ]
 # GitHub renders `#L15` / `#L426-L462` line anchors on blob pages in
 # JavaScript, so they are never present in the fetched HTML and linkcheck
