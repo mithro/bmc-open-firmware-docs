@@ -82,5 +82,13 @@ linkcheck_ignore = [
     # Valid but intermittently times out (>15 s) from CI runners.
     r"https://www\.raptorengineering\.com/.*",
 ]
+# GitHub renders `#L15` / `#L426-L462` line anchors on blob pages in
+# JavaScript, so they are never present in the fetched HTML and linkcheck
+# reports "Anchor not found" for links that work fine in a browser. Skip
+# fragment verification for line-number-shaped anchors only; real markdown
+# heading anchors are still checked.
+linkcheck_anchors_ignore = [
+    r"^L\d+(-L\d+)?$",
+]
 linkcheck_timeout = 15
 linkcheck_retries = 2
